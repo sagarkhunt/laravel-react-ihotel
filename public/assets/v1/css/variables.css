@@ -1,0 +1,74 @@
+
+/* Colors */
+:root {
+    --primary-color: #0863B5; 
+    --primary-color100: #E6EFF8;
+    --primary-color200:#CEE0F0;
+    --primary-color300: #9CC1E1;
+    --primary-color400: #6BA1D3;
+    --primary-color500:#3982C4;
+    --primary-color600: #0863B5;
+    --primary-color700: #064F91;
+    --primary-color800: #053B6D;
+    --primary-color900: #032848;
+    --primary-color1000: #021424;
+
+    --secondary-color: #6B869C; 
+    --secondary-color100: #F0F3F5; 
+    --secondary-color200:#E1E7EB; 
+    --secondary-color300:#C4CFD7; 
+    --secondary-color400:#A6B6C4; 
+    --secondary-color500:#899EB0; 
+    --secondary-color600: #6B869C; 
+    --secondary-color700:#566B7D; 
+    --secondary-color800:#40505E; 
+    --secondary-color900:#2B363E; 
+    --secondary-color1000:#151B1F; 
+
+    --accent-color-y100: #FFF9E6; /* yellow */
+    --accent-color-y200: #FFF3CC; /* yellow */
+    --accent-color-y300: #FFE899 ; /* yellow */
+    --accent-color-y400: #FEDC66; /* yellow */
+    --accent-color-y500: #FED133; /* yellow */
+    --accent-color-y600: #FEC500; /* yellow */
+    --accent-color-y700: #CB9E00 ; /* yellow */
+    --accent-color-y800: #987600; /* yellow */
+    --accent-color-y900: #664F00; /* yellow */
+    --accent-color-y1000: #332700; /* yellow */
+    
+    --accent-color-r100: #FAE8EA; /* Red */
+    --accent-color-r200:#F5D1D5; /* Red */
+    --accent-color-r300: #EBA2AC ; /* Red */
+    --accent-color-r400: #E07482; /* Red */
+    --accent-color-r500: #D64559; /* Red */
+    --accent-color-r600: #E3001F; /* Red */
+    --accent-color-r700: #A31226 ; /* Red */
+    --accent-color-r800:#7A0E1C; /* Red */
+    --accent-color-r900: #520913; /* Red */
+    --accent-color-r1000: #290509; /* Red */
+
+        
+    --accent-color-g100: #E7F6EB; /* Green */
+    --accent-color-g200:#D0EDD6; /* Green */
+    --accent-color-g300: #A0DBAE ; /* Green */
+    --accent-color-g400: #71CA85; /* Green */
+    --accent-color-g500: #41B85D; /* Green */
+    --accent-color-g600:#13A538; /* Green */
+    --accent-color-g700:#0E852A ; /* Green */
+    --accent-color-g800:#0B641F; /* Green */
+    --accent-color-g900: #074215; /* Green */
+    --accent-color-g1000: #04210A; /* Green */
+  
+  }
+  
+  /* Fonts */
+  :root {
+    --main-font: "GeneralSans", sans-serif;
+  }
+  
+  /* Other */
+  :root {
+    --border-radius4: 4px;
+    --border-radius8: 8px;
+    --border-radius16: 16px;
+  }
