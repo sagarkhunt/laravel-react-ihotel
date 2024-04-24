@@ -11,13 +11,18 @@ function ReactApp() {
     );
     const dispatch = useDispatch();
 
+    console.log("🚀 ~ ReactApp ~ isAuthenticsated:", isAuthenticated)
+    // console.log('🚀 ~ ReactApp ~ isAuthenticated:', isAuthenticated);
     useEffect(() => {
+        console.log("🚀 ~ ReactApp ~ isAuthenticated:", isAuthenticated)
+        console.log("🚀 ~ ReactApp ~ validateUserLoader:", validateUserLoader)
         if (!isAuthenticated) {
             dispatch({
                 type: actions.GET_AUTH_USER,
             });
+            
         }
-    }, []);
+    }, [isAuthenticated]);
 
     if (validateUserLoader) {
         return <Spinner />;

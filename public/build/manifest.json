@@ -1,6 +1,6 @@
 {
-  "_index-DAhhHTYQ.js": {
-    "file": "assets/index-DAhhHTYQ.js",
+  "_index-Dc8mdBGx.js": {
+    "file": "assets/index-Dc8mdBGx.js",
     "name": "index",
     "imports": [
       "resources/js/app.js"
@@ -12,7 +12,7 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-Ccj5Qb0J.js",
+    "file": "assets/app-DKxPlNHT.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -26,7 +26,7 @@
     ]
   },
   "resources/js/components/Dashboard.jsx": {
-    "file": "assets/Dashboard-DEhUI_1a.js",
+    "file": "assets/Dashboard-DsLwxt7x.js",
     "name": "Dashboard",
     "src": "resources/js/components/Dashboard.jsx",
     "isDynamicEntry": true,
@@ -35,23 +35,23 @@
     ]
   },
   "resources/js/components/LoginPage.jsx": {
-    "file": "assets/LoginPage-xpHEJwXD.js",
+    "file": "assets/LoginPage-1o2xlLoz.js",
     "name": "LoginPage",
     "src": "resources/js/components/LoginPage.jsx",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js",
-      "_index-DAhhHTYQ.js"
+      "_index-Dc8mdBGx.js"
     ]
   },
   "resources/js/components/Register.jsx": {
-    "file": "assets/Register-Dbt9WWSi.js",
+    "file": "assets/Register-BYWFKPma.js",
     "name": "Register",
     "src": "resources/js/components/Register.jsx",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js",
-      "_index-DAhhHTYQ.js"
+      "_index-Dc8mdBGx.js"
     ]
   },
   "resources/sass/app.scss": {

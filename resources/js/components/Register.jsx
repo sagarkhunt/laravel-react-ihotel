@@ -110,6 +110,25 @@ export default function RegistrationForm() {
                             />
                         </Form.Item>
                         <label htmlFor="user_name" className="custom-label">
+                            User Name
+                        </label>
+                        <Form.Item
+                            name="user_name"
+                            validateTrigger="onSubmit"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please input your user name!',
+                                    whitespace: true,
+                                },
+                            ]}
+                        >
+                            <Input
+                                className="form-control custom-input "
+                                placeholder="User Name"
+                            />
+                        </Form.Item>
+                        <label htmlFor="user_name" className="custom-label">
                             Email
                         </label>
                         <Form.Item
@@ -128,6 +147,26 @@ export default function RegistrationForm() {
                                 placeholder="Email"
                             />
                         </Form.Item>
+                        <label htmlFor="passwords" className="custom-label">
+                            Password
+                        </label>
+                        <Form.Item
+                            name="password"
+                            validateTrigger="onSubmit"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please input your Password!',
+                                },
+                            ]}
+                        >
+                            <Input
+                                type="password"
+                                className="form-control custom-input"
+                                placeholder="Password"
+                            />
+                        </Form.Item>
+
                         <label htmlFor="user_name" className="custom-label">
                             City
                         </label>

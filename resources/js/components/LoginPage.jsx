@@ -2,12 +2,12 @@ import { useDispatch } from 'react-redux';
 import actions from '../redux/Authenticate/actions';
 import { useSelector } from 'react-redux';
 import { Form, Input, Button, Checkbox, Row, Col, Layout } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+
 import { NavLink } from 'react-router-dom';
 
 function LoginPage() {
     const { loader } = useSelector((state) => state.authenticateReducer);
-    // console.log(actions, '=======');
+
     const dispatch = useDispatch();
 
     let onFinish = (values) => {
@@ -104,8 +104,6 @@ function LoginPage() {
                 </div>
             </div>
         </div>
-        // </div>
-        // </div>
     );
 }
 

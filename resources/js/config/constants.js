@@ -1,9 +1,11 @@
 const constants = {
-    HOST_URL: 'http://127.0.0.1:8000/api/v1/',
-    headers: {
+    HOST_URL: import.meta.env.VITE_REACT_APP_URL,
+    withCredentials: true,
+    headers: (token) => ({
         'Content-Type': 'application/json',
         Accept: 'application/json',
-    },
+        // Authorization: `Bearer ${token}`, // Pass the token as a parameter
+    }),
 };
 
 export default constants;

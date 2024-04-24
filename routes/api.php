@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\v1\AuthLoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,9 +31,7 @@ Route::group(['prefix' => '/v1', 'middleware' => ['guest'], 'namespace' => 'Api\
     Route::post('register', 'AuthLoginController@register');
 });
 Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' => 'Api\v1'], function () {
-    Route::get('/auth/user', function (Request $request) {
-        return ['data' => $request->user()];
-    });
+    Route::get('/auth/user', 'AuthLoginController@getUser');
     Route::delete('/logout', [App\Http\Controllers\Api\Auth\AuthController::class, 'logout']);
     #EZBillMiscController
     Route::post('get_login_sync', 'HotelLoginSyncController@getLoginSyncData');
