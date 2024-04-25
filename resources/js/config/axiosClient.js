@@ -2,87 +2,71 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import Cookies from 'js-cookie';
 
-export const axiosApi = axios.create({
-    baseURL: import.meta.env.REACT_APP_URL,
-});
-if (typeof window !== 'undefined') {
-    axiosApi.defaults.headers.common['Authorization'] =
-        `Bearer ${localStorage.getItem('access')}`;
-    axiosApi.defaults.headers['Access-Control-Allow-Origin'] = '*';
-    axiosApi.defaults.headers['ngrok-skip-browser-warning'] = 'any';
-}
+const baseURL = import.meta.env.REACT_APP_URL;
 
-axiosApi.interceptors.request.use(
-    (config) => {
-        // trigger 'loading=true' event here
-        return config;
-    },
+export const axiosApi = axios.create({
+    baseURL: baseURL,
+});
+
+// Add Authorization header with token from local storage
+axiosApi.interceptors.request.use((config) => {
+    const token = localStorage.getItem('access');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+
+// Handle errors and redirections
+axiosApi.interceptors.response.use(
+    (response) => response,
     (error) => {
-        // trigger 'loading=false' event here
+        const { response } = error;
+        if (response && response.status === 401) {
+            // Unauthorized access
+            localStorage.removeItem('access');
+            window.location.href = '/login';
+        } else if (response) {
+            toast.error(response.data?.message || 'An error occurred');
+        } else {
+            toast.error('Network error or server is not reachable');
+        }
         return Promise.reject(error);
     },
 );
-// axiosApi.interceptors.response.use(
-//     (response) => {
-//         if (response?.data?.message) {
-//             toast.success(response?.data?.message);
-//         }
-//         return response;
-//     },
-//     (error) => {
-//         console.log("🚀 ~ error:", error)
-        
-//         // if (axiosApi.isCancel()) {
-//         //   return false;
-//         // }
-//         const _status = error.response.status;
-       
-//         switch (_status) {
-//             case 401:
-                
-//                 toast.error('You are not authorized !');
-//                 // 1. redirect to login
-//                 Cookies.remove('token');
-//                 typeof window !== 'undefined' && localStorage.clear();
-//                 window.location.href = '/login';
-//                 // localStorage.getItem("access");
-//                 return;
-//             case 500:
-//                 toast.error('Internal server Error !');
-//                 break;
-//             default:
-//                 toast.error(error.response?.data?.message);
-//         }
-//         return Promise.reject(error);
-//     },
-// );
 
-export async function getCustomRequest(URL) {
-    return await axiosApi.get(`/${URL}`).then((response) => response);
-}
+export const getRequest = async (url, config = {}) => {
+    try {
+        const response = await axiosApi.get(url, config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
 
-export async function getRequest(URL) {
-    return await axiosApi.get(`/${URL}`).then((response) => response);
-}
-// export async function postRequest(URL, payload) {
-//     console.log(axiosApi);
-//     return await axiosApi
-//         .post(`/${URL}`, payload)
-//         .then((response) => response.data);
-// }
-/** set post response */
-export async function postRequest(URL, payload, config = {}) {
-    return await axiosApi
-      .post(URL, { ...payload }, { ...config })
-      .then((response) =>  response.data);
-  }
+export const postRequest = async (url, payload, config = {}) => {
+    try {
+        const response = await axiosApi.post(url, payload, config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
 
-export async function patchRequest(URL, payload) {
-    return await axiosApi
-        .patch(`/${URL}`, payload)
-        .then((response) => response); 
-}
+export const patchRequest = async (url, payload) => {
+    try {
+        const response = await axiosApi.patch(url, payload);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
 
-export async function deleteRequest(URL) {
-    return await axiosApi.delete(`/${URL}`).then((response) => response);
-}
+export const deleteRequest = async (url) => {
+    try {
+        const response = await axiosApi.delete(url);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};

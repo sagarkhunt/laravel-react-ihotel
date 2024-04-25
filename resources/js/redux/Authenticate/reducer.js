@@ -32,7 +32,6 @@ function Reducer(state = initialState, action) {
         case actions.LOGIN:
             return { ...state, loader: true };
         case actions.LOGIN_SUCCESS:
-            console.log(action,'===============');
             return {
                 ...state,
                 isAuthenticated: !!action.payload.isAuthenticated,
@@ -48,6 +47,16 @@ function Reducer(state = initialState, action) {
             return { ...state, isAuthenticated: false, logOutLoader: false };
         case actions.LOGOUT_FAILURE:
             return { ...state, isAuthenticated: false, logOutLoader: false };
+        case actions.VERIFYTOKEN:
+            return { ...state, logOutLoader: true };
+        case actions.VERIFYTOKEN_SUCCESS:
+            return {
+                ...state,
+                isAuthenticated: !!action.payload.isValid,
+                logOutLoader: false,
+            };
+        case actions.VERIFYTOKEN_FAILURE:
+            return { ...state, isAuthenticated: false, logOutLoader: false };
         case actions.REGISTER:
             return { ...state, registerLoader: true };
         case actions.REGISTER_SUCCESS:
@@ -55,8 +64,7 @@ function Reducer(state = initialState, action) {
                 ...state,
                 isAuthenticated: !!action.payload.isAuthenticated,
                 registerLoader: false,
-                email: action.payload.data.email,
-                name: action.payload.data.name,
+                user: action.payload.user,
             };
         case actions.REGISTER_FAILURE:
             return { ...state, isAuthenticated: false, registerLoader: false };

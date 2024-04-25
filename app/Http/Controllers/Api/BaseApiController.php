@@ -11,7 +11,7 @@ class BaseApiController extends Controller
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    protected $store_id = 0;
+    
 
     /**
      * success response method.

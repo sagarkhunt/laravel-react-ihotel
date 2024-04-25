@@ -1,19 +1,39 @@
 import { Button, Col, Form, Input, Layout, Row } from 'antd';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import actions from '../redux/Authenticate/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 export default function RegistrationForm() {
-    const { registerLoader } = useSelector(
+    // const { registerLoader } = useSelector(
+    //     (state) => state.authenticateReducer,
+    // );
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { isAuthenticated } = useSelector(
         (state) => state.authenticateReducer,
     );
-    const dispatch = useDispatch();
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/dashboard');
+        }
+    }, [isAuthenticated, navigate]);
     const [form] = Form.useForm();
 
     const onFinish = (values) => {
         dispatch({
             type: actions.REGISTER,
             payload: values,
+        }).then(() => {
+            // Check for the registration success in the Redux store
+            const isRegisterSuccess = useSelector(
+                (state) => state.registerSuccess,
+            );
+
+            if (isRegisterSuccess) {
+                // If registration was successful, navigate to the login page
+                navigate('/login');
+            }
         });
     };
     return (

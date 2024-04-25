@@ -26,12 +26,13 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-Route::group(['prefix' => '/v1', 'middleware' => ['guest'], 'namespace' => 'Api\v1'], function () {
+Route::group(['prefix' => '/v1', 'namespace' => 'Api\v1'], function () {
     Route::post('login', 'AuthLoginController@login');
     Route::post('register', 'AuthLoginController@register');
 });
 Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' => 'Api\v1'], function () {
-    Route::get('/auth/user', 'AuthLoginController@getUser');
+    Route::get('auth/user', 'AuthLoginController@getUser');
+    Route::post('verify_token', 'AuthLoginController@verifyToken');
     Route::delete('/logout', [App\Http\Controllers\Api\Auth\AuthController::class, 'logout']);
     #EZBillMiscController
     Route::post('get_login_sync', 'HotelLoginSyncController@getLoginSyncData');

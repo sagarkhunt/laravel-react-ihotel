@@ -1,43 +1,84 @@
-import { lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Switch } from 'react-router-dom';
-import { PrivateRoute, PublicRoute } from '../routes/helpers';
-import ProtectedRoutes from '../routes/ProtectedRoutes';
+// // src/Routes.jsx
+// import React from 'react';
+// import { Routes, Route } from 'react-router-dom';
+// import Home from '../components/pages/Home';
+// import About from '../components/pages/About';
+// import LoginPage from '../components/LoginPage';
+// import RegistrationForm from '../components/Register';
+// import ProtectedRoute from './ProtectedRoutes';
+// import Dashboard from '../components/Dashboard';
 
-const LoginPage = lazy(() => import('../components/LoginPage'));
-const Registration = lazy(() => import('../components/Register'));
+// const AppRoutes = () => {    
+//   return (
+//     <Routes>
+//       {/* Public Routes */}
+//       <Route path="/login" element={<LoginPage />} />
+//       <Route path="/register" element={<RegistrationForm />} />
+//       <Route path="/" element={<LoginPage />} />
+//       <Route path="/about" element={<About />} />
 
-export function AppRoutes({ isAuthenticated }) {
-    console.log('🚀 ~ AppRoutes ~ isAuthenticated:', isAuthenticated);
-    return (
-        <Router>
-            <Suspense fallback={<div>Loading...</div>}>
-                <Switch>
-                    <PublicRoute
-                        path="/"
-                        isAuthenticated={isAuthenticated}
-                        exact
-                    >
-                        <LoginPage />
-                    </PublicRoute>
-                    <PublicRoute
-                        path="/login"
-                        isAuthenticated={isAuthenticated}
-                        exact
-                    >
-                        <LoginPage />
-                    </PublicRoute>
-                    <PublicRoute
-                        path="/register"
-                        isAuthenticated={isAuthenticated}
-                        exact
-                    >
-                        <Registration />
-                    </PublicRoute>
-                    <PrivateRoute path="/" isAuthenticated={isAuthenticated}>
-                        <ProtectedRoutes />
-                    </PrivateRoute>
-                </Switch>
-            </Suspense>
-        </Router>
-    );
-}
+//       {/* Protected Routes */}
+//       <Route element={<ProtectedRoute />}>
+//         <Route path="/dashboard" element={<Dashboard />} />
+//         {/* Add other protected routes here */}
+//       </Route>
+//     </Routes>
+//   );
+// };
+
+// export default AppRoutes;
+import {createBrowserRouter} from 'react-router-dom';
+import LoginPage from '../components/LoginPage.jsx';
+import RegistrationForm from '../components/Register.jsx';
+import DefaultLayout from '../layouts/DefaultLayout.jsx';
+import GuestLayout from '../layouts/GuestLayout.jsx';
+import Dashboard from '../components/Dashboard.jsx';
+import ProtectedRoute from './ProtectedRoutes.jsx';
+// import Users from './views/users.jsx';
+// import UserForm from './views/UserForm.jsx';
+
+const router = createBrowserRouter ([
+    {
+        path: '/',
+        element: <DefaultLayout />,
+        children: [
+            {
+                path:'/dashboard',
+                element: (
+                    <ProtectedRoute>
+                        <Dashboard />
+                    </ProtectedRoute>
+                ),
+            },
+            // {
+            //     path: '/users',
+            //     element: <Users />,
+            // },
+            // {
+            //     path: '/users/new',
+            //     element: <UserForm key="userCreate"/>
+            // },
+            // {
+            //     path: '/users/:id',
+            //     element: <UserForm key="userUpdate" />
+            // },
+        ]
+    },
+
+    {
+        path: '/',
+        element: <GuestLayout />,
+        children: [
+            {
+                path: '/login',
+                element: <LoginPage />,
+            },
+            {
+                path: '/register',
+                element:  <RegistrationForm />,
+            }
+        ]
+    },
+]);
+
+export default router;

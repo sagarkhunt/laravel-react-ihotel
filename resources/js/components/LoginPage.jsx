@@ -3,14 +3,21 @@ import actions from '../redux/Authenticate/actions';
 import { useSelector } from 'react-redux';
 import { Form, Input, Button, Checkbox, Row, Col, Layout } from 'antd';
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, Navigate, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 function LoginPage() {
-    const { loader } = useSelector((state) => state.authenticateReducer);
 
     const dispatch = useDispatch();
-
-    let onFinish = (values) => {
+    const navigate = useNavigate()
+    const { isAuthenticated,loader } = useSelector((state) => state.authenticateReducer);
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/dashboard');
+        }
+    }, [isAuthenticated, navigate]);
+    const onFinish = (values) => {
+        console.log("🚀 ~ onFinish ~ values:", values)
         dispatch({
             type: actions.LOGIN,
             payload: {
@@ -19,6 +26,7 @@ function LoginPage() {
                 remember: values.remember,
             },
         });
+        // navigate('/dashboard')
     };
 
     return (
