@@ -1,79 +1,16 @@
-// import React, { useEffect, useRef } from 'react';
-// import $ from 'jquery'; // Import jQuery
-// import DataTable from 'react-data-table-component';
-
-// const DataTableComponent = ({ data }) => {
-//     console.log('🚀 ~ DataTableComponent ~ data:', data);
-//     const columns = [
-//         {
-//             id: 1,
-//             name: 'Name',
-//             selector: (row) => row.name,
-//             sortable: true,
-//             reorder: true,
-//         },
-//         {
-//             id: 2,
-//             name: 'Email',
-//             selector: (row) => row.email,
-//             sortable: true,
-//             reorder: true,
-//         },
-//         {
-//             id: 3,
-//             name: 'Designation',
-//             selector: (row) => '-',
-//             sortable: true,
-//             right: true,
-//             reorder: true,
-//         },
-//         {
-//             id: 4,
-//             name: 'Status',
-//             selector: (row) => row.status,
-//             sortable: true,
-//             right: true,
-//             reorder: true,
-//         },
-//         {
-//             id: 'edit',
-//             name: 'Action',
-//             cell: (row) => (
-//                 <>
-//                     <span class="material-icons-outlined delete-table">
-//                         cancel_presentation
-//                     </span>
-//                     <span class="material-icons-outlined edit-table">edit</span>
-//                 </>
-//             ),
-//             sortable: false,
-//             right: true,
-//         },
-//     ];
-
-//     return (
-//         <DataTable
-//             title="User"
-//             columns={columns}
-//             data={data}
-//             defaultSortFieldId={1}
-//             // sortIcon={<SortIcon />}
-//             pagination
-//             selectableRows
-//             searching
-//         />
-//     );
-// };
-
-// export default DataTableComponent;
-
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import $ from 'jquery';
 import 'datatables.net';
 
-const DataTableComponent = ({ data, onEdit }) => {
+const DataTableComponent = ({
+    data,
+    columnsConfig,
+    onEdit,
+    onDelete,
+    setSelectedId,
+}) => {
     const tableRef = useRef(null);
-    const [selectedUser, setSelectedUser] = useState(null);
+
     useEffect(() => {
         let dataTableInstance = null;
 
@@ -85,23 +22,9 @@ const DataTableComponent = ({ data, onEdit }) => {
         )
             return;
 
-        // Ensure that data is an array before proceeding
-        const modifiedData = data.map((row) => ({
-            ...row,
-            action: `
-                <label class="custom-control-label" htmlFor="customCheck${row.id}"></label>
-                <span class="material-icons-outlined delete-table">
-                    cancel_presentation
-                </span>
-                <span class="material-icons-outlined edit-table">
-                    edit
-                </span>
-            `,
-        }));
-
         // Create DataTable instance
         dataTableInstance = $(tableRef.current).DataTable({
-            data: modifiedData,
+            data,
             paging: true,
             lengthChange: true,
             searching: false,
@@ -109,28 +32,54 @@ const DataTableComponent = ({ data, onEdit }) => {
             info: false,
             autoWidth: false,
             responsive: true,
-            order: [[0, 'desc']],
+            language: {
+                search: 'search',
+            },
+            pagingType: 'simple_numbers',
             dom: '<"float-left"B><"float-right"f>rt<"row custom-footer-row "<"col-sm-4"l><"col-sm-4"i><"col-sm-4"p>>',
-            columns: [
-                { data: 'id' },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        // Return the HTML for the checkbox input
-                        return `<input type="checkbox" class="custom-control-input" id="customCheck${row.id}">`;
-                    },
-                },
-                { data: 'name' },
-                { data: 'email' },
-                { data: 'designation_id' },
-                { data: 'status' },
-                { data: 'action' }, // Include the custom action column with checkbox
-            ],
+            order: [[0, 'desc']],
+            columns: columnsConfig,
         });
+
         // Add event listener to handle edit action
         $(tableRef.current).on('click', '.edit-table', function () {
             const rowData = dataTableInstance.row($(this).parents('tr')).data();
-            handleEditUser(rowData); // Call function to handle edit action
+            onEdit(rowData); // Call the provided edit action callback
+        });
+
+        // Add event listener to handle delete action
+        $(tableRef.current).on('click', '.delete-table', function () {
+            const rowData = dataTableInstance.row($(this).parents('tr')).data();
+            onDelete(rowData); // Call the provided delete action callback
+        });
+
+        $(tableRef.current).on('click', '.row-checkbox', function () {
+            // Get the index of the row
+            const rowIndex = dataTableInstance
+                .row($(this).closest('tr'))
+                .index();
+
+            // Retrieve the data for the row index
+            const rowData = dataTableInstance.row(rowIndex).data();
+
+            if (rowData && rowData.id) {
+                const selectedId = rowData.id; // Get the ID of the clicked row
+                console.log('🚀 ~ selectedId:', selectedId);
+                const isChecked = $(this).prop('checked'); // Check if the checkbox is checked
+
+                if (isChecked) {
+                    // If the checkbox is checked, push the ID to the array
+                    setSelectedId((prevSelectedId) => [
+                        ...prevSelectedId,
+                        selectedId,
+                    ]);
+                } else {
+                    // If the checkbox is unchecked, remove the ID from the array
+                    setSelectedId((prevSelectedId) =>
+                        prevSelectedId.filter((id) => id !== selectedId),
+                    );
+                }
+            }
         });
 
         return () => {
@@ -139,47 +88,21 @@ const DataTableComponent = ({ data, onEdit }) => {
                 dataTableInstance.destroy();
             }
         };
-    }, [data]);
-    const handleEditUser = (user) => {
-        setSelectedUser(user);
-        onEdit(user);
-    };
+    }, [data, columnsConfig, onEdit, setSelectedId]);
 
     return (
         <table ref={tableRef} className="display">
             <thead>
                 <tr>
-                    <th scope="col" className="th-custom table-left">
-                        #
-                    </th>
-                    <th scope="col" className="th-custom action-check">
-                        <div className="custom-control custom-checkbox">
-                            <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id="customCheckAll"
-                            />
-                            <label
-                                className="custom-control-label"
-                                htmlFor="customCheckAll"
-                            ></label>
-                        </div>
-                    </th>
-                    <th scope="col" className="th-custom">
-                        Name
-                    </th>
-                    <th scope="col" className="th-custom">
-                        Email
-                    </th>
-                    <th scope="col" className="th-custom table-left">
-                        Designation
-                    </th>
-                    <th scope="col" className="th-custom">
-                        Status
-                    </th>
-                    <th scope="col-auto" className="th-custom action-col">
-                        Action
-                    </th>
+                    {columnsConfig.map((column, index) => (
+                        <th
+                            key={index}
+                            scope="col"
+                            className={`th-custom ${column.className}`}
+                        >
+                            {column.label}
+                        </th>
+                    ))}
                 </tr>
             </thead>
             <tbody />

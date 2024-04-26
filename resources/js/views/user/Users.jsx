@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import actions from '../../redux/Users/actions';
 import DataTableComponent from '../../components/common/DataTableComponent';
 import CreateEditMdl from './CreateEditMdl';
+import DeleteMdl from '../../components/common/DeleteMdl';
 function Users() {
     const [listingData, setListingData] = useState([]);
     const dispatch = useDispatch();
@@ -11,39 +12,112 @@ function Users() {
         (state) => state?.usersReducer,
     );
     const [open, setOpen] = useState(false);
+    const [showDel, setShowDel] = useState(false);
+    const [delId, setDelId] = useState('');
     const [mode, setMode] = useState('Add User'); // 'add' or 'edit'
     const [userData, setUserData] = useState(null); // Data of user being edited
-
+    const [selectedId, setSelectedId] = useState([]);
+    const columnsConfig = [
+        { data: 'id', label: '#', className: 'table-left' },
+        {
+            data: null,
+            title: `<span class="dt-column-title">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="customCheckAll">
+                    <label class="custom-control-label" htmlFor="customCheckAll"></label>
+                </div>
+            </span>`,
+            className: 'action-check',
+            render: () =>
+                `
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input row-checkbox">
+                    <label class="custom-control-label"></label>
+                </div>
+                `,
+        },
+        { data: 'name', label: 'Name' },
+        { data: 'email', label: 'Email' },
+        {
+            data: 'designation_id',
+            label: 'Designation',
+            className: 'table-left',
+        },
+        {
+            data: 'status',
+            label: 'Status',
+            render: function (data, type, row) {
+                if (data === 1) {
+                    return '<div class="status-active">Active</div>';
+                } else {
+                    return '<div class="status-deactive">Deactive</div>';
+                }
+            },
+        },
+        {
+            data: null,
+            label: 'Action',
+            render: () =>
+                `
+            <span class="material-icons-outlined delete-table">
+                cancel_presentation
+            </span>
+            <span class="material-icons-outlined edit-table">
+                edit
+            </span>
+            `,
+        },
+    ];
+    /***
+     * @param{handleAddUser}
+     */
     function handleAddUser() {
         setMode('Add User');
         setOpen(true);
     }
-
+    /**
+     *
+     * @param {handleEditUser} user
+     */
     function handleEditUser(user) {
         console.log('🚀 ~ handleEditUser ~ user:', user);
         setMode('Edit User');
         setUserData(user);
         setOpen(true);
     }
-
+    /**
+     *
+     * @param {handleDeleteUser} rowData
+     */
+    const handleDeleteUser = (rowData) => {
+        // Check if rowData contains the id property
+        if (rowData && rowData.id) {
+            setShowDel(true);
+            setDelId(rowData.id);
+        }
+    };
+    const handleDelSubmit = () => {
+        console.log(delId);
+    };
+    const removeMultiple = () => {
+        console.log('=========', selectedId);
+    };
+    /**
+     *
+     * @param {handleSubmit} formData
+     */
     function handleSubmit(formData) {
         // Handle form submission based on mode (add or edit)
         if (mode === 'Add User') {
-            console.log(formData, '====add');
             dispatch({
                 type: actions.USER_ADD,
                 payload: formData,
             });
         } else {
-            console.log(formData, '====edit');
             const updatedFormData = {
                 ...formData,
                 user_id: userData.id, // Add user_id to formData
             };
-            console.log(
-                '🚀 ~ handleSubmit ~ updatedFormData:',
-                updatedFormData,
-            );
             dispatch({
                 type: actions.USER_UPDATE,
                 payload: updatedFormData,
@@ -119,7 +193,10 @@ function Users() {
                                     New User
                                 </button>
 
-                                <button className="btn btn-outline d-flex">
+                                <button
+                                    className="btn btn-outline d-flex"
+                                    onClick={removeMultiple}
+                                >
                                     <span className="material-icons-outlined">
                                         delete
                                     </span>
@@ -132,6 +209,9 @@ function Users() {
                         <DataTableComponent
                             data={listingData}
                             onEdit={handleEditUser}
+                            onDelete={handleDeleteUser}
+                            columnsConfig={columnsConfig}
+                            setSelectedId={setSelectedId}
                         />
                         {/* <table className="table custom-table" id="user_table">
                             <thead>
@@ -241,6 +321,14 @@ function Users() {
                         mode={mode}
                         onSubmit={handleSubmit}
                         userData={userData}
+                    />
+                )}
+                {showDel && (
+                    <DeleteMdl
+                        open={showDel}
+                        setOpen={setShowDel}
+                        onSubmit={handleDelSubmit}
+                        delId={setDelId}
                     />
                 )}
             </div>

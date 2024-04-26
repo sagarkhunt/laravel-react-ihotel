@@ -27,7 +27,7 @@
 // };
 
 // export default AppRoutes;
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import LoginPage from '../components/LoginPage.jsx';
 import RegistrationForm from '../components/Register.jsx';
 import DefaultLayout from '../layouts/DefaultLayout.jsx';
@@ -35,7 +35,27 @@ import GuestLayout from '../layouts/GuestLayout.jsx';
 import Dashboard from '../components/Dashboard.jsx';
 import ProtectedRoute from './ProtectedRoutes.jsx';
 import Users from '../views/user/Users.jsx';
-// import UserForm from './views/UserForm.jsx';
+import Floor from '../views/floor/Floor.jsx';
+import Section from '../views/section/Section.jsx';
+import Amenity from '../views/amenity/Amenity.jsx';
+
+// Define a function to check if the user is authenticated
+const isAuthenticated = () => {
+    // Implement your authentication check logic here
+    const authToken = localStorage.getItem('Access_Token');
+    return !!authToken;
+};
+
+// Create a wrapper component for protected routes
+const ProtectedRouteWrapper = ({ element }) => {
+    // Check if the user is authenticated
+    const authenticated = isAuthenticated();
+    console.log('🚀 ~ ProtectedRouteWrapper ~ authenticated:', authenticated);
+
+    // If the user is authenticated, render the element
+    // Otherwise, redirect to the login page
+    return authenticated ? element : <Navigate to="/login" />;
+};
 
 const router = createBrowserRouter([
     {
@@ -44,28 +64,24 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '/dashboard',
-                element: (
-                    <ProtectedRoute>
-                        <Dashboard />
-                    </ProtectedRoute>
-                ),
+                element: <ProtectedRouteWrapper element={<Dashboard />} />,
             },
             {
                 path: '/user_list',
-                element: (
-                    <ProtectedRoute>
-                        <Users />
-                    </ProtectedRoute>
-                ),
+                element: <ProtectedRouteWrapper element={<Users />} />,
             },
-            // {
-            //     path: '/users/new',
-            //     element: <UserForm key="userCreate"/>
-            // },
-            // {
-            //     path: '/users/:id',
-            //     element: <UserForm key="userUpdate" />
-            // },
+            {
+                path: '/floor',
+                element: <ProtectedRouteWrapper element={<Floor />} />,
+            },
+            {
+                path: '/section',
+                element: <ProtectedRouteWrapper element={<Section />} />,
+            },
+            {
+                path: '/amenity',
+                element: <ProtectedRouteWrapper element={<Amenity />} />,
+            },
         ],
     },
 

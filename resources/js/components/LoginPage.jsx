@@ -18,7 +18,6 @@ function LoginPage() {
         }
     }, [isAuthenticated]);
     const onFinish = (values) => {
-        console.log('🚀 ~ onFinish ~ values:', values);
         dispatch({
             type: actions.LOGIN,
             payload: {

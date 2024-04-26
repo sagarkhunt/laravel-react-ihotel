@@ -10,9 +10,24 @@ function Dashboard() {
     return (
         <div className="dashboard">
             <h1>Laravel React js Dashboard</h1>
-            <Link to="/user_list">
-                <button type="button" className="btn btn-primary">
+            <Link to="/user_list" className="">
+                <button type="button" className="btn btn-primary me-2">
                     User Management
+                </button>
+            </Link>
+            <Link to="/floor">
+                <button type="button" className="btn btn-primary me-2">
+                    Floor
+                </button>
+            </Link>
+            <Link to="/section">
+                <button type="button" className="btn btn-primary me-2">
+                    Section
+                </button>
+            </Link>
+            <Link to="/amenity">
+                <button type="button" className="btn btn-primary">
+                    Amenity
                 </button>
             </Link>
         </div>

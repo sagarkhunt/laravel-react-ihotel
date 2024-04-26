@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Modal from '../../components/common/Modal';
 
 function CreateEditMdl({ open, setOpen, mode, onSubmit, userData }) {
-    console.log('🚀 ~ CreateEditMdl ~ mode:', mode);
     const [selectedValue, setSelectedValue] = useState('');
     const [formData, setFormData] = useState({});
 

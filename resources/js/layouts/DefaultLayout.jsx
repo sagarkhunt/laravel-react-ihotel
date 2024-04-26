@@ -30,17 +30,22 @@ export default function DefaultLayout() {
 
     return (
         <div id="defaultLayout">
+            <Navbar />
             <div className="content">
-                {/* <header>
-                <div>
-                    Header
-                </div>
-                <div>
-                    
-                    <a href="#"  classNameName="btn-logout"> Logout</a>
-                </div>
-            </header> */}
-                <Navbar />
+                {/* <aside className="sidebar">
+                    Sidebar content goes here
+                    <ul>
+                        <li>
+                            <a href="#">Link 1</a>
+                        </li>
+                        <li>
+                            <a href="#">Link 2</a>
+                        </li>
+                        <li>
+                            <a href="#">Link 3</a>
+                        </li>
+                    </ul>
+                </aside> */}
                 <main>
                     <Outlet />
                 </main>
