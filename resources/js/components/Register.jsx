@@ -2,7 +2,7 @@ import { Button, Col, Form, Input, Layout, Row } from 'antd';
 import { NavLink, useNavigate } from 'react-router-dom';
 import actions from '../redux/Authenticate/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 export default function RegistrationForm() {
     // const { registerLoader } = useSelector(
@@ -10,32 +10,28 @@ export default function RegistrationForm() {
     // );
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { isAuthenticated } = useSelector(
-        (state) => state.authenticateReducer,
-    );
-    useEffect(() => {
-        if (isAuthenticated) {
-            navigate('/dashboard');
-        }
-    }, [isAuthenticated, navigate]);
+
+    // useEffect(() => {
+    // }, [isAuthenticated, navigate]);
     const [form] = Form.useForm();
 
     const onFinish = (values) => {
         dispatch({
             type: actions.REGISTER,
             payload: values,
-        }).then(() => {
-            // Check for the registration success in the Redux store
-            const isRegisterSuccess = useSelector(
-                (state) => state.registerSuccess,
-            );
-
-            if (isRegisterSuccess) {
-                // If registration was successful, navigate to the login page
-                navigate('/login');
-            }
         });
     };
+    const { isAuthenticated } = useSelector(
+        (state) => state.authenticateReducer,
+    );
+    // Handle redirection to login page after registration success
+    React.useEffect(() => {
+        if (isAuthenticated) {
+            window.location.href = '/login';
+        } else {
+            navigate('/register');
+        }
+    }, [isAuthenticated]); // Only re-run effect if isRegisterSuccess changes
     return (
         <div className="login-container">
             <div className="row m-0">

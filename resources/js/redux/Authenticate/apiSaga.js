@@ -9,6 +9,7 @@ import {
 } from '../../config/axiosClient';
 import { message } from 'antd';
 import Cookies from 'js-cookie';
+import toast from 'react-hot-toast';
 
 function* login(action) {
     try {
@@ -26,8 +27,13 @@ function* login(action) {
         yield put({ type: actions.LOGIN_FAILURE });
         if (error.response.status === 401) {
             message.error(error.response.data.message);
-        } else {
-            message.error('Something Went Wrong');
+        } else if (
+            error.response &&
+            error.response.data &&
+            error.response.data.message
+        ) {
+            toast.error(error.response.data.message);
+            message.error(error.response.data.message);
         }
     }
 }
@@ -115,9 +121,11 @@ function* verifyToken(action) {
 }
 
 export default function* rootSaga() {
-    yield all([takeLatest(actions.LOGIN, login)]);
-    yield all([takeLatest(actions.GET_AUTH_USER, getAuthUser)]);
-    yield all([takeLatest(actions.LOGOUT, logout)]);
-    yield all([takeLatest(actions.VERIFYTOKEN, verifyToken)]);
-    yield all([takeLatest(actions.REGISTER, register)]);
+    yield all([
+        takeLatest(actions.LOGIN, login),
+        takeLatest(actions.GET_AUTH_USER, getAuthUser),
+        takeLatest(actions.LOGOUT, logout),
+        takeLatest(actions.REGISTER, register),
+        takeLatest(actions.VERIFYTOKEN, verifyToken),
+    ]);
 }

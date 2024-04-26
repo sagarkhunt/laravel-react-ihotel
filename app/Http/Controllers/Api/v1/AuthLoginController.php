@@ -24,7 +24,7 @@ class AuthLoginController extends BaseApiController
 
 
         if (!Auth::attempt($data)) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
+            return response()->json(['message' => 'Invalid credentials'], 422);
         }
         $userDetails = array();
         $auth_user = Auth::user();
@@ -55,9 +55,9 @@ class AuthLoginController extends BaseApiController
             'role_id' => 1,
             'password' => Hash::make($request['password']),
         ]);
-        $accesstoken = $user->createToken('API TOKEN')->plainTextToken;;
+        // $accesstoken = $user->createToken('API TOKEN')->plainTextToken;;
 
-        $userDetails['token'] = $accesstoken;
+        // $userDetails['token'] = $accesstoken;
         $userDetails['isAuthenticated'] = true;
         $userDetails['user'] = $user;
         return $this->sendResponse($userDetails, "Register Successfully!s");

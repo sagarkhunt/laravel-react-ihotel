@@ -7,17 +7,18 @@ import { NavLink, Navigate, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
 function LoginPage() {
-
     const dispatch = useDispatch();
-    const navigate = useNavigate()
-    const { isAuthenticated,loader } = useSelector((state) => state.authenticateReducer);
+    const navigate = useNavigate();
+    const { isAuthenticated, loader } = useSelector(
+        (state) => state.authenticateReducer,
+    );
     useEffect(() => {
         if (isAuthenticated) {
             navigate('/dashboard');
         }
-    }, [isAuthenticated, navigate]);
+    }, [isAuthenticated]);
     const onFinish = (values) => {
-        console.log("🚀 ~ onFinish ~ values:", values)
+        console.log('🚀 ~ onFinish ~ values:', values);
         dispatch({
             type: actions.LOGIN,
             payload: {

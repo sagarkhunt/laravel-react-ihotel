@@ -10,7 +10,7 @@ export const axiosApi = axios.create({
 
 // Add Authorization header with token from local storage
 axiosApi.interceptors.request.use((config) => {
-    const token = localStorage.getItem('access');
+    const token = localStorage.getItem('Access_Token');
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
@@ -25,7 +25,10 @@ axiosApi.interceptors.response.use(
         if (response && response.status === 401) {
             // Unauthorized access
             localStorage.removeItem('access');
+
             window.location.href = '/login';
+        } else if (response && response.status === 422) {
+            toast.error(response.data?.message || 'An error occurred');
         } else if (response) {
             toast.error(response.data?.message || 'An error occurred');
         } else {

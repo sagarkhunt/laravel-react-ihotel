@@ -8,7 +8,7 @@
 // import ProtectedRoute from './ProtectedRoutes';
 // import Dashboard from '../components/Dashboard';
 
-// const AppRoutes = () => {    
+// const AppRoutes = () => {
 //   return (
 //     <Routes>
 //       {/* Public Routes */}
@@ -27,33 +27,37 @@
 // };
 
 // export default AppRoutes;
-import {createBrowserRouter} from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import LoginPage from '../components/LoginPage.jsx';
 import RegistrationForm from '../components/Register.jsx';
 import DefaultLayout from '../layouts/DefaultLayout.jsx';
 import GuestLayout from '../layouts/GuestLayout.jsx';
 import Dashboard from '../components/Dashboard.jsx';
 import ProtectedRoute from './ProtectedRoutes.jsx';
-// import Users from './views/users.jsx';
+import Users from '../views/user/Users.jsx';
 // import UserForm from './views/UserForm.jsx';
 
-const router = createBrowserRouter ([
+const router = createBrowserRouter([
     {
         path: '/',
         element: <DefaultLayout />,
         children: [
             {
-                path:'/dashboard',
+                path: '/dashboard',
                 element: (
                     <ProtectedRoute>
                         <Dashboard />
                     </ProtectedRoute>
                 ),
             },
-            // {
-            //     path: '/users',
-            //     element: <Users />,
-            // },
+            {
+                path: '/user_list',
+                element: (
+                    <ProtectedRoute>
+                        <Users />
+                    </ProtectedRoute>
+                ),
+            },
             // {
             //     path: '/users/new',
             //     element: <UserForm key="userCreate"/>
@@ -62,7 +66,7 @@ const router = createBrowserRouter ([
             //     path: '/users/:id',
             //     element: <UserForm key="userUpdate" />
             // },
-        ]
+        ],
     },
 
     {
@@ -75,9 +79,9 @@ const router = createBrowserRouter ([
             },
             {
                 path: '/register',
-                element:  <RegistrationForm />,
-            }
-        ]
+                element: <RegistrationForm />,
+            },
+        ],
     },
 ]);
 

@@ -8,11 +8,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { RouterProvider } from 'react-router-dom';
 import router from './routes/AppRoutes';
 
-
 ReactDOM.createRoot(document.getElementById('app')).render(
-  <Provider store={store()}>
-    <React.StrictMode>
-    <RouterProvider router={router}/>
-    </React.StrictMode>
-  </Provider>
+    <Provider store={store()}>
+        <RouterProvider router={router} />
+    </Provider>,
 );
