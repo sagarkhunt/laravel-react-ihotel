@@ -38,6 +38,10 @@ import Users from '../views/user/Users.jsx';
 import Floor from '../views/floor/Floor.jsx';
 import Section from '../views/section/Section.jsx';
 import Amenity from '../views/amenity/Amenity.jsx';
+import RoomPlan from '../views/roomplan/RoomPlan.jsx';
+import RoomView from '../views/roomview/RoomView.jsx';
+import Inquiry from '../views/inquiry/Inquiry.jsx';
+import RoomCategory from '../views/roomCategory/RoomCategory.jsx';
 
 // Define a function to check if the user is authenticated
 const isAuthenticated = () => {
@@ -45,12 +49,13 @@ const isAuthenticated = () => {
     const authToken = localStorage.getItem('Access_Token');
     return !!authToken;
 };
-
+console.log('================');
 // Create a wrapper component for protected routes
 const ProtectedRouteWrapper = ({ element }) => {
     // Check if the user is authenticated
     const authenticated = isAuthenticated();
     console.log('🚀 ~ ProtectedRouteWrapper ~ authenticated:', authenticated);
+    console.log('🚀 ~ ProtectedRouteWrapper ~ authenticated:');
 
     // If the user is authenticated, render the element
     // Otherwise, redirect to the login page
@@ -81,6 +86,22 @@ const router = createBrowserRouter([
             {
                 path: '/amenity',
                 element: <ProtectedRouteWrapper element={<Amenity />} />,
+            },
+            {
+                path: '/rooms_plan',
+                element: <ProtectedRouteWrapper element={<RoomPlan />} />,
+            },
+            {
+                path: '/rooms_category',
+                element: <ProtectedRouteWrapper element={<RoomCategory />} />,
+            },
+            {
+                path: '/room_view',
+                element: <ProtectedRouteWrapper element={<RoomView />} />,
+            },
+            {
+                path: '/inquiry_type',
+                element: <ProtectedRouteWrapper element={<Inquiry />} />,
             },
         ],
     },

@@ -2,10 +2,10 @@
 /* @import url('variables.css'); */
 
 /* Fonts */
-@font-face {
+/* @font-face {
     font-family: 'GeneralSans';
     src:
-        url('../fonts/GeneralSans-Regular.woff2') format('woff2'),
+        url('../fonts/GeneralSans-Bold.woff2') format('woff2'),
         url('../fonts/GeneralSans-Regular.woff') format('woff'),
         url('../fonts/GeneralSans-Regular.ttf') format('truetype');
     font-weight: 400;
@@ -43,7 +43,7 @@
     font-weight: 700;
     font-display: swap;
     font-style: normal;
-}
+} */
 
 /* Colors */
 

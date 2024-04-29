@@ -26,8 +26,33 @@ function Dashboard() {
                 </button>
             </Link>
             <Link to="/amenity">
-                <button type="button" className="btn btn-primary">
+                <button type="button" className="btn btn-primary me-2">
                     Amenity
+                </button>
+            </Link>
+            <Link to="/rooms_category">
+                <button type="button" className="btn btn-primary me-2">
+                    Room Category
+                </button>
+            </Link>
+            {/*<Link to="/rooms">
+                <button type="button" className="btn btn-primary me-2">
+                    Room
+                </button>
+            </Link> */}
+            <Link to="/rooms_plan">
+                <button type="button" className="btn btn-primary me-2">
+                    Room Plan
+                </button>
+            </Link>
+            <Link to="/room_view">
+                <button type="button" className="btn btn-primary me-2">
+                    Room View
+                </button>
+            </Link>
+            <Link to="/inquiry_type">
+                <button type="button" className="btn btn-primary me-2">
+                    Inquiry
                 </button>
             </Link>
         </div>

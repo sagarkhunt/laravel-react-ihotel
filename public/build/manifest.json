@@ -1,61 +1,20 @@
 {
-  "_index-Dc8mdBGx.js": {
-    "file": "assets/index-Dc8mdBGx.js",
-    "name": "index",
-    "imports": [
-      "resources/js/app.js"
-    ]
-  },
   "resources/css/app.css": {
-    "file": "assets/app-BDswrcgN.css",
+    "file": "assets/app-CxFOHgVC.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-DKxPlNHT.js",
+    "file": "assets/app-C8cQI2yi.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
-    "dynamicImports": [
-      "resources/js/components/Dashboard.jsx",
-      "resources/js/components/LoginPage.jsx",
-      "resources/js/components/Register.jsx"
-    ],
     "css": [
       "assets/app-DUEfxN0n.css"
     ]
   },
-  "resources/js/components/Dashboard.jsx": {
-    "file": "assets/Dashboard-DsLwxt7x.js",
-    "name": "Dashboard",
-    "src": "resources/js/components/Dashboard.jsx",
-    "isDynamicEntry": true,
-    "imports": [
-      "resources/js/app.js"
-    ]
-  },
-  "resources/js/components/LoginPage.jsx": {
-    "file": "assets/LoginPage-1o2xlLoz.js",
-    "name": "LoginPage",
-    "src": "resources/js/components/LoginPage.jsx",
-    "isDynamicEntry": true,
-    "imports": [
-      "resources/js/app.js",
-      "_index-Dc8mdBGx.js"
-    ]
-  },
-  "resources/js/components/Register.jsx": {
-    "file": "assets/Register-BYWFKPma.js",
-    "name": "Register",
-    "src": "resources/js/components/Register.jsx",
-    "isDynamicEntry": true,
-    "imports": [
-      "resources/js/app.js",
-      "_index-Dc8mdBGx.js"
-    ]
-  },
   "resources/sass/app.scss": {
-    "file": "assets/app-B7pzsyUM.css",
+    "file": "assets/app-xbEfd7vA.css",
     "src": "resources/sass/app.scss",
     "isEntry": true
   }

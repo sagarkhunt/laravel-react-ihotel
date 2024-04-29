@@ -9,22 +9,39 @@ export const axiosApi = axios.create({
 });
 
 // Add Authorization header with token from local storage
-axiosApi.interceptors.request.use((config) => {
-    const token = localStorage.getItem('Access_Token');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-});
+// axiosApi.interceptors.request.use((config) => {
+//     const token = localStorage.getItem('Access_Token');
+//     if (token) {
+//         config.headers.Authorization = `Bearer ${token}`;
+//     }
+//     return config;
+// });
+axiosApi.interceptors.request.use(
+    (config) => {
+        const isAuthenticated = JSON.parse(
+            localStorage.getItem('isAuthenticated'),
+        );
+        if (isAuthenticated) {
+            const token = localStorage.getItem('Access_Token');
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    },
+);
 
 // Handle errors and redirections
 axiosApi.interceptors.response.use(
     (response) => response,
     (error) => {
+        console.log('🚀 ~ error:', error);
         const { response } = error;
         if (response && response.status === 401) {
             // Unauthorized access
-            localStorage.removeItem('access');
+            localStorage.removeItem('Access_Token');
+            localStorage.removeItem('isAuthenticated');
 
             window.location.href = '/login';
         } else if (response && response.status === 422) {

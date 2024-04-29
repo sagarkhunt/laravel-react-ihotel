@@ -50,6 +50,7 @@ const DataTableComponent = ({
         // Add event listener to handle delete action
         $(tableRef.current).on('click', '.delete-table', function () {
             const rowData = dataTableInstance.row($(this).parents('tr')).data();
+            console.log('🚀 ~ rowData:', rowData);
             onDelete(rowData); // Call the provided delete action callback
         });
 
@@ -64,7 +65,7 @@ const DataTableComponent = ({
 
             if (rowData && rowData.id) {
                 const selectedId = rowData.id; // Get the ID of the clicked row
-                console.log('🚀 ~ selectedId:', selectedId);
+
                 const isChecked = $(this).prop('checked'); // Check if the checkbox is checked
 
                 if (isChecked) {
