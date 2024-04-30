@@ -1,58 +1,105 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import actions from '../../redux/RoomCategory/actions';
+import actions from '../../redux/Rooms/actions';
 import { Link } from 'react-router-dom';
 import CreateEditMdl from './CreateEditMdl';
-import Pagination from '../../components/common/Pagination';
-function RoomCategory() {
+import MultiRoomMdl from './MultiRoomMdl';
+import DataTableComponent from '../../components/common/DataTableComponent';
+function Rooms() {
     const [open, setOpen] = useState(false);
-    const [mode, setMode] = useState('Add Room Plan'); // 'add' or 'edit'
-    const [cateData, setCateData] = useState(null); // Data of user being edited
-    const [cateListingData, setCatListinData] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [entriesPerPage, setEntriesPerPage] = useState(10); // Default entries per page
-    const itemsPerPage = 10; // Number of items per page
+    const [openMultiRoom, setOpenMultiRoom] = useState(false);
+    const [mode, setMode] = useState('Add Room'); // 'add' or 'edit'
+    const [modeMultiRoom, setModeMultiRoom] = useState('Add Multiple Rooms'); // 'add' or 'edit'
+    const [roomsData, setRoomsData] = useState(null); // Data of user being edited
 
-    const { roomCateListData, roomCateCreated, roomCateUpdate } = useSelector(
-        (state) => state.roomCateReducer,
-    );
+    const [roomListingData, setRoomListinData] = useState([]);
+    const { roomsListData, roomsCreated, roomsUpdate, addMutliRooms } =
+        useSelector((state) => state.roomReducer);
     const dispatch = useDispatch();
+    const columnsConfig = [
+        { data: 'id', label: '#', className: 'table-left' },
+        {
+            data: null,
+            title: `<span class="dt-column-title">
+                <div className="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="customCheck1">
+                    <label class="custom-control-label" htmlFor="customCheck1"></label>
+                </div>
+            </span>`,
+            className: 'action-check',
+            render: () =>
+                `
+                <div className="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="customCheckAll">
+                    <label class="custom-control-label" htmlFor="customCheckAll"></label>
+                </div>
+                `,
+        },
+        { data: 'room_no', label: 'Room Names/Numbers' },
+        {
+            data: 'room_cate',
+            label: 'Room Category',
+            render: function (data, type, row) {
+                return data.cat_name ?? '';
+            },
+        },
+        {
+            data: 'room_section',
+            label: 'Section',
+            render: function (data, type, row) {
+                return data.name ?? '';
+            },
+        },
+        {
+            data: 'room_floor',
+            label: 'Floor',
+            render: function (data, type, row) {
+                return data.name ?? '';
+            },
+        },
+        {
+            data: 'status',
+            label: 'Status',
+            render: function (data, type, row) {
+                if (data == 1) {
+                    return '<div class="status-active">Active</div>';
+                } else {
+                    return '<div class="status-deactive">Deactive</div>';
+                }
+            },
+        },
+        {
+            data: null,
+            label: 'Action',
+            render: () =>
+                `
+            <span class="material-icons-outlined delete-table">
+                cancel_presentation
+            </span>
+            <span class="material-icons-outlined edit-table">
+                edit
+            </span>
+            `,
+        },
+    ];
 
     useEffect(() => {
         dispatch({
-            type: actions.ROOMCATEGORY_LIST,
+            type: actions.ROOMS_LIST,
         });
-    }, [dispatch, roomCateCreated, roomCateUpdate]);
+    }, [dispatch, roomsCreated, roomsUpdate, addMutliRooms]);
 
     useEffect(() => {
-        setCatListinData(roomCateListData);
-    }, [roomCateListData]);
+        setRoomListinData(roomsListData);
+    }, [roomsListData]);
 
-    // Calculate current items based on pagination
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    // const currentItems = cateListingData.slice(
-    //     indexOfFirstItem,
-    //     indexOfLastItem,
-    // );
-    let currentItems = [];
-    if (cateListingData !== null && cateListingData !== undefined) {
-        if (Array.isArray(cateListingData)) {
-            currentItems = cateListingData.slice(
-                indexOfFirstItem,
-                indexOfLastItem,
-            );
-        }
-    }
-
-    // Change page
-    const onPageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
-
-    function handleAddCate() {
-        setMode('Add Room Category');
+    function handleAddRoom() {
+        setMode('Add Room');
         setOpen(true);
+    }
+    function handleAddMultiRoom() {
+        setModeMultiRoom();
+        setOpenMultiRoom(true);
     }
     const handleDelete = (item) => {
         onDelete(item);
@@ -60,8 +107,8 @@ function RoomCategory() {
 
     const handleEdit = (item) => {
         // onEdit(item);
-        setMode('Edit Room Category');
-        setCateData(item);
+        setMode('Edit Room');
+        setRoomsData(item);
         setOpen(true);
     };
     return (
@@ -80,7 +127,7 @@ function RoomCategory() {
                                 className="breadcrumb-item active"
                                 aria-current="page"
                             >
-                                Room Category
+                                Room
                             </li>
                         </ol>
                     </nav>
@@ -95,12 +142,21 @@ function RoomCategory() {
                         <div className="col-8 gap-3 action-right">
                             <button
                                 className="btn btn-primary d-flex "
-                                onClick={handleAddCate}
+                                onClick={handleAddRoom}
                             >
                                 <span className="material-icons-outlined">
                                     add
                                 </span>
-                                New Category
+                                Add Room
+                            </button>
+                            <button
+                                className="btn btn-secondary d-flex"
+                                onClick={handleAddMultiRoom}
+                            >
+                                <span className="material-icons-outlined">
+                                    add
+                                </span>
+                                Add Multiple Rooms{' '}
                             </button>
                             <button className="btn btn-outline d-flex">
                                 <span className="material-icons-outlined">
@@ -112,29 +168,12 @@ function RoomCategory() {
                 </div>
 
                 <div className="col-12 p-3 container-page">
-                    {/* <div className="dt-layout-cell dt-start">
-                        <div className="dt-length">
-                            <select
-                                name="room_table_length"
-                                aria-controls="room_table"
-                                className="dt-input"
-                                value={entriesPerPage}
-                                onChange={(e) =>
-                                    setEntriesPerPage(parseInt(e.target.value))
-                                }
-                            >
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>
-                            <label htmlFor="dt-length-0">
-                                {' '}
-                                entries per page
-                            </label>
-                        </div>
-                    </div> */}
-                    <table className="table custom-table" id="room_cate_table">
+                    <DataTableComponent
+                        data={roomListingData}
+                        onEdit={handleEdit}
+                        columnsConfig={columnsConfig}
+                    />
+                    {/* <table className="table custom-table" id="room_cate_table">
                         <thead>
                             <tr>
                                 <th
@@ -327,9 +366,9 @@ function RoomCategory() {
                                 </tr>
                             )}
                         </tbody>
-                    </table>
+                    </table> */}
                     {/* Add pagination component */}
-                    <div className="row mt-10 right">
+                    {/* <div className="row mt-10 right">
                         <div className="col-12">
                             <Pagination
                                 currentPage={currentPage}
@@ -340,7 +379,7 @@ function RoomCategory() {
                                 entriesPerPage={entriesPerPage}
                             />
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             {open && (
@@ -349,7 +388,16 @@ function RoomCategory() {
                     setOpen={setOpen}
                     mode={mode}
                     // onSubmit={handleSubmit}
-                    cateData={cateData}
+                    roomsData={roomsData}
+                />
+            )}
+
+            {openMultiRoom && (
+                <MultiRoomMdl
+                    open={openMultiRoom}
+                    setOpen={setOpenMultiRoom}
+                    // onSubmit={handleSubmit}
+                    // cateData={cateData}
                     // statusValue={statusValue}
                     // setStatusValue={setStatusValue}
                 />
@@ -358,4 +406,4 @@ function RoomCategory() {
     );
 }
 
-export default RoomCategory;
+export default Rooms;

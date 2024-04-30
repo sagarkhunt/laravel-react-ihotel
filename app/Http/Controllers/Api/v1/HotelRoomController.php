@@ -173,7 +173,7 @@ class HotelRoomController extends BaseApiController
                 $Room_Edit->updated_at = date('Y-m-d H:i:s');
 
                 $Room_Edit->update();
-                return $this->sendResponse('success', 'Room Data updated successfully.');
+                return $this->sendResponse($Room_Edit, 'Room Data updated successfully.');
             } else {
                 return $this->sendResponse('fail', 'Room id is wrong');
             }
@@ -213,6 +213,7 @@ class HotelRoomController extends BaseApiController
             $user_id = $user->id;
             $hotel_id = $user->hotel_id;
             $roomsName = [];
+
             // Set multiple roome name and prefix and Suffix start_no to_number
             if ($request['m_rooms_name'] == 'room_name') {
                 $roomsName = explode(',', $request->input('m_room_no'));
@@ -248,7 +249,7 @@ class HotelRoomController extends BaseApiController
                     $existingRoom[] = $reqTableLabel;
                 }
             }
-            return $this->sendResponse([], 'Room added successfully.');
+            return $this->sendResponse($addedRoom, 'Room added successfully.');
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
             return $this->sendError('Server Error', $e->getMessage());

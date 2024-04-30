@@ -77,7 +77,8 @@ class HotelBooingInqController extends BaseApiController
                     'child' => $request["child"],
                     'sp_req' => $request["sp_req"],
                     'sp_remark' => $request["sp_remark"],
-                    'status' => $request['status'] == 'false' ? 0 : 1,
+                    // 'status' => $request['status'] == 'false' ? 0 : 1,
+                    'status' => $request['status'],
                     'created_by' => $auth_user_id,
                     'created_at' => date('Y-m-d H:i:s')
                 ]);

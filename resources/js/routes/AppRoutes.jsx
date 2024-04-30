@@ -42,6 +42,8 @@ import RoomPlan from '../views/roomplan/RoomPlan.jsx';
 import RoomView from '../views/roomview/RoomView.jsx';
 import Inquiry from '../views/inquiry/Inquiry.jsx';
 import RoomCategory from '../views/roomCategory/RoomCategory.jsx';
+import Rooms from '../views/rooms/Rooms.jsx';
+import BooingInq from '../views/bookingInq/BooingInq.jsx';
 
 // Define a function to check if the user is authenticated
 const isAuthenticated = () => {
@@ -96,8 +98,16 @@ const router = createBrowserRouter([
                 element: <ProtectedRouteWrapper element={<RoomCategory />} />,
             },
             {
+                path: '/rooms',
+                element: <ProtectedRouteWrapper element={<Rooms />} />,
+            },
+            {
                 path: '/room_view',
                 element: <ProtectedRouteWrapper element={<RoomView />} />,
+            },
+            {
+                path: '/booking_inq',
+                element: <ProtectedRouteWrapper element={<BooingInq />} />,
             },
             {
                 path: '/inquiry_type',

@@ -15,7 +15,6 @@ function Reducer(state = initialStates, action) {
         case actions.AMENITY_LIST:
             return { ...state, loader: true };
         case actions.AMENITY_LIST_SUCCESS:
-            console.log(action.payload, '=====');
             return {
                 ...state,
                 amenityListData: action.payload,

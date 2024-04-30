@@ -1,5 +1,5 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import actions from '../Inquiry/actions';
+import actions from '../BookingInquiry/actions';
 
 import {
     postRequest,
@@ -12,23 +12,23 @@ import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 /**
  *
- * @param {inquiryList} action
+ * @param {bookingInqList} action
  */
-function* inquiryList(action) {
+function* bookingInqList(action) {
     try {
         const response = yield call(
             postRequest,
-            'get_inq_type   ',
+            'get_booking_inq',
             action.payload,
         );
         if (response) {
             yield put({
-                type: actions.INQUIRY_LIST_SUCCESS,
+                type: actions.BOOKINGINQ_LIST_SUCCESS,
                 payload: response.data,
             });
         }
     } catch (error) {
-        yield put({ type: actions.INQUIRY_LIST_FAILURE });
+        yield put({ type: actions.BOOKINGINQ_LIST_FAILURE });
         if (error.response.status === 401) {
             message.error(error.response.data.message);
         } else if (
@@ -43,22 +43,22 @@ function* inquiryList(action) {
 }
 /**
  *
- * @param {createInquiry} action
+ * @param {createBookingInq} action
  */
-function* createInquiry(action) {
+function* createBookingInq(action) {
     const { payload } = action;
     try {
-        const response = yield call(postRequest, 'create_inq', payload);
+        const response = yield call(postRequest, 'create_booking_inq', payload);
         if (response) {
             yield put({
-                type: actions.INQUIRY_ADD_SUCCESS,
+                type: actions.BOOKINGINQ_ADD_SUCCESS,
                 payload: response.data,
             });
             message.success(response.message);
         }
     } catch (error) {
         // Dispatch the register failure action
-        yield put({ type: actions.INQUIRY_ADD_FAILURE });
+        yield put({ type: actions.BOOKINGINQ_ADD_FAILURE });
 
         // Handle different error statuses
         if (error.response?.status === 422) {
@@ -73,22 +73,21 @@ function* createInquiry(action) {
         } else {
             message.error('Something went wrong');
         }
-        return;
     }
 }
 
 /**
  *
- * @param {updateInquiry} action
+ * @param {updateBookingInq} action
  */
-function* updateInquiry(action) {
+function* updateBookingInq(action) {
     const { payload } = action;
     try {
-        const response = yield call(postRequest, 'update_inq', payload);
+        const response = yield call(postRequest, 'update_booking_inq', payload);
 
         if (response) {
             yield put({
-                type: actions.INQUIRY_UPDATE_SUCCESS,
+                type: actions.BOOKINGINQ_UPDATE_SUCCESS,
                 payload: response.data,
             });
             if (response?.data == 'fail') {
@@ -99,7 +98,7 @@ function* updateInquiry(action) {
         }
     } catch (error) {
         // Dispatch the register failure action
-        yield put({ type: actions.INQUIRY_UPDATE_FAILURE });
+        yield put({ type: actions.BOOKINGINQ_UPDATE_FAILURE });
 
         // Handle different error statuses
         if (error.response?.status === 422) {
@@ -116,11 +115,43 @@ function* updateInquiry(action) {
         }
     }
 }
+/**
+ *
+ * @param {dropownList} action
+ */
+function* dropownList(action) {
+    try {
+        const response = yield call(
+            postRequest,
+            'get_login_sync',
+            action.payload,
+        );
+        if (response) {
+            yield put({
+                type: actions.BOOKINGINQ_DROPDOWN_LIST_SUCCESS,
+                payload: response.data,
+            });
+        }
+    } catch (error) {
+        yield put({ type: actions.BOOKINGINQ_DROPDOWN_LIST_FAILURE });
+        if (error.response.status === 401) {
+            message.error(error.response.data.message);
+        } else if (
+            error.response &&
+            error.response.data &&
+            error.response.data.message
+        ) {
+            toast.error(error.response.data.message);
+            message.error(error.response.data.message);
+        }
+    }
+}
 
 export default function* rootSaga() {
     yield all([
-        takeLatest(actions.INQUIRY_LIST, inquiryList),
-        takeLatest(actions.INQUIRY_ADD, createInquiry),
-        takeLatest(actions.INQUIRY_UPDATE, updateInquiry),
+        takeLatest(actions.BOOKINGINQ_LIST, bookingInqList),
+        takeLatest(actions.BOOKINGINQ_ADD, createBookingInq),
+        takeLatest(actions.BOOKINGINQ_UPDATE, updateBookingInq),
+        takeLatest(actions.BOOKINGINQ_DROPDOWN_LIST, dropownList),
     ]);
 }

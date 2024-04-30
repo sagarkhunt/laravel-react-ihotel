@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import Modal from '../../components/common/Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import actions from '../../redux/RoomCategory/actions';
+import actions from '../../redux/Rooms/actions';
 import amntActions from '../../redux/Amenity/actions';
 function CreateEditMdl({
     open,
     setOpen,
     mode,
     // onSubmit,
-    cateData,
-    // statusValue,
-    // setStatusValue,
+    roomsData,
 }) {
-    // console.log('🚀 ~ cateData:', cateData);
     const [amenities, setAmenities] = useState();
-
+    const [saveToDupli, setSaveToDupli] = useState('');
     const { amenityListData } = useSelector((state) => state?.amenityReducer);
+    const { dropDownList } = useSelector((state) => state?.roomReducer);
     const dispatch = useDispatch();
     const [selectedAmenities, setSelectedAmenities] = useState([]);
     const [formData, setFormData] = useState({});
+    const [statusValue, setStatusValue] = useState(roomsData?.status ?? 0);
+    const [dropDownData, setDropDownData] = useState([]);
+
     // Define handleChange function to update form data state
     function handleChange(event) {
         setFormData({
@@ -41,28 +42,29 @@ function CreateEditMdl({
     };
 
     useEffect(() => {
-        if (mode === 'Add Room Category') {
+        if (mode === 'Add Room') {
             // Clear form data for adding new user
             setFormData({
-                cat_name: '',
-                short_name: '',
-                description: '',
+                room_no: '',
+                room_cat_id: '',
+                section_id: '',
+                floor_id: '',
+                room_desc: '',
                 room_size: '',
+                room_view_id: '',
                 base_occu: '',
-                max_occu: '',
+                extra_occu: '',
                 max_adult: '',
                 max_child: '',
                 max_extra_bed: '',
                 base_rate: '',
                 extra_person_charge: '',
                 extra_bed_charge: '',
-                room_size: '',
-
                 status: 1,
             });
         } else {
-            setFormData(cateData); // Pre-fill form with user data for editing
-            const roomAmntsIdsString = cateData.room_amnts_ids;
+            setFormData(roomsData); // Pre-fill form with user data for editing
+            const roomAmntsIdsString = roomsData.room_amnts_ids;
             // Check if amenities is defined, not null, and not empty
             if (amenities && Array.isArray(amenities) && amenities.length > 0) {
                 // Check if roomAmntsIdsString is not null, undefined, or empty
@@ -73,7 +75,6 @@ function CreateEditMdl({
 
                     const selected = roomAmntsIdsArray
                         .map((item) => {
-                            console.log('🚀 ~ .map ~ item:', item);
                             const matchedAmenity = amenities.find(
                                 (amenity) => amenity && amenity.id === item,
                             );
@@ -86,7 +87,7 @@ function CreateEditMdl({
                 }
             }
         }
-    }, [mode, cateData, amenities]);
+    }, [mode, roomsData, amenities]);
     const toggleSelectAll = () => {
         if (amenities.length > 0) {
             // Check if any amenities are selected
@@ -103,27 +104,21 @@ function CreateEditMdl({
     };
 
     const toggleSelectAmenity = (amenity) => {
-        console.log('Selected amenities before toggle:', selectedAmenities);
         const amenityId = amenity.id;
-        console.log('Toggling amenity with ID:', amenityId);
 
         if (
             selectedAmenities.some(
                 (selectedAmenity) => selectedAmenity.id === amenityId,
             )
         ) {
-            console.log('Amenity already selected. Unselecting...');
             setSelectedAmenities(
                 selectedAmenities.filter(
                     (selectedAmenity) => selectedAmenity.id == amenityId,
                 ),
             );
         } else {
-            console.log('Amenity not selected. Selecting...');
             setSelectedAmenities([...selectedAmenities, amenity]);
         }
-
-        console.log('Selected amenities after toggle:', selectedAmenities);
     };
 
     // const isSelected = (amenityId) => selectedAmenities.includes(amenityId);
@@ -142,11 +137,25 @@ function CreateEditMdl({
      */
     useEffect(() => {
         setAmenities(amenityListData);
-    }, [amenityListData]);
+        setDropDownData(dropDownList);
+    }, [amenityListData, dropDownList]);
 
     useEffect(() => {
         dispatch({
             type: amntActions.AMENITY_LIST,
+        });
+        const sync_req = [
+            'room_cate',
+            'hotel_floor',
+            'hotel_section',
+            'rooms_view',
+        ]; // Define the action payloads as an array
+
+        dispatch({
+            type: actions.ROOMS_DROPDOWN_LIST,
+            payload: {
+                sync_req: sync_req.join(','), // Convert the array to a comma-separated string
+            },
         });
     }, []);
     if (!amenities || amenities.length === 0) {
@@ -161,18 +170,43 @@ function CreateEditMdl({
 
         const room_amnts_ids = amenityIs.length > 0 ? amenityIs.join(',') : ' ';
 
-        formData.room_amnts_ids = room_amnts_ids;
-
         const actionType =
-            mode === 'Add Room Category'
-                ? actions.ROOMCATEGORY_ADD
-                : actions.ROOMCATEGORY_UPDATE;
+            mode === 'Add Room' ? actions.ROOMS_ADD : actions.ROOMS_UPDATE;
 
-        dispatch({
-            type: actionType,
-            payload: formData,
-        });
+        if (mode === 'Edit Room') {
+            const updatedFormData = {
+                room_no: formData.room_no,
+                room_cat_id: formData.room_cat_id,
+                section_id: formData.section_id,
+                floor_id: formData.floor_id,
+                room_desc: formData.room_desc,
+                room_size: formData.room_size,
+                room_view_id: formData.room_view_id,
+                base_occu: formData.base_occu,
+                extra_occu: formData.extra_occu,
+                max_adult: formData.max_adult,
+                max_child: formData.max_child,
+                max_extra_bed: formData.max_extra_bed,
+                base_rate: formData.base_rate,
+                extra_person_charge: formData.extra_person_charge,
+                extra_bed_charge: formData.extra_bed_charge,
+                room_amnts_ids: room_amnts_ids,
+                room_id: formData.id,
+                status: statusValue,
+            };
 
+            dispatch({
+                type: actionType,
+                payload: updatedFormData,
+            });
+        } else {
+            formData.room_amnts_ids = room_amnts_ids;
+            formData.action = saveToDupli;
+            dispatch({
+                type: actionType,
+                payload: formData,
+            });
+        }
         setOpen(false);
     }
     return (
@@ -180,7 +214,7 @@ function CreateEditMdl({
             <Modal open={open} handleModal={() => setOpen(!open)}>
                 <div
                     className="modal fade right show"
-                    id="add_category"
+                    id="add_room"
                     tabIndex="-1"
                     aria-labelledby="exampleModalLabel"
                     style={{ display: 'block' }}
@@ -212,7 +246,7 @@ function CreateEditMdl({
                                         {mode}
                                     </h5>
                                     <div className="d-flex gap-4 align-items-center">
-                                        {mode === 'Edit Inquiry Type' ? (
+                                        {mode === 'Edit Room' ? (
                                             <div className="d-flex gap-4 align-items-center">
                                                 <div
                                                     className="form-check form-switch"
@@ -276,16 +310,6 @@ function CreateEditMdl({
                                             Amenities
                                         </a>
                                     </li>
-                                    <li className="nav-item">
-                                        <a
-                                            className="nav-link nav-link-custom"
-                                            data-bs-toggle="pill"
-                                            href="#rooms"
-                                            // onClick="getRoomsOnRoomCatId()"
-                                        >
-                                            Rooms
-                                        </a>
-                                    </li>
                                 </ul>
 
                                 <div
@@ -304,22 +328,22 @@ function CreateEditMdl({
                                                             htmlFor="customInput"
                                                             className="custom-label"
                                                         >
-                                                            Room Category Name*{' '}
+                                                            Room Name/No*
                                                         </label>
                                                         <input
                                                             type="text"
                                                             className="form-control custom-input"
-                                                            id="cat_name"
-                                                            name="cat_name"
+                                                            id="room_no"
+                                                            name="room_no"
                                                             value={
-                                                                formData.cat_name ||
+                                                                formData.room_no ||
                                                                 ''
                                                             }
                                                             onChange={
                                                                 handleChange
                                                             }
+                                                            placeholder="Room Name/No*"
                                                             required
-                                                            placeholder="Room Category Name"
                                                         />
                                                     </div>
                                                 </div>
@@ -329,47 +353,158 @@ function CreateEditMdl({
                                                             htmlFor="customInput"
                                                             className="custom-label"
                                                         >
-                                                            Short Name*{' '}
+                                                            Room Category*
                                                         </label>
-                                                        <input
-                                                            type="text"
-                                                            className="form-control custom-input"
-                                                            id="short_name"
-                                                            name="short_name"
+                                                        <select
+                                                            className="form-select custom-input changesCate"
+                                                            id="room_cat_id"
+                                                            name="room_cat_id"
+                                                            aria-label=".form-select-sm example"
                                                             value={
-                                                                formData.short_name ||
+                                                                formData.room_cat_id ||
                                                                 ''
                                                             }
                                                             onChange={
                                                                 handleChange
                                                             }
                                                             required
-                                                            placeholder="Short Name"
-                                                        />
+                                                        >
+                                                            {/* Dynamically generate options using map */}
+                                                            <option>
+                                                                Select Room
+                                                                Catgory
+                                                            </option>
+                                                            {dropDownData?.room_cate?.map(
+                                                                (option) => (
+                                                                    <option
+                                                                        key={
+                                                                            option.id
+                                                                        }
+                                                                        value={
+                                                                            option.id
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            option.cat_name
+                                                                        }
+                                                                    </option>
+                                                                ),
+                                                            )}
+                                                        </select>
                                                     </div>
                                                 </div>
+                                                <div className="col-6">
+                                                    <div className="form-group  mb-3">
+                                                        <label
+                                                            htmlFor="customInput"
+                                                            className="custom-label"
+                                                        >
+                                                            Room Section
+                                                        </label>
+                                                        <select
+                                                            className="form-select custom-input"
+                                                            id="section_id"
+                                                            name="section_id"
+                                                            aria-label=".form-select-sm example"
+                                                            value={
+                                                                formData.section_id ||
+                                                                ''
+                                                            }
+                                                            onChange={
+                                                                handleChange
+                                                            }
+                                                            required
+                                                        >
+                                                            <option value="">
+                                                                Select Room
+                                                                Catgory
+                                                            </option>
+                                                            {dropDownData?.hotel_section?.map(
+                                                                (option) => (
+                                                                    <option
+                                                                        key={
+                                                                            option.id
+                                                                        }
+                                                                        value={
+                                                                            option.id
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            option.name
+                                                                        }
+                                                                    </option>
+                                                                ),
+                                                            )}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div className="col-6">
+                                                    <div className="form-group  mb-3">
+                                                        <label
+                                                            htmlFor="customInput"
+                                                            className="custom-label"
+                                                        >
+                                                            Floor
+                                                        </label>
+                                                        <select
+                                                            className="form-select custom-input"
+                                                            id="floor_id"
+                                                            name="floor_id"
+                                                            value={
+                                                                formData.floor_id ||
+                                                                ''
+                                                            }
+                                                            onChange={
+                                                                handleChange
+                                                            }
+                                                            aria-label=".form-select-sm example"
+                                                            required
+                                                        >
+                                                            <option value="">
+                                                                Select Floor
+                                                            </option>
+                                                            {dropDownData?.hotel_floor?.map(
+                                                                (option) => (
+                                                                    <option
+                                                                        key={
+                                                                            option.id
+                                                                        }
+                                                                        value={
+                                                                            option.id
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            option.name
+                                                                        }
+                                                                    </option>
+                                                                ),
+                                                            )}
+                                                        </select>
+                                                    </div>
+                                                </div>
+
                                                 <div className="col-12">
                                                     <div className="form-group  mb-3">
                                                         <label
                                                             htmlFor="customInput"
                                                             className="custom-label"
                                                         >
-                                                            Description
+                                                            Room Details
                                                         </label>
                                                         <textarea
                                                             rows="3"
                                                             type="text"
                                                             className="form-control custom-input"
-                                                            id="description"
-                                                            name="description"
-                                                            placeholder="Description"
+                                                            id="room_desc"
+                                                            name="room_desc"
                                                             value={
-                                                                formData.description ||
+                                                                formData.room_desc ||
                                                                 ''
                                                             }
                                                             onChange={
                                                                 handleChange
                                                             }
+                                                            placeholder="Room Details"
                                                         ></textarea>
                                                     </div>
                                                 </div>
@@ -397,6 +532,50 @@ function CreateEditMdl({
                                                         />
                                                     </div>
                                                 </div>
+
+                                                <div className="col-6">
+                                                    <div className="form-group  mb-3">
+                                                        <label
+                                                            htmlFor="customInput"
+                                                            className="custom-label"
+                                                        >
+                                                            Room View
+                                                        </label>
+                                                        <select
+                                                            className="form-select custom-input"
+                                                            id="room_view_id"
+                                                            name="room_view_id"
+                                                            value={
+                                                                formData.room_view_id ||
+                                                                ''
+                                                            }
+                                                            onChange={
+                                                                handleChange
+                                                            }
+                                                            aria-label=".form-select-sm example"
+                                                        >
+                                                            <option value="">
+                                                                Select Room View
+                                                            </option>
+                                                            {dropDownData?.rooms_view?.map(
+                                                                (option) => (
+                                                                    <option
+                                                                        key={
+                                                                            option.id
+                                                                        }
+                                                                        value={
+                                                                            option.id
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            option.room_view
+                                                                        }
+                                                                    </option>
+                                                                ),
+                                                            )}
+                                                        </select>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div className="row">
                                                 <div className="col-12 ">
@@ -410,7 +589,7 @@ function CreateEditMdl({
                                                             htmlFor="customInput"
                                                             className="custom-label"
                                                         >
-                                                            Base Occupancy
+                                                            Base Occupancy*
                                                         </label>
                                                         <input
                                                             list="ice-cream-flavors"
@@ -447,10 +626,10 @@ function CreateEditMdl({
 
                                                         <input
                                                             list="ice-cream-flavors"
-                                                            id="max_occu"
-                                                            name="max_occu"
+                                                            id="extra_occu"
+                                                            name="extra_occu"
                                                             value={
-                                                                formData.max_occu ||
+                                                                formData.extra_occu ||
                                                                 ''
                                                             }
                                                             onChange={
@@ -482,7 +661,6 @@ function CreateEditMdl({
                                                             list="ice-cream-flavors"
                                                             id="max_adult"
                                                             name="max_adult"
-                                                            className="custom-input"
                                                             value={
                                                                 formData.max_adult ||
                                                                 ''
@@ -490,6 +668,7 @@ function CreateEditMdl({
                                                             onChange={
                                                                 handleChange
                                                             }
+                                                            className="custom-input"
                                                         />
                                                         <datalist
                                                             id="ice-cream-flavors"
@@ -515,7 +694,6 @@ function CreateEditMdl({
                                                             list="ice-cream-flavors"
                                                             id="max_child"
                                                             name="max_child"
-                                                            className="custom-input"
                                                             value={
                                                                 formData.max_child ||
                                                                 ''
@@ -523,6 +701,7 @@ function CreateEditMdl({
                                                             onChange={
                                                                 handleChange
                                                             }
+                                                            className="custom-input"
                                                         />
                                                         <datalist
                                                             id="ice-cream-flavors"
@@ -601,7 +780,7 @@ function CreateEditMdl({
                                                             htmlFor="customInput"
                                                             className="custom-label"
                                                         >
-                                                            Base Rate*
+                                                            Base Rate*{' '}
                                                         </label>
                                                         <span className="material-icons-outlined svg-rupee">
                                                             currency_rupee
@@ -630,7 +809,7 @@ function CreateEditMdl({
                                                             htmlFor="customInput"
                                                             className="custom-label"
                                                         >
-                                                            Extra Person*
+                                                            Extra Person*{' '}
                                                         </label>
                                                         <span className="material-icons-outlined svg-rupee">
                                                             currency_rupee
@@ -878,12 +1057,42 @@ function CreateEditMdl({
                                     >
                                         Close
                                     </button>
-                                    <button
-                                        type="submit"
-                                        className="btn btn-primary"
-                                    >
-                                        Save
-                                    </button>
+                                    {mode === 'Edit Room' ? (
+                                        <button
+                                            type="submit"
+                                            className="btn btn-primary"
+                                            onClick={(event) =>
+                                                setSaveToDupli('')
+                                            }
+                                        >
+                                            Save
+                                        </button>
+                                    ) : (
+                                        <>
+                                            <button
+                                                type="submit"
+                                                className="btn btn-secondary"
+                                                id="saveDuplicateButton"
+                                                value="save_and_duplicate"
+                                                onClick={(event) =>
+                                                    setSaveToDupli(
+                                                        'save_and_duplicate',
+                                                    )
+                                                }
+                                            >
+                                                Save and Duplicate Room
+                                            </button>
+                                            <button
+                                                type="submit"
+                                                className="btn btn-primary"
+                                                onClick={(event) =>
+                                                    setSaveToDupli('')
+                                                }
+                                            >
+                                                Save
+                                            </button>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </form>

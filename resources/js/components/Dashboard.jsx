@@ -35,11 +35,11 @@ function Dashboard() {
                     Room Category
                 </button>
             </Link>
-            {/*<Link to="/rooms">
+            <Link to="/rooms">
                 <button type="button" className="btn btn-primary me-2">
                     Room
                 </button>
-            </Link> */}
+            </Link>
             <Link to="/rooms_plan">
                 <button type="button" className="btn btn-primary me-2">
                     Room Plan
@@ -48,6 +48,11 @@ function Dashboard() {
             <Link to="/room_view">
                 <button type="button" className="btn btn-primary me-2">
                     Room View
+                </button>
+            </Link>
+            <Link to="/booking_inq">
+                <button type="button" className="btn btn-primary me-2">
+                    Booking Inquiry
                 </button>
             </Link>
             <Link to="/inquiry_type">
