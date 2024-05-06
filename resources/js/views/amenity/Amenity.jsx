@@ -15,6 +15,7 @@ function Amenity() {
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState('Add Amenity'); // 'add' or 'edit'
     const [amenityData, setAmenityData] = useState(null); // Data of user being edited
+    const [statusValue, setStatusValue] = useState(0);
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left' },
         {
@@ -90,13 +91,21 @@ function Amenity() {
                 payload: formData,
             });
         } else {
+            console.log(formData, '==========');
+
             const updatedFormData = {
                 amnt: formData.amnt,
+                amnt_icon: formData.amnt_icon,
                 description: formData.description,
                 amnt_id: formData.id, // Add user_id to formData
-                status: 'true',
+                status: statusValue,
             };
-
+            // const updatedFormData = {
+            //     ...formData, // Copy existing formData object
+            //     amnt_icon: formData.amnt_icon, // Update amnt_icon property
+            // };
+            console.log(updatedFormData, '=====');
+            // return;
             dispatch({
                 type: actions.AMENITY_UPDATE,
                 payload: updatedFormData,
@@ -222,6 +231,8 @@ function Amenity() {
                         mode={mode}
                         onSubmit={handleSubmit}
                         userData={amenityData}
+                        statusValue={statusValue}
+                        setStatusValue={setStatusValue}
                     />
                 )}
             </div>

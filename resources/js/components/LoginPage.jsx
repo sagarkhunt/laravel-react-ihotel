@@ -13,7 +13,6 @@ function LoginPage() {
         (state) => state.authenticateReducer,
     );
     useEffect(() => {
-        console.log('🚀 ~ LoginPage ~ isAuthenticated:', isAuthenticated);
         if (isAuthenticated) {
             navigate('/dashboard');
         }

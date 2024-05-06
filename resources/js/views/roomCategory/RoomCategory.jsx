@@ -6,13 +6,13 @@ import CreateEditMdl from './CreateEditMdl';
 import Pagination from '../../components/common/Pagination';
 function RoomCategory() {
     const [open, setOpen] = useState(false);
-    const [mode, setMode] = useState('Add Room Plan'); // 'add' or 'edit'
+    const [mode, setMode] = useState('Add Room Category'); // 'add' or 'edit'
     const [cateData, setCateData] = useState(null); // Data of user being edited
     const [cateListingData, setCatListinData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [entriesPerPage, setEntriesPerPage] = useState(10); // Default entries per page
     const itemsPerPage = 10; // Number of items per page
-
+    const [statusValue, setStatusValue] = useState(0);
     const { roomCateListData, roomCateCreated, roomCateUpdate } = useSelector(
         (state) => state.roomCateReducer,
     );
@@ -350,8 +350,8 @@ function RoomCategory() {
                     mode={mode}
                     // onSubmit={handleSubmit}
                     cateData={cateData}
-                    // statusValue={statusValue}
-                    // setStatusValue={setStatusValue}
+                    statusValue={statusValue}
+                    setStatusValue={setStatusValue}
                 />
             )}
         </div>

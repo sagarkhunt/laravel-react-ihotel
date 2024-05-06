@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import actions from '../redux/Authenticate/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Navbar() {
     const dispatch = useDispatch();
@@ -23,15 +23,16 @@ function Navbar() {
     );
 
     useEffect(() => {
-        if (!isAuthenticated) {
-            navigate('/login');
-        }
+        // if (!isAuthenticated) {
+        //     navigate('/login');
+        // }
     }, [isAuthenticated, navigate]);
 
     let onLogout = () => {
         dispatch({
             type: actions.LOGOUT,
         });
+        navigate('/login');
     };
     useEffect(() => {}, []);
     return (
@@ -106,7 +107,6 @@ function Navbar() {
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
                             >
-                                {' '}
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="40"
@@ -149,22 +149,13 @@ function Navbar() {
                                 </li>
 
                                 <li>
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to="#"
                                         onClick={onLogout}
                                         className="dropdown-item"
                                     >
-                                        {' '}
                                         Logout
-                                    </a>
-                                    {/* <form
-                                        id="logout-form"
-                                        action="{{ route('logout') }}"
-                                        method="POST"
-                                        className="d-none"
-                                    >
-                                        @csrf
-                                    </form> */}
+                                    </Link>
                                 </li>
                             </ul>
                         </div>

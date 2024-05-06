@@ -41,7 +41,7 @@ class HotelAmenityController extends BaseApiController
     {
         $rule = [
             'amnt' => 'required|string',
-            'selected_icon' => 'required|string',
+            'amnt_icon' => 'required|string',
         ];
 
         $validate = Validator::make($request->all(), $rule);
@@ -67,17 +67,18 @@ class HotelAmenityController extends BaseApiController
                 return $this->sendResponse('fail', "The Amnt with same " . $msg4 . " Already Exists");
             } else {
 
-                RoomAmntsMaster::insertGetId([
+                $createAmnt = RoomAmntsMaster::insertGetId([
                     'hotel_id' => $hotel_id,
                     'amnt' => $request["amnt"],
                     'charge' => $request["charge"] ?? 0.00,
                     'description' => $request["description"],
-                    'amnt_icon' => $request["selected_icon"],
-                    'status' => $request['status'] == 'false' ? 0 : 1,
+                    'amnt_icon' => $request["amnt_icon"],
+                    // 'status' => $request['status'] == 'false' ? 0 : 1,
+                    'status' => $request['status'],
                     'created_by' => $auth_user_id,
                     'created_at' => date('Y-m-d H:i:s')
                 ]);
-                return $this->sendResponse('success', 'Amnt Data added successfully');
+                return $this->sendResponse($createAmnt, 'Amnt Data added successfully');
             }
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
@@ -111,17 +112,18 @@ class HotelAmenityController extends BaseApiController
                 //     return $this->sendResponse('fail', "The Amnt with same " . $msg4 . " Already Exists");
                 // } else {
 
-                $Amnts_Edit = RoomAmntsMaster::where('hotel_id', $hotel_id)->first();
+                $Amnts_Edit = RoomAmntsMaster::where('id', $request["amnt_id"])->where('hotel_id', $hotel_id)->first();
 
                 $Amnts_Edit->amnt = (isset($request['amnt']) ? (empty($request['amnt']) ? "" : $request['amnt']) : $Amnts_Edit->amnt);
                 $Amnts_Edit->charge = (isset($request['charge']) ? (empty($request['charge']) ? 0.00 : $request['charge']) : $Amnts_Edit->charge);
                 $Amnts_Edit->description = (isset($request['description']) ? (empty($request['description']) ? "" : $request['description']) : $Amnts_Edit->description);
-                $Amnts_Edit->amnt_icon = (isset($request['selected_icon']) ? (empty($request['selected_icon']) ? "" : $request['selected_icon']) : $Amnts_Edit->amnt_icon);
-                $Amnts_Edit->status = (isset($request['status']) ? ($request['status'] == 'false' ? 0 : 1) : $Amnts_Edit->status);
+                $Amnts_Edit->amnt_icon = (isset($request['amnt_icon']) ? (empty($request['amnt_icon']) ? "" : $request['amnt_icon']) : $Amnts_Edit->amnt_icon);
+                $Amnts_Edit->status = (isset($request['status']) ? ($request['status'] == 0 ? 0 : 1) : $Amnts_Edit->status);
+
                 $Amnts_Edit->updated_by = $user_id;;
                 $Amnts_Edit->updated_at = date('Y-m-d H:i:s');
                 $Amnts_Edit->update();
-                return $this->sendResponse('success', 'Amnt Data updated successfully.');
+                return $this->sendResponse($Amnts_Edit, 'Amnt Data updated successfully.');
                 // }
                 // }
             } else {

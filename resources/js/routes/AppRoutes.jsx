@@ -1,31 +1,3 @@
-// // src/Routes.jsx
-// import React from 'react';
-// import { Routes, Route } from 'react-router-dom';
-// import Home from '../components/pages/Home';
-// import About from '../components/pages/About';
-// import LoginPage from '../components/LoginPage';
-// import RegistrationForm from '../components/Register';
-// import ProtectedRoute from './ProtectedRoutes';
-// import Dashboard from '../components/Dashboard';
-
-// const AppRoutes = () => {
-//   return (
-//     <Routes>
-//       {/* Public Routes */}
-//       <Route path="/login" element={<LoginPage />} />
-//       <Route path="/register" element={<RegistrationForm />} />
-//       <Route path="/" element={<LoginPage />} />
-//       <Route path="/about" element={<About />} />
-
-//       {/* Protected Routes */}
-//       <Route element={<ProtectedRoute />}>
-//         <Route path="/dashboard" element={<Dashboard />} />
-//         {/* Add other protected routes here */}
-//       </Route>
-//     </Routes>
-//   );
-// };
-
 // export default AppRoutes;
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import LoginPage from '../components/LoginPage.jsx';
@@ -33,7 +5,6 @@ import RegistrationForm from '../components/Register.jsx';
 import DefaultLayout from '../layouts/DefaultLayout.jsx';
 import GuestLayout from '../layouts/GuestLayout.jsx';
 import Dashboard from '../components/Dashboard.jsx';
-import ProtectedRoute from './ProtectedRoutes.jsx';
 import Users from '../views/user/Users.jsx';
 import Floor from '../views/floor/Floor.jsx';
 import Section from '../views/section/Section.jsx';
@@ -44,20 +15,24 @@ import Inquiry from '../views/inquiry/Inquiry.jsx';
 import RoomCategory from '../views/roomCategory/RoomCategory.jsx';
 import Rooms from '../views/rooms/Rooms.jsx';
 import BooingInq from '../views/bookingInq/BooingInq.jsx';
+import { useEffect, useState } from 'react';
 
 // Define a function to check if the user is authenticated
 const isAuthenticated = () => {
     // Implement your authentication check logic here
     const authToken = localStorage.getItem('Access_Token');
+
     return !!authToken;
 };
-console.log('================');
+
 // Create a wrapper component for protected routes
 const ProtectedRouteWrapper = ({ element }) => {
-    // Check if the user is authenticated
-    const authenticated = isAuthenticated();
-    console.log('🚀 ~ ProtectedRouteWrapper ~ authenticated:', authenticated);
-    console.log('🚀 ~ ProtectedRouteWrapper ~ authenticated:');
+    const [authenticated, setAuthenticated] = useState(isAuthenticated());
+
+    useEffect(() => {
+        // Check authentication status when the component mounts
+        // setAuthenticated(isAuthenticated());
+    }, []);
 
     // If the user is authenticated, render the element
     // Otherwise, redirect to the login page

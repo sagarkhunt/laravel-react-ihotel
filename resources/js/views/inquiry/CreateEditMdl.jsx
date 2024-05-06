@@ -10,7 +10,7 @@ function CreateEditMdl({
     statusValue,
     setStatusValue,
 }) {
-    console.log('🚀 ~ CreateEditMdl ~ userData:', userData);
+    console.log('🚀 ~ CreateEditMdl ~ userData:', userData.status);
     const [selectedValue, setSelectedValue] = useState('');
     const [formData, setFormData] = useState({});
 
@@ -25,6 +25,7 @@ function CreateEditMdl({
     // Effect to update form data when userData prop changes
     useEffect(() => {
         if (mode === 'Edit Inquiry Type') {
+            setStatusValue(userData.status);
             setFormData(userData); // Pre-fill form with user data for editing
         } else {
             // Clear form data for adding new user
@@ -86,16 +87,16 @@ function CreateEditMdl({
                                                         type="checkbox"
                                                         id="status"
                                                         name="status"
-                                                        checked={
-                                                            statusValue === 1
-                                                        }
-                                                        onChange={(e) =>
+                                                        checked={statusValue}
+                                                        onChange={(e) => {
+                                                            const newValue = e
+                                                                .target.checked
+                                                                ? 1
+                                                                : 0;
                                                             setStatusValue(
-                                                                e.target.checked
-                                                                    ? 1
-                                                                    : 0,
-                                                            )
-                                                        }
+                                                                newValue,
+                                                            );
+                                                        }}
                                                     />
                                                     <label
                                                         className="form-check-label"

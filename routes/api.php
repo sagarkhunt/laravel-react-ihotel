@@ -31,7 +31,9 @@ Route::group(['prefix' => '/v1', 'namespace' => 'Api\v1'], function () {
     Route::post('register', 'AuthLoginController@register');
 });
 Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' => 'Api\v1'], function () {
-    Route::get('auth/user', 'AuthLoginController@getUser');
+    Route::get('/auth/user', function (Request $request) {
+        return ['data' => $request->user()];
+    });
     Route::post('verify_token', 'AuthLoginController@verifyToken');
     Route::delete('/logout', [App\Http\Controllers\Api\Auth\AuthController::class, 'logout']);
     #EZBillMiscController

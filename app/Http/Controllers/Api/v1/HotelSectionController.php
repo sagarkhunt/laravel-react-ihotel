@@ -65,7 +65,7 @@ class HotelSectionController extends BaseApiController
                     'hotel_id' => $hotel_id,
                     'name' => $request["name"],
                     'description' => $request["description"],
-                    'status' => $request['status'] == 'false' ? 0 : 1,
+                    'status' => $request['status'],
                     'created_by' => $auth_user_id,
                     'created_at' => date('Y-m-d H:i:s')
                 ]);
@@ -107,7 +107,7 @@ class HotelSectionController extends BaseApiController
 
                     $section_Edit->name = (isset($request['name']) ? (empty($request['name']) ? "" : $request['name']) : $section_Edit->name);
                     $section_Edit->description = (isset($request['description']) ? (empty($request['description']) ? "" : $request['description']) : $section_Edit->description);
-                    $section_Edit->status = (isset($request['status']) ? ($request['status'] == 'false' ? 0 : 1) : $section_Edit->status);
+                    $section_Edit->status = (isset($request['status']) ? ($request['status'] == 0 ? 0 : 1) : $section_Edit->status);
                     $section_Edit->updated_by = $user_id;;
                     $section_Edit->updated_at = date('Y-m-d H:i:s');
                     $section_Edit->update();

@@ -14,6 +14,7 @@ function Section() {
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState('Add Section'); // 'add' or 'edit'
     const [sectionData, setSectionData] = useState(null); // Data of user being edited
+    const [statusValue, setStatusValue] = useState(0);
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left' },
         {
@@ -94,7 +95,7 @@ function Section() {
                 name: formData.name,
                 description: formData.description,
                 section_id: formData.id, // Add user_id to formData
-                status: 'true',
+                status: statusValue,
             };
 
             dispatch({
@@ -222,6 +223,8 @@ function Section() {
                         mode={mode}
                         onSubmit={handleSubmit}
                         userData={sectionData}
+                        statusValue={statusValue}
+                        setStatusValue={setStatusValue}
                     />
                 )}
             </div>

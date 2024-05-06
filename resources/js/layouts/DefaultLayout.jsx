@@ -8,6 +8,7 @@ import Navbar from './Navbar';
 
 export default function DefaultLayout() {
     const isAuthenticated = JSON.parse(localStorage.getItem('isAuthenticated'));
+
     if (!isAuthenticated) {
         return <Navigate to="/login" />;
     }

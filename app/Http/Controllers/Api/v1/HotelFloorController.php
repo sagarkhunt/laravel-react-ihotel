@@ -66,7 +66,7 @@ class HotelFloorController extends BaseApiController
                     'hotel_id' => $hotel_id,
                     'name' => $request["name"],
                     'description' => $request["description"],
-                    'status' => $request['status'] == 'false' ? 0 : 1,
+                    'status' => $request['status'],
                     'created_by' => $auth_user_id,
                     'created_at' => date('Y-m-d H:i:s')
                 ]);
@@ -112,7 +112,7 @@ class HotelFloorController extends BaseApiController
 
                     $floor_Edit->name = (isset($request['name']) ? (empty($request['name']) ? "" : $request['name']) : $floor_Edit->name);
                     $floor_Edit->description = (isset($request['description']) ? (empty($request['description']) ? "" : $request['description']) : $floor_Edit->description);
-                    $floor_Edit->status = (isset($request['status']) ? ($request['status'] == 'false' ? 0 : 1) : $floor_Edit->status);
+                    $floor_Edit->status = (isset($request['status']) ? ($request['status'] == 0 ? 0 : 1) : $floor_Edit->status);
                     $floor_Edit->updated_by = $user_id;;
                     $floor_Edit->updated_at = date('Y-m-d H:i:s');
                     $floor_Edit->update();

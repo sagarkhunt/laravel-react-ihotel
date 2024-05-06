@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Modal from '../../components/common/Modal';
 
-function CreateEditMdl({ open, setOpen, mode, onSubmit, userData }) {
+function CreateEditMdl({
+    open,
+    setOpen,
+    mode,
+    onSubmit,
+    userData,
+    statusValue,
+    setStatusValue,
+}) {
     console.log('🚀 ~ CreateEditMdl ~ userData:', userData);
     const [selectedValue, setSelectedValue] = useState('');
     const [iconName, setIconName] = useState(
@@ -20,13 +28,25 @@ function CreateEditMdl({ open, setOpen, mode, onSubmit, userData }) {
     // Effect to update form data when userData prop changes
     useEffect(() => {
         if (mode === 'Edit Amenity') {
-            setFormData(userData); // Pre-fill form with user data for editing
+            setStatusValue(userData.status);
+
+            // Create a new object with userData, and update amnt_icon if needed
+            const updatedFormData = {
+                ...userData, // Copy existing userData
+                // Update amnt_icon if iconName is available (optional)
+                ...(iconName && { amnt_icon: iconName }),
+            };
+            console.log('🚀 ~ useEffect ~ updatedFormData:', updatedFormData);
+
+            // Set formData with updatedFormData
+            setFormData(updatedFormData);
         } else {
             // Clear form data for adding new user
             setFormData({
                 amnt: '',
+                amnt_icon: '',
                 description: '',
-                status: 'true',
+                status: 1,
             });
         }
     }, [mode, userData]);
@@ -37,7 +57,9 @@ function CreateEditMdl({ open, setOpen, mode, onSubmit, userData }) {
     // Handle form submission
     function handleSubmit(event) {
         event.preventDefault();
-        formData.selected_icon = iconName;
+        formData.amnt_icon = iconName;
+        // console.log(formData, '====asdfghj');
+        // return;
         onSubmit(formData);
     }
     return (
@@ -72,7 +94,41 @@ function CreateEditMdl({ open, setOpen, mode, onSubmit, userData }) {
                                     >
                                         {mode}
                                     </h5>
-                                    <div className="d-flex gap-4 align-items-center">
+                                    <div className="d-flex gap-4 align-items-right">
+                                        {mode === 'Edit Amenity' ? (
+                                            <div className="d-flex gap-4 align-items-center">
+                                                <div
+                                                    className="form-check form-switch"
+                                                    id="customSwitch"
+                                                >
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        id="status"
+                                                        name="status"
+                                                        checked={statusValue}
+                                                        onChange={(e) => {
+                                                            const newValue = e
+                                                                .target.checked
+                                                                ? 1
+                                                                : 0;
+                                                            setStatusValue(
+                                                                newValue,
+                                                            );
+                                                        }}
+                                                    />
+                                                    <label
+                                                        className="form-check-label"
+                                                        htmlFor="status"
+                                                    >
+                                                        Active
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            ''
+                                        )}
+
                                         <button
                                             type="button"
                                             className="btn-close"

@@ -47,13 +47,15 @@ function Rooms() {
             data: 'room_section',
             label: 'Section',
             render: function (data, type, row) {
-                return data.name ?? '';
+                console.log('🚀 ~ Rooms ~ data:', data);
+                return data?.name ?? '';
             },
         },
         {
             data: 'room_floor',
             label: 'Floor',
             render: function (data, type, row) {
+                console.log('🚀 ~ Rooms ~ data:', data);
                 return data.name ?? '';
             },
         },

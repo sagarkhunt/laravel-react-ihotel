@@ -9,8 +9,8 @@ function CreateEditMdl({
     mode,
     // onSubmit,
     cateData,
-    // statusValue,
-    // setStatusValue,
+    statusValue,
+    setStatusValue,
 }) {
     // console.log('🚀 ~ cateData:', cateData);
     const [amenities, setAmenities] = useState();
@@ -56,11 +56,10 @@ function CreateEditMdl({
                 base_rate: '',
                 extra_person_charge: '',
                 extra_bed_charge: '',
-                room_size: '',
-
                 status: 1,
             });
         } else {
+            setStatusValue(cateData.status);
             setFormData(cateData); // Pre-fill form with user data for editing
             const roomAmntsIdsString = cateData.room_amnts_ids;
             // Check if amenities is defined, not null, and not empty
@@ -73,7 +72,6 @@ function CreateEditMdl({
 
                     const selected = roomAmntsIdsArray
                         .map((item) => {
-                            console.log('🚀 ~ .map ~ item:', item);
                             const matchedAmenity = amenities.find(
                                 (amenity) => amenity && amenity.id === item,
                             );
@@ -162,7 +160,10 @@ function CreateEditMdl({
         const room_amnts_ids = amenityIs.length > 0 ? amenityIs.join(',') : ' ';
 
         formData.room_amnts_ids = room_amnts_ids;
-
+        if (mode === 'Edit Room Category') {
+            // Set "status" to the value of statusValue for new room categories
+            formData.status = statusValue;
+        }
         const actionType =
             mode === 'Add Room Category'
                 ? actions.ROOMCATEGORY_ADD
@@ -212,7 +213,7 @@ function CreateEditMdl({
                                         {mode}
                                     </h5>
                                     <div className="d-flex gap-4 align-items-center">
-                                        {mode === 'Edit Inquiry Type' ? (
+                                        {mode === 'Edit Room Category' ? (
                                             <div className="d-flex gap-4 align-items-center">
                                                 <div
                                                     className="form-check form-switch"
@@ -223,16 +224,16 @@ function CreateEditMdl({
                                                         type="checkbox"
                                                         id="status"
                                                         name="status"
-                                                        checked={
-                                                            statusValue === 1
-                                                        }
-                                                        onChange={(e) =>
+                                                        checked={statusValue}
+                                                        onChange={(e) => {
+                                                            const newValue = e
+                                                                .target.checked
+                                                                ? 1
+                                                                : 0;
                                                             setStatusValue(
-                                                                e.target.checked
-                                                                    ? 1
-                                                                    : 0,
-                                                            )
-                                                        }
+                                                                newValue,
+                                                            );
+                                                        }}
                                                     />
                                                     <label
                                                         className="form-check-label"

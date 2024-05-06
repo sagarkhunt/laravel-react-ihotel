@@ -15,6 +15,7 @@ function Floor() {
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState('Add Floor'); // 'add' or 'edit'
     const [floorData, setFloorData] = useState(null); // Data of user being edited
+    const [statusValue, setStatusValue] = useState(0);
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left' },
         {
@@ -95,7 +96,7 @@ function Floor() {
                 name: formData.name,
                 description: formData.description,
                 floor_id: formData.id, // Add user_id to formData
-                status: 'true',
+                status: statusValue,
             };
             console.log(updatedFormData, '===');
 
@@ -224,6 +225,8 @@ function Floor() {
                         mode={mode}
                         onSubmit={handleSubmit}
                         userData={floorData}
+                        statusValue={statusValue}
+                        setStatusValue={setStatusValue}
                     />
                 )}
             </div>

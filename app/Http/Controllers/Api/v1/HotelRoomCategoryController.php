@@ -88,7 +88,7 @@ class HotelRoomCategoryController extends BaseApiController
                     'extra_person_charge' => $request["extra_person_charge"],
                     'extra_bed_charge' => $request["extra_bed_charge"],
                     'room_size' => $request["room_size"] ?? '',
-                    'status' => $request['status'] == 'false' ? 0 : 1,
+                    'status' => $request['status'],
                     'created_by' => $auth_user_id,
                     'created_at' => date('Y-m-d H:i:s')
                 ]);
@@ -156,7 +156,7 @@ class HotelRoomCategoryController extends BaseApiController
                 $Cate_Edit->extra_person_charge = (isset($request['extra_person_charge']) ? (empty($request['extra_person_charge']) ? 0.00 : $request['extra_person_charge']) : $Cate_Edit->extra_person_charge);
                 $Cate_Edit->extra_bed_charge = (isset($request['extra_bed_charge']) ? (empty($request['extra_bed_charge']) ? 0.00 : $request['extra_bed_charge']) : $Cate_Edit->extra_bed_charge);
                 $Cate_Edit->room_size = (isset($request['room_size']) ? (empty($request['room_size']) ? 0.00 : $request['room_size']) : $Cate_Edit->room_size);
-                $Cate_Edit->status = (isset($request['status']) ? ($request['status'] == 'false' ? 0 : 1) : $Cate_Edit->status);
+                $Cate_Edit->status = (isset($request['status']) ? ($request['status'] == 0 ? 0 : 1) : $Cate_Edit->status);
                 $Cate_Edit->updated_by = $user_id;;
                 $Cate_Edit->updated_at = date('Y-m-d H:i:s');
                 $Cate_Edit->update();

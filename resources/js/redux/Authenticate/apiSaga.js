@@ -40,7 +40,7 @@ function* login(action) {
 
 function* register(action) {
     const { payload } = action;
-    // const { navigate } = payload; // Extract navigate from payload
+
     try {
         const response = yield call(postRequest, 'register', payload);
         if (response) {
@@ -66,14 +66,13 @@ function* register(action) {
         } else {
             message.error('Something went wrong');
         }
+        return;
     }
 }
 
 function* getAuthUser() {
     try {
-        // const response = yield call(() => getRequest('auth/user'));
-        const response = yield call(getRequest, '/auth/user');
-
+        const response = yield call(() => getRequest('auth/user'));
         yield put({
             type: actions.GET_AUTH_USER_SUCCESS,
             payload: response.data,
@@ -110,7 +109,6 @@ function* verifyToken(action) {
             });
         }
     } catch (error) {
-        console.log('🚀 ~ function*login ~ error:', error);
         yield put({ type: actions.VERIFYTOKEN_FAILURE });
         if (error.response.status === 401) {
             message.error(error.response.data.message);
