@@ -1,31 +1,100 @@
 import axios from 'axios';
-import constants from './constants';
+import { toast } from 'react-hot-toast';
+import Cookies from 'js-cookie';
 
-const axiosClient = axios.create();
+const baseURL = import.meta.env.REACT_APP_URL;
 
-axiosClient.defaults.baseURL = constants.HOST_URL;
+export const axiosApi = axios.create({
+    baseURL: baseURL,
+    timeout: 10000,
+    withCredentials: true, // Include cookies in cross-origin requests
+});
+// Fetch CSRF token from meta tag in HTML document
+const csrfToken = document
+    .querySelector('meta[name="csrf-token"]')
+    .getAttribute('content');
 
-axiosClient.defaults.headers = constants.headers;
+// Set CSRF token in default headers for all Axios requests
+axiosApi.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
 
-// To share cookies to cross site domain, change to true.
-axiosClient.defaults.withCredentials = false;
+// Add Authorization header with token from local storage
+// axiosApi.interceptors.request.use((config) => {
+//     const token = localStorage.getItem('Access_Token');
+//     if (token) {
+//         config.headers.Authorization = `Bearer ${token}`;
+//     }
+//     return config;
+// });
+axiosApi.interceptors.request.use(
+    (config) => {
+        const isAuthenticated = JSON.parse(
+            localStorage.getItem('isAuthenticated'),
+        );
+        if (isAuthenticated) {
+            const token = localStorage.getItem('Access_Token');
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    },
+);
 
-export function getCustomRequest(URL) {
-  return axios.get(`/${URL}`).then(response => response);
-}
+// Handle errors and redirections
+axiosApi.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        const { response } = error;
+        if (response && response.status === 401) {
+            // Unauthorized access
+            localStorage.removeItem('Access_Token');
+            localStorage.removeItem('isAuthenticated');
 
-export function getRequest(URL) {
-  return axiosClient.get(`/${URL}`).then(response => response);
-}
+            // window.location.href = '/login';
+        } else if (response && response.status === 422) {
+            toast.error(response.data?.message || 'An error occurred');
+        } else if (response) {
+            toast.error(response.data?.message || 'An error occurred');
+        } else {
+            toast.error('Network error or server is not reachable');
+        }
+        return Promise.reject(error);
+    },
+);
 
-export function postRequest(URL, payload) {
-  return axiosClient.post(`/${URL}`, payload).then(response => response);
-}
+export const getRequest = async (url, config = {}) => {
+    try {
+        const response = await axiosApi.get(url, config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
 
-export function patchRequest(URL, payload) {
-  return axiosClient.patch(`/${URL}`, payload).then(response => response);
-}
+export const postRequest = async (url, payload, config = {}) => {
+    try {
+        const response = await axiosApi.post(url, payload, config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
 
-export function deleteRequest(URL) {
-  return axiosClient.delete(`/${URL}`).then(response => response);
-}
+export const patchRequest = async (url, payload) => {
+    try {
+        const response = await axiosApi.patch(url, payload);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const deleteRequest = async (url) => {
+    try {
+        const response = await axiosApi.delete(url);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};

@@ -1,5 +1,5 @@
 // Private route restrict to access public pages after login.
-import { Redirect, Route } from 'react-router-dom';
+import { NavLink, Route } from 'react-router-dom';
 
 export function PrivateRoute({ children, isAuthenticated, ...rest }) {
     return (
@@ -9,7 +9,7 @@ export function PrivateRoute({ children, isAuthenticated, ...rest }) {
                 isAuthenticated ? (
                     children
                 ) : (
-                    <Redirect
+                    <NavLink
                         to={{
                             pathname: '/login',
                             state: { from: location },
@@ -30,7 +30,7 @@ export function PublicRoute({ children, isAuthenticated, ...rest }) {
                 !isAuthenticated ? (
                     children
                 ) : (
-                    <Redirect
+                    <NavLink
                         to={{
                             pathname: '/dashboard',
                             state: { from: location },

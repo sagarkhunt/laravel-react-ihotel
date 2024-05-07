@@ -1,13 +1,18 @@
 import { Button, Col, Form, Input, Layout, Row } from 'antd';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import actions from '../redux/Authenticate/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
 
 export default function RegistrationForm() {
-    const { registerLoader } = useSelector(
-        (state) => state.authenticateReducer,
-    );
+    // const { registerLoader } = useSelector(
+    //     (state) => state.authenticateReducer,
+    // );
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    // useEffect(() => {
+    // }, [isAuthenticated, navigate]);
     const [form] = Form.useForm();
 
     const onFinish = (values) => {
@@ -16,6 +21,17 @@ export default function RegistrationForm() {
             payload: values,
         });
     };
+    const { isAuthenticated } = useSelector(
+        (state) => state.authenticateReducer,
+    );
+    // Handle redirection to login page after registration success
+    React.useEffect(() => {
+        if (isAuthenticated) {
+            window.location.href = '/login';
+        } else {
+            navigate('/register');
+        }
+    }, [isAuthenticated]); // Only re-run effect if isRegisterSuccess changes
     return (
         <div className="login-container">
             <div className="row m-0">
@@ -110,6 +126,25 @@ export default function RegistrationForm() {
                             />
                         </Form.Item>
                         <label htmlFor="user_name" className="custom-label">
+                            User Name
+                        </label>
+                        <Form.Item
+                            name="user_name"
+                            validateTrigger="onSubmit"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please input your user name!',
+                                    whitespace: true,
+                                },
+                            ]}
+                        >
+                            <Input
+                                className="form-control custom-input "
+                                placeholder="User Name"
+                            />
+                        </Form.Item>
+                        <label htmlFor="user_name" className="custom-label">
                             Email
                         </label>
                         <Form.Item
@@ -128,6 +163,26 @@ export default function RegistrationForm() {
                                 placeholder="Email"
                             />
                         </Form.Item>
+                        <label htmlFor="passwords" className="custom-label">
+                            Password
+                        </label>
+                        <Form.Item
+                            name="password"
+                            validateTrigger="onSubmit"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please input your Password!',
+                                },
+                            ]}
+                        >
+                            <Input
+                                type="password"
+                                className="form-control custom-input"
+                                placeholder="Password"
+                            />
+                        </Form.Item>
+
                         <label htmlFor="user_name" className="custom-label">
                             City
                         </label>

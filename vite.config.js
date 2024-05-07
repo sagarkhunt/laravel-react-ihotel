@@ -14,4 +14,7 @@ export default defineConfig({
         }),
         react(),
     ],
+    // Specify your environment variables
+    envDir: process.cwd(),
+    envPrefix: 'REACT_APP_URL',
 });

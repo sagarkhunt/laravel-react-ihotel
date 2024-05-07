@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\v1\AuthLoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-Route::group(['prefix' => '/v1', 'middleware' => ['guest'], 'namespace' => 'Api\v1'], function () {
+Route::group(['prefix' => '/v1', 'namespace' => 'Api\v1'], function () {
     Route::post('login', 'AuthLoginController@login');
     Route::post('register', 'AuthLoginController@register');
 });
@@ -33,6 +34,7 @@ Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' =
     Route::get('/auth/user', function (Request $request) {
         return ['data' => $request->user()];
     });
+    Route::post('verify_token', 'AuthLoginController@verifyToken');
     Route::delete('/logout', [App\Http\Controllers\Api\Auth\AuthController::class, 'logout']);
     #EZBillMiscController
     Route::post('get_login_sync', 'HotelLoginSyncController@getLoginSyncData');
@@ -82,5 +84,5 @@ Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' =
 
     Route::any('get_inq_type', 'HotelBooingInqController@getInqType');
     Route::any('create_inq', 'HotelBooingInqController@createInqType');
-    Route::any('update_inq', 'HotelBooingInqController@updateInqTYpe');
+    Route::any('update_inq', 'HotelBooingInqController@updateInqType');
 });
