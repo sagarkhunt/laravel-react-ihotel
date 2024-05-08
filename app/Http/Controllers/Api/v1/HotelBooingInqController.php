@@ -63,11 +63,12 @@ class HotelBooingInqController extends BaseApiController
             if ($duplicate != 0) {
                 return $this->sendResponse('fail', "The Inquiry with same " . $msg4 . " Already Exists");
             } else {
+                $roomReqJson = json_encode($request["room_req"]);
                 BookingInq::insertGetId([
                     'hotel_id' => $hotel_id,
                     'chk_in_dt' => $request["chk_in_dt"],
                     'chk_out_dt' => $request["chk_out_dt"],
-                    'room_req' => $request["room_req"],
+                    'room_req' => $roomReqJson,
                     'total' => $request["total"],
                     'cust_name' => $request["cust_name"],
                     'mobile' => $request["mobile_no"],
@@ -77,7 +78,7 @@ class HotelBooingInqController extends BaseApiController
                     'child' => $request["child"],
                     'sp_req' => $request["sp_req"],
                     'sp_remark' => $request["sp_remark"],
-                    // 'status' => $request['status'] == 'false' ? 0 : 1,
+                    'status' => $request['status'] == 'false' ? 0 : 1,
                     'status' => $request['status'],
                     'created_by' => $auth_user_id,
                     'created_at' => date('Y-m-d H:i:s')

@@ -61,7 +61,7 @@ class HotelSectionController extends BaseApiController
             if ($duplicate != 0) {
                 return $this->sendResponse('fail', "The Floor with same " . $msg4 . " Already Exists");
             } else {
-                SectionMaster::insertGetId([
+                $creaetSection = SectionMaster::insertGetId([
                     'hotel_id' => $hotel_id,
                     'name' => $request["name"],
                     'description' => $request["description"],
@@ -69,7 +69,7 @@ class HotelSectionController extends BaseApiController
                     'created_by' => $auth_user_id,
                     'created_at' => date('Y-m-d H:i:s')
                 ]);
-                return $this->sendResponse('success', 'Floor Data added successfully');
+                return $this->sendResponse($creaetSection, 'Floor Data added successfully');
             }
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
