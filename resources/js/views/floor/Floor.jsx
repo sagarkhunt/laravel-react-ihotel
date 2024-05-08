@@ -84,7 +84,6 @@ function Floor() {
      * @param {handleSubmit} formData
      */
     function handleSubmit(formData) {
-        console.log('🚀 ~ handleSubmit ~ formData:', formData);
         // Handle form submission based on mode (add or edit)
         if (mode === 'Add Floor') {
             dispatch({
@@ -98,8 +97,6 @@ function Floor() {
                 floor_id: formData.id, // Add user_id to formData
                 status: statusValue,
             };
-            console.log(updatedFormData, '===');
-
             dispatch({
                 type: actions.FLOOR_UPDATE,
                 payload: updatedFormData,

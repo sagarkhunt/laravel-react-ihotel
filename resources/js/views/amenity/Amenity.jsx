@@ -91,8 +91,6 @@ function Amenity() {
                 payload: formData,
             });
         } else {
-            console.log(formData, '==========');
-
             const updatedFormData = {
                 amnt: formData.amnt,
                 amnt_icon: formData.amnt_icon,
@@ -104,7 +102,7 @@ function Amenity() {
             //     ...formData, // Copy existing formData object
             //     amnt_icon: formData.amnt_icon, // Update amnt_icon property
             // };
-            console.log(updatedFormData, '=====');
+
             // return;
             dispatch({
                 type: actions.AMENITY_UPDATE,

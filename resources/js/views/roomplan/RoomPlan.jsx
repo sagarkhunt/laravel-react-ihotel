@@ -14,6 +14,7 @@ function RoomPlan() {
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState('Add Room Plan'); // 'add' or 'edit'
     const [floorData, setFloorData] = useState(null); // Data of user being edited
+    const [statusValue, setStatusValue] = useState(0);
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left' },
         {
@@ -83,7 +84,6 @@ function RoomPlan() {
      */
 
     function handleSubmit(formData) {
-        console.log('🚀 ~ handleSubmit ~ formData:', formData);
         // Handle form submission based on mode (add or edit)
         if (mode === 'Add Room Plan') {
             dispatch({
@@ -96,7 +96,7 @@ function RoomPlan() {
                 plan_code: formData.plan_code,
                 plan_desc: formData.plan_desc,
                 room_plan_id: formData.id, // Add user_id to formData
-                status: 'true',
+                status: statusValue,
             };
 
             dispatch({
@@ -178,6 +178,8 @@ function RoomPlan() {
                         mode={mode}
                         onSubmit={handleSubmit}
                         userData={floorData}
+                        statusValue={statusValue}
+                        setStatusValue={setStatusValue}
                     />
                 )}
             </div>

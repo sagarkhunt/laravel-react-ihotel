@@ -10,7 +10,6 @@ function CreateEditMdl({
     statusValue,
     setStatusValue,
 }) {
-    console.log('🚀 ~ CreateEditMdl ~ userData:', userData.status);
     const [selectedValue, setSelectedValue] = useState('');
     const [formData, setFormData] = useState({});
 

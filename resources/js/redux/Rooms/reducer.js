@@ -37,7 +37,6 @@ function Reducer(state = initialStates, action) {
         case actions.ROOMS_UPDATE:
             return { ...state, loader: true };
         case actions.ROOMS_UPDATE_SUCCESS:
-            console.log(action.playload);
             return {
                 ...state,
                 roomsUpdate: action.payload,
@@ -49,7 +48,6 @@ function Reducer(state = initialStates, action) {
         case actions.ROOMS_MULTIPLE_ADD:
             return { ...state, loader: true };
         case actions.ROOMS_MULTIPLE_ADD_SUCCESS:
-            console.log(action.playload);
             return {
                 ...state,
                 addMutliRooms: action.payload,

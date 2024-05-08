@@ -35,7 +35,6 @@ function Reducer(state = initialStates, action) {
         case actions.INQUIRY_UPDATE:
             return { ...state, loader: true };
         case actions.INQUIRY_UPDATE_SUCCESS:
-            console.log(action.playload);
             return {
                 ...state,
                 inquiryUpdate: action.payload,

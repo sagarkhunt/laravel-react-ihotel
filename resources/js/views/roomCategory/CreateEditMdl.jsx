@@ -12,7 +12,6 @@ function CreateEditMdl({
     statusValue,
     setStatusValue,
 }) {
-    // console.log('🚀 ~ cateData:', cateData);
     const [amenities, setAmenities] = useState();
 
     const { amenityListData } = useSelector((state) => state?.amenityReducer);
@@ -101,27 +100,21 @@ function CreateEditMdl({
     };
 
     const toggleSelectAmenity = (amenity) => {
-        console.log('Selected amenities before toggle:', selectedAmenities);
         const amenityId = amenity.id;
-        console.log('Toggling amenity with ID:', amenityId);
 
         if (
             selectedAmenities.some(
                 (selectedAmenity) => selectedAmenity.id === amenityId,
             )
         ) {
-            console.log('Amenity already selected. Unselecting...');
             setSelectedAmenities(
                 selectedAmenities.filter(
                     (selectedAmenity) => selectedAmenity.id == amenityId,
                 ),
             );
         } else {
-            console.log('Amenity not selected. Selecting...');
             setSelectedAmenities([...selectedAmenities, amenity]);
         }
-
-        console.log('Selected amenities after toggle:', selectedAmenities);
     };
 
     // const isSelected = (amenityId) => selectedAmenities.includes(amenityId);

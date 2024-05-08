@@ -15,7 +15,6 @@ function Reducer(state = initialStates, action) {
         case actions.ROOMVIEW_LIST:
             return { ...state, loader: true };
         case actions.ROOMVIEW_LIST_SUCCESS:
-            console.log(action.payload);
             return {
                 ...state,
                 roomViewListData: action.payload,

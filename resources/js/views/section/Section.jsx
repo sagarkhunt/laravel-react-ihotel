@@ -83,7 +83,6 @@ function Section() {
      * @param {handleSubmit} formData
      */
     function handleSubmit(formData) {
-        console.log('🚀 ~ handleSubmit ~ formData:', formData);
         // Handle form submission based on mode (add or edit)
         if (mode === 'Add Section') {
             dispatch({

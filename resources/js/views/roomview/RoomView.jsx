@@ -14,6 +14,7 @@ function RoomView() {
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState('Add Room View'); // 'add' or 'edit'
     const [floorData, setFloorData] = useState(null); // Data of user being edited
+    const [statusValue, setStatusValue] = useState(0);
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left' },
         {
@@ -82,7 +83,6 @@ function RoomView() {
      */
 
     function handleSubmit(formData) {
-        console.log('🚀 ~ handleSubmit ~ formData:', formData);
         // Handle form submission based on mode (add or edit)
         if (mode === 'Add Room View') {
             dispatch({
@@ -94,7 +94,7 @@ function RoomView() {
                 room_view: formData.room_view,
                 desc: formData.desc,
                 room_view_id: formData.id, // Add user_id to formData
-                status: 'true',
+                status: statusValue,
             };
 
             dispatch({
@@ -176,6 +176,8 @@ function RoomView() {
                         mode={mode}
                         onSubmit={handleSubmit}
                         userData={floorData}
+                        statusValue={statusValue}
+                        setStatusValue={setStatusValue}
                     />
                 )}
             </div>

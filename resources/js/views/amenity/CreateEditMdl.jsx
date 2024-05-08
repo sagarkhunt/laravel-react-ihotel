@@ -10,7 +10,6 @@ function CreateEditMdl({
     statusValue,
     setStatusValue,
 }) {
-    console.log('🚀 ~ CreateEditMdl ~ userData:', userData);
     const [selectedValue, setSelectedValue] = useState('');
     const [iconName, setIconName] = useState(
         userData ? userData.amnt_icon : '',
@@ -36,8 +35,6 @@ function CreateEditMdl({
                 // Update amnt_icon if iconName is available (optional)
                 ...(iconName && { amnt_icon: iconName }),
             };
-            console.log('🚀 ~ useEffect ~ updatedFormData:', updatedFormData);
-
             // Set formData with updatedFormData
             setFormData(updatedFormData);
         } else {
@@ -58,8 +55,6 @@ function CreateEditMdl({
     function handleSubmit(event) {
         event.preventDefault();
         formData.amnt_icon = iconName;
-        // console.log(formData, '====asdfghj');
-        // return;
         onSubmit(formData);
     }
     return (

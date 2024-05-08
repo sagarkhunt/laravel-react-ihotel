@@ -80,7 +80,6 @@ function Users() {
      * @param {handleEditUser} user
      */
     function handleEditUser(user) {
-        console.log('🚀 ~ handleEditUser ~ user:', user);
         setMode('Edit User');
         setUserData(user);
         setOpen(true);

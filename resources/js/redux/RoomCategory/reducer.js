@@ -35,7 +35,6 @@ function Reducer(state = initialStates, action) {
         case actions.ROOMCATEGORY_UPDATE:
             return { ...state, loader: true };
         case actions.ROOMCATEGORY_UPDATE_SUCCESS:
-            console.log(action.playload);
             return {
                 ...state,
                 roomCateUpdate: action.payload,

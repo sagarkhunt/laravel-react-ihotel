@@ -36,7 +36,6 @@ function Reducer(state = initialStates, action) {
         case actions.BOOKINGINQ_UPDATE:
             return { ...state, loader: true };
         case actions.BOOKINGINQ_UPDATE_SUCCESS:
-            console.log(action.playload);
             return {
                 ...state,
                 bookingInqUpdate: action.payload,

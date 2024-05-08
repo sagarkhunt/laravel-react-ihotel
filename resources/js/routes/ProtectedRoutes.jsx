@@ -2,7 +2,6 @@
 
 // const ProtectedRoute = ({ component: Component, ...rest }) => {
 //     const isAuthenticated = !!localStorage.getItem('Access_Token');
-//     console.log('🚀 ~ ProtectedRoute ~ isAuthenticated:', isAuthenticated);
 
 //     return (
 //         <Route

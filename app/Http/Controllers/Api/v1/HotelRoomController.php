@@ -168,7 +168,7 @@ class HotelRoomController extends BaseApiController
                 $Room_Edit->base_rate = (isset($request['base_rate']) ? (empty($request['base_rate']) ? 0.00 : $request['base_rate']) : $Room_Edit->base_rate);
                 $Room_Edit->extra_person_charge = (isset($request['extra_person_charge']) ? (empty($request['extra_person_charge']) ? 0.00 : $request['extra_person_charge']) : $Room_Edit->extra_person_charge);
                 $Room_Edit->extra_bed_charge = (isset($request['extra_bed_charge']) ? (empty($request['extra_bed_charge']) ? 0.00 : $request['extra_bed_charge']) : $Room_Edit->extra_bed_charge);
-                $Room_Edit->status = (isset($request['status']) ? ($request['status'] == 'true' ? 1 : 0) : $Room_Edit->status);
+                $Room_Edit->status = (isset($request['status']) ? ($request['status'] == 1 ? 1 : 0) : $Room_Edit->status);
                 $Room_Edit->updated_by = $user_id;;
                 $Room_Edit->updated_at = date('Y-m-d H:i:s');
 
@@ -356,12 +356,12 @@ class HotelRoomController extends BaseApiController
                 $Room_Edit->plan_code = (isset($request['plan_code']) ? (empty($request['plan_code']) ? "" : $request['plan_code']) : $Room_Edit->plan_code);
                 $Room_Edit->plan_desc = (isset($request['plan_desc']) ? (empty($request['plan_desc']) ? "" : $request['plan_desc']) : $Room_Edit->plan_desc);
 
-                $Room_Edit->status = (isset($request['status']) ? ($request['status'] == 'true' ? 1 : 0) : $Room_Edit->status);
+                $Room_Edit->status = (isset($request['status']) ? ($request['status'] == 1 ? 1 : 0) : $Room_Edit->status);
                 $Room_Edit->updated_by = $user_id;;
                 $Room_Edit->updated_at = date('Y-m-d H:i:s');
 
                 $Room_Edit->update();
-                return $this->sendResponse('success', 'Room Plan updated successfully.');
+                return $this->sendResponse($Room_Edit, 'Room Plan updated successfully.');
             } else {
                 return $this->sendResponse('fail', 'Room  plam id is wrong');
             }
@@ -426,15 +426,15 @@ class HotelRoomController extends BaseApiController
             if ($duplicate != 0) {
                 return $this->sendResponse('fail', "The room view with same " . $msg4 . " Already Exists");
             } else {
-                RoomViewMaster::insertGetId([
+                $createRoomView = RoomViewMaster::insertGetId([
                     'hotel_id' => $hotel_id,
                     'room_view' => $request["room_view"],
                     'desc' => $request["desc"],
-                    'status' => (isset($request['status']) ? ($request['status'] == 'flase' ? 0 : 1) : 0),
+                    'status' => $request['status'],
                     'created_by' => $auth_user_id,
                     'created_at' => date('Y-m-d H:i:s')
                 ]);
-                return $this->sendResponse('success', 'Room Plan added successfully');
+                return $this->sendResponse($createRoomView, 'Room Plan added successfully');
             }
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
@@ -465,12 +465,12 @@ class HotelRoomController extends BaseApiController
             if ($Room_Edit) {
                 $Room_Edit->room_view = (isset($request['room_view']) ? (empty($request['room_view']) ? "" : $request['room_view']) : $Room_Edit->room_view);
                 $Room_Edit->desc = (isset($request['desc']) ? (empty($request['desc']) ? "" : $request['desc']) : $Room_Edit->desc);
-                $Room_Edit->status = (isset($request['status']) ? ($request['status'] == 'true' ? 1 : 0) : $Room_Edit->status);
+                $Room_Edit->status = (isset($request['status']) ? ($request['status'] == 1 ? 1 : 0) : $Room_Edit->status);
                 $Room_Edit->updated_by = $user_id;
                 $Room_Edit->updated_at = date('Y-m-d H:i:s');
 
                 $Room_Edit->update();
-                return $this->sendResponse('success', 'Room Plan updated successfully.');
+                return $this->sendResponse($Room_Edit, 'Room Plan updated successfully.');
             } else {
                 return $this->sendResponse('fail', 'Room  plam id is wrong');
             }

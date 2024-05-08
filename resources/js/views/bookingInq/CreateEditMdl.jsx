@@ -65,8 +65,6 @@ function CreateEditMdl({
         if (mode === 'Add Inquiry') {
             // Dispatch action to add inquiry
             formData.room_req = roomCategories;
-            console.log(formData, '=============');
-
             dispatch({
                 type: actions.BOOKINGINQ_ADD, // Replace with your actual action type
                 payload: formData,

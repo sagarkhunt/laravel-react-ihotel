@@ -132,7 +132,7 @@ class HotelUserController extends BaseApiController
                                 'sh_name' => $request["short_name"] ?? '',
                                 'mobile' => $request["mobile"],
                                 'email' => $request["email"],
-                                'password' => Hash::make($request["password"]),
+                                'password' => Hash::make($request["pin"]),
                                 'role_id' => 1, //$getUserRole->default_role_id,
                                 // 'is_att' => $request["is_att"] ?? 0,
                                 'dlock' => $request["device_lock"] ?? 0,
@@ -150,7 +150,7 @@ class HotelUserController extends BaseApiController
                                 'address' => $request["address"],
                                 'city' => $request["city"],
                                 'email' => $request["email"],
-                                'password' => Hash::make($request["password"]),
+                                'password' => Hash::make($request["pin"]),
                                 'role_id' => 1, //$getUserRole->default_role_id,
                                 'designation_id' => $request["designation_id"],
                                 'pin' => $request["pincode"],
@@ -285,7 +285,7 @@ class HotelUserController extends BaseApiController
                         // $User_Edit->can_day_end = (isset($request['can_day_end']) ? (empty($request['can_day_end']) ? 0 : $request['can_day_end']) : $User_Edit->can_day_end);
 
                         if ($request["password"] != '') {
-                            $User_Edit->password = Hash::make($request["password"]) ?? $User_Edit->password;
+                            $User_Edit->password = Hash::make($request["pin"]) ?? $User_Edit->password;
                         }
 
 

@@ -2,8 +2,6 @@ import React from 'react';
 import Modal from './Modal';
 
 function DeleteMdl({ open, setOpen, onSubmit, delId }) {
-    console.log('🚀 ~ DeleteMdl ~ setOpen:', setOpen);
-    console.log('🚀 ~ DeleteMdl ~ open:', open);
     const deleteRow = () => {
         onSubmit(delId);
     };

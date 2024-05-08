@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Modal from '../../components/common/Modal';
 
-function CreateEditMdl({ open, setOpen, mode, onSubmit, userData }) {
-    console.log('🚀 ~ CreateEditMdl ~ userData:', userData);
+function CreateEditMdl({
+    open,
+    setOpen,
+    mode,
+    onSubmit,
+    userData,
+    statusValue,
+    setStatusValue,
+}) {
     const [selectedValue, setSelectedValue] = useState('');
     const [formData, setFormData] = useState({});
     // Define handleChange function to update form data state
@@ -16,13 +23,14 @@ function CreateEditMdl({ open, setOpen, mode, onSubmit, userData }) {
     // Effect to update form data when userData prop changes
     useEffect(() => {
         if (mode === 'Edit Room View') {
+            setStatusValue(userData.status);
             setFormData(userData); // Pre-fill form with user data for editing
         } else {
             // Clear form data for adding new user
             setFormData({
                 room_view: '',
                 desc: '',
-                status: '',
+                status: 1,
             });
         }
     }, [mode, userData]);
@@ -65,8 +73,8 @@ function CreateEditMdl({ open, setOpen, mode, onSubmit, userData }) {
                                     >
                                         {mode}
                                     </h5>
-                                    {mode === 'Edit Room View' ? (
-                                        <div className="d-flex gap-4 align-items-center">
+                                    <div className="d-flex gap-4 align-items-center">
+                                        {mode === 'Edit Room View' ? (
                                             <div
                                                 className="form-check form-switch"
                                                 id="customSwitch"
@@ -76,31 +84,35 @@ function CreateEditMdl({ open, setOpen, mode, onSubmit, userData }) {
                                                     type="checkbox"
                                                     id="status"
                                                     name="status"
-                                                    value={
-                                                        formData.status == 1 ||
-                                                        'true'
-                                                    }
-                                                    onChange={handleChange}
-                                                    checked
+                                                    checked={statusValue}
+                                                    onChange={(e) => {
+                                                        const newValue = e
+                                                            .target.checked
+                                                            ? 1
+                                                            : 0;
+                                                        setStatusValue(
+                                                            newValue,
+                                                        );
+                                                    }}
                                                 />
                                                 <label
                                                     className="form-check-label"
-                                                    htmlFor="customSwitch"
+                                                    htmlFor="status"
                                                 >
                                                     Active
                                                 </label>
                                             </div>
-                                        </div>
-                                    ) : (
-                                        ''
-                                    )}
-                                    <button
-                                        type="button"
-                                        className="btn-close"
-                                        data-bs-dismiss="modal"
-                                        aria-label="Close"
-                                        onClick={() => setOpen(false)}
-                                    ></button>
+                                        ) : (
+                                            ''
+                                        )}
+                                        <button
+                                            type="button"
+                                            className="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close"
+                                            onClick={() => setOpen(false)}
+                                        ></button>
+                                    </div>
                                 </div>
 
                                 <div className="modal-body modal-lf-body">

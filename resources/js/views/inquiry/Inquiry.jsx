@@ -83,7 +83,6 @@ function Inquiry() {
      */
 
     function handleSubmit(formData) {
-        console.log('🚀 ~ handleSubmit ~ formData:', formData);
         // Handle form submission based on mode (add or edit)
         if (mode === 'Add Inquiry Type') {
             dispatch({

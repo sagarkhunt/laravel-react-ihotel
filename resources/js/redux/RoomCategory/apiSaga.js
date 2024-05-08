@@ -16,7 +16,6 @@ import toast from 'react-hot-toast';
  */
 function* roomCateList(action) {
     try {
-        console.log('asbakjsdnasjkbd');
         const response = yield call(
             postRequest,
             'get_room_cat   ',

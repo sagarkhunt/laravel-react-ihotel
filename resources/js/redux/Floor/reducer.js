@@ -35,7 +35,6 @@ function Reducer(state = initialStates, action) {
         case actions.FLOOR_UPDATE:
             return { ...state, loader: true };
         case actions.FLOOR_UPDATE_SUCCESS:
-            console.log(action.payload, '============');
             return {
                 ...state,
                 floorUpdate: action.payload,
