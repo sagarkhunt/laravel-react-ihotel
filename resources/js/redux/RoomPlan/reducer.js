@@ -7,6 +7,7 @@ const initialStates = {
     logOutLoader: false,
     roomPlanCreated: {},
     roomPlanUpdate: {},
+    roomPlanDelete: {},
 };
 
 function Reducer(state = initialStates, action) {
@@ -42,6 +43,17 @@ function Reducer(state = initialStates, action) {
             };
         case actions.ROOMPLAN_UPDATE_FAILURE:
             return { ...state, roomPlanUpdate: {}, loader: false };
+        /**Delete Room Plan */
+        case actions.ROOMPLAN_DELETE:
+            return { ...state, loader: true };
+        case actions.ROOMPLAN_DELETE_SUCCESS:
+            return {
+                ...state,
+                roomPlanDelete: action.payload,
+                loader: false,
+            };
+        case actions.ROOMPLAN_DELETE_FAILURE:
+            return { ...state, roomPlanDelete: {}, loader: false };
         default:
             return state;
     }

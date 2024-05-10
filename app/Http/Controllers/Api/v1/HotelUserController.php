@@ -43,7 +43,7 @@ class HotelUserController extends BaseApiController
                     $yes['email'] = $getMasterUsers[$i]->email;
                     $yes['mobile'] = $getMasterUsers[$i]->mobile;
                     $yes['IMEI'] = $getMasterUsers[$i]->IMEI;
-                    $yes['status'] = $getMasterUsers[$i]->status == 1 ? 'Active' : 'Deactive';
+                    $yes['status'] = $getMasterUsers[$i]->status;
                     $yes['address'] = $getWorkingHr->address;
                     $yes['pin'] = $getWorkingHr->pin;
                     $yes['city'] = $getWorkingHr->city;
@@ -132,11 +132,12 @@ class HotelUserController extends BaseApiController
                                 'sh_name' => $request["short_name"] ?? '',
                                 'mobile' => $request["mobile"],
                                 'email' => $request["email"],
-                                'password' => Hash::make($request["pin"]),
+                                'password' => Hash::make($request["password"]),
                                 'role_id' => 1, //$getUserRole->default_role_id,
                                 // 'is_att' => $request["is_att"] ?? 0,
                                 'dlock' => $request["device_lock"] ?? 0,
-                                'status' => $request["user_status"] == 'false' ? 0 : 1,
+                                // 'status' => $request["user_status"] == 'false' ? 0 : 1,
+                                'status' => $request["status"],
                                 'uto' => $user_time_out,
                                 'created_by' => $auth_user_id,
                                 'created_at' => date('Y-m-d H:i:s')
@@ -150,13 +151,13 @@ class HotelUserController extends BaseApiController
                                 'address' => $request["address"],
                                 'city' => $request["city"],
                                 'email' => $request["email"],
-                                'password' => Hash::make($request["pin"]),
+                                'password' => Hash::make($request["password"]),
                                 'role_id' => 1, //$getUserRole->default_role_id,
                                 'designation_id' => $request["designation_id"],
-                                'pin' => $request["pincode"],
+                                // 'pin' => $request["pincode"],
                                 'short_name' => $request["short_name"] ?? '',
                                 'working_hr' => $request["working_hr"] ?? 0,
-                                'status' => $request["user_status"] == 'false' ? 0 : 1,
+                                'status' => $request["status"],
                                 'created_by' => $auth_user_id,
                                 'created_at' => date('Y-m-d H:i:s')
                             ]);
@@ -276,7 +277,8 @@ class HotelUserController extends BaseApiController
                         $User_Edit->mobile = (isset($request['mobile']) ? (empty($request['mobile']) ? "" : $request['mobile']) : $User_Edit->mobile);
                         $User_Edit->sh_name = (isset($request['short_name']) ? (empty($request['short_name']) ? "" : $request['short_name']) : $User_Edit->short_name);
                         $User_Edit->IMEI = (isset($request['IMEI']) ? (empty($request['IMEI']) ? "" : $request['IMEI']) : $User_Edit->IMEI);
-                        $User_Edit->status = (isset($request['user_status']) ? ($request['user_status'] == 'Active' ? 1 : 0) : $User_Edit->status);
+                        // $User_Edit->status = (isset($request['user_status']) ? ($request['user_status'] == 'Active' ? 1 : 0) : $User_Edit->status);
+                        $User_Edit->status = (isset($request['status']) ? ($request['status'] == 1 ? 1 : 0) : $User_Edit->status);
                         $User_Edit->uto = (isset($request['user_time_out']) ? (empty($request['user_time_out']) ? 0 : $request['user_time_out']) : $User_Edit->uto);
                         $User_Edit->dlock = (isset($request['device_lock']) ? (empty($request['device_lock']) ? 0 : $request['device_lock']) : $User_Edit->dlock);
                         // $User_Edit->is_att = (isset($request['is_att']) ? (empty($request['is_att']) ? 0 : $request['is_att']) : $User_Edit->is_att);
@@ -285,7 +287,7 @@ class HotelUserController extends BaseApiController
                         // $User_Edit->can_day_end = (isset($request['can_day_end']) ? (empty($request['can_day_end']) ? 0 : $request['can_day_end']) : $User_Edit->can_day_end);
 
                         if ($request["password"] != '') {
-                            $User_Edit->password = Hash::make($request["pin"]) ?? $User_Edit->password;
+                            $User_Edit->password = Hash::make($request["password"]) ?? $User_Edit->password;
                         }
 
 
@@ -325,7 +327,7 @@ class HotelUserController extends BaseApiController
 
                         //     $token_data = DB::table('oauth_access_tokens')->where('user_id', $user_id)->delete();
                         // }                        
-                        return $this->sendResponse('success', 'User Data updated successfully.');
+                        return $this->sendResponse($User_Edit, 'User Data updated successfully.');
                     }
                 }
             } else {
@@ -334,6 +336,28 @@ class HotelUserController extends BaseApiController
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
             return $this->sendError('Server Error', $e->getMessage());
+        }
+    }
+
+    public function deleteUser(Request $request)
+    {
+        $user = Auth::user();
+        $user_id = $user->id;
+        $hotel_id = $user->hotel_id;
+        Helper::change_database_using_hotel_id($hotel_id);
+        // dd($request->all());
+        try {
+            if (isset($request["user_id"]) && $request["user_id"] != "" && $request["user_id"] != null) {
+                // $deleteBookingInq = BookingInq::where('id', $request['user_id'])->delete();
+                $deleteUser = User::whereIn('id', is_array($request['user_id']) ? $request['user_id'] : [$request['user_id']])->delete();
+
+                return $this->sendResponse($deleteUser, 'User deleted successfully');
+            } else {
+                return $this->sendResponse('fail', 'Required Parameters missing');
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return;
         }
     }
 }

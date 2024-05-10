@@ -5,10 +5,12 @@ import actions from '../../redux/Users/actions';
 import DataTableComponent from '../../components/common/DataTableComponent';
 import CreateEditMdl from './CreateEditMdl';
 import DeleteMdl from '../../components/common/DeleteMdl';
+import toast from 'react-hot-toast';
 function Users() {
     const [listingData, setListingData] = useState([]);
+
     const dispatch = useDispatch();
-    const { userListData, userCreateed, userUpdate } = useSelector(
+    const { userListData, userCreateed, userUpdate, userDelete } = useSelector(
         (state) => state?.usersReducer,
     );
     const [open, setOpen] = useState(false);
@@ -16,15 +18,16 @@ function Users() {
     const [delId, setDelId] = useState('');
     const [mode, setMode] = useState('Add User'); // 'add' or 'edit'
     const [userData, setUserData] = useState(null); // Data of user being edited
-    const [selectedId, setSelectedId] = useState([]);
+    const [selectedIds, setSelectedIds] = useState([]);
+    const [statusValue, setStatusValue] = useState(0);
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left' },
         {
             data: null,
             title: `<span class="dt-column-title">
                 <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheckAll">
-                    <label class="custom-control-label" htmlFor="customCheckAll"></label>
+                    <input type="checkbox" class="custom-control-input" id="customCheck1">
+                    <label class="custom-control-label" htmlFor="customCheck1"></label>
                 </div>
             </span>`,
             className: 'action-check',
@@ -47,7 +50,7 @@ function Users() {
             data: 'status',
             label: 'Status',
             render: function (data, type, row) {
-                if (data === 1) {
+                if (data == 1) {
                     return '<div class="status-active">Active</div>';
                 } else {
                     return '<div class="status-deactive">Deactive</div>';
@@ -96,10 +99,24 @@ function Users() {
         }
     };
     const handleDelSubmit = () => {
-        console.log(delId);
+        if (delId) {
+            const userId = {
+                user_id: delId,
+            };
+            dispatch({
+                type: actions.USER_DELETE, // Replace with your actual action type
+                payload: userId,
+            });
+            setShowDel(false);
+        }
     };
     const removeMultiple = () => {
-        console.log('=========', selectedId);
+        // if (selectedIds?.length === 0) {
+        //     toast.error('Please select any one user');
+        // } else {
+        //     setShowDel(true);
+        //     setDelId(selectedIds);
+        // }
     };
     /**
      *
@@ -115,7 +132,8 @@ function Users() {
         } else {
             const updatedFormData = {
                 ...formData,
-                user_id: userData.id, // Add user_id to formData
+                user_id: userData.id,
+                status: statusValue, // Add user_id to formData
             };
             dispatch({
                 type: actions.USER_UPDATE,
@@ -131,7 +149,7 @@ function Users() {
         dispatch({
             type: actions.USER_LIST,
         });
-    }, [userCreateed, userUpdate]);
+    }, [userCreateed, userUpdate, userDelete]);
     return (
         <>
             <div className="container-fluid py-3 px-4">
@@ -210,7 +228,8 @@ function Users() {
                             onEdit={handleEditUser}
                             onDelete={handleDeleteUser}
                             columnsConfig={columnsConfig}
-                            setSelectedId={setSelectedId}
+                            selectedIds={selectedIds}
+                            setSelectedIds={setSelectedIds}
                         />
                         {/* <table className="table custom-table" id="user_table">
                             <thead>
@@ -320,6 +339,8 @@ function Users() {
                         mode={mode}
                         onSubmit={handleSubmit}
                         userData={userData}
+                        statusValue={statusValue}
+                        setStatusValue={setStatusValue}
                     />
                 )}
                 {showDel && (

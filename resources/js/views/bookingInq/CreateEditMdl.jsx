@@ -8,26 +8,29 @@ function CreateEditMdl({
     setOpen,
     mode,
     // onSubmit,
-    roomsData,
+    booingInqData,
 }) {
     const [dropDownData, setDropDownData] = useState([]);
+
     const [formData, setFormData] = useState({
-        booking_inq_id: '0',
-        chk_in_dt: '',
-        chk_out_dt: '',
-        cust_name: '',
-        mobile_no: '',
-        email: '',
-        cust_cat_id: '1',
-        adult: '1',
-        child: '0',
-        sp_req: '',
-        sp_remark: '',
-        total_day: 0,
-        status: 1,
+        booking_inq_id: booingInqData?.id || '0',
+        chk_in_dt: booingInqData?.chk_in_dt || '',
+        chk_out_dt: booingInqData?.chk_out_dt || '',
+        cust_name: booingInqData?.cust_name || '',
+        mobile_no: booingInqData?.mobile || '',
+        email: booingInqData?.email || '',
+        cust_cat_id: booingInqData?.cust_cat_id || '',
+        adult: booingInqData?.adult || '',
+        child: booingInqData?.child || '',
+        sp_req: booingInqData?.sp_req || '',
+        sp_remark: booingInqData?.sp_remark || '',
+        total_day: booingInqData?.total_day || 0,
+        status: booingInqData?.status || 1,
     });
-    const { dropDownList } = useSelector((state) => state?.roomReducer);
+    const { dropDownList } = useSelector((state) => state?.booingInqReduce);
+
     const dispatch = useDispatch();
+    const [statusValue, setStatusValue] = useState(booingInqData?.status || 0);
     function handleChange(event) {
         const { name, value, checked, type } = event.target;
         if (type === 'checkbox') {
@@ -70,13 +73,14 @@ function CreateEditMdl({
                 payload: formData,
             });
         } else if (mode === 'Edit Inquiry') {
+            formData.room_req = roomCategories;
+            formData.status = statusValue;
             // Dispatch action to edit inquiry
             dispatch({
                 type: actions.BOOKINGINQ_UPDATE, // Replace with your actual action type
                 payload: formData,
             });
         }
-
         // Close the modal after submission
         setOpen(false);
     }
@@ -85,15 +89,13 @@ function CreateEditMdl({
         setDropDownData(dropDownList);
     }, [dropDownList]);
     /** Room Catefgory on table */
-    const [roomCategories, setRoomCategories] = useState([
-        { room_cat_id: 1, no_of_rooms: 0, room_plan_id: 1, offered_rate: 0 },
-    ]);
+    const [roomCategories, setRoomCategories] = useState([]);
     const [totalRate, setTotalRate] = useState(0);
 
     const calculateTotalRate = () => {
         let total = 0;
         roomCategories.forEach((category) => {
-            total += parseFloat(category.offeredRate);
+            total += parseFloat(category.offered_rate);
         });
         setTotalRate(total.toFixed(2));
     };
@@ -101,10 +103,10 @@ function CreateEditMdl({
     const addNewRoomCategory = () => {
         const newCategory = {
             id: roomCategories.length + 1,
-            roomCatId: 1,
-            noOfRooms: 0,
-            roomPlanId: 1,
-            offeredRate: 0,
+            room_cat_id: 1,
+            no_of_rooms: 0,
+            room_plan_id: 1,
+            offered_rate: 0,
         };
         setRoomCategories([...roomCategories, newCategory]);
     };
@@ -116,21 +118,63 @@ function CreateEditMdl({
         calculateTotalRate();
     };
 
-    // useEffect(() => {
-    //     const sync_req = [
-    //         'room_cate',
-    //         'hotel_floor',
-    //         'hotel_section',
-    //         'rooms_view',
-    //     ];
+    useEffect(() => {
+        if (booingInqData && booingInqData.room_req) {
+            try {
+                const parsedArray = JSON.parse(booingInqData.room_req);
+                setRoomCategories(parsedArray);
+            } catch (error) {
+                console.error('Error parsing JSON string:', error);
+            }
+        }
+    }, [booingInqData]);
 
-    //     dispatch({
-    //         type: actions.ROOMS_DROPDOWN_LIST,
-    //         payload: {
-    //             sync_req: sync_req.join(','), // Convert the array to a comma-separated string
-    //         },
-    //     });
-    // }, []);
+    useEffect(() => {
+        calculateTotalRate();
+    }, [roomCategories]);
+
+    useEffect(() => {
+        const sync_req = ['room_cate', 'rooms_plan'];
+        dispatch({
+            type: actions.BOOKINGINQ_DROPDOWN_LIST,
+            payload: {
+                sync_req: sync_req.join(','), // Convert the array to a comma-separated string
+            },
+        });
+    }, []);
+
+    const calculateTotalDays = (startDate, endDate) => {
+        // Handle invalid or missing dates gracefully
+        if (!startDate || !endDate) {
+            return 0;
+        }
+
+        const date1 = new Date(startDate);
+        const date2 = new Date(endDate);
+
+        // Ensure end date is after start date
+        if (date2 < date1) {
+            return 0; // Or handle this case differently if needed
+        }
+
+        // Calculate the difference in milliseconds and convert to days
+        const diffInMs = Math.abs(date2 - date1);
+        const totalDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+
+        return totalDays;
+    };
+    // Calculate total days on component mount or on change of chk_in_dt or chk_out_dt
+    useEffect(() => {
+        const updateTotalDays = () => {
+            const totalDays = calculateTotalDays(
+                formData.chk_in_dt,
+                formData.chk_out_dt,
+            );
+            setFormData({ ...formData, total_day: totalDays });
+        };
+
+        updateTotalDays();
+    }, [formData.chk_in_dt, formData.chk_out_dt]); // Dependency array
     return (
         <Modal open={open} handleModal={() => setOpen(!open)}>
             <div
@@ -152,7 +196,7 @@ function CreateEditMdl({
                                 {mode}
                             </h5>
                             <div className="d-flex gap-4 align-items-center">
-                                {mode === 'Edit Inquiry Type' ? (
+                                {mode === 'Edit Inquiry' ? (
                                     <div
                                         className="form-check form-switch"
                                         id="bookingSwitch"
@@ -162,12 +206,19 @@ function CreateEditMdl({
                                             type="checkbox"
                                             id="status"
                                             name="status"
-                                            checked={formData.status}
-                                            onChange={handleInputChange}
+                                            checked={statusValue}
+                                            // onChange={handleInputChange}
+                                            onChange={(e) => {
+                                                const newValue = e.target
+                                                    .checked
+                                                    ? 1
+                                                    : 0;
+                                                setStatusValue(newValue);
+                                            }}
                                         />
                                         <label
                                             className="form-check-label"
-                                            htmlFor="customSwitch"
+                                            htmlFor="status"
                                         >
                                             Open
                                         </label>
@@ -216,6 +267,7 @@ function CreateEditMdl({
                                                 value={formData.chk_in_dt}
                                                 onChange={handleChange}
                                                 placeholder=""
+                                                required
                                             />
                                         </div>
                                     </div>
@@ -251,6 +303,7 @@ function CreateEditMdl({
                                                 value={formData.chk_out_dt}
                                                 onChange={handleChange}
                                                 placeholder=""
+                                                required
                                             />
                                         </div>
                                     </div>
@@ -298,6 +351,9 @@ function CreateEditMdl({
                                                         index={index}
                                                         handleInputChange={
                                                             handleInputChange
+                                                        }
+                                                        dropDownData={
+                                                            dropDownData
                                                         }
                                                     />
                                                 ),
@@ -387,6 +443,7 @@ function CreateEditMdl({
                                                 id="mobile_no"
                                                 name="mobile_no"
                                                 value={formData.mobile_no}
+                                                maxLength={10}
                                                 onChange={handleChange}
                                                 placeholder="Mobile No"
                                             />
@@ -426,10 +483,14 @@ function CreateEditMdl({
                                                 aria-label=".form-select-sm example"
                                                 id="cust_cat_id"
                                                 name="cust_cat_id"
-                                                value={formData.cust_cat_id}
+                                                value={formData.cust_cat_id} // Set value based on state
                                                 onChange={handleChange}
                                             >
-                                                <option selected value="1">
+                                                <option value="">
+                                                    Please Select Cust Cate
+                                                </option>{' '}
+                                                {/* Default option */}
+                                                <option value="1">
                                                     Travel Agent
                                                 </option>
                                                 <option value="2">

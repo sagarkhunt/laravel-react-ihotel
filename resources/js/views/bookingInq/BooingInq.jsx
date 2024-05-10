@@ -4,18 +4,26 @@ import actions from '../../redux/BookingInquiry/actions';
 import CreateEditMdl from './CreateEditMdl';
 import { Link } from 'react-router-dom';
 import DataTableComponent from '../../components/common/DataTableComponent';
+import $ from 'jquery';
+import toast from 'react-hot-toast';
+import DeleteMdl from '../../components/common/DeleteMdl';
 function BooingInq() {
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState('Add Inquiry'); // 'add' or 'edit'
     const [booingInqData, setBookingInqData] = useState(null); // Data of user being edited
+    const [showDel, setShowDel] = useState(false);
+    const [delId, setDelId] = useState('');
+    const [bookingInqListingDatas, setBookinInqListinDatas] = useState([]);
 
-    const [bookingInqListingData, setBookinInqListinData] = useState([]);
     const {
         bookingInqListData,
         bookingInqCreated,
         bookingInqUpdate,
+        bookingInqDelete,
         addMutliRooms,
     } = useSelector((state) => state.booingInqReduce);
+
+    const [selectedIds, setSelectedIds] = useState([]);
     const dispatch = useDispatch();
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left' },
@@ -27,17 +35,23 @@ function BooingInq() {
                     <label class="custom-control-label" htmlFor="customCheck1"></label>
                 </div>
             </span>`,
-            className: 'action-check',
-            render: () =>
+            className: 'th-custom action-check dt-orderable-none',
+            render: (data, type, row) =>
                 `
-                <div className="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheckAll">
-                    <label class="custom-control-label" htmlFor="customCheckAll"></label>
-                </div>
-                `,
+            <div className="custom-control custom-checkbox">
+                <input 
+                    type="checkbox" 
+                    class="custom-control-input row-checkbox" 
+                    id="customCheckAll" 
+                    
+                >
+                <label class="custom-control-label" htmlFor="customCheckAll"></label>
+            </div>
+            `,
         },
         {
             data: 'chk_in_dt',
+            className: '',
             label: 'From Date - To Date',
             render: function (data, type, row) {
                 const chkInDate = row.chk_in_dt ?? ''; // Check-in date
@@ -93,18 +107,38 @@ function BooingInq() {
         dispatch({
             type: actions.BOOKINGINQ_LIST,
         });
-    }, [dispatch, bookingInqCreated, bookingInqUpdate, addMutliRooms]);
+    }, [
+        dispatch,
+        bookingInqCreated,
+        bookingInqUpdate,
+        bookingInqDelete,
+        addMutliRooms,
+    ]);
 
     useEffect(() => {
-        setBookinInqListinData(bookingInqListData);
+        setBookinInqListinDatas(bookingInqListData);
     }, [bookingInqListData]);
 
     function handleAddRoom() {
         setMode('Add Inquiry');
+        setBookingInqData(null);
         setOpen(true);
     }
     const handleDelete = (item) => {
-        onDelete(item);
+        // onDelete(item);
+        if (item && item.id) {
+            setShowDel(true);
+            setDelId(item.id);
+        }
+    };
+
+    const handleDeleteInquiry = () => {
+        if (selectedIds?.length === 0) {
+            toast.error('Please Select any one item');
+        } else {
+            setShowDel(true);
+            setDelId(selectedIds);
+        }
     };
 
     const handleEdit = (item) => {
@@ -113,8 +147,21 @@ function BooingInq() {
         setBookingInqData(item);
         setOpen(true);
     };
+
+    const handleDelSubmit = () => {
+        const bookingid = {
+            booking_id: delId,
+        };
+        dispatch({
+            type: actions.BOOKINGINQ_DELETE, // Replace with your actual action type
+            payload: bookingid,
+        });
+        setShowDel(false);
+    };
+
     return (
         <div className="container-fluid py-3 px-4">
+            {/* <Toaster /> */}
             <div className="row m-0">
                 <div className="col-12 p-0">
                     <nav aria-label="breadcrumb">
@@ -156,11 +203,14 @@ function BooingInq() {
                                 </span>
                             </button>
 
-                            <button className="btn btn-outline d-flex">
+                            {/* <button
+                                className="btn btn-outline d-flex"
+                                onClick={deleteInquiry}
+                            >
                                 <span className="material-icons-outlined">
                                     delete
                                 </span>
-                            </button>
+                            </button> */}
 
                             <div className="dropdown">
                                 <button
@@ -177,7 +227,11 @@ function BooingInq() {
                                     aria-labelledby="dropdownMenuButton1"
                                 >
                                     <li>
-                                        <a className="dropdown-item" href="#">
+                                        <a
+                                            className="dropdown-item"
+                                            href="#"
+                                            onClick={handleDeleteInquiry}
+                                        >
                                             Delete
                                         </a>
                                     </li>
@@ -208,9 +262,13 @@ function BooingInq() {
 
                 <div className="col-12 p-3 container-page">
                     <DataTableComponent
-                        data={bookingInqListingData}
+                        data={bookingInqListingDatas}
                         onEdit={handleEdit}
+                        onDelete={handleDelete}
+                        // onCheckBoxCheck={handleChecked}
                         columnsConfig={columnsConfig}
+                        selectedIds={selectedIds}
+                        setSelectedIds={setSelectedIds}
                     />
                 </div>
             </div>
@@ -220,6 +278,14 @@ function BooingInq() {
                     setOpen={setOpen}
                     mode={mode}
                     booingInqData={booingInqData}
+                />
+            )}
+            {showDel && (
+                <DeleteMdl
+                    open={showDel}
+                    setOpen={setShowDel}
+                    onSubmit={handleDelSubmit}
+                    delId={setDelId}
                 />
             )}
         </div>

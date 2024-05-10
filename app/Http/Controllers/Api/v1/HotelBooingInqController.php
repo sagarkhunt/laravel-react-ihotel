@@ -64,7 +64,7 @@ class HotelBooingInqController extends BaseApiController
                 return $this->sendResponse('fail', "The Inquiry with same " . $msg4 . " Already Exists");
             } else {
                 $roomReqJson = json_encode($request["room_req"]);
-                BookingInq::insertGetId([
+                $createBookingInq = BookingInq::insertGetId([
                     'hotel_id' => $hotel_id,
                     'chk_in_dt' => $request["chk_in_dt"],
                     'chk_out_dt' => $request["chk_out_dt"],
@@ -83,7 +83,7 @@ class HotelBooingInqController extends BaseApiController
                     'created_by' => $auth_user_id,
                     'created_at' => date('Y-m-d H:i:s')
                 ]);
-                return $this->sendResponse('success', 'Booking inq Data added successfully');
+                return $this->sendResponse($createBookingInq, 'Booking inq Data added successfully');
             }
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
@@ -106,9 +106,10 @@ class HotelBooingInqController extends BaseApiController
                 if (empty($chkBookingInq)) {
                     return $this->sendResponse('fail', "The booking inquiry id is wrong");
                 } else {
+                    $roomReqJson = json_encode($request["room_req"]);
                     $chkBookingInq->chk_in_dt = (isset($request['chk_in_dt']) ? (empty($request['chk_in_dt']) ? "" : $request['chk_in_dt']) : $chkBookingInq->chk_in_dt);
                     $chkBookingInq->chk_out_dt = (isset($request['chk_out_dt']) ? (empty($request['chk_out_dt']) ? "" : $request['chk_out_dt']) : $chkBookingInq->chk_out_dt);
-                    $chkBookingInq->room_req = (isset($request['room_req']) ? (empty($request['room_req']) ? "" : $request['room_req']) : $chkBookingInq->room_req);
+                    $chkBookingInq->room_req = (isset($request['room_req']) ? (empty($request['room_req']) ? "" : $roomReqJson) : $chkBookingInq->room_req);
                     $chkBookingInq->cust_name = (isset($request['cust_name']) ? (empty($request['cust_name']) ? "" : $request['cust_name']) : $chkBookingInq->cust_name);
                     $chkBookingInq->mobile = (isset($request['mobile_no']) ? (empty($request['mobile_no']) ? "" : $request['mobile_no']) : $chkBookingInq->mobile_no);
                     $chkBookingInq->email = (isset($request['email']) ? (empty($request['email']) ? "" : $request['email']) : $chkBookingInq->email);
@@ -117,12 +118,12 @@ class HotelBooingInqController extends BaseApiController
                     $chkBookingInq->child = (isset($request['child']) ? (empty($request['child']) ? 0 : $request['child']) : $chkBookingInq->child);
                     $chkBookingInq->sp_req = (isset($request['sp_req']) ? (empty($request['sp_req']) ? "" : $request['sp_req']) : $chkBookingInq->sp_req);
                     $chkBookingInq->total = (isset($request['total']) ? (empty($request['total']) ? "" : $request['total']) : $chkBookingInq->total);
-                    $chkBookingInq->status = (isset($request['status']) ? ($request['status'] == 'false' ? 0 : 1) : $chkBookingInq->status);
+                    $chkBookingInq->status = (isset($request['status']) ? ($request['status'] == 0 ? 0 : 1) : $chkBookingInq->status);
                     $chkBookingInq->updated_by = $user_id;;
                     $chkBookingInq->updated_at = date('Y-m-d H:i:s');
 
                     $chkBookingInq->update();
-                    return $this->sendResponse('success', 'Booking Inq Data updated successfully.');
+                    return $this->sendResponse($chkBookingInq, 'Booking Inq Data updated successfully.');
                 }
                 // }
             } else {
@@ -134,6 +135,29 @@ class HotelBooingInqController extends BaseApiController
             return $this->sendError('Server Error', $e->getMessage());
         }
     }
+
+    public function deleteBookingInq(Request $request)
+    {
+        $user = Auth::user();
+        $user_id = $user->id;
+        $hotel_id = $user->hotel_id;
+        Helper::change_database_using_hotel_id($hotel_id);
+        // dd($request->all());
+        try {
+            if (isset($request["booking_id"]) && $request["booking_id"] != "" && $request["booking_id"] != null) {
+                // $deleteBookingInq = BookingInq::where('id', $request['booking_id'])->delete();
+                $deleteBookingInq = BookingInq::whereIn('id', is_array($request['booking_id']) ? $request['booking_id'] : [$request['booking_id']])->delete();
+
+                return $this->sendResponse($deleteBookingInq, 'Booking inquiry deleted successfully');
+            } else {
+                return $this->sendResponse('fail', 'Required Parameters missing');
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return $this->sendResponse('fail', 'Something went wrong');
+        }
+    }
+
 
 
     /*****************************************Inq Typq Master*******************************************/
@@ -233,6 +257,28 @@ class HotelBooingInqController extends BaseApiController
 
             Log::debug($e->getMessage());
             return $this->sendError('Server Error', $e->getMessage());
+        }
+    }
+    #Delete Inq Type
+    public function deleteInqType(Request $request)
+    {
+        $user = Auth::user();
+        $user_id = $user->id;
+        $hotel_id = $user->hotel_id;
+        Helper::change_database_using_hotel_id($hotel_id);
+
+        try {
+            if (isset($request["inq_id"]) && $request["inq_id"] != "" && $request["inq_id"] != null) {
+
+                // $deleteTable = RoomViewMaster::find($request["inq_id"])->delete();
+                $deleteRoomView = InquiryMaster::whereIn('id', is_array($request['inq_id']) ? $request['inq_id'] : [$request['inq_id']])->delete();
+                return $this->sendResponse($deleteRoomView, 'Inquiry Type deleted successfully');
+            } else {
+                return $this->sendResponse('fail', 'Required Parameters missing');
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return $this->sendResponse('fail', 'Something went wrong');
         }
     }
 }

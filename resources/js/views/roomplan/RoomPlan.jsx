@@ -4,17 +4,25 @@ import DataTableComponent from '../../components/common/DataTableComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import CreateEditMdl from './CreateEditMdl';
 import actions from '../../redux/RoomPlan/actions';
+import DeleteMdl from '../../components/common/DeleteMdl';
+import toast from 'react-hot-toast';
 
 function RoomPlan() {
     const [listingData, setListingData] = useState([]);
     const dispatch = useDispatch();
-    const { roomPlanListData, roomPlanCreated, roomPlanUpdate } = useSelector(
-        (state) => state.roomPlanReducer,
-    );
+    const {
+        roomPlanListData,
+        roomPlanCreated,
+        roomPlanUpdate,
+        roomPlanDelete,
+    } = useSelector((state) => state.roomPlanReducer);
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState('Add Room Plan'); // 'add' or 'edit'
     const [floorData, setFloorData] = useState(null); // Data of user being edited
     const [statusValue, setStatusValue] = useState(0);
+    const [selectedIds, setSelectedIds] = useState([]);
+    const [showDel, setShowDel] = useState(false);
+    const [delId, setDelId] = useState('');
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left' },
         {
@@ -29,7 +37,7 @@ function RoomPlan() {
             render: () =>
                 `
                 <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheckAll">
+                    <input type="checkbox" class="custom-control-input row-checkbox" id="customCheckAll">
                     <label class="custom-control-label" htmlFor="customCheckAll"></label>
                 </div>
                 `,
@@ -113,7 +121,39 @@ function RoomPlan() {
         dispatch({
             type: actions.ROOMPLAN_LIST,
         });
-    }, [roomPlanCreated, roomPlanUpdate]);
+    }, [roomPlanCreated, roomPlanUpdate, roomPlanDelete]);
+    /**
+     *
+     * @param {handleDelete} item
+     */
+    const handleDelete = (item) => {
+        // onDelete(item);
+        if (item && item.id) {
+            setShowDel(true);
+            setDelId(item.id);
+        }
+    };
+    /**
+     * Remove multiple
+     */
+    const removeMultiple = () => {
+        if (selectedIds?.length === 0) {
+            toast.error('Please select any one Room');
+        } else {
+            setShowDel(true);
+            setDelId(selectedIds);
+        }
+    };
+    const handleDelSubmit = () => {
+        const roomPlanId = {
+            room_plan_id: delId,
+        };
+        dispatch({
+            type: actions.ROOMPLAN_DELETE, // Replace with your actual action type
+            payload: roomPlanId,
+        });
+        setShowDel(false);
+    };
     return (
         <>
             <div className="container-fluid py-3 px-4">
@@ -154,7 +194,10 @@ function RoomPlan() {
                                     New Plan
                                 </button>
 
-                                <button className="btn btn-outline d-flex">
+                                <button
+                                    className="btn btn-outline d-flex"
+                                    onClick={removeMultiple}
+                                >
                                     <span className="material-icons-outlined">
                                         delete
                                     </span>
@@ -168,6 +211,9 @@ function RoomPlan() {
                             data={listingData}
                             onEdit={handleEditFloor}
                             columnsConfig={columnsConfig}
+                            onDelete={handleDelete}
+                            selectedIds={selectedIds}
+                            setSelectedIds={setSelectedIds}
                         />
                     </div>
                 </div>
@@ -180,6 +226,14 @@ function RoomPlan() {
                         userData={floorData}
                         statusValue={statusValue}
                         setStatusValue={setStatusValue}
+                    />
+                )}
+                {showDel && (
+                    <DeleteMdl
+                        open={showDel}
+                        setOpen={setShowDel}
+                        onSubmit={handleDelSubmit}
+                        delId={setDelId}
                     />
                 )}
             </div>

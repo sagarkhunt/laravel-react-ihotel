@@ -116,7 +116,7 @@ class HotelRoomController extends BaseApiController
                     // Save the replicated room
                     $newRoom->save();
                 }
-                return $this->sendResponse('success', 'Room Data added successfully');
+                return $this->sendResponse($createRoom, 'Room Data added successfully');
             }
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
@@ -181,6 +181,30 @@ class HotelRoomController extends BaseApiController
             dd($e);
             Log::debug($e->getMessage());
             return $this->sendError('Server Error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Delete Room 
+     */
+    public function deleteRoom(Request $request)
+    {
+        $user = Auth::user();
+        $user_id = $user->id;
+        $hotel_id = $user->hotel_id;
+        Helper::change_database_using_hotel_id($hotel_id);
+        // dd($request->all());
+        try {
+            if (isset($request["room_id"]) && $request["room_id"] != "" && $request["room_id"] != null) {
+                $deleteRoom = RoomMaster::whereIn('id', is_array($request['room_id']) ? $request['room_id'] : [$request['room_id']])->delete();
+
+                return $this->sendResponse($deleteRoom, 'Room deleted successfully');
+            } else {
+                return $this->sendResponse('fail', 'Required Parameters missing');
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return;
         }
     }
 
@@ -371,6 +395,31 @@ class HotelRoomController extends BaseApiController
         }
     }
 
+    /**
+     * Delete Room Plan
+     */
+    public function deleteRoomPlan(Request $request)
+    {
+        $user = Auth::user();
+        $user_id = $user->id;
+        $hotel_id = $user->hotel_id;
+        Helper::change_database_using_hotel_id($hotel_id);
+        // dd($request->all());
+        try {
+            if (isset($request["room_plan_id"]) && $request["room_plan_id"] != "" && $request["room_plan_id"] != null) {
+                // $deleteBookingInq = BookingInq::where('id', $request['room_plan_id'])->delete();
+                $deleteRoomPlan = RoomPlanMaster::whereIn('id', is_array($request['room_plan_id']) ? $request['room_plan_id'] : [$request['room_plan_id']])->delete();
+
+                return $this->sendResponse($deleteRoomPlan, 'Room Plan deleted successfully');
+            } else {
+                return $this->sendResponse('fail', 'Required Parameters missing');
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return;
+        }
+    }
+
     /*****************************************Room View**************************************/
 
     # Get Room View list
@@ -479,7 +528,7 @@ class HotelRoomController extends BaseApiController
             return $this->sendError('Server Error', $e->getMessage());
         }
     }
-    #Delete room Plan
+    #Delete room View
     public function deleteRoomView(Request $request)
     {
         $user = Auth::user();
@@ -490,9 +539,9 @@ class HotelRoomController extends BaseApiController
         try {
             if (isset($request["room_view_id"]) && $request["room_view_id"] != "" && $request["room_view_id"] != null) {
 
-                $deleteTable = RoomViewMaster::find($request["room_view_id"])->delete();
-
-                return $this->sendResponse('', 'Room View deleted successfully');
+                // $deleteTable = RoomViewMaster::find($request["room_view_id"])->delete();
+                $deleteRoomView = RoomViewMaster::whereIn('id', is_array($request['room_view_id']) ? $request['room_view_id'] : [$request['room_view_id']])->delete();
+                return $this->sendResponse($deleteRoomView, 'Room View deleted successfully');
             } else {
                 return $this->sendResponse('fail', 'Required Parameters missing');
             }

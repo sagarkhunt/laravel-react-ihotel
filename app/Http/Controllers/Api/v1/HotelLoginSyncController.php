@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\FloorMaster;
 use App\Models\RoomCatMaster;
 use App\Models\RoomMaster;
+use App\Models\RoomPlanMaster;
 use App\Models\RoomViewMaster;
 use App\Models\SectionMaster;
 use Illuminate\Http\Request;
@@ -69,6 +70,14 @@ class HotelLoginSyncController extends BaseApiController
                         ->get();
 
                     $data['rooms_view'] = $get_menu_cat;
+                }
+                if (in_array("rooms_plan", $sync_req)) {
+
+                    $get_menu_cat = RoomPlanMaster::where('hotel_id', $hotel_id)
+                        ->select('id', 'plan_name')
+                        ->get();
+
+                    $data['rooms_plan'] = $get_menu_cat;
                 }
                 return $this->sendResponse($data, "");
             } else {

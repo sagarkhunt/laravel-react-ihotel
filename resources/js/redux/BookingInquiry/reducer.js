@@ -7,6 +7,7 @@ const initialStates = {
     logOutLoader: false,
     bookingInqCreated: {},
     bookingInqUpdate: {},
+    bookingInqDelete: {},
     dropDownList: {},
 };
 
@@ -43,6 +44,18 @@ function Reducer(state = initialStates, action) {
             };
         case actions.BOOKINGINQ_UPDATE_FAILURE:
             return { ...state, bookingInqUpdate: {}, loader: false };
+
+        /**Delete Room Plan */
+        case actions.BOOKINGINQ_DELETE:
+            return { ...state, loader: true };
+        case actions.BOOKINGINQ_DELETE_SUCCESS:
+            return {
+                ...state,
+                bookingInqDelete: action.payload,
+                loader: false,
+            };
+        case actions.BOOKINGINQ_DELETE_FAILURE:
+            return { ...state, bookingInqDelete: {}, loader: false };
 
         /**Room Plan List */
         case actions.BOOKINGINQ_DROPDOWN_LIST:

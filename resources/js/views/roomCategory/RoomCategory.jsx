@@ -4,28 +4,31 @@ import actions from '../../redux/RoomCategory/actions';
 import { Link } from 'react-router-dom';
 import CreateEditMdl from './CreateEditMdl';
 import Pagination from '../../components/common/Pagination';
+import DeleteMdl from '../../components/common/DeleteMdl';
+import toast from 'react-hot-toast';
 function RoomCategory() {
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState('Add Room Category'); // 'add' or 'edit'
     const [cateData, setCateData] = useState(null); // Data of user being edited
-    const [cateListingData, setCatListinData] = useState([]);
+    const [cateListingData, setCatListingData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [entriesPerPage, setEntriesPerPage] = useState(10); // Default entries per page
     const itemsPerPage = 10; // Number of items per page
     const [statusValue, setStatusValue] = useState(0);
-    const { roomCateListData, roomCateCreated, roomCateUpdate } = useSelector(
-        (state) => state.roomCateReducer,
-    );
+    const [isChecked, setIsChecked] = useState(false);
+    const [selectedIds, setSelectedIds] = useState([]);
+    const [showDel, setShowDel] = useState(false);
+    const [delId, setDelId] = useState('');
+    const {
+        roomCateListData,
+        roomCateCreated,
+        roomCateUpdate,
+        roomCateDelete,
+    } = useSelector((state) => state.roomCateReducer);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch({
-            type: actions.ROOMCATEGORY_LIST,
-        });
-    }, [dispatch, roomCateCreated, roomCateUpdate]);
-
-    useEffect(() => {
-        setCatListinData(roomCateListData);
+        setCatListingData(roomCateListData);
     }, [roomCateListData]);
 
     // Calculate current items based on pagination
@@ -54,15 +57,73 @@ function RoomCategory() {
         setMode('Add Room Category');
         setOpen(true);
     }
-    const handleDelete = (item) => {
-        onDelete(item);
-    };
 
     const handleEdit = (item) => {
         // onEdit(item);
         setMode('Edit Room Category');
         setCateData(item);
         setOpen(true);
+    };
+    useEffect(() => {
+        dispatch({
+            type: actions.ROOMCATEGORY_LIST,
+        });
+    }, [dispatch, roomCateCreated, roomCateUpdate, roomCateDelete]);
+
+    const handleHeaderCheckboxChange = () => {
+        setIsChecked((prevChecked) => !prevChecked); // Toggle checkbox state
+
+        if (!isChecked) {
+            // If checkbox is checked, select all data list items
+            const ids = cateListingData.map((item) => item.id);
+            setSelectedIds(ids);
+        } else {
+            // If checkbox is unchecked, clear the array
+            setSelectedIds([]);
+        }
+    };
+
+    const handleRowCheckboxChange = (id) => {
+        const index = selectedIds.indexOf(id);
+        if (index === -1) {
+            // If ID not found, add it to the array
+            setSelectedIds((prevIds) => [...prevIds, id]);
+        } else {
+            // If ID found, remove it from the array
+            setSelectedIds((prevIds) => prevIds.filter((item) => item !== id));
+        }
+    };
+    /**
+     * delete multiple cate item
+     */
+    const deleteMultiCate = () => {
+        if (selectedIds?.length === 0) {
+            toast.error('Please select room categroy');
+        } else {
+            setShowDel(true);
+            setDelId(selectedIds);
+        }
+    };
+    /**
+     *
+     * @param {handleDelete single} item
+     */
+    const handleDelete = (item) => {
+        if (item && item.id) {
+            setShowDel(true);
+            setDelId(item.id);
+        }
+    };
+    const handleDelSubmit = () => {
+        const roomCateId = {
+            cate_id: delId,
+        };
+
+        dispatch({
+            type: actions.ROOMCATEGORY_DELETE, // Replace with your actual action type
+            payload: roomCateId,
+        });
+        setShowDel(false);
     };
     return (
         <div className="container-fluid py-3 px-4">
@@ -102,7 +163,10 @@ function RoomCategory() {
                                 </span>
                                 New Category
                             </button>
-                            <button className="btn btn-outline d-flex">
+                            <button
+                                className="btn btn-outline d-flex"
+                                onClick={deleteMultiCate}
+                            >
                                 <span className="material-icons-outlined">
                                     delete
                                 </span>
@@ -155,6 +219,10 @@ function RoomCategory() {
                                             type="checkbox"
                                             className="custom-control-input"
                                             id="customCheck1"
+                                            checked={isChecked}
+                                            onChange={
+                                                handleHeaderCheckboxChange
+                                            }
                                         />
                                         <label
                                             className="custom-control-label"
@@ -255,10 +323,23 @@ function RoomCategory() {
                                         </td>
                                         <td className="td-custom action-check">
                                             <div className="custom-control custom-checkbox">
+                                                {/* <input
+                                                    type="checkbox"
+                                                    className="custom-control-input"
+                                                    id={`customCheck${item.id}`}
+                                                /> */}
                                                 <input
                                                     type="checkbox"
                                                     className="custom-control-input"
                                                     id={`customCheck${item.id}`}
+                                                    checked={selectedIds.includes(
+                                                        item.id,
+                                                    )}
+                                                    onChange={() =>
+                                                        handleRowCheckboxChange(
+                                                            item.id,
+                                                        )
+                                                    }
                                                 />
                                                 <label
                                                     className="custom-control-label"
@@ -352,6 +433,14 @@ function RoomCategory() {
                     cateData={cateData}
                     statusValue={statusValue}
                     setStatusValue={setStatusValue}
+                />
+            )}
+            {showDel && (
+                <DeleteMdl
+                    open={showDel}
+                    setOpen={setShowDel}
+                    onSubmit={handleDelSubmit}
+                    delId={setDelId}
                 />
             )}
         </div>

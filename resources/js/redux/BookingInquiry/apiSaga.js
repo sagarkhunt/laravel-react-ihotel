@@ -30,14 +30,14 @@ function* bookingInqList(action) {
     } catch (error) {
         yield put({ type: actions.BOOKINGINQ_LIST_FAILURE });
         if (error.response.status === 401) {
-            message.error(error.response.data.message);
+            toast.error(error.response.data.message);
         } else if (
             error.response &&
             error.response.data &&
             error.response.data.message
         ) {
             toast.error(error.response.data.message);
-            message.error(error.response.data.message);
+            // message.error(error.response.data.message);
         }
     }
 }
@@ -54,7 +54,7 @@ function* createBookingInq(action) {
                 type: actions.BOOKINGINQ_ADD_SUCCESS,
                 payload: response.data,
             });
-            message.success(response.message);
+            toast.success(response.message);
         }
     } catch (error) {
         // Dispatch the register failure action
@@ -63,9 +63,9 @@ function* createBookingInq(action) {
         // Handle different error statuses
         if (error.response?.status === 422) {
             const errors = error.response.data.errors;
-            message.error(Object.values(errors).join(', '));
+            toast.error(Object.values(errors).join(', '));
         } else if (error.response?.status === 400) {
-            message.error('Bad request');
+            toast.error('Bad request');
         } else if (error.response?.status === 401) {
             message.error('Unauthorized');
         } else if (error.response?.status === 500) {
@@ -91,9 +91,9 @@ function* updateBookingInq(action) {
                 payload: response.data,
             });
             if (response?.data == 'fail') {
-                message.error(response.message);
+                toast.error(response.message);
             } else {
-                message.success(response.message);
+                toast.success(response.message);
             }
         }
     } catch (error) {
@@ -103,7 +103,7 @@ function* updateBookingInq(action) {
         // Handle different error statuses
         if (error.response?.status === 422) {
             const errors = error.response.data.errors;
-            message.error(Object.values(errors).join(', '));
+            toast.error(Object.values(errors).join(', '));
         } else if (error.response?.status === 400) {
             message.error('Bad request');
         } else if (error.response?.status === 401) {
@@ -112,6 +112,45 @@ function* updateBookingInq(action) {
             message.error('Internal server error');
         } else {
             message.error('Something went wrong');
+        }
+    }
+}
+/**
+ *
+ * @param {deleteBookingInq} action
+ */
+function* deleteBookingInq(action) {
+    const { payload } = action;
+    try {
+        const response = yield call(postRequest, 'delete_booking_inq', payload);
+
+        if (response) {
+            yield put({
+                type: actions.BOOKINGINQ_DELETE_SUCCESS,
+                payload: response.data,
+            });
+            if (response?.data == 'fail') {
+                toast.error(response.message);
+            } else {
+                toast.success(response?.message);
+            }
+        }
+    } catch (error) {
+        // Dispatch the register failure action
+        yield put({ type: actions.BOOKINGINQ_DELETE_FAILURE });
+
+        // Handle different error statuses
+        if (error.response?.status === 422) {
+            const errors = error.response.data.errors;
+            toast.error(Object.values(errors).join(', '));
+        } else if (error.response?.status === 400) {
+            toast.error('Bad request');
+        } else if (error.response?.status === 401) {
+            toast.error('Unauthorized');
+        } else if (error.response?.status === 500) {
+            toast.error('Internal server error');
+        } else {
+            toast.error('Something went wrong');
         }
     }
 }
@@ -152,6 +191,7 @@ export default function* rootSaga() {
         takeLatest(actions.BOOKINGINQ_LIST, bookingInqList),
         takeLatest(actions.BOOKINGINQ_ADD, createBookingInq),
         takeLatest(actions.BOOKINGINQ_UPDATE, updateBookingInq),
+        takeLatest(actions.BOOKINGINQ_DELETE, deleteBookingInq),
         takeLatest(actions.BOOKINGINQ_DROPDOWN_LIST, dropownList),
     ]);
 }

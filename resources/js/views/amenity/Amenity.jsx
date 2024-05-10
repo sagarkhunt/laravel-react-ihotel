@@ -4,18 +4,22 @@ import DataTableComponent from '../../components/common/DataTableComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import CreateEditMdl from './CreateEditMdl';
 import actions from '../../redux/Amenity/actions';
+import DeleteMdl from '../../components/common/DeleteMdl';
+import toast from 'react-hot-toast';
 
 function Amenity() {
     const [listingData, setListingData] = useState([]);
 
     const dispatch = useDispatch();
-    const { amenityListData, amenityCreated, amenityUpdate } = useSelector(
-        (state) => state?.amenityReducer,
-    );
+    const { amenityListData, amenityCreated, amenityUpdate, amenityDelete } =
+        useSelector((state) => state?.amenityReducer);
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState('Add Amenity'); // 'add' or 'edit'
     const [amenityData, setAmenityData] = useState(null); // Data of user being edited
     const [statusValue, setStatusValue] = useState(0);
+    const [selectedIds, setSelectedIds] = useState([]);
+    const [showDel, setShowDel] = useState(false);
+    const [delId, setDelId] = useState('');
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left' },
         {
@@ -30,7 +34,7 @@ function Amenity() {
             render: () =>
                 `
                 <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheckAll">
+                    <input type="checkbox" class="custom-control-input row-checkbox" id="customCheckAll">
                     <label class="custom-control-label" htmlFor="customCheckAll"></label>
                 </div>
                 `,
@@ -98,12 +102,6 @@ function Amenity() {
                 amnt_id: formData.id, // Add user_id to formData
                 status: statusValue,
             };
-            // const updatedFormData = {
-            //     ...formData, // Copy existing formData object
-            //     amnt_icon: formData.amnt_icon, // Update amnt_icon property
-            // };
-
-            // return;
             dispatch({
                 type: actions.AMENITY_UPDATE,
                 payload: updatedFormData,
@@ -111,6 +109,38 @@ function Amenity() {
         }
         setOpen(false);
     }
+    /**
+     *
+     * @param {handleDelete} item
+     */
+    const handleDelete = (item) => {
+        // onDelete(item);
+        if (item && item.id) {
+            setShowDel(true);
+            setDelId(item.id);
+        }
+    };
+    /**
+     * Remove multiple
+     */
+    const removeMultiple = () => {
+        if (selectedIds?.length === 0) {
+            toast.error('Please select any one amenity');
+        } else {
+            setShowDel(true);
+            setDelId(selectedIds);
+        }
+    };
+    const handleDelSubmit = () => {
+        const amenityId = {
+            amenity_id: delId,
+        };
+        dispatch({
+            type: actions.AMENITY_DELETE, // Replace with your actual action type
+            payload: amenityId,
+        });
+        setShowDel(false);
+    };
     useEffect(() => {
         setListingData(amenityListData);
     }, [amenityListData]);
@@ -118,7 +148,7 @@ function Amenity() {
         dispatch({
             type: actions.AMENITY_LIST,
         });
-    }, [amenityCreated, amenityUpdate]);
+    }, [amenityCreated, amenityUpdate, amenityDelete]);
     return (
         <>
             <div className="container-fluid py-3 px-4">
@@ -159,7 +189,10 @@ function Amenity() {
                                     New Amenity
                                 </button>
 
-                                <button className="btn btn-outline d-flex">
+                                <button
+                                    className="btn btn-outline d-flex"
+                                    onClick={removeMultiple}
+                                >
                                     <span className="material-icons-outlined">
                                         delete
                                     </span>
@@ -173,6 +206,9 @@ function Amenity() {
                             data={listingData}
                             onEdit={handleEditFloor}
                             columnsConfig={columnsConfig}
+                            onDelete={handleDelete}
+                            selectedIds={selectedIds}
+                            setSelectedIds={setSelectedIds}
                         />
                         {/* <table className="table custom-table" id="floor_table">
                             <thead>
@@ -231,6 +267,14 @@ function Amenity() {
                         userData={amenityData}
                         statusValue={statusValue}
                         setStatusValue={setStatusValue}
+                    />
+                )}
+                {showDel && (
+                    <DeleteMdl
+                        open={showDel}
+                        setOpen={setShowDel}
+                        onSubmit={handleDelSubmit}
+                        delId={setDelId}
                     />
                 )}
             </div>

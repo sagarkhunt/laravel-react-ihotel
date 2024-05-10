@@ -152,21 +152,34 @@ function CreateEditMdl({
 
         const room_amnts_ids = amenityIs.length > 0 ? amenityIs.join(',') : ' ';
 
-        formData.room_amnts_ids = room_amnts_ids;
         if (mode === 'Edit Room Category') {
-            // Set "status" to the value of statusValue for new room categories
-            formData.status = statusValue;
+            const updatedFormData = {
+                id: formData.id,
+                cat_name: formData.cat_name,
+                short_name: formData.short_name,
+                description: formData.description,
+                room_size: formData.room_size,
+                base_occu: formData.base_occu,
+                max_occu: formData.max_occu,
+                max_adult: formData.max_adult,
+                max_child: formData.max_child,
+                max_extra_bed: formData.max_extra_bed,
+                base_rate: formData.base_rate,
+                extra_person_charge: formData.extra_person_charge,
+                extra_bed_charge: formData.extra_bed_charge,
+                room_amnts_ids: room_amnts_ids,
+                status: statusValue,
+            };
+            dispatch({
+                type: actions.ROOMCATEGORY_UPDATE,
+                payload: updatedFormData,
+            });
+        } else {
+            dispatch({
+                type: actions.ROOMCATEGORY_ADD,
+                payload: formData,
+            });
         }
-        const actionType =
-            mode === 'Add Room Category'
-                ? actions.ROOMCATEGORY_ADD
-                : actions.ROOMCATEGORY_UPDATE;
-
-        dispatch({
-            type: actionType,
-            payload: formData,
-        });
-
         setOpen(false);
     }
     return (

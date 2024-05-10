@@ -7,6 +7,7 @@ const initialStates = {
     logOutLoader: false,
     floorCreateed: {},
     floorUpdate: {},
+    floorDelete: {},
 };
 
 function Reducer(state = initialStates, action) {
@@ -42,6 +43,17 @@ function Reducer(state = initialStates, action) {
             };
         case actions.FLOOR_UPDATE_FAILURE:
             return { ...state, floorUpdate: {}, loader: false };
+        /**Delete Floor */
+        case actions.FLOOR_DELETE:
+            return { ...state, loader: true };
+        case actions.FLOOR_DELETE_SUCCESS:
+            return {
+                ...state,
+                floorDelete: action.payload,
+                loader: false,
+            };
+        case actions.FLOOR_DELETE_FAILURE:
+            return { ...state, floorDelete: {}, loader: false };
         default:
             return state;
     }

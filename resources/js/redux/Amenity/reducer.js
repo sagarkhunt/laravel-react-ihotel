@@ -7,6 +7,7 @@ const initialStates = {
     logOutLoader: false,
     amenityCreated: {},
     amenityUpdate: {},
+    amenityDelete: {},
 };
 
 function Reducer(state = initialStates, action) {
@@ -31,7 +32,7 @@ function Reducer(state = initialStates, action) {
                 amenityCreated: action.payload,
                 loader: false,
             };
-        /**Update Section */
+        /**Update Amenity */
         case actions.AMENITY_UPDATE:
             return { ...state, loader: true };
         case actions.AMENITY_UPDATE_SUCCESS:
@@ -42,6 +43,17 @@ function Reducer(state = initialStates, action) {
             };
         case actions.AMENITY_UPDATE_FAILURE:
             return { ...state, amenityUpdate: {}, loader: false };
+        /**Delete Amenity */
+        case actions.AMENITY_DELETE:
+            return { ...state, loader: true };
+        case actions.AMENITY_DELETE_SUCCESS:
+            return {
+                ...state,
+                amenityDelete: action.payload,
+                loader: false,
+            };
+        case actions.AMENITY_DELETE_FAILURE:
+            return { ...state, amenityDelete: {}, loader: false };
         default:
             return state;
     }

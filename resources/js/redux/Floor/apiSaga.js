@@ -22,12 +22,16 @@ function* floorList(action) {
                 type: actions.FLOOR_LIST_SUCCESS,
                 payload: response.data,
             });
-            toast.error(response?.data?.message);
+            if (response?.data == 'fail') {
+                toast.error(response.message);
+            } else {
+                // toast.success(response?.message);
+            }
         }
     } catch (error) {
-        yield put({ type: actions.LOGIN_FAILURE });
+        yield put({ type: actions.FLOOR_LIST_FAILURE });
         if (error.response.status === 401) {
-            message.error(error?.response?.data?.message);
+            // message.error(error?.response?.data?.message);
             toast.error(error?.response?.data?.message);
         } else if (
             error.response &&
@@ -35,7 +39,7 @@ function* floorList(action) {
             error.response.data.message
         ) {
             toast.error(error?.response?.data?.message);
-            message.error(error.response.data.message);
+            // message.error(error.response.data.message);
         }
     }
 }
@@ -53,24 +57,24 @@ function* createFloor(action) {
                 type: actions.FLOOR_ADD_SUCCESS,
                 payload: response.data,
             });
-            message.success(response.message);
+            toast.success(response.message);
         }
     } catch (error) {
         // Dispatch the register failure action
-        yield put({ type: actions.USER_ADD_FAILURE });
+        yield put({ type: actions.FLOOR_ADD_FAILURE });
 
         // Handle different error statuses
         if (error.response?.status === 422) {
             const errors = error.response.data.errors;
-            message.error(Object.values(errors).join(', '));
+            toast.error(Object.values(errors).join(', '));
         } else if (error.response?.status === 400) {
-            message.error('Bad request');
+            toast.error('Bad request');
         } else if (error.response?.status === 401) {
-            message.error('Unauthorized');
+            toast.error('Unauthorized');
         } else if (error.response?.status === 500) {
-            message.error('Internal server error');
+            toast.error('Internal server error');
         } else {
-            message.error('Something went wrong');
+            toast.error('Something went wrong');
         }
     }
 }
@@ -90,9 +94,9 @@ function* updateFloor(action) {
                 payload: response.data,
             });
             if (response?.data == 'fail') {
-                message.error(response.message);
+                toast.error(response.message);
             } else {
-                message.success(response.message);
+                toast.success(response.message);
             }
         }
     } catch (error) {
@@ -102,15 +106,54 @@ function* updateFloor(action) {
         // Handle different error statuses
         if (error.response?.status === 422) {
             const errors = error?.response?.data?.errors;
-            message.error(Object.values(errors).join(', '));
+            toast.error(Object.values(errors).join(', '));
         } else if (error.response?.status === 400) {
-            message.error('Bad request');
+            toast.error('Bad request');
         } else if (error.response?.status === 401) {
-            message.error('Unauthorized');
+            toast.error('Unauthorized');
         } else if (error.response?.status === 500) {
-            message.error('Internal server error');
+            toast.error('Internal server error');
         } else {
-            message.error('Something went wrong');
+            toast.error('Something went wrong');
+        }
+    }
+}
+/**
+ *
+ * @param {deleteFloor} action
+ */
+function* deleteFloor(action) {
+    const { payload } = action;
+
+    try {
+        const response = yield call(postRequest, 'delete_floor', payload);
+        if (response) {
+            yield put({
+                type: actions.FLOOR_DELETE_SUCCESS,
+                payload: response.data,
+            });
+            if (response?.data == 'fail') {
+                toast.error(response.message);
+            } else {
+                toast.success(response.message);
+            }
+        }
+    } catch (error) {
+        // Dispatch the register failure action
+        yield put({ type: actions.FLOOR_DELETE_FAILURE });
+
+        // Handle different error statuses
+        if (error.response?.status === 422) {
+            const errors = error?.response?.data?.errors;
+            toast.error(Object.values(errors).join(', '));
+        } else if (error.response?.status === 400) {
+            toast.error('Bad request');
+        } else if (error.response?.status === 401) {
+            toast.error('Unauthorized');
+        } else if (error.response?.status === 500) {
+            toast.error('Internal server error');
+        } else {
+            toast.error('Something went wrong');
         }
     }
 }
@@ -120,5 +163,6 @@ export default function* rootSaga() {
         takeLatest(actions.FLOOR_LIST, floorList),
         takeLatest(actions.FLOOR_ADD, createFloor),
         takeLatest(actions.FLOOR_UPDATE, updateFloor),
+        takeLatest(actions.FLOOR_DELETE, deleteFloor),
     ]);
 }

@@ -45,6 +45,7 @@ axiosApi.interceptors.request.use(
 axiosApi.interceptors.response.use(
     (response) => response,
     (error) => {
+        console.log('🚀 ~ error:', error);
         const { response } = error;
         if (response && response.status === 401) {
             // Unauthorized access

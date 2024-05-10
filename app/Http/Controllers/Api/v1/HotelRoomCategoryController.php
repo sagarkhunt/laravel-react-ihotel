@@ -198,4 +198,29 @@ class HotelRoomCategoryController extends BaseApiController
             return $this->sendError('Server Error', $e->getMessage());
         }
     }
+
+    /**
+     * Delete Room Category
+     */
+    public function deleteRoomCat(Request $request)
+    {
+        $user = Auth::user();
+        $user_id = $user->id;
+        $hotel_id = $user->hotel_id;
+        Helper::change_database_using_hotel_id($hotel_id);
+        // dd($request->all());
+        try {
+            if (isset($request["cate_id"]) && $request["cate_id"] != "" && $request["cate_id"] != null) {
+                // $deleteBookingInq = BookingInq::where('id', $request['cate_id'])->delete();
+                $deleteRoomCate = RoomCatMaster::whereIn('id', is_array($request['cate_id']) ? $request['cate_id'] : [$request['cate_id']])->delete();
+
+                return $this->sendResponse($deleteRoomCate, 'Room Cate deleted successfully');
+            } else {
+                return $this->sendResponse('fail', 'Required Parameters missing');
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return;
+        }
+    }
 }

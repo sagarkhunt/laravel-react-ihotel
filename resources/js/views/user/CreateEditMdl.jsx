@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Modal from '../../components/common/Modal';
 
-function CreateEditMdl({ open, setOpen, mode, onSubmit, userData }) {
+function CreateEditMdl({
+    open,
+    setOpen,
+    mode,
+    onSubmit,
+    userData,
+    statusValue,
+    setStatusValue,
+}) {
     const [selectedValue, setSelectedValue] = useState('');
     const [formData, setFormData] = useState({});
 
@@ -16,6 +24,7 @@ function CreateEditMdl({ open, setOpen, mode, onSubmit, userData }) {
     // Effect to update form data when userData prop changes
     useEffect(() => {
         if (mode === 'Edit User') {
+            setStatusValue(userData.status);
             setFormData(userData); // Pre-fill form with user data for editing
         } else {
             // Clear form data for adding new user
@@ -32,7 +41,7 @@ function CreateEditMdl({ open, setOpen, mode, onSubmit, userData }) {
                 password: '',
                 from_time: '',
                 to_time: '',
-                user_status: '',
+                user_status: 1,
             });
         }
     }, [mode, userData]);
@@ -40,6 +49,7 @@ function CreateEditMdl({ open, setOpen, mode, onSubmit, userData }) {
     // Handle form submission
     function handleSubmit(event) {
         event.preventDefault();
+
         onSubmit(formData);
     }
     return (
@@ -69,29 +79,39 @@ function CreateEditMdl({ open, setOpen, mode, onSubmit, userData }) {
                                         {mode}
                                     </h5>
                                     <div className="d-flex gap-4 align-items-center">
-                                        <div
-                                            className="form-check form-switch"
-                                            id="userSwitch"
-                                        >
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                id="user_status"
-                                                name="user_status"
-                                                value={
-                                                    formData.user_status == 1 ||
-                                                    ''
-                                                }
-                                                onChange={handleChange}
-                                                checked
-                                            />
-                                            <label
-                                                className="form-check-label"
-                                                htmlFor="customSwitch"
-                                            >
-                                                Active
-                                            </label>
-                                        </div>
+                                        {mode === 'Edit User' ? (
+                                            <div className="d-flex gap-4 align-items-center">
+                                                <div
+                                                    className="form-check form-switch"
+                                                    id="customSwitch"
+                                                >
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        id="status"
+                                                        name="status"
+                                                        checked={statusValue}
+                                                        onChange={(e) => {
+                                                            const newValue = e
+                                                                .target.checked
+                                                                ? 1
+                                                                : 0;
+                                                            setStatusValue(
+                                                                newValue,
+                                                            );
+                                                        }}
+                                                    />
+                                                    <label
+                                                        className="form-check-label"
+                                                        htmlFor="status"
+                                                    >
+                                                        Active
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            ''
+                                        )}
                                         <button
                                             type="button"
                                             className="btn-close"

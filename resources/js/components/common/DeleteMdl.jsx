@@ -32,7 +32,9 @@ function DeleteMdl({ open, setOpen, onSubmit, delId }) {
                                 </div>
                             </div>
 
-                            <div className="modal-body"></div>
+                            <div className="modal-body">
+                                Are you sure you want to delete?
+                            </div>
                             <div className="modal-footer">
                                 <button
                                     type="button"

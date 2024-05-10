@@ -5,16 +5,25 @@ import { Link } from 'react-router-dom';
 import CreateEditMdl from './CreateEditMdl';
 import MultiRoomMdl from './MultiRoomMdl';
 import DataTableComponent from '../../components/common/DataTableComponent';
+import DeleteMdl from '../../components/common/DeleteMdl';
+import toast from 'react-hot-toast';
 function Rooms() {
     const [open, setOpen] = useState(false);
     const [openMultiRoom, setOpenMultiRoom] = useState(false);
     const [mode, setMode] = useState('Add Room'); // 'add' or 'edit'
     const [modeMultiRoom, setModeMultiRoom] = useState('Add Multiple Rooms'); // 'add' or 'edit'
     const [roomsData, setRoomsData] = useState(null); // Data of user being edited
-
+    const [selectedIds, setSelectedIds] = useState([]);
+    const [showDel, setShowDel] = useState(false);
+    const [delId, setDelId] = useState('');
     const [roomListingData, setRoomListinData] = useState([]);
-    const { roomsListData, roomsCreated, roomsUpdate, addMutliRooms } =
-        useSelector((state) => state.roomReducer);
+    const {
+        roomsListData,
+        roomsCreated,
+        roomsUpdate,
+        roomsDelete,
+        addMutliRooms,
+    } = useSelector((state) => state.roomReducer);
     const dispatch = useDispatch();
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left' },
@@ -30,7 +39,7 @@ function Rooms() {
             render: () =>
                 `
                 <div className="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheckAll">
+                    <input type="checkbox" class="custom-control-input row-checkbox" id="customCheckAll">
                     <label class="custom-control-label" htmlFor="customCheckAll"></label>
                 </div>
                 `,
@@ -40,7 +49,7 @@ function Rooms() {
             data: 'room_cate',
             label: 'Room Category',
             render: function (data, type, row) {
-                return data.cat_name ?? '';
+                return data?.cat_name ?? '';
             },
         },
         {
@@ -54,7 +63,7 @@ function Rooms() {
             data: 'room_floor',
             label: 'Floor',
             render: function (data, type, row) {
-                return data.name ?? '';
+                return data?.name ?? '';
             },
         },
         {
@@ -87,7 +96,7 @@ function Rooms() {
         dispatch({
             type: actions.ROOMS_LIST,
         });
-    }, [dispatch, roomsCreated, roomsUpdate, addMutliRooms]);
+    }, [dispatch, roomsCreated, roomsUpdate, roomsDelete, addMutliRooms]);
 
     useEffect(() => {
         setRoomListinData(roomsListData);
@@ -101,15 +110,44 @@ function Rooms() {
         setModeMultiRoom();
         setOpenMultiRoom(true);
     }
-    const handleDelete = (item) => {
-        onDelete(item);
-    };
 
     const handleEdit = (item) => {
         // onEdit(item);
         setMode('Edit Room');
         setRoomsData(item);
         setOpen(true);
+    };
+    /**
+     *
+     * @param {handleDelete} item
+     */
+    const handleDelete = (item) => {
+        // onDelete(item);
+        if (item && item.id) {
+            setShowDel(true);
+            setDelId(item.id);
+        }
+    };
+    /**
+     * Remove multiple
+     */
+    const removeMultiple = () => {
+        if (selectedIds?.length === 0) {
+            toast.error('Please select any one Room');
+        } else {
+            setShowDel(true);
+            setDelId(selectedIds);
+        }
+    };
+    const handleDelSubmit = () => {
+        const roomId = {
+            room_id: delId,
+        };
+        dispatch({
+            type: actions.ROOMS_DELETE, // Replace with your actual action type
+            payload: roomId,
+        });
+        setShowDel(false);
     };
     return (
         <div className="container-fluid py-3 px-4">
@@ -158,7 +196,10 @@ function Rooms() {
                                 </span>
                                 Add Multiple Rooms{' '}
                             </button>
-                            <button className="btn btn-outline d-flex">
+                            <button
+                                className="btn btn-outline d-flex"
+                                onClick={removeMultiple}
+                            >
                                 <span className="material-icons-outlined">
                                     delete
                                 </span>
@@ -172,6 +213,9 @@ function Rooms() {
                         data={roomListingData}
                         onEdit={handleEdit}
                         columnsConfig={columnsConfig}
+                        onDelete={handleDelete}
+                        selectedIds={selectedIds}
+                        setSelectedIds={setSelectedIds}
                     />
                     {/* <table className="table custom-table" id="room_cate_table">
                         <thead>
@@ -400,6 +444,14 @@ function Rooms() {
                     // cateData={cateData}
                     // statusValue={statusValue}
                     // setStatusValue={setStatusValue}
+                />
+            )}
+            {showDel && (
+                <DeleteMdl
+                    open={showDel}
+                    setOpen={setShowDel}
+                    onSubmit={handleDelSubmit}
+                    delId={setDelId}
                 />
             )}
         </div>

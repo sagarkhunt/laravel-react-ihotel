@@ -24,8 +24,11 @@ class HotelFloorController extends BaseApiController
             $data = array();
 
             $getFloor = FloorMaster::where('hotel_id', $hotel_id)->get();
-
-            return $this->sendResponse($getFloor, '');
+            if (count($getFloor) > 0) {
+                return $this->sendResponse($getFloor, 'Get Floor Data Successfully');
+            } else {
+                return $this->sendResponse($getFloor, 'No Data Found!');
+            }
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
             return $this->sendError('Server Error', $e->getMessage());
@@ -62,7 +65,7 @@ class HotelFloorController extends BaseApiController
             if ($duplicate != 0) {
                 return $this->sendResponse('fail', "The Floor with same " . $msg4 . " Already Exists");
             } else {
-                FloorMaster::insertGetId([
+                $createFloor = FloorMaster::insertGetId([
                     'hotel_id' => $hotel_id,
                     'name' => $request["name"],
                     'description' => $request["description"],
@@ -70,7 +73,7 @@ class HotelFloorController extends BaseApiController
                     'created_by' => $auth_user_id,
                     'created_at' => date('Y-m-d H:i:s')
                 ]);
-                return $this->sendResponse('success', 'Floor Data added successfully');
+                return $this->sendResponse($createFloor, 'Floor Data added successfully');
             }
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
@@ -125,6 +128,30 @@ class HotelFloorController extends BaseApiController
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
             return $this->sendError('Server Error', $e->getMessage());
+        }
+    }
+    /**
+     * Delete Floor
+     */
+    public function deleteFloor(Request $request)
+    {
+        $user = Auth::user();
+        $user_id = $user->id;
+        $hotel_id = $user->hotel_id;
+        Helper::change_database_using_hotel_id($hotel_id);
+        // dd($request->all());
+        try {
+            if (isset($request["floor_id"]) && $request["floor_id"] != "" && $request["floor_id"] != null) {
+                // $deleteBookingInq = BookingInq::where('id', $request['floor_id'])->delete();
+                $deleteUser = FloorMaster::whereIn('id', is_array($request['floor_id']) ? $request['floor_id'] : [$request['floor_id']])->delete();
+
+                return $this->sendResponse($deleteUser, 'Floor deleted successfully');
+            } else {
+                return $this->sendResponse('fail', 'Required Parameters missing');
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return;
         }
     }
 }

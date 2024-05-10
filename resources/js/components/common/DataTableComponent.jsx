@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import $ from 'jquery';
 import 'datatables.net';
 
@@ -7,7 +7,8 @@ const DataTableComponent = ({
     columnsConfig,
     onEdit,
     onDelete,
-    setSelectedId,
+    selectedIds,
+    setSelectedIds,
 }) => {
     const tableRef = useRef(null);
 
@@ -19,8 +20,10 @@ const DataTableComponent = ({
             !$.fn.DataTable ||
             !Array.isArray(data) ||
             data.length === 0
-        )
+        ) {
+            // tableRef.current = null;
             return;
+        }
 
         // Create DataTable instance
         dataTableInstance = $(tableRef.current).DataTable({
@@ -53,45 +56,64 @@ const DataTableComponent = ({
             onDelete(rowData); // Call the provided delete action callback
         });
 
-        $(tableRef.current).on('click', '.row-checkbox', function () {
-            // Get the index of the row
-            const rowIndex = dataTableInstance
-                .row($(this).closest('tr'))
-                .index();
+        $(tableRef.current).on('change', '#customCheck1', function (event) {
+            const isChecked = event.target.checked;
+            const updatedSelectedIds = selectedIds;
+            // Set the checked state of each row checkbox based on the state of the "select all" checkbox
+            if (event.target.checked) {
+                // If "select all" checkbox is checked, add all IDs to selectedIds array
+                const allId = data.map((row) => row.id);
+                updatedSelectedIds.push(...allId);
+                $(tableRef.current)
+                    .find('.row-checkbox')
+                    .prop('checked', isChecked);
+                setSelectedIds(updatedSelectedIds);
+            } else {
+                $(tableRef.current)
+                    .find('.row-checkbox')
+                    .prop('checked', isChecked);
 
-            // Retrieve the data for the row index
-            const rowData = dataTableInstance.row(rowIndex).data();
+                setSelectedIds([]);
+            }
+        });
+
+        // Set class for each checkbox based on data.id
+        $(tableRef.current).on('change', '.row-checkbox', function (event) {
+            const rowData = dataTableInstance.row($(this).closest('tr')).data();
 
             if (rowData && rowData.id) {
-                const selectedId = rowData.id; // Get the ID of the clicked row
+                const updatedSelectedIds = selectedIds;
 
-                const isChecked = $(this).prop('checked'); // Check if the checkbox is checked
-
-                if (isChecked) {
-                    // If the checkbox is checked, push the ID to the array
-                    setSelectedId((prevSelectedId) => [
-                        ...prevSelectedId,
-                        selectedId,
-                    ]);
+                if (event.target.checked) {
+                    // If checkbox is checked, add the ID to selectedIds array
+                    updatedSelectedIds.push(rowData.id);
                 } else {
-                    // If the checkbox is unchecked, remove the ID from the array
-                    setSelectedId((prevSelectedId) =>
-                        prevSelectedId.filter((id) => id !== selectedId),
-                    );
+                    // If checkbox is unchecked, remove the ID from selectedIds array
+                    const index = updatedSelectedIds.indexOf(rowData.id);
+                    if (index !== -1) {
+                        updatedSelectedIds.splice(index, 1);
+                    }
                 }
+                $(tableRef.current)
+                    .find('#customCheck1')
+                    .prop('checked', false);
+
+                setSelectedIds(updatedSelectedIds); // Update selectedIds state
+            } else {
+                console.log('rowData or rowData.id is undefined.');
             }
         });
 
         return () => {
-            // Cleanup function to destroy DataTable instance
+            // Destroy DataTable instance
             if (dataTableInstance) {
                 dataTableInstance.destroy();
             }
         };
-    }, [data, columnsConfig, onEdit, setSelectedId]);
+    }, [data, columnsConfig, onEdit, onDelete]);
 
     return (
-        <table ref={tableRef} className="display">
+        <table ref={tableRef} className="display dataTable">
             <thead>
                 <tr>
                     {columnsConfig.map((column, index) => (
@@ -105,7 +127,19 @@ const DataTableComponent = ({
                     ))}
                 </tr>
             </thead>
-            <tbody />
+            <tbody>
+                {/* Render "No data found" message if data array is empty */}
+                {data.length === 0 && (
+                    <tr>
+                        <td
+                            colSpan={columnsConfig.length}
+                            className="text-center"
+                        >
+                            <span className="text-muted">No data found</span>
+                        </td>
+                    </tr>
+                )}
+            </tbody>
         </table>
     );
 };

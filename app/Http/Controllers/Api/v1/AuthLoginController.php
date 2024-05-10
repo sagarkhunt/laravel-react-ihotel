@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\BaseApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -22,19 +23,23 @@ class AuthLoginController extends BaseApiController
             'password' => $request['password']
         ];
 
+        try {
+            //code...
+            if (!Auth::attempt($data)) {
+                return response()->json(['message' => 'Invalid credentials'], 422);
+            }
+            $userDetails = array();
+            $auth_user = Auth::user();
+            $accesstoken = $auth_user->createToken('API TOKEN')->plainTextToken;;
+            $userDetails['token'] = $accesstoken;
+            $userDetails['isAuthenticated'] = true;
+            $userDetails['user'] = $auth_user;
+            // $request->session()->regenerate();
 
-        if (!Auth::attempt($data)) {
-            return response()->json(['message' => 'Invalid credentials'], 422);
+            return $this->sendResponse($userDetails, "Login Successfully!s");
+        } catch (Exception $e) {
+            dd($e);
         }
-        $userDetails = array();
-        $auth_user = Auth::user();
-        $accesstoken = $auth_user->createToken('API TOKEN')->plainTextToken;;
-        $userDetails['token'] = $accesstoken;
-        $userDetails['isAuthenticated'] = true;
-        $userDetails['user'] = $auth_user;
-        // $request->session()->regenerate();
-
-        return $this->sendResponse($userDetails, "Login Successfully!s");
     }
 
     public function register(Request $request)

@@ -1,17 +1,18 @@
 import actions from '../Inquiry/actions';
 
 const initialStates = {
-    inquiryListData: {},
+    inquiryListData: [],
     error: {},
     loader: false,
     logOutLoader: false,
     inquiryCreated: {},
     inquiryUpdate: {},
+    inquiryDelete: {},
 };
 
 function Reducer(state = initialStates, action) {
     switch (action.type) {
-        /**Room Plan List */
+        /**Inquiry List */
         case actions.INQUIRY_LIST:
             return { ...state, loader: true };
         case actions.INQUIRY_LIST_SUCCESS:
@@ -22,7 +23,7 @@ function Reducer(state = initialStates, action) {
             };
         case actions.INQUIRY_LIST_FAILURE:
             return { ...state, inquiryListData: [], loader: false };
-        /**Add Room Plan */
+        /**Add Inquiry */
         case actions.INQUIRY_ADD:
             return { ...state, loader: true };
         case actions.INQUIRY_ADD_SUCCESS:
@@ -31,7 +32,7 @@ function Reducer(state = initialStates, action) {
                 inquiryCreated: action.payload,
                 loader: false,
             };
-        /**Update Room Plan */
+        /**Update Inquiry */
         case actions.INQUIRY_UPDATE:
             return { ...state, loader: true };
         case actions.INQUIRY_UPDATE_SUCCESS:
@@ -42,6 +43,17 @@ function Reducer(state = initialStates, action) {
             };
         case actions.INQUIRY_UPDATE_FAILURE:
             return { ...state, inquiryUpdate: {}, loader: false };
+        /**Update Inquiry */
+        case actions.INQUIRY_DELETE:
+            return { ...state, loader: true };
+        case actions.INQUIRY_DELETE_SUCCESS:
+            return {
+                ...state,
+                inquiryDelete: action.payload,
+                loader: false,
+            };
+        case actions.INQUIRY_DELETE_FAILURE:
+            return { ...state, inquiryDelete: {}, loader: false };
         default:
             return state;
     }

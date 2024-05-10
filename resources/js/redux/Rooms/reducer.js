@@ -7,6 +7,7 @@ const initialStates = {
     logOutLoader: false,
     roomsCreated: {},
     roomsUpdate: {},
+    roomsDelete: {},
     addMutliRooms: {},
     dropDownList: {},
 };
@@ -44,6 +45,17 @@ function Reducer(state = initialStates, action) {
             };
         case actions.ROOMS_UPDATE_FAILURE:
             return { ...state, roomsUpdate: {}, loader: false };
+        /**Delete Room  */
+        case actions.ROOMS_DELETE:
+            return { ...state, loader: true };
+        case actions.ROOMS_DELETE_SUCCESS:
+            return {
+                ...state,
+                roomsDelete: action.payload,
+                loader: false,
+            };
+        case actions.ROOMS_DELETE_FAILURE:
+            return { ...state, roomsDelete: {}, loader: false };
         /**Add Multiple Room  */
         case actions.ROOMS_MULTIPLE_ADD:
             return { ...state, loader: true };

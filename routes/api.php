@@ -41,29 +41,35 @@ Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' =
     Route::any('get_users', 'HotelUserController@getUsers');
     Route::any('create_user', 'HotelUserController@createUser');
     Route::any('update_user', 'HotelUserController@updateUser');
+    Route::any('delete_user', 'HotelUserController@deleteUser');
 
     #--------------Room Management-------------------
     #Floor
     Route::any('get_floors', 'HotelFloorController@getFloor');
     Route::any('create_floor', 'HotelFloorController@createFloor');
     Route::any('update_floor', 'HotelFloorController@updateFloor');
+    Route::any('delete_floor', 'HotelFloorController@deleteFloor');
     #Section
     Route::any('get_section', 'HotelSectionController@getSection');
     Route::any('create_section', 'HotelSectionController@createSection');
     Route::any('update_section', 'HotelSectionController@updateSection');
+    Route::any('delete_section', 'HotelSectionController@deleteSection');
     #Amenity
     Route::any('get_amenity', 'HotelAmenityController@getAmenity');
     Route::any('create_amenity', 'HotelAmenityController@createAmenity');
     Route::any('update_amenity', 'HotelAmenityController@updateAmenity');
+    Route::any('delete_amenity', 'HotelAmenityController@deleteAmenity');
     #Rooms Category
     Route::any('get_room_cat', 'HotelRoomCategoryController@getRoomCat');
     Route::any('create_room_cat', 'HotelRoomCategoryController@createRoomCat');
     Route::any('update_room_cat', 'HotelRoomCategoryController@updateRoomCat');
+    Route::any('delete_room_cat', 'HotelRoomCategoryController@deleteRoomCat');
     Route::any('get_rooms_on_room_cat_id', 'HotelRoomCategoryController@getRoomsOnRoomCatId');
     #Rooms
     Route::any('get_room', 'HotelRoomController@getRoom');
     Route::any('create_room', 'HotelRoomController@createRoom');
     Route::any('update_room', 'HotelRoomController@updateRoom');
+    Route::any('delete_room', 'HotelRoomController@deleteRoom');
     Route::any('get_cate_details', 'HotelRoomController@getCatDetails');
     Route::any('create_multi_room', 'HotelRoomController@createMultiRoom');
 
@@ -71,6 +77,7 @@ Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' =
     Route::any('get_room_plan', 'HotelRoomController@getRoomPlan');
     Route::any('create_room_plan', 'HotelRoomController@createRoomPlan');
     Route::any('update_room_plan', 'HotelRoomController@updateRoomPlan');
+    Route::any('delete_room_plan', 'HotelRoomController@deleteRoomPlan');
     # Room View
     Route::any('get_room_view', 'HotelRoomController@getRoomView');
     Route::any('create_room_view', 'HotelRoomController@createRoomView');
@@ -81,8 +88,10 @@ Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' =
     Route::any('get_booking_inq', 'HotelBooingInqController@getBookingInq');
     Route::any('create_booking_inq', 'HotelBooingInqController@createBookingInq');
     Route::any('update_booking_inq', 'HotelBooingInqController@updateBookingInq');
+    Route::any('delete_booking_inq', 'HotelBooingInqController@deleteBookingInq');
 
     Route::any('get_inq_type', 'HotelBooingInqController@getInqType');
     Route::any('create_inq', 'HotelBooingInqController@createInqType');
     Route::any('update_inq', 'HotelBooingInqController@updateInqType');
+    Route::any('delete_inq', 'HotelBooingInqController@deleteInqType');
 });

@@ -122,4 +122,28 @@ class HotelSectionController extends BaseApiController
             return $this->sendError('Server Error', $e->getMessage());
         }
     }
+    /**
+     * Delete Section
+     */
+    public function deleteSection(Request $request)
+    {
+        $user = Auth::user();
+        $user_id = $user->id;
+        $hotel_id = $user->hotel_id;
+        Helper::change_database_using_hotel_id($hotel_id);
+        // dd($request->all());
+        try {
+            if (isset($request["section_id"]) && $request["section_id"] != "" && $request["section_id"] != null) {
+                // $deleteBookingInq = BookingInq::where('id', $request['section_id'])->delete();
+                $deleteSection = SectionMaster::whereIn('id', is_array($request['section_id']) ? $request['section_id'] : [$request['section_id']])->delete();
+
+                return $this->sendResponse($deleteSection, 'Section deleted successfully');
+            } else {
+                return $this->sendResponse('fail', 'Required Parameters missing');
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return;
+        }
+    }
 }

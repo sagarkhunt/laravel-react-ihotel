@@ -26,14 +26,14 @@ function* login(action) {
     } catch (error) {
         yield put({ type: actions.LOGIN_FAILURE });
         if (error.response.status === 401) {
-            message.error(error.response.data.message);
+            // toast.error(error.response.data.message);
         } else if (
             error.response &&
             error.response.data &&
             error.response.data.message
         ) {
             toast.error(error.response.data.message);
-            message.error(error.response.data.message);
+            // message.error(error.response.data.message);
         }
     }
 }
@@ -87,7 +87,7 @@ function* logout() {
         // 1. redirect to login
         Cookies.remove('token');
         typeof window !== 'undefined' && localStorage.clear();
-        //  window.location.href = '/login';
+        // window.location.href = '/login';
         yield call(() => deleteRequest('logout'));
         yield put({ type: actions.LOGOUT_SUCCESS });
     } catch (e) {

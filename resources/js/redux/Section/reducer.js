@@ -7,6 +7,7 @@ const initialStates = {
     logOutLoader: false,
     sectionCreated: {},
     sectionUpdate: {},
+    sectionDelete: {},
 };
 
 function Reducer(state = initialStates, action) {
@@ -42,6 +43,17 @@ function Reducer(state = initialStates, action) {
             };
         case actions.SECTION_UPDATE_FAILURE:
             return { ...state, sectionUpdate: {}, loader: false };
+        /**Delete Section */
+        case actions.SECTION_DELETE:
+            return { ...state, loader: true };
+        case actions.SECTION_DELETE_SUCCESS:
+            return {
+                ...state,
+                sectionDelete: action.payload,
+                loader: false,
+            };
+        case actions.SECTION_DELETE_FAILURE:
+            return { ...state, sectionDelete: {}, loader: false };
         default:
             return state;
     }

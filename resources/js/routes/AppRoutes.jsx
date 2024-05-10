@@ -31,7 +31,7 @@ const ProtectedRouteWrapper = ({ element }) => {
 
     useEffect(() => {
         // Check authentication status when the component mounts
-        // setAuthenticated(isAuthenticated());
+        setAuthenticated(isAuthenticated());
     }, []);
 
     // If the user is authenticated, render the element
@@ -44,6 +44,10 @@ const router = createBrowserRouter([
         path: '/',
         element: <DefaultLayout />,
         children: [
+            {
+                path: '/',
+                element: <ProtectedRouteWrapper element={<Dashboard />} />,
+            },
             {
                 path: '/dashboard',
                 element: <ProtectedRouteWrapper element={<Dashboard />} />,

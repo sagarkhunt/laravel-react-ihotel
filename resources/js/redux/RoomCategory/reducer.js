@@ -7,6 +7,7 @@ const initialStates = {
     logOutLoader: false,
     roomCateCreated: {},
     roomCateUpdate: {},
+    roomCateDelete: {},
 };
 
 function Reducer(state = initialStates, action) {
@@ -42,6 +43,17 @@ function Reducer(state = initialStates, action) {
             };
         case actions.ROOMCATEGORY_UPDATE_FAILURE:
             return { ...state, roomCateUpdate: {}, loader: false };
+        /**Delete Room Cate */
+        case actions.ROOMCATEGORY_DELETE:
+            return { ...state, loader: true };
+        case actions.ROOMCATEGORY_DELETE_SUCCESS:
+            return {
+                ...state,
+                roomCateDelete: action.payload,
+                loader: false,
+            };
+        case actions.ROOMCATEGORY_DELETE_FAILURE:
+            return { ...state, roomCateDelete: {}, loader: false };
         default:
             return state;
     }

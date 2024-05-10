@@ -11,7 +11,7 @@ class BaseApiController extends Controller
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    
+
 
     /**
      * success response method.
@@ -20,7 +20,7 @@ class BaseApiController extends Controller
      */
     public function sendResponse($result, $message)
     {
-    	$response = [
+        $response = [
             'success' => true,
             'data'    => $result,
             'message' => $message,
@@ -42,12 +42,12 @@ class BaseApiController extends Controller
 
     public function sendError($error, $errorMessages = [], $code = 200)
     {
-    	$response = [
+        $response = [
             'success' => false,
             'message' => $error,
         ];
 
-        if(!empty($errorMessages)){
+        if (!empty($errorMessages)) {
             $response['data'] = $errorMessages;
         }
 
@@ -55,6 +55,4 @@ class BaseApiController extends Controller
 
         return response()->json($response, $code);
     }
-
 }
-

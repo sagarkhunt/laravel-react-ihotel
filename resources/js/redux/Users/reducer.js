@@ -7,6 +7,7 @@ const initialStates = {
     logOutLoader: false,
     userCreateed: {},
     userUpdate: {},
+    userDelete: {},
 };
 
 function Reducer(state = initialStates, action) {
@@ -42,6 +43,17 @@ function Reducer(state = initialStates, action) {
             };
         case actions.USER_UPDATE_FAILURE:
             return { ...state, userUpdate: {}, loader: false };
+        /**Delete User */
+        case actions.USER_DELETE:
+            return { ...state, loader: true };
+        case actions.USER_DELETE_SUCCESS:
+            return {
+                ...state,
+                userDelete: action.payload,
+                loader: false,
+            };
+        case actions.USER_DELETE_FAILURE:
+            return { ...state, userDelete: {}, loader: false };
         default:
             return state;
     }

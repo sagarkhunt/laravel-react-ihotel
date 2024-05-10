@@ -5,17 +5,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import CreateEditMdl from './CreateEditMdl';
 import actions from '../../redux/Floor/actions';
 import { Descriptions } from 'antd';
+import DeleteMdl from '../../components/common/DeleteMdl';
+import toast from 'react-hot-toast';
 
 function Floor() {
     const [listingData, setListingData] = useState([]);
     const dispatch = useDispatch();
-    const { floorListData, floorCreateed, floorUpdate } = useSelector(
-        (state) => state?.floorReducer,
-    );
+    const { floorListData, floorCreateed, floorUpdate, floorDelete } =
+        useSelector((state) => state?.floorReducer);
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState('Add Floor'); // 'add' or 'edit'
     const [floorData, setFloorData] = useState(null); // Data of user being edited
     const [statusValue, setStatusValue] = useState(0);
+    const [selectedIds, setSelectedIds] = useState([]);
+    const [showDel, setShowDel] = useState(false);
+    const [delId, setDelId] = useState('');
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left' },
         {
@@ -27,13 +31,18 @@ function Floor() {
                 </div>
             </span>`,
             className: 'action-check',
-            render: () =>
+            render: (data, type, row) =>
                 `
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheckAll">
-                    <label class="custom-control-label" htmlFor="customCheckAll"></label>
-                </div>
-                `,
+            <div className="custom-control custom-checkbox">
+                <input 
+                    type="checkbox" 
+                    class="custom-control-input row-checkbox" 
+                    id="customCheckAll" 
+                    
+                >
+                <label class="custom-control-label" htmlFor="customCheckAll"></label>
+            </div>
+            `,
         },
         { data: 'name', label: 'Floors Name' },
         { data: 'description', label: 'Description' },
@@ -81,6 +90,17 @@ function Floor() {
     }
     /**
      *
+     * @param {handleDelete} item
+     */
+    const handleDelete = (item) => {
+        // onDelete(item);
+        if (item && item.id) {
+            setShowDel(true);
+            setDelId(item.id);
+        }
+    };
+    /**
+     *
      * @param {handleSubmit} formData
      */
     function handleSubmit(formData) {
@@ -104,6 +124,27 @@ function Floor() {
         }
         setOpen(false);
     }
+    /**
+     * Remove multiple
+     */
+    const removeMultiple = () => {
+        if (selectedIds?.length === 0) {
+            toast.error('Please select any one Floor');
+        } else {
+            setShowDel(true);
+            setDelId(selectedIds);
+        }
+    };
+    const handleDelSubmit = () => {
+        const floorId = {
+            floor_id: delId,
+        };
+        dispatch({
+            type: actions.FLOOR_DELETE, // Replace with your actual action type
+            payload: floorId,
+        });
+        setShowDel(false);
+    };
     useEffect(() => {
         setListingData(floorListData);
     }, [floorListData]);
@@ -111,7 +152,7 @@ function Floor() {
         dispatch({
             type: actions.FLOOR_LIST,
         });
-    }, [floorCreateed, floorUpdate]);
+    }, [floorCreateed, floorUpdate, floorDelete]);
     return (
         <>
             <div className="container-fluid py-3 px-4">
@@ -152,7 +193,10 @@ function Floor() {
                                     New Floor
                                 </button>
 
-                                <button className="btn btn-outline d-flex">
+                                <button
+                                    className="btn btn-outline d-flex"
+                                    onClick={removeMultiple}
+                                >
                                     <span className="material-icons-outlined">
                                         delete
                                     </span>
@@ -165,7 +209,10 @@ function Floor() {
                         <DataTableComponent
                             data={listingData}
                             onEdit={handleEditFloor}
+                            onDelete={handleDelete}
                             columnsConfig={columnsConfig}
+                            selectedIds={selectedIds}
+                            setSelectedIds={setSelectedIds}
                         />
                         {/* <table className="table custom-table" id="floor_table">
                             <thead>
@@ -224,6 +271,14 @@ function Floor() {
                         userData={floorData}
                         statusValue={statusValue}
                         setStatusValue={setStatusValue}
+                    />
+                )}
+                {showDel && (
+                    <DeleteMdl
+                        open={showDel}
+                        setOpen={setShowDel}
+                        onSubmit={handleDelSubmit}
+                        delId={setDelId}
                     />
                 )}
             </div>
