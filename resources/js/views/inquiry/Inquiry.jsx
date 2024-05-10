@@ -19,6 +19,7 @@ function Inquiry() {
     const [selectedIds, setSelectedIds] = useState([]);
     const [showDel, setShowDel] = useState(false);
     const [delId, setDelId] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left' },
         {
@@ -172,6 +173,21 @@ function Inquiry() {
                                 </h5>
                             </div>
                             <div className="col-8 gap-3 action-right">
+                                <div className="form-group  position-relative">
+                                    <span className="material-icons-outlined search-icon">
+                                        search
+                                    </span>
+                                    <input
+                                        type="text"
+                                        className="form-control search-input"
+                                        id="customInput"
+                                        placeholder="Search"
+                                        value={searchQuery}
+                                        onChange={(e) =>
+                                            setSearchQuery(e.target.value)
+                                        }
+                                    />
+                                </div>
                                 <button
                                     className="btn btn-primary d-flex "
                                     onClick={handleAddFloor}
@@ -202,6 +218,8 @@ function Inquiry() {
                             onDelete={handleDelete}
                             selectedIds={selectedIds}
                             setSelectedIds={setSelectedIds}
+                            searchQuery={searchQuery}
+                            onSearchChange={setSearchQuery}
                         />
                     </div>
                 </div>

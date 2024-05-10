@@ -24,6 +24,7 @@ function BooingInq() {
     } = useSelector((state) => state.booingInqReduce);
 
     const [selectedIds, setSelectedIds] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
     const dispatch = useDispatch();
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left' },
@@ -182,7 +183,7 @@ function BooingInq() {
                     <div className="row">
                         <div className="col-4 d-flex align-items-center">
                             <h5 className="headline-h6m mb-0 ">
-                                Inquires List List
+                                Inquires List
                             </h5>
                         </div>
                         <div className="col-8 gap-3 action-right">
@@ -195,6 +196,10 @@ function BooingInq() {
                                     className="form-control search-input"
                                     id="customInput"
                                     placeholder="Search"
+                                    value={searchQuery}
+                                    onChange={(e) =>
+                                        setSearchQuery(e.target.value)
+                                    }
                                 />
                             </div>
                             <button className="btn btn-secondary d-flex">
@@ -269,6 +274,8 @@ function BooingInq() {
                         columnsConfig={columnsConfig}
                         selectedIds={selectedIds}
                         setSelectedIds={setSelectedIds}
+                        searchQuery={searchQuery}
+                        onSearchChange={setSearchQuery}
                     />
                 </div>
             </div>

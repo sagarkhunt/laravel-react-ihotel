@@ -89,6 +89,7 @@ Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' =
     Route::any('create_booking_inq', 'HotelBooingInqController@createBookingInq');
     Route::any('update_booking_inq', 'HotelBooingInqController@updateBookingInq');
     Route::any('delete_booking_inq', 'HotelBooingInqController@deleteBookingInq');
+    Route::any('follow_up_booking_inq', 'HotelBooingInqController@followUpBookingInq');
 
     Route::any('get_inq_type', 'HotelBooingInqController@getInqType');
     Route::any('create_inq', 'HotelBooingInqController@createInqType');

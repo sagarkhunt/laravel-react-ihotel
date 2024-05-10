@@ -18,6 +18,7 @@ function RoomCategory() {
     const [isChecked, setIsChecked] = useState(false);
     const [selectedIds, setSelectedIds] = useState([]);
     const [showDel, setShowDel] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
     const [delId, setDelId] = useState('');
     const {
         roomCateListData,
@@ -41,7 +42,10 @@ function RoomCategory() {
     let currentItems = [];
     if (cateListingData !== null && cateListingData !== undefined) {
         if (Array.isArray(cateListingData)) {
-            currentItems = cateListingData.slice(
+            const filteredData = cateListingData.filter((item) =>
+                item.cat_name.toLowerCase().includes(searchQuery.toLowerCase()),
+            );
+            currentItems = filteredData.slice(
                 indexOfFirstItem,
                 indexOfLastItem,
             );
@@ -154,6 +158,21 @@ function RoomCategory() {
                             </h5>
                         </div>
                         <div className="col-8 gap-3 action-right">
+                            <div className="form-group  position-relative">
+                                <span className="material-icons-outlined search-icon">
+                                    search
+                                </span>
+                                <input
+                                    type="text"
+                                    className="form-control search-input"
+                                    id="dt-serach-cstm"
+                                    placeholder="Search"
+                                    value={searchQuery}
+                                    onChange={(e) =>
+                                        setSearchQuery(e.target.value)
+                                    }
+                                />
+                            </div>
                             <button
                                 className="btn btn-primary d-flex "
                                 onClick={handleAddCate}

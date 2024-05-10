@@ -131,7 +131,7 @@ function CreateEditMdl({
                                                     className="form-control custom-input"
                                                     id="name"
                                                     name="name"
-                                                    placeholder="Ex: Laundry Service"
+                                                    placeholder="Section Name"
                                                     required
                                                     value={formData.name || ''}
                                                     onChange={handleChange}

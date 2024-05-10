@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 function Section() {
     const [listingData, setListingData] = useState([]);
     const dispatch = useDispatch();
-    const { sectionListData, sectionCreateed, sectionUpdate, sectionDelete } =
+    const { sectionListData, sectionCreated, sectionUpdate, sectionDelete } =
         useSelector((state) => state?.sectionReducer);
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState('Add Section'); // 'add' or 'edit'
@@ -19,6 +19,7 @@ function Section() {
     const [selectedIds, setSelectedIds] = useState([]);
     const [showDel, setShowDel] = useState(false);
     const [delId, setDelId] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left' },
         {
@@ -40,7 +41,7 @@ function Section() {
         },
         { data: 'name', label: 'Section Name' },
         // { data: 'description', label: 'Description' },
-        { data: 'created_by', label: 'Rooms' },
+        { data: 'name', label: 'Rooms' },
         {
             data: 'status',
             label: 'Status',
@@ -147,7 +148,7 @@ function Section() {
         dispatch({
             type: actions.SECTION_LIST,
         });
-    }, [sectionCreateed, sectionUpdate, sectionDelete]);
+    }, [sectionCreated, sectionUpdate, sectionDelete]);
     return (
         <>
             <div className="container-fluid py-3 px-4">
@@ -178,6 +179,21 @@ function Section() {
                                 </h5>
                             </div>
                             <div className="col-8 gap-3 action-right">
+                                <div className="form-group  position-relative">
+                                    <span className="material-icons-outlined search-icon">
+                                        search
+                                    </span>
+                                    <input
+                                        type="text"
+                                        className="form-control search-input"
+                                        id="dt-serach-cstm"
+                                        placeholder="Search"
+                                        value={searchQuery}
+                                        onChange={(e) =>
+                                            setSearchQuery(e.target.value)
+                                        }
+                                    />
+                                </div>
                                 <button
                                     className="btn btn-primary d-flex "
                                     onClick={handleAddFloor}
@@ -208,6 +224,8 @@ function Section() {
                             onDelete={handleDelete}
                             selectedIds={selectedIds}
                             setSelectedIds={setSelectedIds}
+                            searchQuery={searchQuery}
+                            onSearchChange={setSearchQuery}
                         />
                         {/* <table className="table custom-table" id="floor_table">
                             <thead>

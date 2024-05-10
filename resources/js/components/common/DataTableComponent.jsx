@@ -9,8 +9,21 @@ const DataTableComponent = ({
     onDelete,
     selectedIds,
     setSelectedIds,
+    searchQuery,
+    onSearchChange,
 }) => {
     const tableRef = useRef(null);
+
+    const filteredData = Array.isArray(data)
+        ? data.filter((item) => {
+              return Object.values(item).some(
+                  (value) =>
+                      String(value)
+                          .toLowerCase()
+                          .includes((searchQuery ?? '').toLowerCase()), // Add the nullish coalescing operator here
+              );
+          })
+        : [];
 
     useEffect(() => {
         let dataTableInstance = null;
@@ -27,7 +40,7 @@ const DataTableComponent = ({
 
         // Create DataTable instance
         dataTableInstance = $(tableRef.current).DataTable({
-            data,
+            data: filteredData,
             paging: true,
             lengthChange: true,
             searching: false,
@@ -110,7 +123,7 @@ const DataTableComponent = ({
                 dataTableInstance.destroy();
             }
         };
-    }, [data, columnsConfig, onEdit, onDelete]);
+    }, [filteredData, columnsConfig, onEdit, onDelete, searchQuery]);
 
     return (
         <table ref={tableRef} className="display dataTable">
@@ -128,7 +141,6 @@ const DataTableComponent = ({
                 </tr>
             </thead>
             <tbody>
-                {/* Render "No data found" message if data array is empty */}
                 {data.length === 0 && (
                     <tr>
                         <td

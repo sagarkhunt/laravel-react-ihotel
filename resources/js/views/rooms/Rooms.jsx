@@ -17,6 +17,7 @@ function Rooms() {
     const [showDel, setShowDel] = useState(false);
     const [delId, setDelId] = useState('');
     const [roomListingData, setRoomListinData] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
     const {
         roomsListData,
         roomsCreated,
@@ -178,6 +179,21 @@ function Rooms() {
                             </h5>
                         </div>
                         <div className="col-8 gap-3 action-right">
+                            <div className="form-group  position-relative">
+                                <span className="material-icons-outlined search-icon">
+                                    search
+                                </span>
+                                <input
+                                    type="text"
+                                    className="form-control search-input"
+                                    id="dt-serach-cstm"
+                                    placeholder="Search"
+                                    value={searchQuery}
+                                    onChange={(e) =>
+                                        setSearchQuery(e.target.value)
+                                    }
+                                />
+                            </div>
                             <button
                                 className="btn btn-primary d-flex "
                                 onClick={handleAddRoom}
@@ -216,6 +232,8 @@ function Rooms() {
                         onDelete={handleDelete}
                         selectedIds={selectedIds}
                         setSelectedIds={setSelectedIds}
+                        searchQuery={searchQuery}
+                        onSearchChange={setSearchQuery}
                     />
                     {/* <table className="table custom-table" id="room_cate_table">
                         <thead>

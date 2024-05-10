@@ -7,8 +7,11 @@ use App\Http\Controllers\Api\BaseApiController;
 use App\Http\Controllers\Controller;
 use App\Models\BookingInq;
 use App\Models\InquiryMaster;
+use DateTime;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -78,7 +81,10 @@ class HotelBooingInqController extends BaseApiController
                     'child' => $request["child"],
                     'sp_req' => $request["sp_req"],
                     'sp_remark' => $request["sp_remark"],
-                    'status' => $request['status'] == 'false' ? 0 : 1,
+                    'ref_name' => $request["ref_name"],
+                    'off_give' => $request["off_give"],
+                    'cust_req' => $request["cust_req"],
+                    // 'status' => $request['status'] == 'false' ? 0 : 1,
                     'status' => $request['status'],
                     'created_by' => $auth_user_id,
                     'created_at' => date('Y-m-d H:i:s')
@@ -113,10 +119,14 @@ class HotelBooingInqController extends BaseApiController
                     $chkBookingInq->cust_name = (isset($request['cust_name']) ? (empty($request['cust_name']) ? "" : $request['cust_name']) : $chkBookingInq->cust_name);
                     $chkBookingInq->mobile = (isset($request['mobile_no']) ? (empty($request['mobile_no']) ? "" : $request['mobile_no']) : $chkBookingInq->mobile_no);
                     $chkBookingInq->email = (isset($request['email']) ? (empty($request['email']) ? "" : $request['email']) : $chkBookingInq->email);
-                    $chkBookingInq->cust_cat_id = (isset($request['cust_cat_id']) ? (empty($request['cust_cat_id']) ? "" : $request['cust_cat_id']) : $chkBookingInq->cust_cat_id);
-                    $chkBookingInq->adult = (isset($request['adult']) ? (empty($request['adult']) ? "" : $request['adult']) : $chkBookingInq->adult);
+                    $chkBookingInq->cust_cat_id = (isset($request['cust_cat_id']) ? (empty($request['cust_cat_id']) ? NULL : $request['cust_cat_id']) : $chkBookingInq->cust_cat_id);
+                    $chkBookingInq->adult = (isset($request['adult']) ? (empty($request['adult']) ? 0 : $request['adult']) : $chkBookingInq->adult);
                     $chkBookingInq->child = (isset($request['child']) ? (empty($request['child']) ? 0 : $request['child']) : $chkBookingInq->child);
                     $chkBookingInq->sp_req = (isset($request['sp_req']) ? (empty($request['sp_req']) ? "" : $request['sp_req']) : $chkBookingInq->sp_req);
+                    // $chkBookingInq->sp_req = (isset($request['sp_req']) ? (empty($request['sp_req']) ? "" : $request['sp_req']) : $chkBookingInq->sp_req);
+                    $chkBookingInq->ref_name = (isset($request['ref_name']) ? (empty($request['ref_name']) ? "" : $request['ref_name']) : $chkBookingInq->ref_name);
+                    $chkBookingInq->off_give = (isset($request['off_give']) ? (empty($request['off_give']) ? "" : $request['off_give']) : $chkBookingInq->off_give);
+                    $chkBookingInq->cust_name = (isset($request['cust_name']) ? (empty($request['cust_name']) ? "" : $request['cust_name']) : $chkBookingInq->cust_name);
                     $chkBookingInq->total = (isset($request['total']) ? (empty($request['total']) ? "" : $request['total']) : $chkBookingInq->total);
                     $chkBookingInq->status = (isset($request['status']) ? ($request['status'] == 0 ? 0 : 1) : $chkBookingInq->status);
                     $chkBookingInq->updated_by = $user_id;;
@@ -153,6 +163,52 @@ class HotelBooingInqController extends BaseApiController
                 return $this->sendResponse('fail', 'Required Parameters missing');
             }
         } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return $this->sendResponse('fail', 'Something went wrong');
+        }
+    }
+
+    /**
+     * FollowUp Add
+     */
+    public function followUpBookingInq(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $user_id = $user->id;
+            $hotel_id = $user->hotel_id;
+            $userName = $user->name;
+            Helper::change_database_using_hotel_id($hotel_id);
+            $date = new DateTime();
+            $currentDateTime = $date->format('d/m/Y H:i A');
+
+            // Create an array with the new data
+            $newData = [
+                'name' => $userName,
+                'date' => $currentDateTime,
+                'remark' => $request->input('remark')
+            ];
+
+            // Retrieve the existing follow_up field from the database
+            $getBookingDetails = BookingInq::where('id', $request['booking_id'])->first();
+            $existingFollowUp = json_decode($getBookingDetails['follow_up'], true); // Decode JSON into array
+
+            // Initialize the follow_up field as an empty array if it's null
+            if ($existingFollowUp === null) {
+                $existingFollowUp = [];
+            }
+
+            // Add the new data to the existing array
+            $existingFollowUp[] = $newData;
+
+            // Encode the updated array back into JSON format
+            $updatedFollowUp = json_encode($existingFollowUp);
+
+            // Update the follow_up field with the updated JSON string
+            $getBookingDetails->update(['follow_up' => $updatedFollowUp]);
+
+            return $this->sendResponse($getBookingDetails, 'Follow up successfully');
+        } catch (Exception $e) {
             Log::debug($e->getMessage());
             return $this->sendResponse('fail', 'Something went wrong');
         }

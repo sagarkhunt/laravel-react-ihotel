@@ -9,6 +9,8 @@ const initialStates = {
     bookingInqUpdate: {},
     bookingInqDelete: {},
     dropDownList: {},
+    followUpList: {},
+    followUpAdd: {},
 };
 
 function Reducer(state = initialStates, action) {
@@ -68,6 +70,17 @@ function Reducer(state = initialStates, action) {
             };
         case actions.BOOKINGINQ_DROPDOWN_LIST_FAILURE:
             return { ...state, dropDownList: [], loader: false };
+        /**Add Follow Up */
+        case actions.BOOKINGINQ_FOLLOWUP_ADD:
+            return { ...state, loader: true };
+        case actions.BOOKINGINQ_FOLLOWUP_ADD_SUCCESS:
+            return {
+                ...state,
+                followUpAdd: action.payload,
+                loader: false,
+            };
+        case actions.BOOKINGINQ_FOLLOWUP_ADD_FAILURE:
+            return { ...state, followUpAdd: {}, loader: false };
         default:
             return state;
     }

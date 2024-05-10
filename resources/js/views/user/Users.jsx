@@ -20,6 +20,8 @@ function Users() {
     const [userData, setUserData] = useState(null); // Data of user being edited
     const [selectedIds, setSelectedIds] = useState([]);
     const [statusValue, setStatusValue] = useState(0);
+    const [searchQuery, setSearchQuery] = useState('');
+
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left' },
         {
@@ -111,6 +113,7 @@ function Users() {
         }
     };
     const removeMultiple = () => {
+        console.log('=========', selectedIds);
         // if (selectedIds?.length === 0) {
         //     toast.error('Please select any one user');
         // } else {
@@ -187,6 +190,10 @@ function Users() {
                                         className="form-control search-input"
                                         id="dt-serach-cstm"
                                         placeholder="Search"
+                                        value={searchQuery}
+                                        onChange={(e) =>
+                                            setSearchQuery(e.target.value)
+                                        }
                                     />
                                 </div>
                                 <button className="btn btn-secondary d-flex">
@@ -230,6 +237,8 @@ function Users() {
                             columnsConfig={columnsConfig}
                             selectedIds={selectedIds}
                             setSelectedIds={setSelectedIds}
+                            searchQuery={searchQuery}
+                            onSearchChange={setSearchQuery}
                         />
                         {/* <table className="table custom-table" id="user_table">
                             <thead>
