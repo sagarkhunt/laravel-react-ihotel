@@ -2,26 +2,30 @@ import React, { useEffect, useState } from 'react';
 const RoomCategory = ({ category, index, handleInputChange, dropDownData }) => {
     return (
         <tr key={index}>
-            <td className="td-custom">
+            <td className="td-custom" style={{ width: '70%' }}>
                 <div className="input-group">
                     <select
                         className="form-select custom-input"
                         value={category.room_cat_id}
                         onChange={(e) =>
-                            handleInputChange(e, index, 'room_cat_id')
+                            handleInputChange(
+                                e,
+                                index,
+                                'room_cat_id',
+                                'room_cat_name',
+                            )
                         }
                     >
-                        {/* <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option> */}
+                        <option value="">Select Category</option>
                         {dropDownData?.room_cate &&
                         dropDownData?.room_cate.length > 0 ? (
                             dropDownData?.room_cate.map((roomCategory) => (
                                 <option
-                                    key={roomCategory.id || roomCategory.id}
-                                    value={roomCategory.id || roomCategory.id}
+                                    key={roomCategory.id}
+                                    value={roomCategory.id}
                                 >
-                                    {roomCategory.name || roomCategory.cat_name}
+                                    {roomCategory.cat_name ||
+                                        roomCategory.cat_name}
                                 </option>
                             ))
                         ) : (
@@ -32,20 +36,27 @@ const RoomCategory = ({ category, index, handleInputChange, dropDownData }) => {
                     </select>
                 </div>
             </td>
-            <td className="td-custom">
-                <div className="input-group">
+            <td className="td-custom" style={{ width: '30%' }}>
+                <div className="">
                     <input
-                        type="number"
-                        className="form-control custom-input text-end"
+                        list="ice-cream-flavors"
+                        id="base_occu"
+                        name="base_occu"
                         value={category.no_of_rooms}
                         onChange={(e) =>
                             handleInputChange(e, index, 'no_of_rooms')
                         }
-                        placeholder="00"
+                        className="custom-input"
                     />
+                    <datalist id="ice-cream-flavors" className="custom-input ">
+                        <option value="1"></option>
+                        <option value="2"></option>
+                        <option value="3"></option>
+                        <option value="4"></option>
+                    </datalist>
                 </div>
             </td>
-            <td className="td-custom">
+            {/* <td className="td-custom">
                 <div className="input-group">
                     <select
                         className="form-select custom-input"
@@ -54,9 +65,7 @@ const RoomCategory = ({ category, index, handleInputChange, dropDownData }) => {
                             handleInputChange(e, index, 'room_plan_id')
                         }
                     >
-                        {/* <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option> */}
+                        <option value="">Select Room Plan</option>
                         {dropDownData?.rooms_plan &&
                         dropDownData?.rooms_plan.length > 0 ? (
                             dropDownData?.rooms_plan.map((roomPlan) => (
@@ -74,8 +83,8 @@ const RoomCategory = ({ category, index, handleInputChange, dropDownData }) => {
                         )}
                     </select>
                 </div>
-            </td>
-            <td className="td-custom">
+            </td> */}
+            {/* <td className="td-custom">
                 <div className="input-group">
                     <input
                         type="number"
@@ -87,7 +96,7 @@ const RoomCategory = ({ category, index, handleInputChange, dropDownData }) => {
                         placeholder="00"
                     />
                 </div>
-            </td>
+            </td> */}
         </tr>
     );
 };

@@ -1,0 +1,22 @@
+const filteredData = Array.isArray(data)
+        ? data.filter((item) => {
+              // Filtering based on search query
+              const matchesSearchQuery = Object.values(item).some(
+                  (value) =>
+                      String(value)
+                          .toLowerCase()
+                          .includes((searchQuery ?? '').toLowerCase()), // Add the nullish coalescing operator here
+              );
+
+              // Filtering based on selected action
+              let matchesSelectedAction = true;
+              if (selectedAction === 'open') {
+                  matchesSelectedAction = item.status === 1; // Filter records with status 1 (open)
+              } else if (selectedAction === 'close') {
+                  matchesSelectedAction = item.status === 0; // Filter records with status 0 (close)
+              }
+
+              // Combine both conditions using logical AND (&&)
+              return matchesSearchQuery && matchesSelectedAction;
+          })
+        : [];

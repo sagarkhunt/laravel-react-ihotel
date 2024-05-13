@@ -6,13 +6,13 @@ import DataTableComponent from '../../components/common/DataTableComponent';
 import CreateEditMdl from './CreateEditMdl';
 import DeleteMdl from '../../components/common/DeleteMdl';
 import toast from 'react-hot-toast';
+import Spinner from '../../components/Spinner';
 function Users() {
     const [listingData, setListingData] = useState([]);
 
     const dispatch = useDispatch();
-    const { userListData, userCreateed, userUpdate, userDelete } = useSelector(
-        (state) => state?.usersReducer,
-    );
+    const { loader, userListData, userCreateed, userUpdate, userDelete } =
+        useSelector((state) => state?.usersReducer);
     const [open, setOpen] = useState(false);
     const [showDel, setShowDel] = useState(false);
     const [delId, setDelId] = useState('');
@@ -181,7 +181,7 @@ function Users() {
                                 </h5>
                             </div>
                             <div className="col-8 gap-3 action-right">
-                                <div className="form-group  position-relative">
+                                <div className="form-group  position-relative search-container">
                                     <span className="material-icons-outlined search-icon">
                                         search
                                     </span>
@@ -195,6 +195,14 @@ function Users() {
                                             setSearchQuery(e.target.value)
                                         }
                                     />
+                                    {searchQuery && (
+                                        <span
+                                            className="material-icons-outlined close-icon"
+                                            onClick={() => setSearchQuery('')}
+                                        >
+                                            close
+                                        </span>
+                                    )}
                                 </div>
                                 <button className="btn btn-secondary d-flex">
                                     <span className="material-icons-outlined">
@@ -228,7 +236,9 @@ function Users() {
                             </div>
                         </div>
                     </div>
-
+                    {/* {loader ? (
+                        <Spinner />
+                    ) : ( */}
                     <div className="col-12 p-3 container-page">
                         <DataTableComponent
                             data={listingData}
@@ -239,6 +249,7 @@ function Users() {
                             setSelectedIds={setSelectedIds}
                             searchQuery={searchQuery}
                             onSearchChange={setSearchQuery}
+                            loader={loader}
                         />
                         {/* <table className="table custom-table" id="user_table">
                             <thead>
@@ -340,6 +351,7 @@ function Users() {
                             </tbody>
                         </table> */}
                     </div>
+                    {/* )} */}
                 </div>
                 {open && (
                     <CreateEditMdl

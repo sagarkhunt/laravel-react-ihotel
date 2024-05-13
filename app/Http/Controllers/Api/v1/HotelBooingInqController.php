@@ -66,6 +66,7 @@ class HotelBooingInqController extends BaseApiController
             if ($duplicate != 0) {
                 return $this->sendResponse('fail', "The Inquiry with same " . $msg4 . " Already Exists");
             } else {
+
                 $roomReqJson = json_encode($request["room_req"]);
                 $createBookingInq = BookingInq::insertGetId([
                     'hotel_id' => $hotel_id,
@@ -84,7 +85,6 @@ class HotelBooingInqController extends BaseApiController
                     'ref_name' => $request["ref_name"],
                     'off_give' => $request["off_give"],
                     'cust_req' => $request["cust_req"],
-                    // 'status' => $request['status'] == 'false' ? 0 : 1,
                     'status' => $request['status'],
                     'created_by' => $auth_user_id,
                     'created_at' => date('Y-m-d H:i:s')

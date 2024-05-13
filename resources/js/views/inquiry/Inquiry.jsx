@@ -6,12 +6,18 @@ import CreateEditMdl from './CreateEditMdl';
 import actions from '../../redux/Inquiry/actions';
 import toast from 'react-hot-toast';
 import DeleteMdl from '../../components/common/DeleteMdl';
+import Spinner from '../../components/Spinner';
 
 function Inquiry() {
     const [listingData, setListingData] = useState([]);
     const dispatch = useDispatch();
-    const { inquiryListData, inquiryCreated, inquiryUpdate, inquiryDelete } =
-        useSelector((state) => state?.inquiryReducer);
+    const {
+        loader,
+        inquiryListData,
+        inquiryCreated,
+        inquiryUpdate,
+        inquiryDelete,
+    } = useSelector((state) => state?.inquiryReducer);
     const [statusValue, setStatusValue] = useState(0);
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState('Add Inquiry Type'); // 'add' or 'edit'
@@ -173,7 +179,7 @@ function Inquiry() {
                                 </h5>
                             </div>
                             <div className="col-8 gap-3 action-right">
-                                <div className="form-group  position-relative">
+                                <div className="form-group  position-relative search-container">
                                     <span className="material-icons-outlined search-icon">
                                         search
                                     </span>
@@ -187,6 +193,14 @@ function Inquiry() {
                                             setSearchQuery(e.target.value)
                                         }
                                     />
+                                    {searchQuery && (
+                                        <span
+                                            className="material-icons-outlined close-icon"
+                                            onClick={() => setSearchQuery('')}
+                                        >
+                                            close
+                                        </span>
+                                    )}
                                 </div>
                                 <button
                                     className="btn btn-primary d-flex "
@@ -209,19 +223,22 @@ function Inquiry() {
                             </div>
                         </div>
                     </div>
-
-                    <div className="col-12 p-3 container-page">
-                        <DataTableComponent
-                            data={listingData}
-                            onEdit={handleEditFloor}
-                            columnsConfig={columnsConfig}
-                            onDelete={handleDelete}
-                            selectedIds={selectedIds}
-                            setSelectedIds={setSelectedIds}
-                            searchQuery={searchQuery}
-                            onSearchChange={setSearchQuery}
-                        />
-                    </div>
+                    {loader ? (
+                        <Spinner />
+                    ) : (
+                        <div className="col-12 p-3 container-page">
+                            <DataTableComponent
+                                data={listingData}
+                                onEdit={handleEditFloor}
+                                columnsConfig={columnsConfig}
+                                onDelete={handleDelete}
+                                selectedIds={selectedIds}
+                                setSelectedIds={setSelectedIds}
+                                searchQuery={searchQuery}
+                                onSearchChange={setSearchQuery}
+                            />
+                        </div>
+                    )}
                 </div>
                 {open && (
                     <CreateEditMdl

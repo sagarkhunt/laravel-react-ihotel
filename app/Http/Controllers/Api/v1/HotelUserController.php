@@ -137,7 +137,7 @@ class HotelUserController extends BaseApiController
                                 // 'is_att' => $request["is_att"] ?? 0,
                                 'dlock' => $request["device_lock"] ?? 0,
                                 // 'status' => $request["user_status"] == 'false' ? 0 : 1,
-                                'status' => $request["status"],
+                                'status' => $request["user_status"],
                                 'uto' => $user_time_out,
                                 'created_by' => $auth_user_id,
                                 'created_at' => date('Y-m-d H:i:s')
@@ -157,7 +157,7 @@ class HotelUserController extends BaseApiController
                                 // 'pin' => $request["pincode"],
                                 'short_name' => $request["short_name"] ?? '',
                                 'working_hr' => $request["working_hr"] ?? 0,
-                                'status' => $request["status"],
+                                'status' => $request["user_status"],
                                 'created_by' => $auth_user_id,
                                 'created_at' => date('Y-m-d H:i:s')
                             ]);

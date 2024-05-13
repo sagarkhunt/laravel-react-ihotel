@@ -1,17 +1,4 @@
 /* Import variables */
-/* @import url('variables.css'); */
-
-/* Fonts */
-/* @font-face {
-    font-family: 'GeneralSans';
-    src:
-        url('../fonts/GeneralSans-Bold.woff2') format('woff2'),
-        url('../fonts/GeneralSans-Regular.woff') format('woff'),
-        url('../fonts/GeneralSans-Regular.ttf') format('truetype');
-    font-weight: 400;
-    font-display: swap;
-    font-style: normal;
-}
 
 @font-face {
     font-family: 'GeneralSans';
@@ -43,7 +30,7 @@
     font-weight: 700;
     font-display: swap;
     font-style: normal;
-} */
+}
 
 /* Colors */
 
@@ -398,7 +385,7 @@
     font-feature-settings:
         'clig' off,
         'liga' off;
-    font-family: var(--main-font);
+    font-family: var(--main-font) !important;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
@@ -892,6 +879,16 @@ table.table tr td {
     padding: 4px;
     margin-right: 12px;
 }
+.cancel-table {
+    color: var(--accent-color-r500);
+    padding: 4px;
+    margin-right: 10px;
+}
+.check-table {
+    color: green;
+    padding: 4px;
+    margin-right: 10px;
+}
 .delete-table:hover {
     cursor: pointer;
     color: var(--accent-color-r700);
@@ -1343,4 +1340,22 @@ body {
     margin-top: 24px;
     border-radius: 4px;
     padding: 4px;
+}
+.search-container {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    left: 10px; /* Adjust as needed */
+    transform: translateY(-50%);
+}
+
+.close-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px; /* Adjust as needed */
+    transform: translateY(-50%);
+    cursor: pointer;
 }

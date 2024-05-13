@@ -6,13 +6,19 @@ import CreateEditMdl from './CreateEditMdl';
 import actions from '../../redux/Amenity/actions';
 import DeleteMdl from '../../components/common/DeleteMdl';
 import toast from 'react-hot-toast';
+import Spinner from '../../components/Spinner';
 
 function Amenity() {
     const [listingData, setListingData] = useState([]);
 
     const dispatch = useDispatch();
-    const { amenityListData, amenityCreated, amenityUpdate, amenityDelete } =
-        useSelector((state) => state?.amenityReducer);
+    const {
+        loader,
+        amenityListData,
+        amenityCreated,
+        amenityUpdate,
+        amenityDelete,
+    } = useSelector((state) => state?.amenityReducer);
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState('Add Amenity'); // 'add' or 'edit'
     const [amenityData, setAmenityData] = useState(null); // Data of user being edited
@@ -180,7 +186,7 @@ function Amenity() {
                                 </h5>
                             </div>
                             <div className="col-8 gap-3 action-right">
-                                <div className="form-group  position-relative">
+                                <div className="form-group  position-relative search-container">
                                     <span className="material-icons-outlined search-icon">
                                         search
                                     </span>
@@ -194,6 +200,14 @@ function Amenity() {
                                             setSearchQuery(e.target.value)
                                         }
                                     />
+                                    {searchQuery && (
+                                        <span
+                                            className="material-icons-outlined close-icon"
+                                            onClick={() => setSearchQuery('')}
+                                        >
+                                            close
+                                        </span>
+                                    )}
                                 </div>
                                 <button
                                     className="btn btn-primary d-flex "
@@ -216,19 +230,22 @@ function Amenity() {
                             </div>
                         </div>
                     </div>
-
-                    <div className="col-12 p-3 container-page">
-                        <DataTableComponent
-                            data={listingData}
-                            onEdit={handleEditFloor}
-                            columnsConfig={columnsConfig}
-                            onDelete={handleDelete}
-                            selectedIds={selectedIds}
-                            setSelectedIds={setSelectedIds}
-                            searchQuery={searchQuery}
-                            onSearchChange={setSearchQuery}
-                        />
-                        {/* <table className="table custom-table" id="floor_table">
+                    {loader ? (
+                        <Spinner />
+                    ) : (
+                        <div className="col-12 p-3 container-page">
+                            <DataTableComponent
+                                data={listingData}
+                                onEdit={handleEditFloor}
+                                columnsConfig={columnsConfig}
+                                onDelete={handleDelete}
+                                selectedIds={selectedIds}
+                                setSelectedIds={setSelectedIds}
+                                searchQuery={searchQuery}
+                                onSearchChange={setSearchQuery}
+                                // loader={loader}
+                            />
+                            {/* <table className="table custom-table" id="floor_table">
                             <thead>
                                 <tr>
                                     <th scope="col" className="th-custom">
@@ -274,7 +291,8 @@ function Amenity() {
                             </thead>
                             <tbody id="floor_table_body"></tbody>
                         </table> */}
-                    </div>
+                        </div>
+                    )}
                 </div>
                 {open && (
                     <CreateEditMdl

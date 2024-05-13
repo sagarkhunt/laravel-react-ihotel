@@ -6,11 +6,13 @@ import CreateEditMdl from './CreateEditMdl';
 import actions from '../../redux/RoomPlan/actions';
 import DeleteMdl from '../../components/common/DeleteMdl';
 import toast from 'react-hot-toast';
+import Spinner from '../../components/Spinner';
 
 function RoomPlan() {
     const [listingData, setListingData] = useState([]);
     const dispatch = useDispatch();
     const {
+        loader,
         roomPlanListData,
         roomPlanCreated,
         roomPlanUpdate,
@@ -185,7 +187,7 @@ function RoomPlan() {
                                 </h5>
                             </div>
                             <div className="col-8 gap-3 action-right">
-                                <div className="form-group  position-relative">
+                                <div className="form-group  position-relative search-container">
                                     <span className="material-icons-outlined search-icon">
                                         search
                                     </span>
@@ -199,6 +201,14 @@ function RoomPlan() {
                                             setSearchQuery(e.target.value)
                                         }
                                     />
+                                    {searchQuery && (
+                                        <span
+                                            className="material-icons-outlined close-icon"
+                                            onClick={() => setSearchQuery('')}
+                                        >
+                                            close
+                                        </span>
+                                    )}
                                 </div>
                                 <button
                                     className="btn btn-primary d-flex "
@@ -221,19 +231,22 @@ function RoomPlan() {
                             </div>
                         </div>
                     </div>
-
-                    <div className="col-12 p-3 container-page">
-                        <DataTableComponent
-                            data={listingData}
-                            onEdit={handleEditFloor}
-                            columnsConfig={columnsConfig}
-                            onDelete={handleDelete}
-                            selectedIds={selectedIds}
-                            setSelectedIds={setSelectedIds}
-                            searchQuery={searchQuery}
-                            onSearchChange={setSearchQuery}
-                        />
-                    </div>
+                    {loader ? (
+                        <Spinner />
+                    ) : (
+                        <div className="col-12 p-3 container-page">
+                            <DataTableComponent
+                                data={listingData}
+                                onEdit={handleEditFloor}
+                                columnsConfig={columnsConfig}
+                                onDelete={handleDelete}
+                                selectedIds={selectedIds}
+                                setSelectedIds={setSelectedIds}
+                                searchQuery={searchQuery}
+                                onSearchChange={setSearchQuery}
+                            />
+                        </div>
+                    )}
                 </div>
                 {open && (
                     <CreateEditMdl

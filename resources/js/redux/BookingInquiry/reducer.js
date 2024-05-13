@@ -35,6 +35,8 @@ function Reducer(state = initialStates, action) {
                 bookingInqCreated: action.payload,
                 loader: false,
             };
+        case actions.BOOKINGINQ_ADD_FAILURE:
+            return { ...state, bookingInqUpdate: {}, loader: false };
         /**Update Room Plan */
         case actions.BOOKINGINQ_UPDATE:
             return { ...state, loader: true };
@@ -61,7 +63,7 @@ function Reducer(state = initialStates, action) {
 
         /**Room Plan List */
         case actions.BOOKINGINQ_DROPDOWN_LIST:
-            return { ...state, loader: true };
+            return { ...state, loader: false };
         case actions.BOOKINGINQ_DROPDOWN_LIST_SUCCESS:
             return {
                 ...state,
@@ -72,7 +74,7 @@ function Reducer(state = initialStates, action) {
             return { ...state, dropDownList: [], loader: false };
         /**Add Follow Up */
         case actions.BOOKINGINQ_FOLLOWUP_ADD:
-            return { ...state, loader: true };
+            return { ...state, loader: false };
         case actions.BOOKINGINQ_FOLLOWUP_ADD_SUCCESS:
             return {
                 ...state,

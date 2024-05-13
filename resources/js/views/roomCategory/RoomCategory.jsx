@@ -6,6 +6,7 @@ import CreateEditMdl from './CreateEditMdl';
 import Pagination from '../../components/common/Pagination';
 import DeleteMdl from '../../components/common/DeleteMdl';
 import toast from 'react-hot-toast';
+import Spinner from '../../components/Spinner';
 function RoomCategory() {
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState('Add Room Category'); // 'add' or 'edit'
@@ -21,6 +22,7 @@ function RoomCategory() {
     const [searchQuery, setSearchQuery] = useState('');
     const [delId, setDelId] = useState('');
     const {
+        loader,
         roomCateListData,
         roomCateCreated,
         roomCateUpdate,
@@ -158,7 +160,7 @@ function RoomCategory() {
                             </h5>
                         </div>
                         <div className="col-8 gap-3 action-right">
-                            <div className="form-group  position-relative">
+                            <div className="form-group  position-relative search-container">
                                 <span className="material-icons-outlined search-icon">
                                     search
                                 </span>
@@ -172,6 +174,14 @@ function RoomCategory() {
                                         setSearchQuery(e.target.value)
                                     }
                                 />
+                                {searchQuery && (
+                                    <span
+                                        className="material-icons-outlined close-icon"
+                                        onClick={() => setSearchQuery('')}
+                                    >
+                                        close
+                                    </span>
+                                )}
                             </div>
                             <button
                                 className="btn btn-primary d-flex "
@@ -195,28 +205,6 @@ function RoomCategory() {
                 </div>
 
                 <div className="col-12 p-3 container-page">
-                    {/* <div className="dt-layout-cell dt-start">
-                        <div className="dt-length">
-                            <select
-                                name="room_table_length"
-                                aria-controls="room_table"
-                                className="dt-input"
-                                value={entriesPerPage}
-                                onChange={(e) =>
-                                    setEntriesPerPage(parseInt(e.target.value))
-                                }
-                            >
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>
-                            <label htmlFor="dt-length-0">
-                                {' '}
-                                entries per page
-                            </label>
-                        </div>
-                    </div> */}
                     <table className="table custom-table" id="room_cate_table">
                         <thead>
                             <tr>
@@ -334,97 +322,111 @@ function RoomCategory() {
                             </tr>
                         </thead>
                         <tbody id="room_cate_table_body">
-                            {currentItems.length > 0 ? (
-                                currentItems.map((item, index) => (
-                                    <tr key={index}>
-                                        <td className="td-custom table-left">
-                                            {item.id}
-                                        </td>
-                                        <td className="td-custom action-check">
-                                            <div className="custom-control custom-checkbox">
-                                                {/* <input
+                            {loader ? (
+                                <tr>
+                                    <td colSpan="11">
+                                        <Spinner />
+                                    </td>
+                                </tr>
+                            ) : (
+                                <>
+                                    {currentItems.length > 0 ? (
+                                        currentItems.map((item, index) => (
+                                            <tr key={index}>
+                                                <td className="td-custom table-left">
+                                                    {item.id}
+                                                </td>
+                                                <td className="td-custom action-check">
+                                                    <div className="custom-control custom-checkbox">
+                                                        {/* <input
                                                     type="checkbox"
                                                     className="custom-control-input"
                                                     id={`customCheck${item.id}`}
                                                 /> */}
-                                                <input
-                                                    type="checkbox"
-                                                    className="custom-control-input"
-                                                    id={`customCheck${item.id}`}
-                                                    checked={selectedIds.includes(
-                                                        item.id,
-                                                    )}
-                                                    onChange={() =>
-                                                        handleRowCheckboxChange(
-                                                            item.id,
-                                                        )
-                                                    }
-                                                />
-                                                <label
-                                                    className="custom-control-label"
-                                                    htmlFor={`customCheck${item.id}`}
-                                                ></label>
-                                            </div>
-                                        </td>
-                                        <td className="td-custom">
-                                            {item.cat_name}
-                                        </td>
-                                        <td className="td-custom">
-                                            {item.base_occu}
-                                        </td>
-                                        <td className="td-custom">
-                                            {item.max_occu}
-                                        </td>
-                                        <td className="td-custom">
-                                            {item.max_adult}
-                                        </td>
-                                        <td className="td-custom">
-                                            {item.max_child}
-                                        </td>
-                                        <td className="td-custom">
-                                            {item.max_extra_bed}
-                                        </td>
+                                                        <input
+                                                            type="checkbox"
+                                                            className="custom-control-input"
+                                                            id={`customCheck${item.id}`}
+                                                            checked={selectedIds.includes(
+                                                                item.id,
+                                                            )}
+                                                            onChange={() =>
+                                                                handleRowCheckboxChange(
+                                                                    item.id,
+                                                                )
+                                                            }
+                                                        />
+                                                        <label
+                                                            className="custom-control-label"
+                                                            htmlFor={`customCheck${item.id}`}
+                                                        ></label>
+                                                    </div>
+                                                </td>
+                                                <td className="td-custom">
+                                                    {item.cat_name}
+                                                </td>
+                                                <td className="td-custom">
+                                                    {item.base_occu}
+                                                </td>
+                                                <td className="td-custom">
+                                                    {item.max_occu}
+                                                </td>
+                                                <td className="td-custom">
+                                                    {item.max_adult}
+                                                </td>
+                                                <td className="td-custom">
+                                                    {item.max_child}
+                                                </td>
+                                                <td className="td-custom">
+                                                    {item.max_extra_bed}
+                                                </td>
 
-                                        <td className="td-custom">
-                                            <a className="a-btn-link">
-                                                10 Rooms / Add Rooms
-                                            </a>
-                                        </td>
-                                        <td className="td-custom">
-                                            <div
-                                                className={
-                                                    item.status == 1
-                                                        ? 'status-active'
-                                                        : 'status-deactive'
-                                                }
-                                            >
-                                                {item.status == 1
-                                                    ? 'Active'
-                                                    : 'Deactive'}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                className="material-icons-outlined delete-table"
-                                                onClick={() =>
-                                                    handleDelete(item)
-                                                }
-                                            >
-                                                cancel_presentation
-                                            </span>
-                                            <span
-                                                className="material-icons-outlined edit-table"
-                                                onClick={() => handleEdit(item)}
-                                            >
-                                                edit
-                                            </span>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan="11">No data available</td>
-                                </tr>
+                                                <td className="td-custom">
+                                                    <a className="a-btn-link">
+                                                        10 Rooms / Add Rooms
+                                                    </a>
+                                                </td>
+                                                <td className="td-custom">
+                                                    <div
+                                                        className={
+                                                            item.status == 1
+                                                                ? 'status-active'
+                                                                : 'status-deactive'
+                                                        }
+                                                    >
+                                                        {item.status == 1
+                                                            ? 'Active'
+                                                            : 'Deactive'}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span
+                                                        className="material-icons-outlined delete-table"
+                                                        onClick={() =>
+                                                            handleDelete(item)
+                                                        }
+                                                    >
+                                                        cancel_presentation
+                                                    </span>
+                                                    <span
+                                                        className="material-icons-outlined edit-table"
+                                                        onClick={() =>
+                                                            handleEdit(item)
+                                                        }
+                                                    >
+                                                        edit
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan="11">
+                                                No data available
+                                            </td>
+                                        </tr>
+                                    )}
+                                </>
                             )}
                         </tbody>
                     </table>

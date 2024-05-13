@@ -7,11 +7,13 @@ import actions from '../../redux/Floor/actions';
 import { Descriptions } from 'antd';
 import DeleteMdl from '../../components/common/DeleteMdl';
 import toast from 'react-hot-toast';
+import Spinner from '../../components/Spinner';
+import { render } from 'react-dom';
 
 function Floor() {
     const [listingData, setListingData] = useState([]);
     const dispatch = useDispatch();
-    const { floorListData, floorCreateed, floorUpdate, floorDelete } =
+    const { loader, floorListData, floorCreateed, floorUpdate, floorDelete } =
         useSelector((state) => state?.floorReducer);
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState('Add Floor'); // 'add' or 'edit'
@@ -34,7 +36,7 @@ function Floor() {
             className: 'action-check',
             render: (data, type, row) =>
                 `
-            <div className="custom-control custom-checkbox">
+            <div class="custom-control custom-checkbox">
                 <input 
                     type="checkbox" 
                     class="custom-control-input row-checkbox" 
@@ -45,8 +47,13 @@ function Floor() {
             </div>
             `,
         },
-        { data: 'name', label: 'Floors Name' },
-        { data: 'description', label: 'Description' },
+        {
+            data: 'name',
+            label: 'Floor Name',
+            className: 'th-custom', // Apply class to the column header (<th>)
+            render: (data, type, row) => `<td class="td-custom">${data}</td>`, // Render the <td> element with custom class
+        },
+        { data: 'description', label: 'Description', className: 'th-custom' },
         { data: 'created_by', label: 'Rooms' },
         {
             data: 'status',
@@ -184,7 +191,7 @@ function Floor() {
                                 </h5>
                             </div>
                             <div className="col-8 gap-3 action-right">
-                                <div className="form-group  position-relative">
+                                <div className="form-group  position-relative search-container">
                                     <span className="material-icons-outlined search-icon">
                                         search
                                     </span>
@@ -198,6 +205,14 @@ function Floor() {
                                             setSearchQuery(e.target.value)
                                         }
                                     />
+                                    {searchQuery && (
+                                        <span
+                                            className="material-icons-outlined close-icon"
+                                            onClick={() => setSearchQuery('')}
+                                        >
+                                            close
+                                        </span>
+                                    )}
                                 </div>
                                 <button
                                     className="btn btn-primary d-flex "
@@ -220,65 +235,69 @@ function Floor() {
                             </div>
                         </div>
                     </div>
-
-                    <div className="col-12 p-3 container-page">
-                        <DataTableComponent
-                            data={listingData}
-                            onEdit={handleEditFloor}
-                            onDelete={handleDelete}
-                            columnsConfig={columnsConfig}
-                            selectedIds={selectedIds}
-                            setSelectedIds={setSelectedIds}
-                            searchQuery={searchQuery}
-                            onSearchChange={setSearchQuery}
-                        />
-                        {/* <table className="table custom-table" id="floor_table">
-                            <thead>
-                                <tr>
-                                    <th scope="col" className="th-custom">
-                                        #
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="th-custom action-check"
-                                    >
-                                        <div className="custom-control custom-checkbox">
-                                            <input
-                                                type="checkbox"
-                                                className="custom-control-input"
-                                                id="customCheck1"
-                                            />
-                                            <label
-                                                className="custom-control-label"
-                                                for="customCheck1"
-                                            ></label>
-                                        </div>
-                                    </th>
-                                    <th scope="col" className="th-custom">
-                                        Floors Name
-                                    </th>
-                                    <th scope="col" className="th-custom">
-                                        Rooms
-                                    </th>
-
-                                    <th
-                                        scope="col"
-                                        className="th-custom"
-                                        width="10%"
-                                    >
-                                        Status
-                                    </th>
-                                    <th
-                                        scope="col-auto"
-                                        className="th-custom action-col"
-                                    >
-                                        Action
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody id="floor_table_body"></tbody>
-                        </table> */}
-                    </div>
+                    {loader ? (
+                        <Spinner />
+                    ) : (
+                        <div className="col-12 p-3 container-page">
+                            <DataTableComponent
+                                data={listingData}
+                                onEdit={handleEditFloor}
+                                onDelete={handleDelete}
+                                columnsConfig={columnsConfig}
+                                selectedIds={selectedIds}
+                                setSelectedIds={setSelectedIds}
+                                searchQuery={searchQuery}
+                                onSearchChange={setSearchQuery}
+                                loader={loader}
+                            />
+                            {/* <table className="table custom-table" id="floor_table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" className="th-custom">
+                                            #
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="th-custom action-check"
+                                        >
+                                            <div className="custom-control custom-checkbox">
+                                                <input
+                                                    type="checkbox"
+                                                    className="custom-control-input"
+                                                    id="customCheck1"
+                                                />
+                                                <label
+                                                    className="custom-control-label"
+                                                    for="customCheck1"
+                                                ></label>
+                                            </div>
+                                        </th>
+                                        <th scope="col" className="th-custom">
+                                            Floors Name
+                                        </th>
+                                        <th scope="col" className="th-custom">
+                                            Rooms
+                                        </th>
+    
+                                        <th
+                                            scope="col"
+                                            className="th-custom"
+                                            width="10%"
+                                        >
+                                            Status
+                                        </th>
+                                        <th
+                                            scope="col-auto"
+                                            className="th-custom action-col"
+                                        >
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="floor_table_body"></tbody>
+                            </table> */}
+                        </div>
+                    )}
                 </div>
                 {open && (
                     <CreateEditMdl

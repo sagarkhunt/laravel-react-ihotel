@@ -7,6 +7,7 @@ import MultiRoomMdl from './MultiRoomMdl';
 import DataTableComponent from '../../components/common/DataTableComponent';
 import DeleteMdl from '../../components/common/DeleteMdl';
 import toast from 'react-hot-toast';
+import Spinner from '../../components/Spinner';
 function Rooms() {
     const [open, setOpen] = useState(false);
     const [openMultiRoom, setOpenMultiRoom] = useState(false);
@@ -19,6 +20,7 @@ function Rooms() {
     const [roomListingData, setRoomListinData] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const {
+        loader,
         roomsListData,
         roomsCreated,
         roomsUpdate,
@@ -179,7 +181,7 @@ function Rooms() {
                             </h5>
                         </div>
                         <div className="col-8 gap-3 action-right">
-                            <div className="form-group  position-relative">
+                            <div className="form-group  position-relative search-container">
                                 <span className="material-icons-outlined search-icon">
                                     search
                                 </span>
@@ -193,6 +195,14 @@ function Rooms() {
                                         setSearchQuery(e.target.value)
                                     }
                                 />
+                                {searchQuery && (
+                                    <span
+                                        className="material-icons-outlined close-icon"
+                                        onClick={() => setSearchQuery('')}
+                                    >
+                                        close
+                                    </span>
+                                )}
                             </div>
                             <button
                                 className="btn btn-primary d-flex "
@@ -223,19 +233,22 @@ function Rooms() {
                         </div>
                     </div>
                 </div>
-
-                <div className="col-12 p-3 container-page">
-                    <DataTableComponent
-                        data={roomListingData}
-                        onEdit={handleEdit}
-                        columnsConfig={columnsConfig}
-                        onDelete={handleDelete}
-                        selectedIds={selectedIds}
-                        setSelectedIds={setSelectedIds}
-                        searchQuery={searchQuery}
-                        onSearchChange={setSearchQuery}
-                    />
-                    {/* <table className="table custom-table" id="room_cate_table">
+                {loader ? (
+                    <Spinner />
+                ) : (
+                    <div className="col-12 p-3 container-page">
+                        <DataTableComponent
+                            // loader={loader}
+                            data={roomListingData}
+                            onEdit={handleEdit}
+                            columnsConfig={columnsConfig}
+                            onDelete={handleDelete}
+                            selectedIds={selectedIds}
+                            setSelectedIds={setSelectedIds}
+                            searchQuery={searchQuery}
+                            onSearchChange={setSearchQuery}
+                        />
+                        {/* <table className="table custom-table" id="room_cate_table">
                         <thead>
                             <tr>
                                 <th
@@ -429,8 +442,8 @@ function Rooms() {
                             )}
                         </tbody>
                     </table> */}
-                    {/* Add pagination component */}
-                    {/* <div className="row mt-10 right">
+                        {/* Add pagination component */}
+                        {/* <div className="row mt-10 right">
                         <div className="col-12">
                             <Pagination
                                 currentPage={currentPage}
@@ -442,7 +455,8 @@ function Rooms() {
                             />
                         </div>
                     </div> */}
-                </div>
+                    </div>
+                )}
             </div>
             {open && (
                 <CreateEditMdl

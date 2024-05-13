@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import $ from 'jquery';
 import 'datatables.net';
+import Spinner from '../../components/Spinner';
 
 const DataTableComponent = ({
     data,
@@ -10,18 +11,42 @@ const DataTableComponent = ({
     selectedIds,
     setSelectedIds,
     searchQuery,
+    selectedAction,
+    loader,
     onSearchChange,
 }) => {
     const tableRef = useRef(null);
 
+    // const filteredData = Array.isArray(data)
+    //     ? data.filter((item) => {
+    //           return Object.values(item).some(
+    //               (value) =>
+    //                   String(value)
+    //                       .toLowerCase()
+    //                       .includes((searchQuery ?? '').toLowerCase()), // Add the nullish coalescing operator here
+    //           );
+    //       })
+    //     : [];
     const filteredData = Array.isArray(data)
         ? data.filter((item) => {
-              return Object.values(item).some(
+              // Filtering based on search query
+              const matchesSearchQuery = Object.values(item).some(
                   (value) =>
                       String(value)
                           .toLowerCase()
                           .includes((searchQuery ?? '').toLowerCase()), // Add the nullish coalescing operator here
               );
+
+              // Filtering based on selected action
+              let matchesSelectedAction = true;
+              if (selectedAction === 'open') {
+                  matchesSelectedAction = item.status === 1; // Filter records with status 1 (open)
+              } else if (selectedAction === 'close') {
+                  matchesSelectedAction = item.status === 0; // Filter records with status 0 (close)
+              }
+
+              // Combine both conditions using logical AND (&&)
+              return matchesSearchQuery && matchesSelectedAction;
           })
         : [];
 
@@ -126,33 +151,37 @@ const DataTableComponent = ({
     }, [filteredData, columnsConfig, onEdit, onDelete, searchQuery]);
 
     return (
-        <table ref={tableRef} className="display dataTable">
-            <thead>
-                <tr>
-                    {columnsConfig.map((column, index) => (
-                        <th
-                            key={index}
-                            scope="col"
-                            className={`th-custom ${column.className}`}
-                        >
-                            {column.label}
-                        </th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                {data.length === 0 && (
+        <>
+            <table ref={tableRef} className="display dataTable">
+                <thead>
                     <tr>
-                        <td
-                            colSpan={columnsConfig.length}
-                            className="text-center"
-                        >
-                            <span className="text-muted">No data found</span>
-                        </td>
+                        {columnsConfig.map((column, index) => (
+                            <th
+                                key={index}
+                                scope="col"
+                                className={`th-custom ${column.className}`}
+                            >
+                                {column.label}
+                            </th>
+                        ))}
                     </tr>
-                )}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {data.length === 0 && (
+                        <tr>
+                            <td
+                                colSpan={columnsConfig.length}
+                                className="text-center"
+                            >
+                                <span className="text-muted">
+                                    No data found
+                                </span>
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+        </>
     );
 };
 

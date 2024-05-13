@@ -14,18 +14,45 @@ function CreateEditMdl({
     const [dropDownData, setDropDownData] = useState([]);
     const [followUpText, setFollowUpText] = useState('');
     const [followUpList, setFollowUpList] = useState([]);
-    console.log('🚀 ~ followUpList:', followUpList);
+
     const [isOfferGiven, setIsOfferGiven] = useState(
         booingInqData && booingInqData.off_give ? true : false,
     );
     const [isCustReq, setIsCustReq] = useState(
         booingInqData && booingInqData.cust_req ? true : false,
     );
+    // Function to get the current date in YYYY-MM-DD format
+    const getCurrentDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        let month = today.getMonth() + 1;
+        let day = today.getDate();
 
+        // Add leading zero if month or day is less than 10
+        month = month < 10 ? '0' + month : month;
+        day = day < 10 ? '0' + day : day;
+
+        return `${year}-${month}-${day}`;
+    };
+
+    // Function to get the minimum check-out date (one day ahead of current date)
+    const getMinCheckOutDate = () => {
+        const today = new Date();
+        today.setDate(today.getDate() + 1); // Add one day to today's date
+        const year = today.getFullYear();
+        let month = today.getMonth() + 1;
+        let day = today.getDate();
+
+        // Add leading zero if month or day is less than 10
+        month = month < 10 ? '0' + month : month;
+        day = day < 10 ? '0' + day : day;
+
+        return `${year}-${month}-${day}`;
+    };
     const [formData, setFormData] = useState({
         booking_inq_id: booingInqData?.id || '0',
-        chk_in_dt: booingInqData?.chk_in_dt || '',
-        chk_out_dt: booingInqData?.chk_out_dt || '',
+        chk_in_dt: booingInqData?.chk_in_dt || getCurrentDate(),
+        chk_out_dt: booingInqData?.chk_out_dt || getMinCheckOutDate(),
         cust_name: booingInqData?.cust_name || '',
         mobile_no: booingInqData?.mobile || '',
         email: booingInqData?.email || '',
@@ -110,7 +137,14 @@ function CreateEditMdl({
         setDropDownData(dropDownList);
     }, [dropDownList]);
     /** Room Catefgory on table */
-    const [roomCategories, setRoomCategories] = useState([]);
+    const [roomCategories, setRoomCategories] = useState([
+        {
+            room_cat_id: 0,
+            room_cat_name: '',
+            no_of_rooms: 0,
+            // room_plan_id: 0,
+        },
+    ]);
     const [totalRate, setTotalRate] = useState(0);
 
     const calculateTotalRate = () => {
@@ -123,20 +157,33 @@ function CreateEditMdl({
 
     const addNewRoomCategory = () => {
         const newCategory = {
-            id: roomCategories.length + 1,
-            room_cat_id: 1,
+            room_cat_id: 0,
+            room_cat_name: '',
             no_of_rooms: 0,
-            room_plan_id: 1,
-            offered_rate: 0,
+            // room_plan_id: 0,
         };
         setRoomCategories([...roomCategories, newCategory]);
     };
 
-    const handleInputChange = (e, index, key) => {
+    // const handleInputChange = (e, index, key) => {
+    //     const updatedCategories = [...roomCategories];
+    //     updatedCategories[index][key] = e.target.value;
+    //     setRoomCategories(updatedCategories);
+    //     // calculateTotalRate();
+    // };
+    const handleInputChange = (e, index, fieldName, fieldToUpdate) => {
+        const { value } = e.target;
         const updatedCategories = [...roomCategories];
-        updatedCategories[index][key] = e.target.value;
+        updatedCategories[index][fieldName] = value;
+        const selectedRoomCategory = dropDownData?.room_cate.find(
+            (category) => category.id == value,
+        );
+        if (selectedRoomCategory) {
+            updatedCategories[index][fieldToUpdate] =
+                selectedRoomCategory.cat_name || selectedRoomCategory.cat_name;
+        }
+
         setRoomCategories(updatedCategories);
-        calculateTotalRate();
     };
 
     const submitFollowUp = () => {
@@ -238,7 +285,7 @@ function CreateEditMdl({
                 role="dialog"
             >
                 <div
-                    className="modal-dialog modal-lg modal-lf"
+                    className="modal-dialog modal-md modal-lf"
                     style={{ minHeight: '500px' }}
                 >
                     <form
@@ -322,6 +369,15 @@ function CreateEditMdl({
                                             <a
                                                 className="nav-link nav-link-custom"
                                                 data-bs-toggle="pill"
+                                                href="#guest_info"
+                                            >
+                                                Guest Info
+                                            </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a
+                                                className="nav-link nav-link-custom"
+                                                data-bs-toggle="pill"
                                                 href="#follo_Up"
                                             >
                                                 FolloUp
@@ -337,6 +393,15 @@ function CreateEditMdl({
                                                 href="#inq_deta"
                                             >
                                                 Inquiry Details
+                                            </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a
+                                                className="nav-link nav-link-custom"
+                                                data-bs-toggle="pill"
+                                                href="#guest_info"
+                                            >
+                                                Guest Info
                                             </a>
                                         </li>
                                     </>
@@ -365,6 +430,7 @@ function CreateEditMdl({
                                                         className="form-control custom-input"
                                                         id="chk_in_dt"
                                                         name="chk_in_dt"
+                                                        min={getCurrentDate()}
                                                         value={
                                                             formData.chk_in_dt
                                                         }
@@ -405,6 +471,7 @@ function CreateEditMdl({
                                                         className="form-control custom-input"
                                                         id="chk_out_dt"
                                                         name="chk_out_dt"
+                                                        min={getMinCheckOutDate()}
                                                         value={
                                                             formData.chk_out_dt
                                                         }
@@ -422,31 +489,35 @@ function CreateEditMdl({
                                                         <th
                                                             scope="col"
                                                             className="th-custom"
-                                                            width="40%"
+                                                            style={{
+                                                                width: '70%',
+                                                            }}
                                                         >
                                                             Room Category
                                                         </th>
                                                         <th
                                                             scope="col"
                                                             className="th-custom"
-                                                            width="15%"
+                                                            style={{
+                                                                width: '30%',
+                                                            }}
                                                         >
-                                                            No of Rooms
+                                                            Rooms
                                                         </th>
-                                                        <th
+                                                        {/* <th
                                                             scope="col"
                                                             className="th-custom"
-                                                            width="25%"
+                                                            width="50%"
                                                         >
                                                             Room Plan
-                                                        </th>
-                                                        <th
+                                                        </th> */}
+                                                        {/* <th
                                                             scope="col"
                                                             className="th-custom table-right"
                                                             width="20%"
                                                         >
                                                             Rate(RS.)
-                                                        </th>
+                                                        </th> */}
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -487,7 +558,7 @@ function CreateEditMdl({
                                                             </button>
                                                         </td>
                                                     </tr>
-                                                    <tr className="surface-s">
+                                                    {/* <tr className="surface-s">
                                                         <td
                                                             className="td-custom"
                                                             colSpan="3"
@@ -507,79 +578,11 @@ function CreateEditMdl({
                                                                 {totalRate}
                                                             </p>
                                                         </td>
-                                                    </tr>
+                                                    </tr> */}
                                                 </tbody>
                                             </table>
                                         </div>
                                         <div className="row mt-4">
-                                            <div className="col-12 ">
-                                                <p className="subtitle-2m  heading_box  primary-color">
-                                                    Guest Information
-                                                </p>
-                                            </div>
-
-                                            <div className="col-12">
-                                                <div className="form-group  mb-3">
-                                                    <label
-                                                        htmlFor="customInput"
-                                                        className="custom-label"
-                                                    >
-                                                        Name
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        className="form-control custom-input"
-                                                        id="cust_name"
-                                                        name="cust_name"
-                                                        placeholder="Name"
-                                                        value={
-                                                            formData.cust_name
-                                                        }
-                                                        onChange={handleChange}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="col-6">
-                                                <div className="form-group  mb-3">
-                                                    <label
-                                                        htmlFor="customInput"
-                                                        className="custom-label"
-                                                    >
-                                                        Mobile No
-                                                    </label>
-                                                    <input
-                                                        type="mobile"
-                                                        className="form-control custom-input"
-                                                        id="mobile_no"
-                                                        name="mobile_no"
-                                                        value={
-                                                            formData.mobile_no
-                                                        }
-                                                        maxLength={10}
-                                                        onChange={handleChange}
-                                                        placeholder="Mobile No"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="col-6">
-                                                <div className="form-group  mb-3">
-                                                    <label
-                                                        htmlFor="customInput"
-                                                        className="custom-label"
-                                                    >
-                                                        Email
-                                                    </label>
-                                                    <input
-                                                        type="email"
-                                                        className="form-control custom-input"
-                                                        id="email"
-                                                        name="email"
-                                                        value={formData.email}
-                                                        onChange={handleChange}
-                                                        placeholder="Email"
-                                                    />
-                                                </div>
-                                            </div>
                                             <div className="col-12">
                                                 <div className="form-group  mb-3">
                                                     <label
@@ -601,6 +604,48 @@ function CreateEditMdl({
                                                     />
                                                 </div>
                                             </div>
+                                            <div className="col-12">
+                                                <div className="form-group  mb-3">
+                                                    <div className="form-group  mb-3">
+                                                        <label
+                                                            htmlFor="customInput"
+                                                            className="custom-label"
+                                                        >
+                                                            BUsiness Source
+                                                        </label>
+                                                        <select
+                                                            className="form-select custom-input "
+                                                            aria-label=".form-select-sm example"
+                                                            id="bus_sou_id"
+                                                            name="bus_sou_id"
+                                                            value={
+                                                                formData.bus_sou_id
+                                                            }
+                                                            onChange={
+                                                                handleChange
+                                                            }
+                                                        >
+                                                            <option value="">
+                                                                Please Select
+                                                                Business Source
+                                                            </option>{' '}
+                                                            <option value="1">
+                                                                1
+                                                            </option>
+                                                            <option value="2">
+                                                                2
+                                                            </option>
+                                                            <option value="3">
+                                                                3
+                                                            </option>
+                                                            <option value="4">
+                                                                4
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div className="col-12 mt-1">
                                                 <div className="form-group  mb-3">
                                                     <div className="d-flex  mt-1 align-items-center">
@@ -806,6 +851,81 @@ function CreateEditMdl({
                                                         onChange={handleChange}
                                                         placeholder="Special Remarks"
                                                     ></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        id="guest_info"
+                                        className="container tab-pane fade"
+                                    >
+                                        <div className="row mt-0">
+                                            <div className="col-12 ">
+                                                <p className="subtitle-2m  heading_box  primary-color">
+                                                    Guest Information
+                                                </p>
+                                            </div>
+
+                                            <div className="col-12">
+                                                <div className="form-group  mb-3">
+                                                    <label
+                                                        htmlFor="customInput"
+                                                        className="custom-label"
+                                                    >
+                                                        Name
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control custom-input"
+                                                        id="cust_name"
+                                                        name="cust_name"
+                                                        placeholder="Name"
+                                                        value={
+                                                            formData.cust_name
+                                                        }
+                                                        onChange={handleChange}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="col-6">
+                                                <div className="form-group  mb-3">
+                                                    <label
+                                                        htmlFor="customInput"
+                                                        className="custom-label"
+                                                    >
+                                                        Mobile No
+                                                    </label>
+                                                    <input
+                                                        type="mobile"
+                                                        className="form-control custom-input"
+                                                        id="mobile_no"
+                                                        name="mobile_no"
+                                                        value={
+                                                            formData.mobile_no
+                                                        }
+                                                        maxLength={10}
+                                                        onChange={handleChange}
+                                                        placeholder="Mobile No"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="col-6">
+                                                <div className="form-group  mb-3">
+                                                    <label
+                                                        htmlFor="customInput"
+                                                        className="custom-label"
+                                                    >
+                                                        Email
+                                                    </label>
+                                                    <input
+                                                        type="email"
+                                                        className="form-control custom-input"
+                                                        id="email"
+                                                        name="email"
+                                                        value={formData.email}
+                                                        onChange={handleChange}
+                                                        placeholder="Email"
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
