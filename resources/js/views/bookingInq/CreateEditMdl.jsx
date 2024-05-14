@@ -70,7 +70,7 @@ function CreateEditMdl({
         status: booingInqData?.status || 1,
     });
     const { dropDownList, followUpAdd } = useSelector(
-        (state) => state?.booingInqReduce,
+        (state) => state?.booingInqReducer,
     );
     // Function to handle checkbox change
     const handleOfferGiven = (event) => {

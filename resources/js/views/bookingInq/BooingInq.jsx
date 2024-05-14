@@ -23,7 +23,7 @@ function BooingInq() {
         bookingInqUpdate,
         bookingInqDelete,
         addMutliRooms,
-    } = useSelector((state) => state.booingInqReduce);
+    } = useSelector((state) => state.booingInqReducer);
 
     const [selectedIds, setSelectedIds] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
