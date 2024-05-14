@@ -60,6 +60,11 @@ function Dashboard() {
                     Inquiry
                 </button>
             </Link>
+            <Link to="/business_source">
+                <button type="button" className="btn btn-primary me-2">
+                    Business Source
+                </button>
+            </Link>
         </div>
     );
 }
