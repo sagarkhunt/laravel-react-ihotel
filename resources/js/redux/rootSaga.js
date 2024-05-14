@@ -10,6 +10,8 @@ import inqeiryManage from './Inquiry/apiSaga';
 import roomCateManage from './RoomCategory/apiSaga';
 import roomsSaga from './Rooms/apiSaga';
 import bookingInq from './BookingInquiry/apiSaga';
+import businessManage from './BusinessSource/apiSaga';
+
 // Here you can include all the saga which you write for components
 export default function* rootSaga() {
     yield all([
@@ -24,5 +26,6 @@ export default function* rootSaga() {
         roomCateManage(),
         roomsSaga(),
         bookingInq(),
+        businessManage(),
     ]);
 }

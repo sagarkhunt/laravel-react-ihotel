@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import RoomCategory from './RoomCategory';
 import actions from '../../redux/BookingInquiry/actions';
 import toast from 'react-hot-toast';
+
 function CreateEditMdl({
     open,
     setOpen,
@@ -57,14 +58,15 @@ function CreateEditMdl({
         mobile_no: booingInqData?.mobile || '',
         email: booingInqData?.email || '',
         cust_cat_id: booingInqData?.cust_cat_id || '',
-        adult: booingInqData?.adult || 0,
-        child: booingInqData?.child || 0,
+        adult: booingInqData?.adult || '',
+        child: booingInqData?.child || '',
         sp_req: booingInqData?.sp_req || '',
         sp_remark: booingInqData?.sp_remark || '',
         total_day: booingInqData?.total_day || 0,
         ref_name: booingInqData?.ref_name || '',
         off_give: booingInqData?.off_give || '',
         cust_req: booingInqData?.cust_req || '',
+        bus_sou_id: booingInqData?.bus_sou_id || '',
         status: booingInqData?.status || 1,
     });
     const { dropDownList, followUpAdd } = useSelector(
@@ -87,20 +89,45 @@ function CreateEditMdl({
                 [name]: checked,
             });
         } else if (name === 'chk_in_dt' || name === 'chk_out_dt') {
-            const checkInDate =
-                name === 'chk_in_dt'
-                    ? new Date(value)
-                    : new Date(formData.chk_in_dt);
-            const checkOutDate =
-                name === 'chk_out_dt'
-                    ? new Date(value)
-                    : new Date(formData.chk_out_dt);
+            let checkInDate = new Date(formData.chk_in_dt);
+            let checkOutDate = new Date(formData.chk_out_dt);
+
+            // Parse dates only if they are valid
+            if (name === 'chk_in_dt' && isValidDate(value)) {
+                checkInDate = new Date(value);
+                // Update min check-out date to check-in date + 1
+                checkOutDate = new Date(checkInDate);
+                checkOutDate.setDate(checkOutDate.getDate() + 1);
+            } else if (name === 'chk_out_dt' && isValidDate(value)) {
+                if (isValidDate(value)) {
+                    checkOutDate = new Date(value);
+                    // Ensure check-out date is not earlier than check-in date
+                    if (checkOutDate <= checkInDate) {
+                        checkOutDate = new Date(checkInDate);
+                        checkOutDate.setDate(checkOutDate.getDate() + 1);
+                        toast.error(
+                            'Check-out date cannot be earlier than or same as check-in date.',
+                        );
+                    }
+                } else {
+                    // Handle invalid check-out date
+                }
+            }
+
+            // Ensure check-out date is not earlier than check-in date
+            if (checkOutDate < checkInDate) {
+                checkOutDate = new Date(checkInDate);
+                checkOutDate.setDate(checkOutDate.getDate() + 1);
+            }
+
             const timeDifference =
                 checkOutDate.getTime() - checkInDate.getTime();
             const nightCount = Math.ceil(timeDifference / (1000 * 3600 * 24));
+
             setFormData({
                 ...formData,
-                [name]: value,
+                [name]: formatDate(checkInDate), // Update with formatted date string
+                chk_out_dt: formatDate(checkOutDate), // Update with formatted date string
                 total_day: nightCount,
             });
         } else {
@@ -111,9 +138,31 @@ function CreateEditMdl({
         }
     }
 
+    // Helper function to check if a date string is valid
+    function isValidDate(dateString) {
+        const regEx = /^\d{4}-\d{2}-\d{2}$/;
+        return dateString.match(regEx) !== null;
+    }
+
+    // Helper function to format date as yyyy-mm-dd
+    function formatDate(date) {
+        return date.toISOString().split('T')[0];
+    }
+
     function handleSubmit(event) {
         event.preventDefault();
         if (mode === 'Add Inquiry') {
+            const isValidRoomCategories = roomCategories.every(
+                (category) =>
+                    category.room_cat_id !== 0 &&
+                    category.room_cat_name.trim() !== '' &&
+                    category.no_of_rooms.trim() !== '',
+            );
+
+            if (!isValidRoomCategories) {
+                toast.error('Please fill in all fields for room categories.');
+                return;
+            }
             // Dispatch action to add inquiry
             formData.room_req = roomCategories;
             dispatch({
@@ -141,7 +190,7 @@ function CreateEditMdl({
         {
             room_cat_id: 0,
             room_cat_name: '',
-            no_of_rooms: 0,
+            no_of_rooms: '',
             // room_plan_id: 0,
         },
     ]);
@@ -159,18 +208,12 @@ function CreateEditMdl({
         const newCategory = {
             room_cat_id: 0,
             room_cat_name: '',
-            no_of_rooms: 0,
+            no_of_rooms: '',
             // room_plan_id: 0,
         };
         setRoomCategories([...roomCategories, newCategory]);
     };
 
-    // const handleInputChange = (e, index, key) => {
-    //     const updatedCategories = [...roomCategories];
-    //     updatedCategories[index][key] = e.target.value;
-    //     setRoomCategories(updatedCategories);
-    //     // calculateTotalRate();
-    // };
     const handleInputChange = (e, index, fieldName, fieldToUpdate) => {
         const { value } = e.target;
         const updatedCategories = [...roomCategories];
@@ -232,7 +275,7 @@ function CreateEditMdl({
     }, [roomCategories]);
 
     useEffect(() => {
-        const sync_req = ['room_cate', 'rooms_plan'];
+        const sync_req = ['room_cate', 'rooms_plan', 'bus_sou'];
         dispatch({
             type: actions.BOOKINGINQ_DROPDOWN_LIST,
             payload: {
@@ -481,8 +524,125 @@ function CreateEditMdl({
                                                     />
                                                 </div>
                                             </div>
+                                            <div className="col-6">
+                                                {/* <div className="form-group  mb-3">
+                                                    <label
+                                                        htmlFor="customInput"
+                                                        className="custom-label"
+                                                    >
+                                                        Customer Category
+                                                    </label>
+                                                    <select
+                                                        className="form-select custom-input "
+                                                        aria-label=".form-select-sm example"
+                                                        id="cust_cat_id"
+                                                        name="cust_cat_id"
+                                                        value={
+                                                            formData.cust_cat_id
+                                                        } // Set value based on state
+                                                        onChange={handleChange}
+                                                    >
+                                                        <option value="">
+                                                            Please Select Cust
+                                                            Cate
+                                                        </option>{' '}
+                                                        <option value="1">
+                                                            Travel Agent
+                                                        </option>
+                                                        <option value="2">
+                                                            Direct Booking
+                                                        </option>
+                                                        <option value="3">
+                                                            Corporates
+                                                        </option>
+                                                        <option value="4">
+                                                            Referential
+                                                        </option>
+                                                    </select>
+                                                </div> */}
+                                                <div className="form-group  mb-3">
+                                                    <label
+                                                        htmlFor="customInput"
+                                                        className="custom-label"
+                                                    >
+                                                        Business Source
+                                                    </label>
+                                                    <select
+                                                        className="form-select custom-input"
+                                                        aria-label=".form-select-sm example"
+                                                        id="bus_sou_id"
+                                                        name="bus_sou_id"
+                                                        value={
+                                                            formData.bus_sou_id
+                                                        }
+                                                        onChange={handleChange}
+                                                    >
+                                                        <option value="">
+                                                            Please Select
+                                                            Business Source
+                                                        </option>
+                                                        {dropDownData?.bus_sou &&
+                                                            dropDownData.bus_sou.map(
+                                                                (source) => (
+                                                                    <option
+                                                                        key={
+                                                                            source.id
+                                                                        }
+                                                                        value={
+                                                                            source.id
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            source.name
+                                                                        }
+                                                                    </option>
+                                                                ),
+                                                            )}
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div className="col">
+                                                <div className="form-group  mb-3">
+                                                    <label
+                                                        htmlFor="customInput"
+                                                        className="custom-label"
+                                                    >
+                                                        Adult
+                                                    </label>
+                                                    <input
+                                                        type="number"
+                                                        className="form-control custom-input"
+                                                        id="adult"
+                                                        name="adult"
+                                                        value={formData.adult}
+                                                        onChange={handleChange}
+                                                        placeholder="1"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="col">
+                                                <div className="form-group  mb-3">
+                                                    <label
+                                                        htmlFor="customInput"
+                                                        className="custom-label"
+                                                    >
+                                                        Child{' '}
+                                                    </label>
+                                                    <input
+                                                        type="number"
+                                                        className="form-control custom-input"
+                                                        id="child"
+                                                        name="child"
+                                                        value={formData.child}
+                                                        onChange={handleChange}
+                                                        placeholder="0"
+                                                    />
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="row mt-4 mx-0">
+
+                                        <div className="row mt-2 mx-0">
                                             <table className="table custom-table">
                                                 <thead>
                                                     <tr className="surface-l">
@@ -601,48 +761,8 @@ function CreateEditMdl({
                                                             formData.ref_name
                                                         }
                                                         onChange={handleChange}
+                                                        required
                                                     />
-                                                </div>
-                                            </div>
-                                            <div className="col-12">
-                                                <div className="form-group  mb-3">
-                                                    <div className="form-group  mb-3">
-                                                        <label
-                                                            htmlFor="customInput"
-                                                            className="custom-label"
-                                                        >
-                                                            BUsiness Source
-                                                        </label>
-                                                        <select
-                                                            className="form-select custom-input "
-                                                            aria-label=".form-select-sm example"
-                                                            id="bus_sou_id"
-                                                            name="bus_sou_id"
-                                                            value={
-                                                                formData.bus_sou_id
-                                                            }
-                                                            onChange={
-                                                                handleChange
-                                                            }
-                                                        >
-                                                            <option value="">
-                                                                Please Select
-                                                                Business Source
-                                                            </option>{' '}
-                                                            <option value="1">
-                                                                1
-                                                            </option>
-                                                            <option value="2">
-                                                                2
-                                                            </option>
-                                                            <option value="3">
-                                                                3
-                                                            </option>
-                                                            <option value="4">
-                                                                4
-                                                            </option>
-                                                        </select>
-                                                    </div>
                                                 </div>
                                             </div>
 
@@ -737,79 +857,6 @@ function CreateEditMdl({
                                                     )}
                                                 </div>
                                             </div>
-                                            {/* <div className="col-6">
-                                            <div className="form-group  mb-3">
-                                                <label
-                                                    htmlFor="customInput"
-                                                    className="custom-label"
-                                                >
-                                                    Customer Category
-                                                </label>
-                                                <select
-                                                    className="form-select custom-input "
-                                                    aria-label=".form-select-sm example"
-                                                    id="cust_cat_id"
-                                                    name="cust_cat_id"
-                                                    value={formData.cust_cat_id} // Set value based on state
-                                                    onChange={handleChange}
-                                                >
-                                                    <option value="">
-                                                        Please Select Cust Cate
-                                                    </option>{' '}
-                                                    <option value="1">
-                                                        Travel Agent
-                                                    </option>
-                                                    <option value="2">
-                                                        Direct Booking
-                                                    </option>
-                                                    <option value="3">
-                                                        Corporates
-                                                    </option>
-                                                    <option value="4">
-                                                        Referential
-                                                    </option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div className="col">
-                                            <div className="form-group  mb-3">
-                                                <label
-                                                    htmlFor="customInput"
-                                                    className="custom-label"
-                                                >
-                                                    Adult
-                                                </label>
-                                                <input
-                                                    type="number"
-                                                    className="form-control custom-input"
-                                                    id="adult"
-                                                    name="adult"
-                                                    value={formData.adult}
-                                                    onChange={handleChange}
-                                                    placeholder="1"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="col">
-                                            <div className="form-group  mb-3">
-                                                <label
-                                                    htmlFor="customInput"
-                                                    className="custom-label"
-                                                >
-                                                    Child{' '}
-                                                </label>
-                                                <input
-                                                    type="number"
-                                                    className="form-control custom-input"
-                                                    id="child"
-                                                    name="child"
-                                                    value={formData.child}
-                                                    onChange={handleChange}
-                                                    placeholder="0"
-                                                />
-                                            </div>
-                                        </div> */}
 
                                             {/* <div className="col-12">
                                             <div className="form-group  mb-3">

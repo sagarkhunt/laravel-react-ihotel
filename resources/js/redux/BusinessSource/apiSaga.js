@@ -1,35 +1,26 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import actions from '../Inquiry/actions';
+import actions from '../BusinessSource/actions';
+import { postRequest } from '../../config/axiosClient'; // Assuming postRequest is used for all API requests
+import { message } from 'antd'; // Assuming Ant Design's message component is used for notifications
+import toast from 'react-hot-toast'; // Assuming react-hot-toast is used for toast notifications
 
-import {
-    postRequest,
-    getRequest,
-    deleteRequest,
-    axiosApi,
-} from '../../config/axiosClient';
-import { message } from 'antd';
-import Cookies from 'js-cookie';
-import toast from 'react-hot-toast';
 /**
- *
- * @param {inquiryList} action
+ * Fetches the list of businesses.
+ * @param {businessList} action The action containing payload for fetching business list.
  */
-function* inquiryList(action) {
+function* businessList(action) {
     try {
-        const response = yield call(
-            postRequest,
-            'get_inq_type',
-            action.payload,
-        );
+        const response = yield call(postRequest, 'get_bus_sou', action.payload);
         if (response) {
             yield put({
-                type: actions.INQUIRY_LIST_SUCCESS,
+                type: actions.BUSINESS_LIST_SUCCESS,
                 payload: response.data,
             });
         }
     } catch (error) {
-        yield put({ type: actions.INQUIRY_LIST_FAILURE });
-        if (error.response.status === 401) {
+        yield put({ type: actions.BUSINESS_LIST_FAILURE });
+        // Handle different error statuses
+        if (error.response?.status === 401) {
             toast.error(error.response.data.message);
         } else if (
             error.response &&
@@ -37,70 +28,27 @@ function* inquiryList(action) {
             error.response.data.message
         ) {
             toast.error(error.response.data.message);
-            // message.error(error.response.data.message);
         }
     }
 }
+
 /**
- *
- * @param {createInquiry} action
+ * Creates a new business.
+ * @param {createBusiness} action The action containing payload for creating a new business.
  */
-function* createInquiry(action) {
+function* createBusiness(action) {
     const { payload } = action;
     try {
-        const response = yield call(postRequest, 'create_inq', payload);
+        const response = yield call(postRequest, 'create_bus_sou', payload);
         if (response) {
             yield put({
-                type: actions.INQUIRY_ADD_SUCCESS,
+                type: actions.BUSINESS_ADD_SUCCESS,
                 payload: response.data,
             });
             toast.success(response.message);
         }
     } catch (error) {
-        // Dispatch the register failure action
-        yield put({ type: actions.INQUIRY_ADD_FAILURE });
-
-        // Handle different error statuses
-        if (error.response?.status === 422) {
-            const errors = error.response.data.errors;
-            toast.error(Object.values(errors).join(', '));
-        } else if (error.response?.status === 400) {
-            toast.error('Bad request');
-        } else if (error.response?.status === 401) {
-            toast.error('Unauthorized');
-        } else if (error.response?.status === 500) {
-            toast.error('Internal server error');
-        } else {
-            toast.error('Something went wrong');
-        }
-        return;
-    }
-}
-
-/**
- *
- * @param {updateInquiry} action
- */
-function* updateInquiry(action) {
-    const { payload } = action;
-    try {
-        const response = yield call(postRequest, 'update_inq', payload);
-
-        if (response) {
-            yield put({
-                type: actions.INQUIRY_UPDATE_SUCCESS,
-                payload: response.data,
-            });
-            if (response?.data == 'fail') {
-                toast.error(response.message);
-            } else {
-                toast.success(response.message);
-            }
-        }
-    } catch (error) {
-        // Dispatch the register failure action
-        yield put({ type: actions.INQUIRY_UPDATE_FAILURE });
-
+        yield put({ type: actions.BUSINESS_ADD_FAILURE });
         // Handle different error statuses
         if (error.response?.status === 422) {
             const errors = error.response.data.errors;
@@ -118,29 +66,63 @@ function* updateInquiry(action) {
 }
 
 /**
- *
- * @param {deleteInquiry} action
+ * Updates a new business.
+ * @param {updateBusiness} action The action containing payload for updating a new business.
  */
-function* deleteInquiry(action) {
+function* updateBusiness(action) {
     const { payload } = action;
     try {
-        const response = yield call(postRequest, 'delete_inq', payload);
-
+        const response = yield call(postRequest, 'update_bus_sou', payload);
         if (response) {
             yield put({
-                type: actions.INQUIRY_DELETE_SUCCESS,
+                type: actions.BUSINESS_UPDATE_SUCCESS,
                 payload: response.data,
             });
-            if (response?.data == 'fail') {
+            if (response.data === 'fail') {
                 toast.error(response.message);
             } else {
                 toast.success(response.message);
             }
         }
     } catch (error) {
-        // Dispatch the register failure action
-        yield put({ type: actions.INQUIRY_DELETE_FAILURE });
+        yield put({ type: actions.BUSINESS_UPDATE_FAILURE });
+        // Handle different error statuses
+        if (error.response?.status === 422) {
+            const errors = error.response.data.errors;
+            toast.error(Object.values(errors).join(', '));
+        } else if (error.response?.status === 400) {
+            toast.error('Bad request');
+        } else if (error.response?.status === 401) {
+            toast.error('Unauthorized');
+        } else if (error.response?.status === 500) {
+            toast.error('Internal server error');
+        } else {
+            toast.error('Something went wrong');
+        }
+    }
+}
 
+/**
+ * Deletes a new business.
+ * @param {deleteBusiness} action The action containing payload for deleting a new business.
+ */
+function* deleteBusiness(action) {
+    const { payload } = action;
+    try {
+        const response = yield call(postRequest, 'delete_bus_sou', payload);
+        if (response) {
+            yield put({
+                type: actions.BUSINESS_DELETE_SUCCESS,
+                payload: response.data,
+            });
+            if (response.data === 'fail') {
+                toast.error(response.message);
+            } else {
+                toast.success(response.message);
+            }
+        }
+    } catch (error) {
+        yield put({ type: actions.BUSINESS_DELETE_FAILURE });
         // Handle different error statuses
         if (error.response?.status === 422) {
             const errors = error.response.data.errors;
@@ -159,9 +141,11 @@ function* deleteInquiry(action) {
 
 export default function* rootSaga() {
     yield all([
-        takeLatest(actions.INQUIRY_LIST, inquiryList),
-        takeLatest(actions.INQUIRY_ADD, createInquiry),
-        takeLatest(actions.INQUIRY_UPDATE, updateInquiry),
-        takeLatest(actions.INQUIRY_DELETE, deleteInquiry),
+        takeLatest(actions.BUSINESS_LIST, businessList),
+        takeLatest(actions.BUSINESS_ADD, createBusiness),
+        takeLatest(actions.BUSINESS_UPDATE, updateBusiness),
+        takeLatest(actions.BUSINESS_DELETE, deleteBusiness),
     ]);
 }
+
+export { businessList, createBusiness, updateBusiness, deleteBusiness };

@@ -30,7 +30,7 @@ function BooingInq() {
     const [selectedAction, setSelectedAction] = useState('');
     const dispatch = useDispatch();
     const columnsConfig = [
-        { data: 'id', label: '# Inq No', className: 'table-left' },
+        { data: 'id', label: 'Inq No', className: 'table-left' },
         {
             data: null,
             title: `<span class="dt-column-title">
@@ -56,7 +56,7 @@ function BooingInq() {
         {
             data: 'chk_in_dt',
             className: '',
-            label: 'From Date - To Date',
+            label: 'ChkIn Date - ChkOut Date',
             render: function (data, type, row) {
                 const chkInDate = row.chk_in_dt ?? ''; // Check-in date
                 const chkOutDate = row.chk_out_dt ?? ''; // Check-out date
@@ -77,7 +77,7 @@ function BooingInq() {
         },
         {
             data: 'room_req',
-            label: 'Room Category x Rooms',
+            label: 'Room Details',
             className: '',
             render: function (data, type, row) {
                 let roomDetailsHTML = '';

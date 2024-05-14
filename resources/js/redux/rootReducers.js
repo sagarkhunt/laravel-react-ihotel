@@ -8,7 +8,9 @@ import roomViewReduce from './RoomView/reducer';
 import inquiryReducer from './Inquiry/reducer';
 import roomCateReducer from './RoomCategory/reducer';
 import roomReducer from './Rooms/reducer';
-import booingInqReduce from './BookingInquiry/reducer';
+import booingInqReducer from './BookingInquiry/reducer';
+import businessReducer from './BusinessSource/reducer';
+
 //Include all the reducer to combine and provide to configure store.
 export default {
     authenticateReducer,
@@ -21,5 +23,6 @@ export default {
     inquiryReducer,
     roomCateReducer,
     roomReducer,
-    booingInqReduce,
+    booingInqReducer,
+    businessReducer,
 };

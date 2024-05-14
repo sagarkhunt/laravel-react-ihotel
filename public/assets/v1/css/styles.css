@@ -1,41 +1,45 @@
 /* Import variables */
-@import url("variables.css");
+@import url('variables.css');
 
 /* Fonts */
 @font-face {
-    font-family: "GeneralSans";
-    src: url("../fonts/GeneralSans-Regular.woff2") format("woff2"),
-        url("../fonts/GeneralSans-Regular.woff") format("woff"),
-        url("../fonts/GeneralSans-Regular.ttf") format("truetype");
+    font-family: 'GeneralSans';
+    src:
+        url('../fonts/GeneralSans-Regular.woff2') format('woff2'),
+        url('../fonts/GeneralSans-Regular.woff') format('woff'),
+        url('../fonts/GeneralSans-Regular.ttf') format('truetype');
     font-weight: 400;
     font-display: swap;
     font-style: normal;
 }
 
 @font-face {
-    font-family: "GeneralSans";
-    src: url("../fonts/GeneralSans-Medium.woff2") format("woff2"),
-        url("../fonts/GeneralSans-Medium.woff") format("woff"),
-        url("../fonts/GeneralSans-Medium.ttf") format("truetype");
+    font-family: 'GeneralSans';
+    src:
+        url('../fonts/GeneralSans-Medium.woff2') format('woff2'),
+        url('../fonts/GeneralSans-Medium.woff') format('woff'),
+        url('../fonts/GeneralSans-Medium.ttf') format('truetype');
     font-weight: 500;
     font-display: swap;
     font-style: normal;
 }
 
 @font-face {
-    font-family: "GeneralSans";
-    src: url("../fonts/GeneralSans-Semibold.woff2") format("woff2"),
-        url("../fonts/GeneralSans-Semibold.woff") format("woff"),
-        url("../fonts/GeneralSans-Semibold.ttf") format("truetype");
+    font-family: 'GeneralSans';
+    src:
+        url('../fonts/GeneralSans-Semibold.woff2') format('woff2'),
+        url('../fonts/GeneralSans-Semibold.woff') format('woff'),
+        url('../fonts/GeneralSans-Semibold.ttf') format('truetype');
     font-weight: 600;
     font-display: swap;
     font-style: normal;
 }
 @font-face {
-    font-family: "GeneralSans";
-    src: url("../fonts/GeneralSans-Bold.woff2") format("woff2"),
-        url("../fonts/GeneralSans-Bold.woff") format("woff"),
-        url("../fonts/GeneralSans-Bold.ttf") format("truetype");
+    font-family: 'GeneralSans';
+    src:
+        url('../fonts/GeneralSans-Bold.woff2') format('woff2'),
+        url('../fonts/GeneralSans-Bold.woff') format('woff'),
+        url('../fonts/GeneralSans-Bold.ttf') format('truetype');
     font-weight: 700;
     font-display: swap;
     font-style: normal;
@@ -131,7 +135,9 @@
 .headline-h1b {
     /* Headline/H1B•56px•Bold */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 56px;
     font-style: normal;
@@ -142,7 +148,9 @@
 .headline-h1m {
     /* Headline/H1M•56px•Medium */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 56px;
     font-style: normal;
@@ -153,7 +161,9 @@
 .headline-h1 {
     /* Headline/H1•56px•Regular */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 56px;
     font-style: normal;
@@ -164,7 +174,9 @@
 .headline-h2m {
     /* Headline/H2M•48px•Medium */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 48px;
     font-style: normal;
@@ -175,7 +187,9 @@
 .headline-h2 {
     /* Headline/H2•48px•Regular */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 48px;
     font-style: normal;
@@ -186,7 +200,9 @@
 .headline-h3m {
     /* Headline/H3M•40px•Medium */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 40px;
     font-style: normal;
@@ -197,7 +213,9 @@
 .headline-h3 {
     /* Headline/H3•40px•Regular */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 40px;
     font-style: normal;
@@ -208,7 +226,9 @@
 .headline-h4b {
     /* Headline/H4B•32px•Bold */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 32px;
     font-style: normal;
@@ -219,7 +239,9 @@
 .headline-h4m {
     /* Headline/H4B•32px•Bold */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 32px;
     font-style: normal;
@@ -230,7 +252,9 @@
 .headline-h4 {
     /* Headline/H4•32px•Regular */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 32px;
     font-style: normal;
@@ -241,7 +265,9 @@
 .headline-h5m {
     /* Headline/H5M•26px•Medium */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 26px;
     font-style: normal;
@@ -252,7 +278,9 @@
 .headline-h5 {
     /* Headline/H5•26px•Regular */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 26px;
     font-style: normal;
@@ -263,7 +291,9 @@
 .headline-h6m {
     /* Headline/H6M•20px•Medium */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 20px;
     font-style: normal;
@@ -274,7 +304,9 @@
 .headline-h6 {
     /* Headline/H6•20px•Regular */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 20px;
     font-style: normal;
@@ -285,7 +317,9 @@
 .subtitle-1b {
     /* Subtitle/S1B•16px•Bold */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 16px;
     font-style: normal;
@@ -296,7 +330,9 @@
 .subtitle-1m {
     /* Subtitle/S1M•16px•Medium */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 16px;
     font-style: normal;
@@ -307,7 +343,9 @@
 .subtitle-2b {
     /* Subtitle/S2B•14px•Bold */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 14px;
     font-style: normal;
@@ -318,7 +356,9 @@
 .subtitle-2m {
     /* Subtitle/S2M•14px•Medium */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 14px;
     font-style: normal;
@@ -329,7 +369,9 @@
 .body-1 {
     /* Body/B1•16px•Regular */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 16px;
     font-style: normal;
@@ -340,7 +382,9 @@
 .body-1l {
     /* Body/B1•16px•Regular */
     color: var(--secondary-color700);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 16px;
     font-style: normal;
@@ -351,7 +395,9 @@
 .body-2 {
     /* Body/B2•14px•Regular */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 14px;
     font-style: normal;
@@ -362,7 +408,9 @@
 .body-2l {
     /* Body/B2•14px•Regular */
     color: var(--secondary-color700);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 14px;
     font-style: normal;
@@ -373,9 +421,11 @@
 .caption-1 {
     /* Caption/C1•12px•Regular */
     color: var(--secondary-color700);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
-    font-family: "General Sans";
+    font-family: 'General Sans';
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
@@ -385,9 +435,11 @@
 .caption-1b {
     /* Caption/C2•12px•Bold */
     color: var(--secondary-color700);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
-    font-family: "General Sans";
+    font-family: 'General Sans';
     font-size: 12px;
     font-style: normal;
     font-weight: 700;
@@ -397,9 +449,11 @@
 .caption-2 {
     /* Caption/C3•10px•Regular */
     color: var(--secondary-color700);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
-    font-family: "General Sans";
+    font-family: 'General Sans';
     font-size: 10px;
     font-style: normal;
     font-weight: 400;
@@ -409,7 +463,9 @@
 .overline-1 {
     /* Overline/O2•10px•Medium•0.5px */
     color: var(--secondary-color700);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 10px;
     font-style: normal;
@@ -420,7 +476,9 @@
 .overline-2 {
     /* Overline/O1•10PX•REGULAR•1.5px */
     color: var(--secondary-color700);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 10px;
     font-style: normal;
@@ -579,7 +637,9 @@
 .custom-label {
     overflow: hidden;
     color: var(--secondary-color600);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     text-overflow: ellipsis;
     white-space: nowrap;
     /* Body/B2•14px•Regular */
@@ -644,7 +704,9 @@ input.search-input {
 .a-btn-link {
     /* Subtitle/S2M•14px•Medium */
     color: var(--primary-color);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 14px;
     font-style: normal;
@@ -750,7 +812,9 @@ input.search-input {
     line-height: 1.5rem;
     vertical-align: middle;
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 16px;
     font-style: normal;
@@ -783,7 +847,9 @@ input.search-input {
 .th-custom {
     /* Subtitle/S2M•14px•Medium */
     color: var(--secondary-color700);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 14px;
     font-style: normal;
@@ -795,7 +861,9 @@ input.search-input {
 .td-custom {
     /* Body/B2•14px•Regular */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 14px;
     vertical-align: middle;
@@ -854,7 +922,9 @@ td.table-right {
 .dt-length > label {
     /* Body/B2•14px•Regular */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 14px;
     font-style: normal;
@@ -880,7 +950,9 @@ div.dt-container .dt-paging .dt-paging-button {
     border-radius: 2px;
     background: transparent;
 
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 14px;
     font-style: normal;
@@ -907,7 +979,9 @@ div.dt-container .dt-paging .dt-paging-button:hover {
 .status-active {
     /* Subtitle/S2M•14px•Medium */
     color: var(--accent-color-g700);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 14px;
     font-style: normal;
@@ -922,7 +996,9 @@ div.dt-container .dt-paging .dt-paging-button:hover {
 .status-deactive {
     /* Subtitle/S2M•14px•Medium */
     color: var(--accent-color-r700);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 14px;
     font-style: normal;
@@ -999,7 +1075,9 @@ div.dt-container .dt-paging .dt-paging-button:hover {
 }
 .nav-link.nav-link-custom {
     color: var(--secondary-color500);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 14px;
     font-style: normal;
@@ -1011,7 +1089,9 @@ div.dt-container .dt-paging .dt-paging-button:hover {
 }
 .nav-pills .nav-link.active {
     color: var(--primary-color600) !important;
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 14px;
     font-style: normal;
@@ -1037,7 +1117,9 @@ div.dt-container .dt-paging .dt-paging-button:hover {
     transition: background-color 0.3s ease; /* Smooth transition */
     /* Body/B2•14px•Regular */
     color: var(--secondary-color900);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 14px;
     font-style: normal;
@@ -1090,7 +1172,8 @@ body {
     background-color: #fff;
     border-radius: 20px;
     background: #fff;
-    box-shadow: 0px 12px 56px 0px rgba(0, 0, 0, 0.12),
+    box-shadow:
+        0px 12px 56px 0px rgba(0, 0, 0, 0.12),
         0px 2px 4px 0px rgba(0, 0, 0, 0.04);
 }
 .left-login {
@@ -1153,7 +1236,9 @@ body {
 
 .breadcrumb-item a {
     color: var(--secondary-color500);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 16px;
     font-style: normal;
@@ -1169,7 +1254,9 @@ body {
 }
 .breadcrumb-item.active {
     color: var(--secondary-color700);
-    font-feature-settings: "clig" off, "liga" off;
+    font-feature-settings:
+        'clig' off,
+        'liga' off;
     font-family: var(--main-font);
     font-size: 16px;
     font-style: normal;
