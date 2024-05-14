@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-DegXhnDI.css",
+    "file": "assets/app-BRq3LGfA.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -41,16 +41,14 @@
     "src": "resources/fonts/GeneralSans-Semibold.woff2"
   },
   "resources/js/app.js": {
-    "file": "assets/app-B3bidjHw.js",
+    "file": "assets/app-CtexTsbM.js",
     "name": "app",
     "src": "resources/js/app.js",
-    "isEntry": true,
-    "css": [
-      "assets/app-DUEfxN0n.css"
-    ]
+    "isEntry": true
   },
   "resources/sass/app.scss": {
-    "file": "assets/app-xbEfd7vA.css",
+    "file": "assets/app-l0sNRNKZ.js",
+    "name": "app",
     "src": "resources/sass/app.scss",
     "isEntry": true
   }

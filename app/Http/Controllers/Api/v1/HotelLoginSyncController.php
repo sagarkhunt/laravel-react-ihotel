@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Helpers\Helper;
 use App\Http\Controllers\Api\BaseApiController;
 use App\Http\Controllers\Controller;
+use App\Models\BusinessSource;
 use App\Models\FloorMaster;
 use App\Models\RoomCatMaster;
 use App\Models\RoomMaster;
@@ -78,6 +79,14 @@ class HotelLoginSyncController extends BaseApiController
                         ->get();
 
                     $data['rooms_plan'] = $get_menu_cat;
+                }
+                if (in_array("bus_sou", $sync_req)) {
+
+                    $get_bus_sou = BusinessSource::where('hotel_id', $hotel_id)
+                        ->select('id', 'name')
+                        ->get();
+
+                    $data['bus_sou'] = $get_bus_sou;
                 }
                 return $this->sendResponse($data, "");
             } else {
