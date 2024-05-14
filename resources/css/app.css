@@ -1,5 +1,9 @@
 /* Import variables */
-
+@import url('./variables.css');
+@import url('https://fonts.bunny.net/css?family=Nunito');
+@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css');
+@import url('https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp');
+@import url('https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css');
 @font-face {
     font-family: 'GeneralSans';
     src:
@@ -614,7 +618,7 @@
 .custom-input {
     font-family: var(--main-font) !important;
     color: var(--secondary-color700);
-    border: 2px solid #a6b6c4;
+    /* border: 2px solid #a6b6c4; */
     border-radius: 6px;
     padding: 10px;
     transition: border-color 0.3s ease;
@@ -754,11 +758,11 @@ input.search-input {
 /* Custom CSS for checkboxes */
 /* Customize size */
 .custom-control-input {
-    width: 20px; /* Custom width */
-    height: 20px; /* Custom height */
+    width: 15px; /* Custom width */
+    height: 15px; /* Custom height */
     border-radius: 50%; /* Make the checkbox round */
     transition: all 0.3s ease;
-    line-height: 20px;
+    line-height: 15px;
     vertical-align: sub;
 }
 
@@ -1358,4 +1362,18 @@ body {
     right: 10px; /* Adjust as needed */
     transform: translateY(-50%);
     cursor: pointer;
+}
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    z-index: 1000; /* Ensure the backdrop is behind the modal */
+    display: none; /* Initially hidden */
+}
+
+.modal-backdrop.show {
+    display: block; /* Show the backdrop when modal is open */
 }

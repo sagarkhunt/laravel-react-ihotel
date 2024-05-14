@@ -21,6 +21,7 @@
     <div id="app"></div>
 
     <!-- This line is used to include the React app file -->
+
 </body>
 
 </html>
