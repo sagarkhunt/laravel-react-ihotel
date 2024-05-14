@@ -18,7 +18,7 @@ function* inquiryList(action) {
     try {
         const response = yield call(
             postRequest,
-            'get_inq_type   ',
+            'get_inq_type',
             action.payload,
         );
         if (response) {

@@ -43,7 +43,7 @@ function Reducer(state = initialStates, action) {
             };
         case actions.INQUIRY_UPDATE_FAILURE:
             return { ...state, inquiryUpdate: {}, loader: false };
-        /**Update Inquiry */
+        /**Delete Inquiry */
         case actions.INQUIRY_DELETE:
             return { ...state, loader: true };
         case actions.INQUIRY_DELETE_SUCCESS:
