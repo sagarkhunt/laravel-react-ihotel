@@ -12,26 +12,14 @@
     justify-content: start;
     cursor: pointer;
 }
-
-/* Define your active class with blue color */
-/* Define your active class with blue background */
-.nav-line.active {
-    background-color: #0863b5;
+.nav-sub-box.active {
+    background-color: #064f91;
     color: white;
 }
-
-.menu {
-    display: none; /* Initially hide the menu */
+.nav-line.active {
+    background-color: #064f91;
+    color: white;
 }
-
-.visible {
-    display: block; /* Show the menu */
-}
-
-.hidden {
-    display: none; /* Hide the menu */
-}
-
 .inner_nav_line {
     position: relative;
     color: #353534;
@@ -130,7 +118,9 @@ a.active-icon > .icon_svg {
 #sidebar > li:hover,
 #sidebar > li:hover .nav-line .nav-item,
 #sidebar > li:hover .nav-line .downarrow {
+    background-color: #e6eff8;
     text-decoration: none;
+    color: #064f91;
     fill: #064f91;
 }
 
@@ -171,7 +161,7 @@ a.active-icon > .icon_svg {
 .nav-sub-box:not(.active-icon):hover .icon_svg,
 .nav-sub-box:not(.active-icon):hover,
 .nav-sub-box:not(.active-icon):hover .nav-item {
-    /* background: #e6eff8; */
+    background: #e6eff8;
     text-decoration: none;
     color: #0863b5;
     fill: #0863b5;
@@ -210,7 +200,7 @@ a.active-icon > .icon_svg {
     transition: width 0.2s linear;
 }
 .offcanvas-start {
-    width: 280px;
+    width: 280px !important;
 }
 .offcanvas-body {
     padding: 1rem;

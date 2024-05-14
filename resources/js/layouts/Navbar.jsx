@@ -80,7 +80,7 @@ function Navbar() {
                                 </div>
                                 <div className=" offcanvas-body">
                                     <ul className="navbar-nav" id="sidebar">
-                                        <li className="">
+                                        <li>
                                             <Link
                                                 className={`nav-line cp ${activeLink === '/dashboard' ? 'active' : ''}`}
                                                 to="/dashboard"
@@ -220,7 +220,7 @@ function Navbar() {
                                                 </ul>
                                             </div>
                                         </li>
-                                        <li className="">
+                                        <li>
                                             <Link
                                                 className={`nav-line cp ${activeLink === '/booking_inq' ? 'active' : ''}`}
                                                 to="/booking_inq"
@@ -254,7 +254,7 @@ function Navbar() {
                                             </Link>
                                         </li>
 
-                                        <li className="">
+                                        <li>
                                             <div
                                                 className="nav-line cp {{ collect(['resto/raw_mat_category', 'resto/raw_mat_item_group', 'resto/raw_mat_items', 'resto/suppliers', 'resto/units', 'resto/kitchen', 'resto/tax_rate', 'resto/purchase', 'resto/issue'])->contains(Request::path()) ? 'active_sub' : '' }}"
                                                 href="#"
@@ -296,7 +296,7 @@ function Navbar() {
                                                 <ul className="sub-menu-list px-2  row">
                                                     <li className="col-12 grid_padding">
                                                         <Link
-                                                            className={`nav-sub-box nav-line cp ${activeLink === '/floor' ? 'active' : ''}`}
+                                                            className={`nav-sub-box cp ${activeLink === '/floor' ? 'active' : ''}`}
                                                             to="/floor"
                                                             onClick={() =>
                                                                 handleLinkClick(
@@ -316,7 +316,7 @@ function Navbar() {
                                                     </li>
                                                     <li className="col-12 grid_padding">
                                                         <Link
-                                                            className={`nav-sub-box nav-line cp ${activeLink === '/section' ? 'active' : ''}`}
+                                                            className={`nav-sub-box cp ${activeLink === '/section' ? 'active' : ''}`}
                                                             to="/section"
                                                             onClick={() =>
                                                                 handleLinkClick(
@@ -335,7 +335,7 @@ function Navbar() {
                                                     </li>
                                                     <li className="col-12 grid_padding">
                                                         <Link
-                                                            className={`nav-sub-box nav-line cp ${activeLink === '/amenity' ? 'active' : ''}`}
+                                                            className={`nav-sub-box cp ${activeLink === '/amenity' ? 'active' : ''}`}
                                                             to="/amenity"
                                                             onClick={() =>
                                                                 handleLinkClick(
@@ -354,7 +354,7 @@ function Navbar() {
                                                     </li>
                                                     <li className="col-12 grid_padding">
                                                         <Link
-                                                            className={`nav-sub-box nav-line cp ${activeLink === '/rooms_category' ? 'active' : ''}`}
+                                                            className={`nav-sub-box cp ${activeLink === '/rooms_category' ? 'active' : ''}`}
                                                             to="/rooms_category"
                                                             onClick={() =>
                                                                 handleLinkClick(
@@ -373,7 +373,7 @@ function Navbar() {
                                                     </li>
                                                     <li className="col-12 grid_padding">
                                                         <Link
-                                                            className={`nav-sub-box nav-line cp ${activeLink === '/rooms' ? 'active' : ''}`}
+                                                            className={`nav-sub-box cp ${activeLink === '/rooms' ? 'active' : ''}`}
                                                             to="/rooms"
                                                             onClick={() =>
                                                                 handleLinkClick(
@@ -392,7 +392,7 @@ function Navbar() {
                                                     </li>
                                                     <li className="col-12 grid_padding">
                                                         <Link
-                                                            className={`nav-sub-box nav-line cp ${activeLink === '/rooms_plan' ? 'active' : ''}`}
+                                                            className={`nav-sub-box cp ${activeLink === '/rooms_plan' ? 'active' : ''}`}
                                                             to="/rooms_plan"
                                                             onClick={() =>
                                                                 handleLinkClick(
@@ -411,7 +411,7 @@ function Navbar() {
                                                     </li>
                                                     <li className="col-12 grid_padding">
                                                         <Link
-                                                            className={`nav-sub-box nav-line cp ${activeLink === '/room_view' ? 'active' : ''}`}
+                                                            className={`nav-sub-box cp ${activeLink === '/room_view' ? 'active' : ''}`}
                                                             to="/room_view"
                                                             onClick={() =>
                                                                 handleLinkClick(
@@ -430,7 +430,7 @@ function Navbar() {
                                                     </li>
                                                     <li className="col-12 grid_padding">
                                                         <Link
-                                                            className={`nav-sub-box nav-line cp ${activeLink === '/inquiry_type' ? 'active' : ''}`}
+                                                            className={`nav-sub-box cp ${activeLink === '/inquiry_type' ? 'active' : ''}`}
                                                             to="/inquiry_type"
                                                             onClick={() =>
                                                                 handleLinkClick(
@@ -451,7 +451,7 @@ function Navbar() {
                                                 </ul>
                                             </div>
                                         </li>
-                                        <li className="">
+                                        <li>
                                             <div
                                                 className="nav-line cp {{ collect(['resto/raw_mat_category', 'resto/raw_mat_item_group', 'resto/raw_mat_items', 'resto/suppliers', 'resto/units', 'resto/kitchen', 'resto/tax_rate', 'resto/purchase', 'resto/issue'])->contains(Request::path()) ? 'active_sub' : '' }}"
                                                 href="#"
@@ -551,7 +551,7 @@ function Navbar() {
                                                 </ul>
                                             </div>
                                         </li>
-                                        <li className="">
+                                        <li>
                                             <Link
                                                 className={`nav-line cp ${activeLink === '/user_list' ? 'active' : ''}`}
                                                 to="/user_list"
@@ -584,7 +584,7 @@ function Navbar() {
                                                 </span>
                                             </Link>
                                         </li>
-                                        <li className="">
+                                        <li>
                                             <div
                                                 className="nav-line cp {{ collect(['resto/raw_mat_category', 'resto/raw_mat_item_group', 'resto/raw_mat_items', 'resto/suppliers', 'resto/units', 'resto/kitchen', 'resto/tax_rate', 'resto/purchase', 'resto/issue'])->contains(Request::path()) ? 'active_sub' : '' }}"
                                                 href="#"
@@ -684,7 +684,7 @@ function Navbar() {
                                                 </ul>
                                             </div>
                                         </li>
-                                        <li className="">
+                                        <li>
                                             <div
                                                 className="nav-line cp {{ collect(['resto/raw_mat_category', 'resto/raw_mat_item_group', 'resto/raw_mat_items', 'resto/suppliers', 'resto/units', 'resto/kitchen', 'resto/tax_rate', 'resto/purchase', 'resto/issue'])->contains(Request::path()) ? 'active_sub' : '' }}"
                                                 href="#"
@@ -784,7 +784,7 @@ function Navbar() {
                                                 </ul>
                                             </div>
                                         </li>
-                                        <li className="">
+                                        <li>
                                             <Link
                                                 className="nav-line  cp {{ Request::is('resto/dashboard') ? 'active_sub' : '' }} "
                                                 href="/login"
