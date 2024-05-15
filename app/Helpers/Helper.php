@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Helpers;
 
 use App\Models\HotelConn;
@@ -14,11 +15,11 @@ class Helper
         if ($user) {
             $hotel_conn =  HotelConn::where('hotel_id', auth()->user()->hotel_id)->first();
             $hotel_connection['database'] = $hotel_conn->db_name;
-            
+
             // when we use in local then no need to user password
             $hotel_connection['username'] = $hotel_conn->db_un;
             $hotel_connection['password'] = $hotel_conn->db_pwd;
-            
+
             config(['database.connections.ihotel' => $hotel_connection]);
         }
     }
@@ -61,20 +62,21 @@ class Helper
     //     config(['database.connections.store' => $hotel_connection]);
     // }
 
-    public static function get_store_public_url($hotel_id, $assetsName = NULL) {
-        $HotelConn = HotelConn::where("hotel_id",$hotel_id)->first();
-        if($HotelConn){
+    public static function get_store_public_url($hotel_id, $assetsName = NULL)
+    {
+        $HotelConn = HotelConn::where("hotel_id", $hotel_id)->first();
+        if ($HotelConn) {
             $bucket_url_flag = $HotelConn->bucket_url_flag;
-            
-            if($bucket_url_flag == 1) {
-                $storeBasePath = $HotelConn->bucket_url."/".$hotel_id."/";
+
+            if ($bucket_url_flag == 1) {
+                $storeBasePath = $HotelConn->bucket_url . "/" . $hotel_id . "/";
                 $s3BaseURL = Storage::disk('s3')->url("/public/");
                 $public_dir_url = $s3BaseURL;
             } else {
-                $storeBasePath = "treasure/".$hotel_id."/";
-                $public_dir_url = url("/public/")."/";
-            }      
-            $store_dir_url = $public_dir_url.$storeBasePath;
+                $storeBasePath = "treasure/" . $hotel_id . "/";
+                $public_dir_url = url("/public/") . "/";
+            }
+            $store_dir_url = $public_dir_url . $storeBasePath;
         } else {
             $store_dir_url = "";
         }
@@ -84,52 +86,53 @@ class Helper
         return $store_dir_url;
     }
 
-    public static function upload_file($file_name, $file, $path, $bucket_flag = 0){
-               
+    public static function upload_file($file_name, $file, $path, $bucket_flag = 0)
+    {
+
         # Validate File
         if (!$file->isValid()) {
             return false;
         }
-    
+
         # Check file type for basic security
         $allowedFileTypes = ['jpeg', 'png', 'jpg', 'gif', 'bmp', 'pdf', 'doc', 'docs', 'xls'];
         $extension = strtolower($file->getClientOriginalExtension());
-    
+
         if (!in_array($extension, $allowedFileTypes)) {
             return false;
         }
-    
+
         if ($bucket_flag == 0) {
             # Move the file to the desired path with the provided name
             $file->move($path, $file_name);
 
             return true;
-    
         } elseif ($bucket_flag == 1) {
             $s3 = Storage::disk('s3_public');
             $filePath = $path . $file_name;
             $s3->put($filePath, file_get_contents($file), 'public');
             return true;
         }
-        
+
         return false;
     }
 
-    public static function delete_file($file_name, $folder_path, $hotel_id = 0){
+    public static function delete_file($file_name, $folder_path, $hotel_id = 0)
+    {
         $HotelConn = HotelConn::where('hotel_id', $hotel_id)
-            ->select('bucket_flag','bucket_url')
+            ->select('bucket_flag', 'bucket_url')
             ->first();
-            
+
         $bucket_flag = $HotelConn->bucket_flag ?? 0;
 
-        if($bucket_flag == 1 ){
-            $destinationPath = "public/".$HotelConn->bucket_url."/$hotel_id/archive/".$folder_path."/";
+        if ($bucket_flag == 1) {
+            $destinationPath = "public/" . $HotelConn->bucket_url . "/$hotel_id/archive/" . $folder_path . "/";
             $s3 = Storage::disk('s3_public');
             $filePath = $destinationPath . $file_name;
             $s3->delete($filePath);
         } else {
-            $destinationPath = "public/treasure/".$hotel_id."/archive/".$folder_path."/";
-            File::delete($destinationPath.$file_name);
+            $destinationPath = "public/treasure/" . $hotel_id . "/archive/" . $folder_path . "/";
+            File::delete($destinationPath . $file_name);
         }
     }
 
