@@ -3,12 +3,24 @@ import actions from '../redux/Authenticate/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../css/sidebar.css';
+import headerLogo from '../../../public/assets/v1/images/header_logo.png';
 
 function Navbar() {
     const [activeLink, setActiveLink] = useState(null);
 
     const handleLinkClick = (link) => {
         setActiveLink(link);
+    };
+
+    const [activeLinks, setActiveLinks] = useState(['/masters']);
+
+    const handleLinkClick2 = (link) => {
+        // Remove previously active link from activeLinks
+        const updatedLinks = activeLinks.filter(
+            (activeLink) => activeLink !== link,
+        );
+        // Add the clicked link
+        setActiveLinks([...updatedLinks, link]);
     };
 
     const dispatch = useDispatch();
@@ -66,7 +78,7 @@ function Navbar() {
                                 <div className="offcanvas-header border-lb">
                                     <h5 className="offcanvas-title">
                                         <img
-                                            src="Images/header_logo.png"
+                                            src={headerLogo}
                                             className="header_logo"
                                             alt=""
                                         ></img>
@@ -95,7 +107,12 @@ function Navbar() {
                                                     className="icon_svg"
                                                     height="25"
                                                     viewBox="0 0 24 25"
-                                                    fill="#566B7D"
+                                                    fill={
+                                                        activeLink ===
+                                                        '/dashboard'
+                                                            ? '#FFF'
+                                                            : '#566B7D'
+                                                    }
                                                     xmlns="http://www.w3.org/2000/svg"
                                                 >
                                                     <path
@@ -122,7 +139,11 @@ function Navbar() {
                                                     height="25"
                                                     className="icon_svg"
                                                     viewBox="0 0 24 25"
-                                                    fill="#566B7D"
+                                                    fill={
+                                                        activeLink === '/'
+                                                            ? '#FFF'
+                                                            : '#566B7D'
+                                                    }
                                                     xmlns="http://www.w3.org/2000/svg"
                                                 >
                                                     <path
@@ -149,7 +170,7 @@ function Navbar() {
                                             <div className="submenu_box p-3 y_scrolling">
                                                 <ul className="sub-menu-list px-2  row">
                                                     <li className="col-12 grid_padding">
-                                                        <a
+                                                        <Link
                                                             className="nav-sub-box cp {{ Request::is('resto/raw_mat_item_group') ? 'active-icon' : '' }}"
                                                             href="{{ url('/resto/raw_mat_item_group') }}"
                                                         >
@@ -171,7 +192,7 @@ function Navbar() {
                                                                 Raw Mat. Item
                                                                 Group
                                                             </span>
-                                                        </a>
+                                                        </Link>
                                                     </li>
                                                     <li className="col-12 grid_padding">
                                                         <a
@@ -235,7 +256,12 @@ function Navbar() {
                                                     className="icon_svg"
                                                     height="25"
                                                     viewBox="0 0 24 25"
-                                                    fill="#566B7D"
+                                                    fill={
+                                                        activeLink ===
+                                                        '/booking_inq'
+                                                            ? '#FFF'
+                                                            : '#566B7D'
+                                                    }
                                                     xmlns="http://www.w3.org/2000/svg"
                                                 >
                                                     <path
@@ -256,15 +282,31 @@ function Navbar() {
 
                                         <li>
                                             <div
-                                                className="nav-line cp {{ collect(['resto/raw_mat_category', 'resto/raw_mat_item_group', 'resto/raw_mat_items', 'resto/suppliers', 'resto/units', 'resto/kitchen', 'resto/tax_rate', 'resto/purchase', 'resto/issue'])->contains(Request::path()) ? 'active_sub' : '' }}"
-                                                href="#"
+                                                className={`nav-line cp ${activeLink === '/floor' || activeLink === '/section' || activeLink === '/amenity' || activeLink === '/rooms_category' || activeLink === '/rooms_plan' || activeLink === '/room_view' || activeLink === '/inquiry_type' ? 'active' : ''}`}
                                             >
                                                 <svg
                                                     width="24"
                                                     className="icon_svg"
                                                     height="25"
                                                     viewBox="0 0 24 25"
-                                                    fill="#566B7D"
+                                                    fill={
+                                                        activeLink ===
+                                                            '/floor' ||
+                                                        activeLink ===
+                                                            '/section' ||
+                                                        activeLink ===
+                                                            '/amenity' ||
+                                                        activeLink ===
+                                                            '/rooms_category' ||
+                                                        activeLink ===
+                                                            '/rooms_plan' ||
+                                                        activeLink ===
+                                                            '/room_view' ||
+                                                        activeLink ===
+                                                            '/inquiry_type'
+                                                            ? '#FFF'
+                                                            : '#566B7D'
+                                                    }
                                                     xmlns="http://www.w3.org/2000/svg"
                                                 >
                                                     <path
@@ -461,7 +503,11 @@ function Navbar() {
                                                     className="icon_svg"
                                                     height="25"
                                                     viewBox="0 0 24 25"
-                                                    fill="#566B7D"
+                                                    fill={
+                                                        activeLink === '/'
+                                                            ? '#FFF'
+                                                            : '#566B7D'
+                                                    }
                                                     xmlns="http://www.w3.org/2000/svg"
                                                 >
                                                     <path
@@ -566,7 +612,12 @@ function Navbar() {
                                                     height="25"
                                                     className="icon_svg"
                                                     viewBox="0 0 24 25"
-                                                    fill="#566B7D"
+                                                    fill={
+                                                        activeLink ===
+                                                        '/user_list'
+                                                            ? '#FFF'
+                                                            : '#566B7D'
+                                                    }
                                                     xmlns="http://www.w3.org/2000/svg"
                                                 >
                                                     <path
@@ -594,7 +645,11 @@ function Navbar() {
                                                     height="25"
                                                     className="icon_svg"
                                                     viewBox="0 0 24 25"
-                                                    fill="#566B7D"
+                                                    fill={
+                                                        activeLink === '/'
+                                                            ? '#FFF'
+                                                            : '#566B7D'
+                                                    }
                                                     xmlns="http://www.w3.org/2000/svg"
                                                 >
                                                     <path
@@ -622,7 +677,12 @@ function Navbar() {
                                                                 className="icon_svg"
                                                                 height="40"
                                                                 viewBox="0 0 40 40"
-                                                                fill="#6A6968"
+                                                                fill={
+                                                                    activeLink ===
+                                                                    '/'
+                                                                        ? '#FFF'
+                                                                        : '#566B7D'
+                                                                }
                                                                 xmlns="http://www.w3.org/2000/svg"
                                                             >
                                                                 <path
@@ -647,7 +707,12 @@ function Navbar() {
                                                                 className="icon_svg"
                                                                 height="40"
                                                                 viewBox="0 0 40 40"
-                                                                fill="#6A6968"
+                                                                fill={
+                                                                    activeLink ===
+                                                                    '/'
+                                                                        ? '#FFF'
+                                                                        : '#566B7D'
+                                                                }
                                                                 xmlns="http://www.w3.org/2000/svg"
                                                             >
                                                                 <path
@@ -694,7 +759,11 @@ function Navbar() {
                                                     height="25"
                                                     className="icon_svg"
                                                     viewBox="0 0 24 25"
-                                                    fill="#566B7D"
+                                                    fill={
+                                                        activeLink === '/'
+                                                            ? '#FFF'
+                                                            : '#566B7D'
+                                                    }
                                                     xmlns="http://www.w3.org/2000/svg"
                                                 >
                                                     <path
@@ -722,7 +791,12 @@ function Navbar() {
                                                                 className="icon_svg"
                                                                 height="40"
                                                                 viewBox="0 0 40 40"
-                                                                fill="#6A6968"
+                                                                fill={
+                                                                    activeLink ===
+                                                                    '/'
+                                                                        ? '#FFF'
+                                                                        : '#566B7D'
+                                                                }
                                                                 xmlns="http://www.w3.org/2000/svg"
                                                             >
                                                                 <path
@@ -747,7 +821,12 @@ function Navbar() {
                                                                 className="icon_svg"
                                                                 height="40"
                                                                 viewBox="0 0 40 40"
-                                                                fill="#6A6968"
+                                                                fill={
+                                                                    activeLink ===
+                                                                    '/'
+                                                                        ? '#FFF'
+                                                                        : '#566B7D'
+                                                                }
                                                                 xmlns="http://www.w3.org/2000/svg"
                                                             >
                                                                 <path
@@ -794,7 +873,11 @@ function Navbar() {
                                                     height="25"
                                                     className="icon_svg"
                                                     viewBox="0 0 24 25"
-                                                    fill="#566B7D"
+                                                    fill={
+                                                        activeLink === '/login'
+                                                            ? '#FFF'
+                                                            : '#566B7D'
+                                                    }
                                                     xmlns="http://www.w3.org/2000/svg"
                                                 >
                                                     <path
