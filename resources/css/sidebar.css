@@ -13,25 +13,28 @@
     cursor: pointer;
 }
 
-/* Define your active class with blue color */
-/* Define your active class with blue background */
-.nav-line.active {
-    background-color: #0863b5;
+.header_logo {
+    margin-bottom: 5px;
+}
+
+.nav-line.cp.active:hover .icon_svg path {
+    fill: #566b7d !important; /* Original color */
+}
+/* 
+.nav-sub-box {
+    background-color: #e6eff8 !important;
+} */
+
+.nav-item.active,
+.nav-sub-box.active {
+    background-color: #064f91;
     color: white;
 }
 
-.menu {
-    display: none; /* Initially hide the menu */
+.nav-line.active {
+    background-color: #064f91;
+    color: white;
 }
-
-.visible {
-    display: block; /* Show the menu */
-}
-
-.hidden {
-    display: none; /* Hide the menu */
-}
-
 .inner_nav_line {
     position: relative;
     color: #353534;
@@ -111,7 +114,7 @@ a.active-icon > .icon_svg {
     width: 300px;
     display: block;
     z-index: 2;
-    background: #fff;
+    background: #f7f6f6;
     pointer-events: none;
     transition: all 0.4s ease;
 
@@ -126,11 +129,11 @@ a.active-icon > .icon_svg {
     pointer-events: auto;
 }
 
-#sidebar > li:hover .nav-line .icon_svg,
 #sidebar > li:hover,
-#sidebar > li:hover .nav-line .nav-item,
-#sidebar > li:hover .nav-line .downarrow {
+#sidebar > li:hover .nav-line {
+    background-color: #e6eff8;
     text-decoration: none;
+    color: #064f91;
     fill: #064f91;
 }
 
@@ -161,17 +164,20 @@ a.active-icon > .icon_svg {
     text-align: left;
     margin: 0px;
 }
-.nav-sub-box.active-icon:hover {
+
+.nav-sub-box-icon:hover {
     background: #0863b5 !important;
     text-decoration: none;
     color: #fff !important;
     fill: #fff !important;
 }
-
+.sub-menu-list {
+    color: #e6eff8;
+}
 .nav-sub-box:not(.active-icon):hover .icon_svg,
 .nav-sub-box:not(.active-icon):hover,
 .nav-sub-box:not(.active-icon):hover .nav-item {
-    /* background: #e6eff8; */
+    background: #e6eff8;
     text-decoration: none;
     color: #0863b5;
     fill: #0863b5;
@@ -210,7 +216,7 @@ a.active-icon > .icon_svg {
     transition: width 0.2s linear;
 }
 .offcanvas-start {
-    width: 280px;
+    width: 280px !important;
 }
 .offcanvas-body {
     padding: 1rem;

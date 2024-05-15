@@ -84,12 +84,12 @@ function CreateEditMdl({
                             <div className="modal-content modal-lf-container">
                                 <div className="modal-header">
                                     <h5
-                                        className="modal-title"
+                                        className="modal-title col"
                                         id="ftable_header"
                                     >
                                         {mode}
                                     </h5>
-                                    <div className="d-flex gap-4 align-items-right">
+                                    <div className="d-flex gap-4 align-items-right col-auto">
                                         {mode === 'Edit Amenity' ? (
                                             <div className="d-flex gap-4 align-items-center">
                                                 <div
@@ -126,7 +126,7 @@ function CreateEditMdl({
 
                                         <button
                                             type="button"
-                                            className="btn-close"
+                                            className="btn-close "
                                             data-bs-dismiss="modal"
                                             aria-label="Close"
                                             onClick={() => setOpen(false)}
