@@ -866,7 +866,7 @@ function Navbar() {
                                         <li>
                                             <Link
                                                 className="nav-line  cp {{ Request::is('resto/dashboard') ? 'active_sub' : '' }} "
-                                                href="/login"
+                                                onClick={onLogout}
                                             >
                                                 <svg
                                                     width="24"

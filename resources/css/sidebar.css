@@ -20,6 +20,10 @@
 .nav-line.cp.active:hover .icon_svg path {
     fill: #566b7d !important; /* Original color */
 }
+/* 
+.nav-sub-box {
+    background-color: #e6eff8 !important;
+} */
 
 .nav-item.active,
 .nav-sub-box.active {
@@ -160,13 +164,16 @@ a.active-icon > .icon_svg {
     text-align: left;
     margin: 0px;
 }
-.nav-sub-box.active-icon:hover {
+
+.nav-sub-box-icon:hover {
     background: #0863b5 !important;
     text-decoration: none;
     color: #fff !important;
     fill: #fff !important;
 }
-
+.sub-menu-list {
+    color: #e6eff8;
+}
 .nav-sub-box:not(.active-icon):hover .icon_svg,
 .nav-sub-box:not(.active-icon):hover,
 .nav-sub-box:not(.active-icon):hover .nav-item {
