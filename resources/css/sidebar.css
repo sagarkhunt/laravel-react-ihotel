@@ -15,6 +15,7 @@
 
 .header_logo {
     margin-bottom: 5px;
+    margin-left: -4px;
 }
 
 .nav-line.cp.active:hover .icon_svg path {
@@ -137,8 +138,19 @@ a.active-icon > .icon_svg {
     fill: #064f91;
 }
 
+.navbar-toggler-icon {
+    margin-bottom: 2px;
+    margin-left: 7px;
+    margin-right: -8px;
+}
+
 .sub-menu-list {
     gap: 12px;
+}
+.navbar-brand {
+    outline: none; /* Remove the outline */
+    border: none; /* Remove the border */
+    background-color: white;
 }
 
 .nav-sub-box {

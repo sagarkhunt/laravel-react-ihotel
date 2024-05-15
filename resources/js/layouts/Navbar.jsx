@@ -54,6 +54,7 @@ function Navbar() {
         });
         navigate('/login');
     };
+
     return (
         <>
             <nav className="navbar navbar-light navabr_custom">
@@ -61,7 +62,7 @@ function Navbar() {
                     <div className="row m-0 w-100 h-auto">
                         <div className="col-4 d-flex align-items-center ps-0">
                             <button
-                                className="navbar-toggler"
+                                className="navbar-brand"
                                 type="button"
                                 data-bs-toggle="offcanvas"
                                 data-bs-target="#sidebar"
@@ -189,8 +190,7 @@ function Navbar() {
                                                             </svg>
                                                             <span className="nav-item">
                                                                 {' '}
-                                                                Raw Mat. Item
-                                                                Group
+                                                                option 1
                                                             </span>
                                                         </Link>
                                                     </li>
@@ -233,8 +233,7 @@ function Navbar() {
                                                                 />
                                                             </svg>
                                                             <span className="nav-item">
-                                                                Raw Material
-                                                                Items
+                                                                option 2
                                                             </span>
                                                         </a>
                                                     </li>
@@ -545,8 +544,7 @@ function Navbar() {
                                                             </svg>
                                                             <span className="nav-item">
                                                                 {' '}
-                                                                Raw Mat. Item
-                                                                Group
+                                                                option 1
                                                             </span>
                                                         </Link>
                                                     </li>
@@ -589,8 +587,7 @@ function Navbar() {
                                                                 />
                                                             </svg>
                                                             <span className="nav-item">
-                                                                Raw Material
-                                                                Items
+                                                                option 2
                                                             </span>
                                                         </Link>
                                                     </li>
@@ -692,8 +689,7 @@ function Navbar() {
                                                             </svg>
                                                             <span className="nav-item">
                                                                 {' '}
-                                                                Raw Mat. Item
-                                                                Group
+                                                                option 1
                                                             </span>
                                                         </Link>
                                                     </li>
@@ -741,8 +737,7 @@ function Navbar() {
                                                                 />
                                                             </svg>
                                                             <span className="nav-item">
-                                                                Raw Material
-                                                                Items
+                                                                option 2
                                                             </span>
                                                         </Link>
                                                     </li>
@@ -806,8 +801,7 @@ function Navbar() {
                                                             </svg>
                                                             <span className="nav-item">
                                                                 {' '}
-                                                                Raw Mat. Item
-                                                                Group
+                                                                option 1
                                                             </span>
                                                         </Link>
                                                     </li>
@@ -855,8 +849,7 @@ function Navbar() {
                                                                 />
                                                             </svg>
                                                             <span className="nav-item">
-                                                                Raw Material
-                                                                Items
+                                                                option 2
                                                             </span>
                                                         </Link>
                                                     </li>
