@@ -72,7 +72,7 @@ function CreateEditMdl({
                                     >
                                         {mode}
                                     </h5>
-                                    <div className="d-flex gap-4 align-items-right">
+                                    <div className="d-flex gap-2 align-items-right">
                                         {mode === 'Edit Section' ? (
                                             <div className="d-flex gap-4 align-items-center">
                                                 <div
@@ -102,17 +102,19 @@ function CreateEditMdl({
                                                         Active
                                                     </label>
                                                 </div>
+                                                <button
+                                                    type="button"
+                                                    className="btn-close"
+                                                    data-bs-dismiss="modal"
+                                                    aria-label="Close"
+                                                    onClick={() =>
+                                                        setOpen(false)
+                                                    }
+                                                ></button>
                                             </div>
                                         ) : (
                                             ''
                                         )}
-                                        <button
-                                            type="button"
-                                            className="btn-close"
-                                            data-bs-dismiss="modal"
-                                            aria-label="Close"
-                                            onClick={() => setOpen(false)}
-                                        ></button>
                                     </div>
                                 </div>
 
