@@ -12,7 +12,7 @@ const initialStates = {
 
 function Reducer(state = initialStates, action) {
     switch (action.type) {
-        /**Section List */
+        /**Business List */
         case actions.BUSINESS_LIST:
             return { ...state, loader: true };
         case actions.BUSINESS_LIST_SUCCESS:
@@ -23,7 +23,7 @@ function Reducer(state = initialStates, action) {
             };
         case actions.BUSINESS_LIST_FAILURE:
             return { ...state, businessListData: [], loader: false };
-        /**Add Section */
+        /**Add Business */
         case actions.BUSINESS_ADD:
             return { ...state, loader: true };
         case actions.BUSINESS_ADD_SUCCESS:

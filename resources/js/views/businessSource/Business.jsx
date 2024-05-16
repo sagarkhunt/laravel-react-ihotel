@@ -19,8 +19,8 @@ function Business() {
         businessDelete,
     } = useSelector((state) => state?.businessReducer);
     const [open, setOpen] = useState(false);
-    const [mode, setMode] = useState('Add Business Source'); // 'add' or 'edit'
-    const [businessData, setBusinessData] = useState(null); // Data of user being edited
+    const [mode, setMode] = useState('Add Business Source');
+    const [businessData, setBusinessData] = useState(null);
     const [statusValue, setStatusValue] = useState(0);
     const [selectedIds, setSelectedIds] = useState([]);
     const [showDel, setShowDel] = useState(false);
@@ -36,12 +36,12 @@ function Business() {
             render: function (data, type, row) {
                 if (data == 1) {
                     return `<div class=""><span class="material-icons-outlined check-table">
-                    check_circle
-                </span></div>`;
+                                check_circle
+                            </span></div>`;
                 } else {
                     return `<div class=""><span class="material-icons-outlined cancel-table">
-                    cancel
-                </span></div>`;
+                                cancel
+                            </span></div>`;
                 }
             },
         },
@@ -106,25 +106,13 @@ function Business() {
      */
     const handleDelete = (item) => {
         // onDelete(item);
-        console.log('delete item', item);
         if (item && item.id) {
             setShowDel(true);
             setDelId(item.id);
         }
     };
-    /**
-     * Remove multiple
-     */
-    const removeMultiple = () => {
-        if (selectedIds?.length === 0) {
-            toast.error('Please select any one business');
-        } else {
-            setShowDel(true);
-            setDelId(selectedIds);
-        }
-    };
+
     const handleDelSubmit = () => {
-        console.log('inside the handledelete', delId);
         const businessId = {
             bus_sou_id: delId,
         };
