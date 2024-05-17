@@ -30,7 +30,7 @@ function BooingInq() {
     const [selectedAction, setSelectedAction] = useState('');
     const dispatch = useDispatch();
     const columnsConfig = [
-        { data: 'id', label: 'Inq No', className: 'table-left' },
+        { data: 'id', label: 'Inq No', className: 'table-left', width: '5%' },
         {
             data: null,
             title: `<span class="dt-column-title">
@@ -52,6 +52,8 @@ function BooingInq() {
                 <label class="custom-control-label" htmlFor="customCheckAll"></label>
             </div>
             `,
+            className: 'table-right',
+            width: '5%',
         },
         {
             data: 'chk_in_dt',
@@ -62,6 +64,7 @@ function BooingInq() {
                 const chkOutDate = row.chk_out_dt ?? ''; // Check-out date
                 return chkInDate + ' - ' + chkOutDate; // Combine with a separator
             },
+            width: '25%',
         },
         {
             data: 'cust_name',
@@ -74,10 +77,11 @@ function BooingInq() {
                 // Return the combined data formatted as HTML paragraphs
                 return `<p class="body-2 mb-0">${custName}</p><p class="caption-1 pt-1 mb-0">${mobile}</p>`;
             },
+            width: '25%',
         },
         {
             data: 'room_req',
-            label: 'Room Details',
+            label: 'Room Category x Rooms',
             className: '',
             render: function (data, type, row) {
                 let roomDetailsHTML = '';
@@ -94,6 +98,7 @@ function BooingInq() {
 
                 return roomDetailsHTML;
             },
+            width: '25%',
         },
         {
             data: 'status',
@@ -109,19 +114,22 @@ function BooingInq() {
                 </span></div>`;
                 }
             },
+            width: '7.5%',
         },
         {
             data: null,
             label: 'Action',
             render: () =>
                 `
-            <span class="material-icons-outlined delete-table">
-                cancel_presentation
-            </span>
-            <span class="material-icons-outlined edit-table">
-                edit
-            </span>
+                <span class="material-icons-outlined edit-table">
+                    edit
+                </span>
+                <span class="material-icons-outlined delete-table">
+                    cancel_presentation
+                </span>
             `,
+            className: 'action-container',
+            width: '7.5%',
         },
     ];
 

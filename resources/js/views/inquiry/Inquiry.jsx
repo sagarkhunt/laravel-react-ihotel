@@ -27,7 +27,7 @@ function Inquiry() {
     const [delId, setDelId] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const columnsConfig = [
-        { data: 'id', label: '#', className: 'table-left' },
+        { data: 'id', label: '#', className: 'table-left', width: '5%' },
         {
             data: null,
             title: `<span class="dt-column-title">
@@ -44,9 +44,11 @@ function Inquiry() {
                     <label class="custom-control-label" htmlFor="customCheckAll"></label>
                 </div>
                 `,
+            width: '5%',
+            className: 'table-right',
         },
-        { data: 'inq_type', label: 'Inquiry Type' },
-        { data: 'inq_desc', label: 'Description' },
+        { data: 'inq_type', label: 'Inquiry Type', width: '25%' },
+        { data: 'inq_desc', label: 'Description', width: '50%' },
         {
             data: 'status',
             label: 'Status',
@@ -57,19 +59,22 @@ function Inquiry() {
                     return '<div class="status-deactive">Deactive</div>';
                 }
             },
+            width: '7.5%',
         },
         {
             data: null,
             label: 'Action',
             render: () =>
                 `
-            <span class="material-icons-outlined delete-table">
-                cancel_presentation
-            </span>
-            <span class="material-icons-outlined edit-table">
-                edit
-            </span>
+                <span class="material-icons-outlined edit-table">
+                    edit
+                </span>
+                <span class="material-icons-outlined delete-table">
+                    cancel_presentation
+                </span>
             `,
+            className: 'action-container',
+            width: '7.5%',
         },
     ];
     /***

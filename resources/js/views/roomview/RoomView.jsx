@@ -27,7 +27,7 @@ function RoomView() {
     const [delId, setDelId] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const columnsConfig = [
-        { data: 'id', label: '#', className: 'table-left' },
+        { data: 'id', label: '#', className: 'table-left', width: '5%' },
         {
             data: null,
             title: `<span class="dt-column-title">
@@ -44,9 +44,11 @@ function RoomView() {
                     <label class="custom-control-label" htmlFor="customCheckAll"></label>
                 </div>
                 `,
+            width: '5%',
+            className: 'table-right',
         },
-        { data: 'room_view', label: 'Room View' },
-        { data: 'desc', label: 'Description' },
+        { data: 'room_view', label: 'Room View', width: '25%' },
+        { data: 'desc', label: 'Description', width: '50%' },
         {
             data: 'status',
             label: 'Status',
@@ -57,19 +59,22 @@ function RoomView() {
                     return '<div class="status-deactive">Deactive</div>';
                 }
             },
+            width: '7.5%',
         },
         {
             data: null,
             label: 'Action',
             render: () =>
                 `
-            <span class="material-icons-outlined delete-table">
-                cancel_presentation
-            </span>
-            <span class="material-icons-outlined edit-table">
-                edit
-            </span>
+                <span class="material-icons-outlined edit-table">
+                    edit
+                </span>
+                <span class="material-icons-outlined delete-table">
+                    cancel_presentation
+                </span>
             `,
+            width: '7.5%',
+            className: 'action-container',
         },
     ];
     /***

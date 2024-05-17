@@ -27,7 +27,7 @@ function RoomPlan() {
     const [delId, setDelId] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const columnsConfig = [
-        { data: 'id', label: '#', className: 'table-left' },
+        { data: 'id', label: '#', className: 'table-left', width: '5%' },
         {
             data: null,
             title: `<span class="dt-column-title">
@@ -44,10 +44,12 @@ function RoomPlan() {
                     <label class="custom-control-label" htmlFor="customCheckAll"></label>
                 </div>
                 `,
+            width: '5%',
+            className: 'table-right',
         },
-        { data: 'plan_name', label: 'Plan Name' },
-        { data: 'plan_code', label: 'Plan Code' },
-        { data: 'plan_desc', label: 'Description' },
+        { data: 'plan_name', label: 'Plan Name', width: '20%' },
+        { data: 'plan_code', label: 'Plan Code', width: '20%' },
+        { data: 'plan_desc', label: 'Description', width: '35%' },
         {
             data: 'status',
             label: 'Status',
@@ -58,19 +60,22 @@ function RoomPlan() {
                     return '<div class="status-deactive">Deactive</div>';
                 }
             },
+            width: '7.5%',
         },
         {
             data: null,
             label: 'Action',
             render: () =>
                 `
-            <span class="material-icons-outlined delete-table">
-                cancel_presentation
-            </span>
-            <span class="material-icons-outlined edit-table">
-                edit
-            </span>
+                <span class="material-icons-outlined edit-table">
+                    edit
+                </span>
+                <span class="material-icons-outlined delete-table">
+                    cancel_presentation
+                </span>
             `,
+            className: 'action-container',
+            width: '7.5%',
         },
     ];
     /***

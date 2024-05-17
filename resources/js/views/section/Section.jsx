@@ -27,7 +27,7 @@ function Section() {
     const [delId, setDelId] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const columnsConfig = [
-        { data: 'id', label: '#', className: 'table-left' },
+        { data: 'id', label: '#', className: 'table-left', width: '5%' },
         {
             data: null,
             title: `<span class="dt-column-title">
@@ -44,10 +44,17 @@ function Section() {
                     <label class="custom-control-label" htmlFor="customCheckAll"></label>
                 </div>
                 `,
+            width: '5%',
+            className: 'table-right',
         },
-        { data: 'name', label: 'Section Name' },
+        { data: 'name', label: 'Section Name', width: '50%' },
         // { data: 'description', label: 'Description' },
-        { data: 'name', label: 'Rooms' },
+        {
+            data: null,
+            label: 'Rooms',
+            render: () => '<a class="a-btn-link">10 Rooms / Add Rooms</a>',
+            width: '25%',
+        },
         {
             data: 'status',
             label: 'Status',
@@ -58,19 +65,22 @@ function Section() {
                     return '<div class="status-deactive">Deactive</div>';
                 }
             },
+            width: '7.5%',
         },
         {
             data: null,
             label: 'Action',
             render: () =>
                 `
-            <span class="material-icons-outlined delete-table">
-                cancel_presentation
-            </span>
-            <span class="material-icons-outlined edit-table">
-                edit
-            </span>
+                <span class="material-icons-outlined edit-table">
+                    edit
+                </span>
+                <span class="material-icons-outlined delete-table">
+                    cancel_presentation
+                </span>
             `,
+            className: 'action-container',
+            width: '7.5%',
         },
     ];
     /***

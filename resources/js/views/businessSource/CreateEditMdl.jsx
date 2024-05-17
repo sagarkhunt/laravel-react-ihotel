@@ -57,7 +57,7 @@ function CreateEditMdl({
                     aria-modal="true"
                     role="dialog"
                 >
-                    <div className="modal-dialog modal-lg modal-dialog-centered">
+                    <div className="modal-dialog modal-lg modal-center">
                         <form
                             method="post"
                             id="floordata"

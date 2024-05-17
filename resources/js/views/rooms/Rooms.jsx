@@ -29,7 +29,7 @@ function Rooms() {
     } = useSelector((state) => state.roomReducer);
     const dispatch = useDispatch();
     const columnsConfig = [
-        { data: 'id', label: '#', className: 'table-left' },
+        { data: 'id', label: '#', className: 'table-left', width: '5%' },
         {
             data: null,
             title: `<span class="dt-column-title">
@@ -46,14 +46,17 @@ function Rooms() {
                     <label class="custom-control-label" htmlFor="customCheckAll"></label>
                 </div>
                 `,
+            width: '5%',
+            className: 'table-right',
         },
-        { data: 'room_no', label: 'Room Names/Numbers' },
+        { data: 'room_no', label: 'Room Names/Numbers', width: '25%' },
         {
             data: 'room_cate',
             label: 'Room Category',
             render: function (data, type, row) {
                 return data?.cat_name ?? '';
             },
+            width: '20%',
         },
         {
             data: 'room_section',
@@ -61,6 +64,7 @@ function Rooms() {
             render: function (data, type, row) {
                 return data?.name ?? '';
             },
+            width: '15%',
         },
         {
             data: 'room_floor',
@@ -68,6 +72,7 @@ function Rooms() {
             render: function (data, type, row) {
                 return data?.name ?? '';
             },
+            width: '15%',
         },
         {
             data: 'status',
@@ -79,19 +84,22 @@ function Rooms() {
                     return '<div class="status-deactive">Deactive</div>';
                 }
             },
+            width: '7.5%',
         },
         {
             data: null,
             label: 'Action',
             render: () =>
                 `
-            <span class="material-icons-outlined delete-table">
-                cancel_presentation
-            </span>
-            <span class="material-icons-outlined edit-table">
-                edit
-            </span>
+                <span class="material-icons-outlined edit-table">
+                    edit
+                </span>
+                <span class="material-icons-outlined delete-table">
+                    cancel_presentation
+                </span>
             `,
+            className: 'action-container',
+            width: '7.5%',
         },
     ];
 
@@ -176,9 +184,7 @@ function Rooms() {
                 <div className="col-12  action-header">
                     <div className="row">
                         <div className="col-4 d-flex align-items-center">
-                            <h5 className="headline-h6m mb-0 ">
-                                Room Categories List
-                            </h5>
+                            <h5 className="headline-h6m mb-0 ">Room List</h5>
                         </div>
                         <div className="col-8 gap-3 action-right">
                             <div className="form-group  position-relative search-container">

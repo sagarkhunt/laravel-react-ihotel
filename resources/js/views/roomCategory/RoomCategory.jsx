@@ -54,6 +54,8 @@ function RoomCategory() {
         }
     }
 
+    // console.log(currentItems)
+
     // Change page
     const onPageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -254,7 +256,7 @@ function RoomCategory() {
                                 </th>
                                 <th
                                     scope="col"
-                                    className="th-custom border-bnone text-center"
+                                    className="th-custom border-bnone text-left"
                                     style={{ border: 'none !important' }}
                                     width=""
                                 >
@@ -272,13 +274,14 @@ function RoomCategory() {
                                     scope="col"
                                     className="th-custom border-bnone"
                                     style={{ border: 'none !important' }}
-                                    width=""
+                                    width="7.5%"
                                 >
                                     Status
                                 </th>
                                 <th
                                     scope="col-auto"
-                                    className="th-custom action-col border-bnone"
+                                    className="th-custom action-col border-bnone action-container"
+                                    width="7.5%"
                                     style={{ border: 'none !important' }}
                                 >
                                     Action
@@ -399,15 +402,9 @@ function RoomCategory() {
                                                             : 'Deactive'}
                                                     </div>
                                                 </td>
-                                                <td>
-                                                    <span
-                                                        className="material-icons-outlined delete-table"
-                                                        onClick={() =>
-                                                            handleDelete(item)
-                                                        }
-                                                    >
-                                                        cancel_presentation
-                                                    </span>
+                                                <td className='table-right' style={{
+                                                    paddingRight: "25px"
+                                                }} >
                                                     <span
                                                         className="material-icons-outlined edit-table"
                                                         onClick={() =>
@@ -415,6 +412,14 @@ function RoomCategory() {
                                                         }
                                                     >
                                                         edit
+                                                    </span>
+                                                    <span
+                                                        className="material-icons-outlined delete-table"
+                                                        onClick={() =>
+                                                            handleDelete(item)
+                                                        }
+                                                    >
+                                                        cancel_presentation
                                                     </span>
                                                 </td>
                                             </tr>

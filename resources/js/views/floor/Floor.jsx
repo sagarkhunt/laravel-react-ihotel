@@ -4,11 +4,9 @@ import DataTableComponent from '../../components/common/DataTableComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import CreateEditMdl from './CreateEditMdl';
 import actions from '../../redux/Floor/actions';
-import { Descriptions } from 'antd';
 import DeleteMdl from '../../components/common/DeleteMdl';
 import toast from 'react-hot-toast';
 import Spinner from '../../components/Spinner';
-import { render } from 'react-dom';
 
 function Floor() {
     const [listingData, setListingData] = useState([]);
@@ -24,7 +22,7 @@ function Floor() {
     const [delId, setDelId] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const columnsConfig = [
-        { data: 'id', label: '#', className: 'table-left' },
+        { data: 'id', label: '#', className: 'table-left', width: '5%' },
         {
             data: null,
             title: `<span class="dt-column-title">
@@ -46,15 +44,23 @@ function Floor() {
                 <label class="custom-control-label" htmlFor="customCheckAll"></label>
             </div>
             `,
+            width: '5%',
+            className: 'table-right',
         },
         {
             data: 'name',
             label: 'Floor Name',
             className: 'th-custom', // Apply class to the column header (<th>)
             render: (data, type, row) => `<td class="td-custom">${data}</td>`, // Render the <td> element with custom class
+            width: '50%',
         },
-        { data: 'description', label: 'Description', className: 'th-custom' },
-        { data: 'created_by', label: 'Rooms' },
+        // { data: 'description', label: 'Description', className: 'th-custom' },
+        {
+            data: null,
+            label: 'Rooms',
+            render: () => '<a class="a-btn-link">10 Rooms / Add Rooms</a>',
+            width: '25%',
+        },
         {
             data: 'status',
             label: 'Status',
@@ -65,19 +71,22 @@ function Floor() {
                     return '<div class="status-deactive">Deactive</div>';
                 }
             },
+            width: '7.5%',
         },
         {
             data: null,
             label: 'Action',
             render: () =>
                 `
-            <span class="material-icons-outlined delete-table">
-                cancel_presentation
-            </span>
-            <span class="material-icons-outlined edit-table">
-                edit
-            </span>
+                <span class="material-icons-outlined edit-table">
+                    edit
+                </span>
+                <span class="material-icons-outlined delete-table">
+                    cancel_presentation
+                </span>
             `,
+            className: 'action-container',
+            width: '7.5%',
         },
     ];
     /***

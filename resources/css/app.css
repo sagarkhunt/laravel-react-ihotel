@@ -881,7 +881,7 @@ table.table tr td {
     cursor: pointer;
     color: var(--accent-color-r500);
     padding: 4px;
-    margin-right: 12px;
+    /* margin-right: 12px; */
 }
 .cancel-table {
     color: var(--accent-color-r500);
@@ -913,6 +913,14 @@ td.table-left {
 th.table-right,
 td.table-right {
     text-align: right !important;
+}
+.action-container {
+    text-align: center;
+}
+.action-container .dt-column-title {
+    display: inline-block; /* Ensures the span takes up the necessary space */
+    text-align: center; /* Centers the content */
+    width: 100%; /* Forces the span to take up the full width of its container */
 }
 .dt-paging.paging_simple_numbers {
     float: right;
@@ -1068,6 +1076,17 @@ div.dt-container .dt-paging .dt-paging-button:hover {
 
 .modal-content {
     border-radius: 0;
+}
+
+.modal-center {
+    height: calc(100vh - 4rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-center form {
+    min-width: 30rem;
 }
 
 /* -------------------Tabs Outline---------------------- */

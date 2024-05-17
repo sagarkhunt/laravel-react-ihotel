@@ -23,7 +23,7 @@ function Users() {
     const [searchQuery, setSearchQuery] = useState('');
 
     const columnsConfig = [
-        { data: 'id', label: '#', className: 'table-left' },
+        { data: 'id', label: '#', className: 'table-left', width: '5%' },
         {
             data: null,
             title: `<span class="dt-column-title">
@@ -40,13 +40,16 @@ function Users() {
                     <label class="custom-control-label"></label>
                 </div>
                 `,
+            width: '5%',
+            className: 'table-right',
         },
-        { data: 'name', label: 'Name' },
-        { data: 'email', label: 'Email' },
+        { data: 'name', label: 'Name', width: '25%' },
+        { data: 'email', label: 'Email', width: '25%' },
         {
             data: 'designation_id',
             label: 'Designation',
             className: 'table-left',
+            width: '15%',
         },
         {
             data: 'status',
@@ -58,19 +61,23 @@ function Users() {
                     return '<div class="status-deactive">Deactive</div>';
                 }
             },
+            width: '15%',
         },
+
         {
             data: null,
             label: 'Action',
             render: () =>
                 `
-            <span class="material-icons-outlined delete-table">
-                cancel_presentation
-            </span>
-            <span class="material-icons-outlined edit-table">
-                edit
-            </span>
+                <span class="material-icons-outlined edit-table">
+                    edit
+                </span>
+                <span class="material-icons-outlined delete-table">
+                    cancel_presentation
+                </span>
             `,
+            width: '10%',
+            className: 'action-container',
         },
     ];
     /***

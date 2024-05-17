@@ -28,8 +28,8 @@ function Business() {
     const [searchQuery, setSearchQuery] = useState('');
 
     const columnsConfig = [
-        { data: 'id', label: '#', className: 'table-left' },
-        { data: 'name', label: 'Business Resource Name' },
+        { data: 'id', label: '#', className: 'table-left', width: '10%' },
+        { data: 'name', label: 'Business Resource Name', width: '70%' },
         {
             data: 'status',
             label: 'Status',
@@ -44,19 +44,22 @@ function Business() {
                             </span></div>`;
                 }
             },
+            className: 'table-right',
+            width: '10%',
         },
         {
             data: null,
             label: 'Action',
-            render: () =>
-                `
-            <span class="material-icons-outlined delete-table">
-                cancel_presentation
-            </span>
-            <span class="material-icons-outlined edit-table">
-                edit
-            </span>
+            render: () => `
+                <span class="material-icons-outlined edit-table">
+                    edit
+                </span>
+                <span class="material-icons-outlined delete-table">
+                    cancel_presentation
+                </span>
             `,
+            className: "action-container",
+            width: '10%',
         },
     ];
 
