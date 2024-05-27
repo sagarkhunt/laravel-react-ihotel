@@ -11,6 +11,7 @@ import roomCateManage from './RoomCategory/apiSaga';
 import roomsSaga from './Rooms/apiSaga';
 import bookingInq from './BookingInquiry/apiSaga';
 import businessManage from './BusinessSource/apiSaga';
+import bookingManage from './BookingSource/apiSaga';
 
 // Here you can include all the saga which you write for components
 export default function* rootSaga() {
@@ -27,5 +28,6 @@ export default function* rootSaga() {
         roomsSaga(),
         bookingInq(),
         businessManage(),
+        bookingManage(),
     ]);
 }

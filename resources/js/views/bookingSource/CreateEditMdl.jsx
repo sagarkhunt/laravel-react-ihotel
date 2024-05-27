@@ -10,7 +10,8 @@ function CreateEditMdl({
     statusValue,
     setStatusValue,
 }) {
-    const [selectedValue, setSelectedValue] = useState('');
+    // const [selectedValue, setSelectedValue] = useState('');
+
     const [formData, setFormData] = useState({});
     // Define handleChange function to update form data state
     function handleChange(event) {
@@ -22,14 +23,19 @@ function CreateEditMdl({
 
     // Effect to update form data when userData prop changes
     useEffect(() => {
-        if (mode === 'Edit Room View') {
+        if (mode === 'Edit Booking Source') {
             setStatusValue(userData.status);
-            setFormData(userData); // Pre-fill form with user data for editing
+
+            // Create a new object with userData,
+            const updatedFormData = {
+                ...userData,
+            };
+            // Set formData with updatedFormData
+            setFormData(updatedFormData);
         } else {
             // Clear form data for adding new user
             setFormData({
-                room_view: '',
-                desc: '',
+                name: '',
                 status: 1,
             });
         }
@@ -44,15 +50,14 @@ function CreateEditMdl({
         <>
             <Modal open={open} handleModal={() => setOpen(!open)}>
                 <div
-                    className="modal right show"
-                    id="add_user"
+                    className="modal show"
                     tabIndex="-1"
                     aria-labelledby="exampleModalLabel"
                     style={{ display: 'block' }}
                     aria-modal="true"
                     role="dialog"
                 >
-                    <div className="modal-dialog modal-md modal-lf">
+                    <div className="modal-dialog modal-lg modal-dialog-centered">
                         <form
                             method="post"
                             id="floordata"
@@ -65,7 +70,7 @@ function CreateEditMdl({
                                 id="floor_id"
                                 value="0"
                             />
-                            <div className="modal-content modal-lf-container">
+                            <div className="modal-content">
                                 <div className="modal-header">
                                     <h5
                                         className="modal-title"
@@ -73,41 +78,44 @@ function CreateEditMdl({
                                     >
                                         {mode}
                                     </h5>
-                                    <div className="d-flex gap-2 align-items-center">
-                                        {mode === 'Edit Room View' ? (
-                                            <div
-                                                className="form-check form-switch"
-                                                id="customSwitch"
-                                            >
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    id="status"
-                                                    name="status"
-                                                    checked={statusValue}
-                                                    onChange={(e) => {
-                                                        const newValue = e
-                                                            .target.checked
-                                                            ? 1
-                                                            : 0;
-                                                        setStatusValue(
-                                                            newValue,
-                                                        );
-                                                    }}
-                                                />
-                                                <label
-                                                    className="form-check-label"
-                                                    htmlFor="status"
+                                    <div className="d-flex gap-2 align-items-right">
+                                        {mode === 'Edit Booking Source' ? (
+                                            <div className="d-flex gap-4 align-items-center">
+                                                <div
+                                                    className="form-check form-switch"
+                                                    id="customSwitch"
                                                 >
-                                                    Active
-                                                </label>
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        id="status"
+                                                        name="status"
+                                                        checked={statusValue}
+                                                        onChange={(e) => {
+                                                            const newValue = e
+                                                                .target.checked
+                                                                ? 1
+                                                                : 0;
+                                                            setStatusValue(
+                                                                newValue,
+                                                            );
+                                                        }}
+                                                    />
+                                                    <label
+                                                        className="form-check-label"
+                                                        htmlFor="status"
+                                                    >
+                                                        Active
+                                                    </label>
+                                                </div>
                                             </div>
                                         ) : (
                                             ''
                                         )}
+
                                         <button
                                             type="button"
-                                            className="btn-close"
+                                            className="btn-close mt-1"
                                             data-bs-dismiss="modal"
                                             aria-label="Close"
                                             onClick={() => setOpen(false)}
@@ -115,49 +123,26 @@ function CreateEditMdl({
                                     </div>
                                 </div>
 
-                                <div className="modal-body modal-lf-body">
+                                <div className="modal-body">
                                     <div className="row">
                                         <div className="col-12">
-                                            <div className="form-group mb-3">
+                                            <div className="form-group  mb-3">
                                                 <label
                                                     htmlFor="customInput"
                                                     className="custom-label"
                                                 >
-                                                    View Name
+                                                    Booking Source Name
                                                 </label>
                                                 <input
                                                     type="text"
                                                     className="form-control custom-input"
-                                                    id="room_view"
-                                                    name="room_view"
-                                                    placeholder="Plan Name"
-                                                    value={
-                                                        formData.room_view || ''
-                                                    }
+                                                    id="name"
+                                                    name="name"
+                                                    placeholder="Business Source Name"
+                                                    value={formData.name || ''}
                                                     onChange={handleChange}
                                                     required
                                                 />
-                                            </div>
-                                        </div>
-
-                                        <div className="col-12">
-                                            <div className="form-group mb-3">
-                                                <label
-                                                    htmlFor="customInput"
-                                                    className="custom-label"
-                                                >
-                                                    Description
-                                                </label>
-                                                <textarea
-                                                    rows="3"
-                                                    type="text"
-                                                    className="form-control custom-input"
-                                                    id="desc"
-                                                    name="desc"
-                                                    value={formData.desc || ''}
-                                                    onChange={handleChange}
-                                                    placeholder="Description"
-                                                ></textarea>
                                             </div>
                                         </div>
                                     </div>

@@ -5,7 +5,8 @@ const RoomCategory = ({ category, index, handleInputChange, dropDownData }) => {
             <td className="td-custom" style={{ width: '70%' }}>
                 <div className="input-group">
                     <select
-                        className="form-select custom-input"
+                        className="form-select custom-input dropdown123"
+                        aria-label=".form-select-sm example"
                         value={category.room_cat_id}
                         onChange={(e) =>
                             handleInputChange(
@@ -47,6 +48,7 @@ const RoomCategory = ({ category, index, handleInputChange, dropDownData }) => {
                             handleInputChange(e, index, 'no_of_rooms')
                         }
                         className="custom-input"
+                        style={{ marginBottom: '18px' }}
                     />
                     <datalist id="ice-cream-flavors" className="custom-input ">
                         <option value="1"></option>

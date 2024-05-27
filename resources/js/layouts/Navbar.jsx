@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../css/sidebar.css';
 import headerLogo from '../../../public/assets/v1/images/header_logo.png';
+import Tooltip from '../components/common/ToolTip';
 
 function Navbar() {
     const [activeLink, setActiveLink] = useState(null);
@@ -91,7 +92,7 @@ function Navbar() {
                                         aria-label="Close"
                                     ></button>
                                 </div>
-                                <div className=" offcanvas-body">
+                                <div className="offcanvas-body">
                                     <ul className="navbar-nav" id="sidebar">
                                         <li>
                                             <Link
@@ -240,6 +241,7 @@ function Navbar() {
                                                 </ul>
                                             </div>
                                         </li>
+
                                         <li>
                                             <Link
                                                 className={`nav-line cp ${activeLink === '/booking_inq' ? 'active' : ''}`}
@@ -281,7 +283,7 @@ function Navbar() {
 
                                         <li>
                                             <div
-                                                className={`nav-line cp ${activeLink === '/floor' || activeLink === '/section' || activeLink === '/amenity' || activeLink === '/rooms_category' || activeLink === '/rooms_plan' || activeLink === '/room_view' || activeLink === '/inquiry_type' ? 'active' : ''}`}
+                                                className={`nav-line cp ${activeLink === '/business_source' || activeLink === '/booking_source' || activeLink === '/floor' || activeLink === '/section' || activeLink === '/amenity' || activeLink === '/rooms_category' || activeLink === '/rooms_plan' || activeLink === '/room_view' || activeLink === '/inquiry_type' ? 'active' : ''}`}
                                             >
                                                 <svg
                                                     width="24"
@@ -289,6 +291,10 @@ function Navbar() {
                                                     height="25"
                                                     viewBox="0 0 24 25"
                                                     fill={
+                                                        activeLink ===
+                                                            '/business_source' ||
+                                                        activeLink ===
+                                                            '/booking_source' ||
                                                         activeLink ===
                                                             '/floor' ||
                                                         activeLink ===
@@ -335,6 +341,44 @@ function Navbar() {
                                             </div>
                                             <div className="submenu_box p-3 y_scrolling">
                                                 <ul className="sub-menu-list px-2  row">
+                                                    <li className="col-12 grid_padding">
+                                                        <Link
+                                                            className={`nav-sub-box cp ${activeLink === '/business_source' ? 'active' : ''}`}
+                                                            to="/business_source"
+                                                            onClick={() =>
+                                                                handleLinkClick(
+                                                                    '/business_source',
+                                                                )
+                                                            }
+                                                        >
+                                                            <span
+                                                                type="button"
+                                                                className="nav-item"
+                                                                data-bs-dismiss="offcanvas"
+                                                            >
+                                                                Bussiness Source
+                                                            </span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="col-12 grid_padding">
+                                                        <Link
+                                                            className={`nav-sub-box cp ${activeLink === '/booking_source' ? 'active' : ''}`}
+                                                            to="/booking_source"
+                                                            onClick={() =>
+                                                                handleLinkClick(
+                                                                    '/booking_source',
+                                                                )
+                                                            }
+                                                        >
+                                                            <span
+                                                                type="button"
+                                                                className="nav-item"
+                                                                data-bs-dismiss="offcanvas"
+                                                            >
+                                                                Booking Source
+                                                            </span>
+                                                        </Link>
+                                                    </li>
                                                     <li className="col-12 grid_padding">
                                                         <Link
                                                             className={`nav-sub-box cp ${activeLink === '/floor' ? 'active' : ''}`}
@@ -905,50 +949,62 @@ function Navbar() {
                         </div>
 
                         <div className="col-8 d-flex align-items-center justify-content-end pe-0">
-                            <a href="#default" className="header_icons">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
+                            <Tooltip text="Reservation">
+                                <Link
+                                    to="/reservation-list"
+                                    href="#"
+                                    className="header_icons"
                                 >
-                                    <path
-                                        d="M19 4H18V2H16V4H8V2H6V4H5C3.9 4 3 4.9 3 6V20C3 21.1 3.9 22 5 22H19C20.1 22 21 21.1 21 20V6C21 4.9 20.1 4 19 4ZM19 20H5V10H19V20ZM5 8V6H19V8H5ZM7 12H17V14H7V12ZM7 16H14V18H7V16Z"
-                                        fill="#2B363E"
-                                    />
-                                </svg>
-                            </a>
-                            <a href="#default" className="header_icons ms-3">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                    >
+                                        <path
+                                            d="M19 4H18V2H16V4H8V2H6V4H5C3.9 4 3 4.9 3 6V20C3 21.1 3.9 22 5 22H19C20.1 22 21 21.1 21 20V6C21 4.9 20.1 4 19 4ZM19 20H5V10H19V20ZM5 8V6H19V8H5ZM7 12H17V14H7V12ZM7 16H14V18H7V16Z"
+                                            fill="#2B363E"
+                                        />
+                                    </svg>
+                                </Link>
+                            </Tooltip>
+                            <Tooltip text="Add Reservation">
+                                <Link
+                                    to="/add-reservation"
+                                    href="#default"
+                                    className="header_icons ms-3"
                                 >
-                                    <path
-                                        d="M16.5 19.72H4.5V7.5H11.5V5.5H4.5C3.4 5.5 2.5 6.4 2.5 7.5V19.5C2.5 20.6 3.4 21.5 4.5 21.5H16.5C17.6 21.5 18.5 20.6 18.5 19.5V12.5H16.5V19.72Z"
-                                        fill="#0863B5"
-                                    />
-                                    <path
-                                        d="M18.5 2.5H16.5V5.5H13.5C13.51 5.51 13.5 7.5 13.5 7.5H16.5V10.49C16.51 10.5 18.5 10.49 18.5 10.49V7.5H21.5V5.5H18.5V2.5Z"
-                                        fill="#0863B5"
-                                    />
-                                    <path
-                                        d="M14.5 9.5H6.5V11.5H14.5V9.5Z"
-                                        fill="#0863B5"
-                                    />
-                                    <path
-                                        d="M6.5 12.5V14.5H14.5V12.5H6.5Z"
-                                        fill="#0863B5"
-                                    />
-                                    <path
-                                        d="M14.5 15.5H6.5V17.5H14.5V15.5Z"
-                                        fill="#0863B5"
-                                    />
-                                </svg>
-                            </a>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                    >
+                                        <path
+                                            d="M16.5 19.72H4.5V7.5H11.5V5.5H4.5C3.4 5.5 2.5 6.4 2.5 7.5V19.5C2.5 20.6 3.4 21.5 4.5 21.5H16.5C17.6 21.5 18.5 20.6 18.5 19.5V12.5H16.5V19.72Z"
+                                            fill="#0863B5"
+                                        />
+                                        <path
+                                            d="M18.5 2.5H16.5V5.5H13.5C13.51 5.51 13.5 7.5 13.5 7.5H16.5V10.49C16.51 10.5 18.5 10.49 18.5 10.49V7.5H21.5V5.5H18.5V2.5Z"
+                                            fill="#0863B5"
+                                        />
+                                        <path
+                                            d="M14.5 9.5H6.5V11.5H14.5V9.5Z"
+                                            fill="#0863B5"
+                                        />
+                                        <path
+                                            d="M6.5 12.5V14.5H14.5V12.5H6.5Z"
+                                            fill="#0863B5"
+                                        />
+                                        <path
+                                            d="M14.5 15.5H6.5V17.5H14.5V15.5Z"
+                                            fill="#0863B5"
+                                        />
+                                    </svg>
+                                </Link>
+                            </Tooltip>
                             <div className="dropdown ms-4">
                                 <button
                                     className="btn  header-drop-custom   dropdown-toggle"
@@ -992,10 +1048,19 @@ function Navbar() {
                                             Another action
                                         </a>
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         <a className="dropdown-item" href="#">
                                             Something else here
                                         </a>
+                                    </li> */}
+
+                                    <li>
+                                        <Link
+                                            to="/hotel_profile"
+                                            className="dropdown-item"
+                                        >
+                                            Profile
+                                        </Link>
                                     </li>
 
                                     <li>

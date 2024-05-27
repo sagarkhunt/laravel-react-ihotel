@@ -89,11 +89,11 @@ function CreateEditMdl({
                                     >
                                         {mode}
                                     </h5>
-                                    <div className="d-flex gap-4 align-items-right col-auto">
+                                    <div className="d-flex gap-2 align-items-right col-auto">
                                         {mode === 'Edit Amenity' ? (
                                             <div className="d-flex gap-4 align-items-center">
                                                 <div
-                                                    className="form-check form-switch"
+                                                    className="form-check form-switch mt-1"
                                                     id="customSwitch"
                                                 >
                                                     <input
@@ -126,7 +126,7 @@ function CreateEditMdl({
 
                                         <button
                                             type="button"
-                                            className="btn-close "
+                                            className="btn-close mt-1"
                                             data-bs-dismiss="modal"
                                             aria-label="Close"
                                             onClick={() => setOpen(false)}
@@ -219,7 +219,7 @@ function CreateEditMdl({
                                                         >
                                                             <i className="material-icons">
                                                                 person
-                                                            </i>{' '}
+                                                            </i>
                                                             Profile
                                                         </a>
                                                     </li>

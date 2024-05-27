@@ -17,6 +17,10 @@ import Rooms from '../views/rooms/Rooms.jsx';
 import BookingInq from '../views/bookingInq/BooingInq.jsx';
 import Business from '../views/businessSource/Business.jsx';
 import { useEffect, useState } from 'react';
+import AddReservation from '../views/reservation/AddReservation.jsx';
+import ReservationList from '../views/reservation/ReservationList.jsx';
+import HotelProfile from '../views/Profile/HotelProfile.jsx';
+import Booking from '../views/bookingSource/Booking.jsx';
 
 // Define a function to check if the user is authenticated
 const isAuthenticated = () => {
@@ -86,6 +90,16 @@ const router = createBrowserRouter([
                 element: <ProtectedRouteWrapper element={<RoomView />} />,
             },
             {
+                path: '/add-reservation',
+                element: <ProtectedRouteWrapper element={<AddReservation />} />,
+            },
+            {
+                path: '/reservation-list',
+                element: (
+                    <ProtectedRouteWrapper element={<ReservationList />} />
+                ),
+            },
+            {
                 path: '/booking_inq',
                 element: <ProtectedRouteWrapper element={<BookingInq />} />,
             },
@@ -96,6 +110,14 @@ const router = createBrowserRouter([
             {
                 path: '/business_source',
                 element: <ProtectedRouteWrapper element={<Business />} />,
+            },
+            {
+                path: '/booking_source',
+                element: <ProtectedRouteWrapper element={<Booking />} />,
+            },
+            {
+                path: '/hotel_profile',
+                element: <ProtectedRouteWrapper element={<HotelProfile />} />,
             },
         ],
     },

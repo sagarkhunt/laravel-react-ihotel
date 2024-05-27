@@ -4,17 +4,18 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Helpers\Helper;
 use App\Http\Controllers\Api\BaseApiController;
-use App\Models\BusinessSource;
+use App\Http\Controllers\Controller;
+use App\Models\BookingSource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
-class HotelBusinessSourceController extends BaseApiController
+class HotelBookingSourceController extends BaseApiController
 {
-    /*****************************************Inq Typq Master*******************************************/
+    /*****************************************Booking Source Master*******************************************/
     # Get Floor Details
-    public function getBusSou()
+    public function getBooSou()
     {
         try {
             $user = Auth::user();
@@ -23,7 +24,7 @@ class HotelBusinessSourceController extends BaseApiController
             Helper::change_database_using_hotel_id($hotel_id);
             $data = array();
 
-            $getBookingList = BusinessSource::where('hotel_id', $hotel_id)->get();
+            $getBookingList = BookingSource::where('hotel_id', $hotel_id)->get();
 
             return $this->sendResponse($getBookingList, '');
         } catch (\Exception $e) {
@@ -32,7 +33,7 @@ class HotelBusinessSourceController extends BaseApiController
         }
     }
     # Cerate Floor
-    public function createBusSou(Request $request)
+    public function createBooSou(Request $request)
     {
         //  dd($request->all());
         $rule = [
@@ -52,23 +53,23 @@ class HotelBusinessSourceController extends BaseApiController
             $duplicate = 0;
             $msg1 = "";
 
-            $chkFloorName = BusinessSource::where('name', $request["name"])->where('hotel_id', $hotel_id)->count();
+            $chkFloorName = BookingSource::where('name', $request["name"])->where('hotel_id', $hotel_id)->count();
             if ($chkFloorName > 0) {
                 $duplicate = 1;
-                $msg1 = " Business Name";
+                $msg1 = " Booking Name";
             }
             $msg4 = $msg1;
             if ($duplicate != 0) {
                 return $this->sendResponse('fail', "The Inquiry type with same " . $msg4 . " Already Exists");
             } else {
-                $createInq = BusinessSource::insertGetId([
+                $createInq = BookingSource::insertGetId([
                     'hotel_id' => $hotel_id,
                     'name' => $request["name"],
                     'status' => 1,
                     'created_by' => $auth_user_id,
                     'created_at' => date('Y-m-d H:i:s')
                 ]);
-                return $this->sendResponse($createInq, 'Business Source added successfully');
+                return $this->sendResponse($createInq, 'Booking Source added successfully');
             }
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
@@ -76,7 +77,7 @@ class HotelBusinessSourceController extends BaseApiController
         }
     }
 
-    public function updateBusSou(Request $request)
+    public function updateBooSou(Request $request)
     {
 
         $user = Auth::user();
@@ -84,10 +85,10 @@ class HotelBusinessSourceController extends BaseApiController
         $hotel_id = $user->hotel_id;
         Helper::change_database_using_hotel_id($hotel_id);
         try {
-            if ((isset($request["bus_sou_id"]) && $request["bus_sou_id"] != "" && $request["bus_sou_id"] != null)) {
-                $bus_sou_id = $request["bus_sou_id"];
+            if ((isset($request["booking_sou_id"]) && $request["booking_sou_id"] != "" && $request["booking_sou_id"] != null)) {
+                $booking_sou_id = $request["booking_sou_id"];
 
-                $chkBusDel = BusinessSource::where('hotel_id', $hotel_id)->where('id', $bus_sou_id)->first();
+                $chkBusDel = BookingSource::where('hotel_id', $hotel_id)->where('id', $booking_sou_id)->first();
                 if (empty($chkBusDel)) {
                     return $this->sendResponse('fail', "The business source id is wrong");
                 } else {
@@ -98,7 +99,7 @@ class HotelBusinessSourceController extends BaseApiController
 
                     $chkBusDel->update();
 
-                    return $this->sendResponse($chkBusDel, 'Business Source updated successfully.');
+                    return $this->sendResponse($chkBusDel, 'Booking Source updated successfully.');
                 }
                 // }
             } else {
@@ -111,7 +112,7 @@ class HotelBusinessSourceController extends BaseApiController
         }
     }
     #Delete Inq Type
-    public function deleteBusSou(Request $request)
+    public function deleteBooSou(Request $request)
     {
         $user = Auth::user();
         $user_id = $user->id;
@@ -119,11 +120,11 @@ class HotelBusinessSourceController extends BaseApiController
         Helper::change_database_using_hotel_id($hotel_id);
 
         try {
-            if (isset($request["bus_sou_id"]) && $request["bus_sou_id"] != "" && $request["bus_sou_id"] != null) {
+            if (isset($request["booking_sou_id"]) && $request["booking_sou_id"] != "" && $request["booking_sou_id"] != null) {
 
                 // $deleteTable = RoomViewMaster::find($request["inq_id"])->delete();
-                $deleteBusDel = BusinessSource::whereIn('id', is_array($request['bus_sou_id']) ? $request['bus_sou_id'] : [$request['bus_sou_id']])->delete();
-                return $this->sendResponse($deleteBusDel, 'Business Source deleted successfully');
+                $deleteBusDel = BookingSource::whereIn('id', is_array($request['booking_sou_id']) ? $request['booking_sou_id'] : [$request['booking_sou_id']])->delete();
+                return $this->sendResponse($deleteBusDel, 'Booking Source deleted successfully');
             } else {
                 return $this->sendResponse('fail', 'Required Parameters missing');
             }
