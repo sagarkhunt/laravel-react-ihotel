@@ -111,4 +111,15 @@ Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' =
     Route::any('create_reservation', 'HotelReservationController@createReservation');
     Route::any('update_reservation', 'HotelReservationController@updateReservation');
     Route::any('delete_reservation', 'HotelReservationController@deleteReservation');
+    #Terms & Condition
+    Route::POST('get_tnc', 'HotelTncCnpController@getTnc');
+    Route::POST('cr_tnc', 'HotelTncCnpController@createTnc');
+    Route::POST('upd_tnc', 'HotelTncCnpController@updateTnc');
+    Route::POST('del_tnc', 'HotelTncCnpController@deleteTnc');
+
+    #Cancellation Policy
+    Route::POST('get_cp', 'HotelTncCnpController@getCp');
+    Route::POST('cr_cp', 'HotelTncCnpController@createCp');
+    Route::POST('upd_cp', 'HotelTncCnpController@updateCp');
+    Route::POST('del_cp', 'HotelTncCnpController@deleteCp');
 });

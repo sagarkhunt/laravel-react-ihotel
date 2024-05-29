@@ -596,7 +596,7 @@
 .custom-input {
     font-family: var(--main-font) !important;
     color: var(--secondary-color700);
-    /* border: 2px solid #a6b6c4; */
+    border: 1px solid #a6b6c4;
     border-radius: 6px;
     padding: 10px;
     transition: border-color 0.3s ease;
@@ -1506,4 +1506,23 @@ body {
     font-size: 14px;
     color: #666;
     margin-top: 10px;
+}
+/* cancell policy css */
+.lists {
+    width: 100%;
+    /* overflow-y: scroll; */
+    margin: 0;
+    padding-left: 0 !important;
+}
+
+.lists li {
+    width: 100%;
+    list-style-type: none;
+    padding: 15px;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.selected_policy {
+    background-color: var(--primary-color100);
+    border-right: 5px solid var(--primary-color);
 }

@@ -66,7 +66,7 @@
 }
 
 .btn {
-    display: flex;
+    /* display: flex; */
     align-items: center;
 }
 
@@ -166,12 +166,6 @@
     height: 50px;
     width: 170px;
 }
-/* .dropdown-icon {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-} */
 .modal-dropdown {
     border: none;
     border-bottom: 1px solid #c4cfd7;
@@ -241,29 +235,6 @@
 .darkred {
     font-weight: 500 !important;
     color: #e3001f !important;
-}
-.rounded-circle {
-    border-radius: 50%;
-    width: 25px; /* Adjust the width and height as needed */
-    height: 25px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid white; /* Set border thickness and color */
-    margin-left: 3px;
-    font-size: small;
-}
-.rounded-circle2 {
-    border-radius: 50%;
-    width: 25px; /* Adjust the width and height as needed */
-    height: 25px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #a6cdef; /* Set border thickness and color */
-    margin-left: 3px;
-    font-size: small;
-    color: #0863b5;
 }
 
 .material-icons-outlined {

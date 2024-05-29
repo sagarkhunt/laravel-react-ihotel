@@ -21,6 +21,8 @@ import AddReservation from '../views/reservation/AddReservation.jsx';
 import ReservationList from '../views/reservation/ReservationList.jsx';
 import HotelProfile from '../views/Profile/HotelProfile.jsx';
 import Booking from '../views/bookingSource/Booking.jsx';
+import CPList from '../views/CancellPolicy/CPList.jsx';
+import TncList from '../views/TNC/TncList.jsx';
 
 // Define a function to check if the user is authenticated
 const isAuthenticated = () => {
@@ -118,6 +120,14 @@ const router = createBrowserRouter([
             {
                 path: '/hotel_profile',
                 element: <ProtectedRouteWrapper element={<HotelProfile />} />,
+            },
+            {
+                path: '/cancell_policy',
+                element: <ProtectedRouteWrapper element={<CPList />} />,
+            },
+            {
+                path: '/tnc',
+                element: <ProtectedRouteWrapper element={<TncList />} />,
             },
         ],
     },

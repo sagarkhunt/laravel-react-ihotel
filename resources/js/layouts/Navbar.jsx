@@ -283,7 +283,7 @@ function Navbar() {
 
                                         <li>
                                             <div
-                                                className={`nav-line cp ${activeLink === '/business_source' || activeLink === '/booking_source' || activeLink === '/floor' || activeLink === '/section' || activeLink === '/amenity' || activeLink === '/rooms_category' || activeLink === '/rooms_plan' || activeLink === '/room_view' || activeLink === '/inquiry_type' ? 'active' : ''}`}
+                                                className={`nav-line cp ${activeLink === '/tnc' || activeLink === '/cancell_policy' || activeLink === '/business_source' || activeLink === '/booking_source' || activeLink === '/floor' || activeLink === '/section' || activeLink === '/amenity' || activeLink === '/rooms_category' || activeLink === '/rooms_plan' || activeLink === '/room_view' || activeLink === '/inquiry_type' ? 'active' : ''}`}
                                             >
                                                 <svg
                                                     width="24"
@@ -291,6 +291,9 @@ function Navbar() {
                                                     height="25"
                                                     viewBox="0 0 24 25"
                                                     fill={
+                                                        activeLink === '/tnc' ||
+                                                        activeLink ===
+                                                            '/cancell_policy' ||
                                                         activeLink ===
                                                             '/business_source' ||
                                                         activeLink ===
@@ -341,6 +344,44 @@ function Navbar() {
                                             </div>
                                             <div className="submenu_box p-3 y_scrolling">
                                                 <ul className="sub-menu-list px-2  row">
+                                                    <li className="col-12 grid_padding">
+                                                        <Link
+                                                            className={`nav-sub-box cp ${activeLink === '/cancell_policy' ? 'active' : ''}`}
+                                                            to="/cancell_policy"
+                                                            onClick={() =>
+                                                                handleLinkClick(
+                                                                    '/cancell_policy',
+                                                                )
+                                                            }
+                                                        >
+                                                            <span
+                                                                type="button"
+                                                                className="nav-item"
+                                                                data-bs-dismiss="offcanvas"
+                                                            >
+                                                                Cancell Policy
+                                                            </span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="col-12 grid_padding">
+                                                        <Link
+                                                            className={`nav-sub-box cp ${activeLink === '/tnc' ? 'active' : ''}`}
+                                                            to="/tnc"
+                                                            onClick={() =>
+                                                                handleLinkClick(
+                                                                    '/tnc',
+                                                                )
+                                                            }
+                                                        >
+                                                            <span
+                                                                type="button"
+                                                                className="nav-item"
+                                                                data-bs-dismiss="offcanvas"
+                                                            >
+                                                                Terms & Conition
+                                                            </span>
+                                                        </Link>
+                                                    </li>
                                                     <li className="col-12 grid_padding">
                                                         <Link
                                                             className={`nav-sub-box cp ${activeLink === '/business_source' ? 'active' : ''}`}
