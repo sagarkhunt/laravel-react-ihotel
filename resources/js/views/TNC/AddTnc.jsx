@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import actions from '../../redux/TermConition/actions';
 import { useDispatch } from 'react-redux';
-function AddTnc({ setTncPolicyHide }) {
+function AddTnc({ setTncPolicyHide, setShowTncPolicy }) {
     const [inputs, setInputs] = useState([{ value: '' }]);
     const dispatch = useDispatch();
     const handleInputChange = (index, event) => {
@@ -31,22 +31,23 @@ function AddTnc({ setTncPolicyHide }) {
             payload: formData,
         });
         setTncPolicyHide(false);
+        setShowTncPolicy('');
     };
     return (
         <div
-            className="container-page"
-            style={{ minHeight: 'calc(100vh - 88px)' }}
+            className="container-page policy-container-size"
+            // style={{ minHeight: 'calc(100vh - 88px)' }}
         >
             <div className="modal-header p-3">
                 <h6 className="headline-h6m mb-0">Add Terms & Conditions</h6>
             </div>
             <form onSubmit={handleSubmit}>
                 <div
-                    className="modal-body"
-                    style={{
-                        height: 'calc(100vh - 220px)',
-                        overflowY: 'scroll',
-                    }}
+                    className="modal-body policy-container-body"
+                    // style={{
+                    //     height: 'calc(100vh - 220px)',
+                    //     overflowY: 'scroll',
+                    // }}
                 >
                     <div className="row mb-3">
                         <div className="col-5 d-flex flex-column">
@@ -69,8 +70,8 @@ function AddTnc({ setTncPolicyHide }) {
                         <div className="col-12 d-flex flex-column">
                             <label
                                 htmlFor="cancellation-policy"
-                                className="body-2 py-3"
-                                style={{ color: '#0863b5', fontWeight: '600' }}
+                                className="body-2 py-3 f-weight-600"
+                                // style={{ color: '#0863b5', fontWeight: '600' }}
                             >
                                 TERMS & CONDITIONS
                             </label>

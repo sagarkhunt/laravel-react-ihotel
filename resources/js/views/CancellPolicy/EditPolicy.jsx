@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import actions from '../../redux/CancellPolicy/actions';
 import { useDispatch } from 'react-redux';
 
-function EditPolicy({ setPolicyHide, cpName, cpDetails, cpId }) {
+function EditPolicy({ setPolicyHide, cpName, cpDetails, cpId, setShowPolicy }) {
     const dispatch = useDispatch();
     const [showEditForm, setShowEditForm] = useState(false);
     const [showList, setShowList] = useState(false);
@@ -58,28 +58,32 @@ function EditPolicy({ setPolicyHide, cpName, cpDetails, cpId }) {
         setPolicyHide(false);
         setShowList(false);
         setShowEditForm(false);
+        setShowPolicy('');
     };
     return (
         <div>
             {/* <!-- View Policy  --> */}
             {showList && (
                 <div
-                    className="container-page"
-                    style={{
-                        minHeight: 'calc(100vh - 88px)',
-                        overflowY: 'scroll',
-                    }}
+                    className="container-page policy-container-size"
+                    // style={{
+                    //     minHeight: 'calc(100vh - 88px)',
+                    //     overflowY: 'scroll',
+                    // }}
                 >
                     <div className="modal-header p-3">
                         <h6 className="headline-h6m mb-0">{cpName}</h6>
                     </div>
                     <div
-                        className="modal-body"
-                        style={{
-                            height: 'calc(100vh - 120px)',
-                        }}
+                        className="modal-body policy-container-body"
+                        // style={{
+                        //     height: 'calc(100vh - 120px)',
+                        // }}
                     >
-                        <ul className="w-100" style={{ padding: '0 1rem' }}>
+                        <ul
+                            className="w-100 policy-ul"
+                            // style={{ padding: '0 1rem' }}
+                        >
                             {cpDetails.length > 0 ? (
                                 cpDetails?.map((item, index) => (
                                     <li
@@ -111,8 +115,8 @@ function EditPolicy({ setPolicyHide, cpName, cpDetails, cpId }) {
             {/* <!-- Edit More Policy  --> */}
             {showEditForm && (
                 <div
-                    className="container-page"
-                    style={{ minHeight: 'calc(100vh - 88px)' }}
+                    className="container-page policy-container-size"
+                    // style={{ minHeight: 'calc(100vh - 88px)' }}
                 >
                     <div className="modal-header p-3">
                         <h6 className="headline-h6m mb-0">
@@ -121,11 +125,11 @@ function EditPolicy({ setPolicyHide, cpName, cpDetails, cpId }) {
                     </div>
                     <form onSubmit={handleSubmit}>
                         <div
-                            className="modal-body"
-                            style={{
-                                height: 'calc(100vh - 220px)',
-                                overflowY: 'scroll',
-                            }}
+                            className="modal-body policy-container-body"
+                            // style={{
+                            //     height: 'calc(100vh - 220px)',
+                            //     overflowY: 'scroll',
+                            // }}
                         >
                             <div className="row mb-3">
                                 <div className="col-5 d-flex flex-column">

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import actions from '../../redux/CancellPolicy/actions';
 import { useDispatch } from 'react-redux';
-function AddPolicy({ setPolicyHide }) {
+function AddPolicy({ setPolicyHide, setShowPolicy }) {
     const [inputs, setInputs] = useState([{ value: '' }]);
     const dispatch = useDispatch();
     const handleInputChange = (index, event) => {
@@ -32,22 +32,23 @@ function AddPolicy({ setPolicyHide }) {
             payload: formData,
         });
         setPolicyHide(false);
+        setShowPolicy('');
     };
     return (
         <div
-            className="container-page"
-            style={{ minHeight: 'calc(100vh - 88px)' }}
+            className="container-page policy-container-size"
+            // style={{ minHeight: 'calc(100vh - 88px)' }}
         >
             <div className="modal-header p-3">
                 <h6 className="headline-h6m mb-0">Add Cancellation Policy</h6>
             </div>
             <form onSubmit={handleSubmit}>
                 <div
-                    className="modal-body"
-                    style={{
-                        height: 'calc(100vh - 220px)',
-                        overflowX: 'scroll',
-                    }}
+                    className="modal-body policy-container-body"
+                    // style={{
+                    //     height: 'calc(100vh - 220px)',
+                    //     overflowX: 'scroll',
+                    // }}
                 >
                     <div className="row mb-3">
                         <div className="col-5 d-flex flex-column">

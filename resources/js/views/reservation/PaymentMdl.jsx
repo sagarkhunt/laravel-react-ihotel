@@ -5,45 +5,45 @@ function PaymentMdl({ open, setOpen }) {
     return (
         <Modal open={open} handleModal={() => setOpen(!open)}>
             <div
-                class="modal right fade show"
+                className="modal right fade show"
                 id="add_creditCard"
                 tabIndex="-1"
                 aria-labelledby="exampleModalLabel"
                 aria-hidden="true"
                 style={{ display: 'block' }}
             >
-                <div class="modal-dialog modal-md modal-lf">
-                    <div class="modal-content modal-lf-container">
-                        <div class="modal-header">
+                <div className="modal-dialog modal-md modal-lf">
+                    <div className="modal-content modal-lf-container">
+                        <div className="modal-header">
                             <h5
-                                class="modal-title headline-h6m"
+                                className="modal-title headline-h6m"
                                 id="exampleModalLabel"
                             >
                                 Add Payment
                             </h5>
-                            <div class="d-flex gap-4 align-items-center">
+                            <div className="d-flex gap-4 align-items-center">
                                 <button
                                     type="button"
-                                    class="btn-close"
+                                    className="btn-close"
                                     data-bs-dismiss="modal"
                                     aria-label="Close"
                                     onClick={() => setOpen(false)}
                                 ></button>
                             </div>
                         </div>
-                        <ul class="nav tab-nav nav-pills" role="tablist">
-                            <li class="nav-item">
+                        <ul className="nav tab-nav nav-pills" role="tablist">
+                            <li className="nav-item">
                                 <a
-                                    class="nav-link nav-link-custom active"
+                                    className="nav-link nav-link-custom active"
                                     data-bs-toggle="pill"
                                     href="#addCredit"
                                 >
                                     Add Credit Card
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <li className="nav-item">
                                 <a
-                                    class="nav-link nav-link-custom"
+                                    className="nav-link nav-link-custom"
                                     data-bs-toggle="pill"
                                     href="#addPayment"
                                 >
@@ -52,58 +52,58 @@ function PaymentMdl({ open, setOpen }) {
                             </li>
                         </ul>
                         <div
-                            class="modal-body modal-lft-body"
+                            className="modal-body modal-lft-body"
                             style={{ minWidth: '500px' }}
                         >
-                            <div class="tab-content">
+                            <div className="tab-content">
                                 <div
                                     id="addCredit"
-                                    class="container px-0 tab-pane active"
+                                    className="container px-0 tab-pane active"
                                 >
                                     <form>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group mb-3">
+                                        <div className="row">
+                                            <div className="col-12">
+                                                <div className="form-group mb-3">
                                                     <label
                                                         for="customInput"
-                                                        class="custom-label"
+                                                        className="custom-label"
                                                     >
                                                         Card Number*
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        class="form-control custom-input"
+                                                        className="form-control custom-input"
                                                         id="customInput"
                                                         placeholder="Name"
                                                     />
                                                 </div>
                                             </div>
-                                            <div class="col-12">
-                                                <div class="form-group mb-3">
+                                            <div className="col-12">
+                                                <div className="form-group mb-3">
                                                     <label
                                                         for="customInput"
-                                                        class="custom-label"
+                                                        className="custom-label"
                                                     >
                                                         Card Holder Name*
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        class="form-control custom-input"
+                                                        className="form-control custom-input"
                                                         id="customInput"
                                                         placeholder="Name"
                                                     />
                                                 </div>
                                             </div>
-                                            <div class="col-4">
-                                                <div class="form-group mb-3">
+                                            <div className="col-4">
+                                                <div className="form-group mb-3">
                                                     <label
                                                         for="customInput"
-                                                        class="custom-label"
+                                                        className="custom-label"
                                                     >
                                                         Expiry Date*
                                                     </label>
                                                     <select
-                                                        class="form-select custom-input"
+                                                        className="form-select custom-input"
                                                         aria-label=".form-select-sm example"
                                                     >
                                                         <option selected>
@@ -121,16 +121,16 @@ function PaymentMdl({ open, setOpen }) {
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-4">
-                                                <div class="form-group mb-3">
+                                            <div className="col-4">
+                                                <div className="form-group mb-3">
                                                     <label
                                                         for="customInput"
-                                                        class="custom-label"
+                                                        className="custom-label"
                                                     >
                                                         {' '}
                                                     </label>
                                                     <select
-                                                        class="form-select custom-input"
+                                                        className="form-select custom-input"
                                                         aria-label=".form-select-sm example"
                                                     >
                                                         <option selected>
@@ -148,33 +148,33 @@ function PaymentMdl({ open, setOpen }) {
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-4">
-                                                <div class="form-group mb-3">
+                                            <div className="col-4">
+                                                <div className="form-group mb-3">
                                                     <label
                                                         for="customInput"
-                                                        class="custom-label"
+                                                        className="custom-label"
                                                     >
                                                         CVV*
                                                     </label>
                                                     <input
                                                         type="number"
                                                         maxlength="6"
-                                                        class="form-control custom-input"
+                                                        className="form-control custom-input"
                                                         id="customInput"
                                                         placeholder="CVV"
                                                     />
                                                 </div>
                                             </div>
-                                            <div class="col-12">
-                                                <div class="form-group mb-3">
+                                            <div className="col-12">
+                                                <div className="form-group mb-3">
                                                     <label
                                                         for="customInput"
-                                                        class="custom-label"
+                                                        className="custom-label"
                                                     >
                                                         Format
                                                     </label>
                                                     <select
-                                                        class="form-select custom-input"
+                                                        className="form-select custom-input"
                                                         aria-label=".form-select-sm example"
                                                     >
                                                         <option selected>
@@ -197,20 +197,20 @@ function PaymentMdl({ open, setOpen }) {
                                 </div>
                                 <div
                                     id="addPayment"
-                                    class="container tab-pane fade"
+                                    className="container tab-pane fade"
                                 >
                                     <form>
-                                        <div class="row">
-                                            <div class="col-12 px-0">
-                                                <div class="form-group mb-3">
+                                        <div className="row">
+                                            <div className="col-12 px-0">
+                                                <div className="form-group mb-3">
                                                     <label
                                                         for="customInput"
-                                                        class="custom-label"
+                                                        className="custom-label"
                                                     >
                                                         Payment Type
                                                     </label>
                                                     <select
-                                                        class="form-select custom-input"
+                                                        className="form-select custom-input"
                                                         aria-label=".form-select-sm example"
                                                     >
                                                         <option selected>
@@ -228,33 +228,33 @@ function PaymentMdl({ open, setOpen }) {
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-12 px-0">
-                                                <div class="form-group mb-3">
+                                            <div className="col-12 px-0">
+                                                <div className="form-group mb-3">
                                                     <label
                                                         for="customInput"
-                                                        class="custom-label"
+                                                        className="custom-label"
                                                     >
                                                         REC/Vou#
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        class="form-control custom-input"
+                                                        className="form-control custom-input"
                                                         id="customInput"
                                                         placeholder="Card Holder Name"
                                                     />
                                                 </div>
                                             </div>
-                                            <div class="col-7 px-0">
-                                                <div class="form-group mb-3">
+                                            <div className="col-7 px-0">
+                                                <div className="form-group mb-3">
                                                     <label
                                                         for="customInput"
-                                                        class="custom-label"
+                                                        className="custom-label"
                                                     >
                                                         Rate
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        class="form-control custom-input"
+                                                        className="form-control custom-input"
                                                         id="customInput"
                                                         placeholder="12000"
                                                     />
@@ -265,16 +265,16 @@ function PaymentMdl({ open, setOpen }) {
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
+                        <div className="modal-footer">
                             <button
                                 type="button"
-                                class="btn btn-outline"
+                                className="btn btn-outline"
                                 data-bs-dismiss="modal"
                                 onClick={() => setOpen(false)}
                             >
                                 Close
                             </button>
-                            <button type="button" class="btn btn-primary">
+                            <button type="button" className="btn btn-primary">
                                 Add Payment
                             </button>
                         </div>

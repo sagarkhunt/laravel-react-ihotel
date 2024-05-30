@@ -5,10 +5,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../../css/sidebar.css';
 import headerLogo from '../../../public/assets/v1/images/header_logo.png';
 import Tooltip from '../components/common/ToolTip';
+import AvailableInqMdl from '../views/reservation/AvailableInqMdl';
 
 function Navbar() {
     const [activeLink, setActiveLink] = useState(null);
-
+    const [showAvaInq, setShowAvaInq] = useState(false);
     const handleLinkClick = (link) => {
         setActiveLink(link);
     };
@@ -42,7 +43,9 @@ function Navbar() {
     const { isAuthenticated, loader, logOutLoader } = useSelector(
         (state) => state.authenticateReducer,
     );
-
+    function showAvaibleInquiry() {
+        setShowAvaInq(true);
+    }
     useEffect(() => {
         // if (!isAuthenticated) {
         //     navigate('/login');
@@ -343,7 +346,7 @@ function Navbar() {
                                                 </span>
                                             </div>
                                             <div className="submenu_box p-3 y_scrolling">
-                                                <ul className="sub-menu-list px-2  row">
+                                                <ul className="sub-menu-list px-2  row sidebar-masters-submenu mb-2">
                                                     <li className="col-12 grid_padding">
                                                         <Link
                                                             className={`nav-sub-box cp ${activeLink === '/cancell_policy' ? 'active' : ''}`}
@@ -1046,6 +1049,42 @@ function Navbar() {
                                     </svg>
                                 </Link>
                             </Tooltip>
+                            <Tooltip text="Avilability Inquiry">
+                                <button
+                                    className="header_icons ms-3"
+                                    onClick={showAvaibleInquiry}
+                                >
+                                    <svg
+                                        className="availability-icon"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                    >
+                                        <path
+                                            d="M16.5 19.72H4.5V7.5H11.5V5.5H4.5C3.4 5.5 2.5 6.4 2.5 7.5V19.5C2.5 20.6 3.4 21.5 4.5 21.5H16.5C17.6 21.5 18.5 20.6 18.5 19.5V12.5H16.5V19.72Z"
+                                            fill="#0863B5"
+                                        />
+                                        <path
+                                            d="M18.5 2.5H16.5V5.5H13.5C13.51 5.51 13.5 7.5 13.5 7.5H16.5V10.49C16.51 10.5 18.5 10.49 18.5 10.49V7.5H21.5V5.5H18.5V2.5Z"
+                                            fill="#0863B5"
+                                        />
+                                        <path
+                                            d="M14.5 9.5H6.5V11.5H14.5V9.5Z"
+                                            fill="#0863B5"
+                                        />
+                                        <path
+                                            d="M6.5 12.5V14.5H14.5V12.5H6.5Z"
+                                            fill="#0863B5"
+                                        />
+                                        <path
+                                            d="M14.5 15.5H6.5V17.5H14.5V15.5Z"
+                                            fill="#0863B5"
+                                        />
+                                    </svg>
+                                </button>
+                            </Tooltip>
                             <div className="dropdown ms-4">
                                 <button
                                     className="btn  header-drop-custom   dropdown-toggle"
@@ -1118,6 +1157,12 @@ function Navbar() {
                         </div>
                     </div>
                 </div>
+                {showAvaInq && (
+                    <AvailableInqMdl
+                        showAvaInq={showAvaInq}
+                        setShowAvaInq={setShowAvaInq}
+                    />
+                )}
             </nav>
         </>
     );

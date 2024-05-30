@@ -60,12 +60,12 @@ function CPList() {
         <>
             <div className="container-fluid d-flex justify-content-between">
                 <div
-                    className="container-page p-3"
-                    style={{
-                        width: '30%',
-                        maxWidth: '380px',
-                        minHeight: 'calc(100vh - 88px)',
-                    }}
+                    className="container-page p-3 policy-sidebar"
+                    // style={{
+                    //     width: '30%',
+                    //     maxWidth: '380px',
+                    //     minHeight: 'calc(100vh - 88px)',
+                    // }}
                 >
                     <div className="row">
                         <h6 className="headline-h6m mb-0">
@@ -74,8 +74,8 @@ function CPList() {
 
                         <div className="col-12 d-flex justify-content-between gap-3 my-4">
                             <div
-                                className="custom-input d-flex align-items-center py-0 w-100 gap-2"
-                                style={{ height: '40px' }}
+                                className="custom-input d-flex align-items-center py-0 w-100 gap-2 height-40"
+                                // style={{ height: '40px' }}
                             >
                                 <svg
                                     width="24"
@@ -99,7 +99,7 @@ function CPList() {
                                     onChange={handleSearch}
                                 />
                             </div>
-                            <div style={{ width: '100px' }}>
+                            <div className="width-100">
                                 <button
                                     type="button"
                                     className="btn btn-primary d-flex align-items-center gap-2"
@@ -154,20 +154,20 @@ function CPList() {
                     </div>
                 </div>
 
-                <div style={{ width: 'max(calc(98vw - 410px), 66%)' }}>
+                <div className="policy-main-container">
                     {/* <!-- if no cancellation policy selected then this will appear --> */}
                     {!policyHide && (
                         <div
-                            className="p-3 d-flex align-items-center justify-content-center"
-                            style={{ minHeight: 'calc(100vh - 88px)' }}
+                            className="p-3 d-flex align-items-center justify-content-center policy-container-size"
+                            // style={{ minHeight: 'calc(100vh - 88px)' }}
                         >
                             <div
-                                className="d-flex flex-column gap-4 justify-content-center align-items-center container-page"
-                                style={{
-                                    borderRadius: '24px',
-                                    width: '450px',
-                                    height: '360px',
-                                }}
+                                className="d-flex flex-column gap-4 justify-content-center align-items-center container-page no-policy-selected-banner"
+                                // style={{
+                                //     borderRadius: '24px',
+                                //     width: '450px',
+                                //     height: '360px',
+                                // }}
                             >
                                 <svg
                                     width="222"
@@ -230,8 +230,8 @@ function CPList() {
                                 </svg>
 
                                 <p
-                                    className="subtitle-1m"
-                                    style={{ color: '#566b7d' }}
+                                    className="subtitle-1m secondary-color700"
+                                    // style={{ color: '#566b7d' }}
                                 >
                                     Please Select Policy
                                 </p>
@@ -241,11 +241,15 @@ function CPList() {
 
                     {/* <!-- Add More Policy  --> */}
                     {showPolicy === 'add' && (
-                        <AddPolicy setPolicyHide={setPolicyHide} />
+                        <AddPolicy
+                            setPolicyHide={setPolicyHide}
+                            setShowPolicy={setShowPolicy}
+                        />
                     )}
                     {showPolicy === 'edit' && (
                         <EditPolicy
                             setPolicyHide={setPolicyHide}
+                            setShowPolicy={setShowPolicy}
                             cpName={cpName}
                             cpDetails={cpDetails}
                             cpId={cpId}

@@ -61,12 +61,12 @@ function TncList() {
         <>
             <div className="container-fluid d-flex justify-content-between">
                 <div
-                    className="container-page p-3"
-                    style={{
-                        width: '30%',
-                        maxWidth: '380px',
-                        minHeight: 'calc(100vh - 88px)',
-                    }}
+                    className="container-page p-3 policy-sidebar"
+                    // style={{
+                    //     width: '30%',
+                    //     maxWidth: '380px',
+                    //     minHeight: 'calc(100vh - 88px)',
+                    // }}
                 >
                     <div className="row">
                         <h6 className="headline-h6m mb-0">
@@ -75,8 +75,8 @@ function TncList() {
 
                         <div className="col-12 d-flex justify-content-between gap-3 my-4">
                             <div
-                                className="custom-input d-flex align-items-center py-0 w-100 gap-2"
-                                style={{ height: '40px' }}
+                                className="custom-input d-flex align-items-center py-0 w-100 gap-2 height-40"
+                                // style={{ height: '40px' }}
                             >
                                 <svg
                                     width="24"
@@ -100,7 +100,7 @@ function TncList() {
                                     onChange={handleSearch}
                                 />
                             </div>
-                            <div style={{ width: '100px' }}>
+                            <div class="width-100">
                                 <button
                                     type="button"
                                     className="btn btn-primary d-flex align-items-center gap-2"
@@ -155,20 +155,20 @@ function TncList() {
                     </div>
                 </div>
 
-                <div style={{ width: 'max(calc(100vw - 412px), 68%)' }}>
+                <div class="policy-main-container">
                     {/* <!-- if no cancellation policy selected then this will appear --> */}
                     {!tncPolicyHide && (
                         <div
-                            className="p-3 d-flex align-items-center justify-content-center"
-                            style={{ minHeight: 'calc(100vh - 88px)' }}
+                            className="p-3 d-flex align-items-center justify-content-center policy-container-size"
+                            // style={{ minHeight: 'calc(100vh - 88px)' }}
                         >
                             <div
-                                className="d-flex flex-column gap-4 justify-content-center align-items-center container-page"
-                                style={{
-                                    borderRadius: '24px',
-                                    width: '450px',
-                                    height: '360px',
-                                }}
+                                className="d-flex flex-column gap-4 justify-content-center align-items-center container-page no-policy-selected-banner"
+                                // style={{
+                                //     borderRadius: '24px',
+                                //     width: '450px',
+                                //     height: '360px',
+                                // }}
                             >
                                 <svg
                                     width="222"
@@ -242,11 +242,15 @@ function TncList() {
 
                     {/* <!-- Add More Policy  --> */}
                     {showTncPolicy === 'add' && (
-                        <AddTnc setTncPolicyHide={setTncPolicyHide} />
+                        <AddTnc
+                            setTncPolicyHide={setTncPolicyHide}
+                            setShowTncPolicy={setShowTncPolicy}
+                        />
                     )}
                     {showTncPolicy === 'edit' && (
                         <EditTnc
                             setTncPolicyHide={setTncPolicyHide}
+                            setShowTncPolicy={setShowTncPolicy}
                             tncName={tncName}
                             tncDetails={tncDetails}
                             tncId={tncId}

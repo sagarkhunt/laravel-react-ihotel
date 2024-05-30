@@ -66,21 +66,17 @@ function EditTnc({ setTncPolicyHide, tncName, tncDetails, tncId }) {
             {/* <!-- View Policy  --> */}
             {showList && (
                 <div
-                    className="container-page"
-                    style={{ minHeight: 'calc(100vh - 88px)' }}
+                    className="container-page policy-container-size"
+                    // style={{ minHeight: 'calc(100vh - 88px)' }}
                 >
                     <div className="modal-header p-3">
                         <h6 className="headline-h6m mb-0">{tncName}</h6>
                     </div>
-                    <div
-                        className="modal-body"
-                        style={
-                            {
-                                // height: 'calc(100vh - 220px)',
-                            }
-                        }
-                    >
-                        <ul className="w-100" style={{ padding: '0 1rem' }}>
+                    <div className="modal-body policy-container-body">
+                        <ul
+                            className="w-100 policy-ul"
+                            style={{ padding: '0 1rem' }}
+                        >
                             {tncDetails.length > 0 ? (
                                 tncDetails?.map((item, index) => (
                                     <li
@@ -111,10 +107,7 @@ function EditTnc({ setTncPolicyHide, tncName, tncDetails, tncId }) {
 
             {/* <!-- Edit More Policy  --> */}
             {showEditForm && (
-                <div
-                    className="container-page"
-                    style={{ minHeight: 'calc(100vh - 88px)' }}
-                >
+                <div className="container-page policy-container-size">
                     <div className="modal-header p-3">
                         <h6 className="headline-h6m mb-0">
                             Edit Terms & Conditions
@@ -122,11 +115,11 @@ function EditTnc({ setTncPolicyHide, tncName, tncDetails, tncId }) {
                     </div>
                     <form onSubmit={handleSubmit}>
                         <div
-                            className="modal-body"
-                            style={{
-                                height: 'calc(100vh - 220px)',
-                                overflowY: 'scroll',
-                            }}
+                            className="modal-body policy-container-body"
+                            // style={{
+                            //     height: 'calc(100vh - 220px)',
+                            //     overflowY: 'scroll',
+                            // }}
                         >
                             <div className="row mb-3">
                                 <div className="col-5 d-flex flex-column">

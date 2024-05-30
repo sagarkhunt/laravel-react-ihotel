@@ -42,7 +42,7 @@ function HotelProfile() {
         }
     };
     return (
-        <div className="container-fluid" style={{ maxWidth: '680px' }}>
+        <div className="container-fluid width-680">
             <div className="d-flex gap-1 align-items-center my-2">
                 <span className="body-2"> Dashboard </span>
                 <span>/</span>
@@ -53,7 +53,7 @@ function HotelProfile() {
                 <h6 className="headline-h6m mb-0">Hotel Profile</h6>
             </div>
 
-            <div className="container-page p-3 mb-5">
+            <div className="container-page p-3 mb-0">
                 <form>
                     <div>
                         <div className="p-3 light-blue-box">USER INFO</div>
@@ -68,8 +68,7 @@ function HotelProfile() {
                                 </label>
                                 <input
                                     type="text"
-                                    className="custom-input"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input border-width-1"
                                     placeholder="Hotel Name"
                                 />
                             </div>
@@ -121,7 +120,7 @@ function HotelProfile() {
                                         type="file"
                                         id="file-input1"
                                         ref={fileInputRef}
-                                        style={{ display: 'none' }}
+                                        className="d-none"
                                         onChange={handleFileChange}
                                     />
                                 </div>
@@ -164,7 +163,7 @@ function HotelProfile() {
                                     <input
                                         type="file"
                                         id="file-input"
-                                        style={{ display: 'none' }}
+                                        className="d-none"
                                     />
                                 </div>
                             </div>
@@ -180,8 +179,7 @@ function HotelProfile() {
                                 <textarea
                                     name="hotel_address"
                                     id="hotel_address"
-                                    className="w-100 custom-input"
-                                    style={{ borderWidth: '1px' }}
+                                    className="w-100 custom-input border-width-1"
                                     rows="5"
                                     placeholder="Address"
                                 ></textarea>
@@ -198,8 +196,7 @@ function HotelProfile() {
                                 <select
                                     name="country"
                                     id="country"
-                                    className="custom-input w-100"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input w-100 border-width-1"
                                     aria-placeholder="Country"
                                 >
                                     <option value="India">India</option>
@@ -214,8 +211,7 @@ function HotelProfile() {
                                 <select
                                     name="state"
                                     id="state"
-                                    className="custom-input w-100"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input w-100 border-width-1"
                                     aria-placeholder="State"
                                 >
                                     <option value="gujarat">Gujarat</option>
@@ -234,8 +230,7 @@ function HotelProfile() {
                                 <select
                                     name="city"
                                     id="city"
-                                    className="custom-input w-100"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input w-100 border-width-1"
                                     aria-placeholder="City"
                                 >
                                     <option value="banglore">Banglore</option>
@@ -254,8 +249,7 @@ function HotelProfile() {
                                     type="text"
                                     name="zip_code"
                                     placeholder="Zip Code"
-                                    className="custom-input w-100"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input w-100 border-width-1"
                                 />
                             </div>
                         </div>
@@ -271,8 +265,7 @@ function HotelProfile() {
                                     type="text"
                                     name="mobile_no"
                                     placeholder="Mobile No"
-                                    className="custom-input w-100"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input w-100 border-width-1"
                                 />
                             </div>
                             <div className="col-6">
@@ -283,8 +276,7 @@ function HotelProfile() {
                                     type="email"
                                     name="email"
                                     placeholder="Email"
-                                    className="custom-input w-100"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input w-100 border-width-1"
                                 />
                             </div>
                         </div>
@@ -300,8 +292,7 @@ function HotelProfile() {
                                     type="number"
                                     name="no_of_rooms"
                                     placeholder="No of Rooms"
-                                    className="custom-input w-100"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input w-100 border-width-1"
                                 />
                             </div>
                             <div className="col-6">
@@ -315,8 +306,7 @@ function HotelProfile() {
                                     type="url"
                                     name="website"
                                     placeholder="Website"
-                                    className="custom-input w-100"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input w-100 border-width-1"
                                 />
                             </div>
                         </div>
@@ -355,8 +345,7 @@ function HotelProfile() {
                                 <textarea
                                     name="hotel_address"
                                     id="hotel_address"
-                                    className="w-100 custom-input"
-                                    style={{ borderWidth: '1px' }}
+                                    className="w-100 custom-input border-width-1"
                                     rows="5"
                                     placeholder="Address"
                                 ></textarea>
@@ -373,8 +362,7 @@ function HotelProfile() {
                                 <select
                                     name="country"
                                     id="country"
-                                    className="custom-input w-100"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input w-100 border-width-1"
                                     aria-placeholder="Country"
                                 >
                                     <option value="India">India</option>
@@ -389,8 +377,7 @@ function HotelProfile() {
                                 <select
                                     name="state"
                                     id="state"
-                                    className="custom-input w-100"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input w-100 border-width-1"
                                     aria-placeholder="State"
                                 >
                                     <option value="gujarat">Gujarat</option>
@@ -409,8 +396,7 @@ function HotelProfile() {
                                 <select
                                     name="city"
                                     id="city"
-                                    className="custom-input w-100"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input w-100 border-width-1"
                                     aria-placeholder="City"
                                 >
                                     <option value="banglore">Banglore</option>
@@ -429,8 +415,7 @@ function HotelProfile() {
                                     type="text"
                                     name="zip_code"
                                     placeholder="Zip Code"
-                                    className="custom-input w-100"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input w-100 border-width-1"
                                 />
                             </div>
                         </div>
@@ -446,8 +431,7 @@ function HotelProfile() {
                                     type="text"
                                     name="mobile_no"
                                     placeholder="Mobile No"
-                                    className="custom-input w-100"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input w-100 border-width-1"
                                 />
                             </div>
                             <div className="col-6">
@@ -458,8 +442,7 @@ function HotelProfile() {
                                     type="email"
                                     name="email"
                                     placeholder="Email"
-                                    className="custom-input w-100"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input w-100 border-width-1"
                                 />
                             </div>
                         </div>
@@ -478,8 +461,7 @@ function HotelProfile() {
                                 <input
                                     type="text"
                                     name="name"
-                                    className="custom-input w-100"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input w-100 border-width-1"
                                     placeholder="Name"
                                 />
                             </div>
@@ -495,8 +477,7 @@ function HotelProfile() {
                                 <input
                                     type="text"
                                     name="designation"
-                                    className="custom-input w-100"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input w-100 border-width-1"
                                     placeholder="Designation"
                                 />
                             </div>
@@ -510,8 +491,7 @@ function HotelProfile() {
                                 <input
                                     type="tel"
                                     name="office_phone"
-                                    className="custom-input w-100"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input w-100 border-width-1"
                                     placeholder="Office Phone"
                                 />
                             </div>
@@ -528,8 +508,7 @@ function HotelProfile() {
                                     type="text"
                                     name="mobile_no"
                                     placeholder="Mobile No"
-                                    className="custom-input w-100"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input w-100 border-width-1"
                                 />
                             </div>
                             <div className="col-6">
@@ -540,8 +519,7 @@ function HotelProfile() {
                                     type="email"
                                     name="email"
                                     placeholder="Email"
-                                    className="custom-input w-100"
-                                    style={{ borderWidth: '1px' }}
+                                    className="custom-input w-100 border-width-1"
                                 />
                             </div>
                         </div>
