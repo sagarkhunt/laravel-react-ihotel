@@ -10,6 +10,9 @@ import roomCateReducer from './RoomCategory/reducer';
 import roomReducer from './Rooms/reducer';
 import booingInqReducer from './BookingInquiry/reducer';
 import businessReducer from './BusinessSource/reducer';
+import bookingReducer from './BookingSource/reducer';
+import cpReducer from './CancellPolicy/reducer';
+import tncReducer from './TermConition/reducer';
 
 //Include all the reducer to combine and provide to configure store.
 export default {
@@ -25,4 +28,7 @@ export default {
     roomReducer,
     booingInqReducer,
     businessReducer,
+    bookingReducer,
+    cpReducer,
+    tncReducer,
 };

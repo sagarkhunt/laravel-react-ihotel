@@ -351,7 +351,7 @@ function CreateEditMdl({
                                 >
                                     {mode}
                                 </h5>
-                                <div className="d-flex gap-4 align-items-center">
+                                <div className="d-flex gap-2 align-items-center">
                                     {mode === 'Edit Inquiry' ? (
                                         <div
                                             className="form-check form-switch"

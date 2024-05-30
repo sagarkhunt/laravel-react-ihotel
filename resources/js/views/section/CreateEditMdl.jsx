@@ -76,7 +76,7 @@ function CreateEditMdl({
                                         {mode === 'Edit Section' ? (
                                             <div className="d-flex gap-4 align-items-center">
                                                 <div
-                                                    className="form-check form-switch"
+                                                    className="form-check form-switch mt-1"
                                                     id="customSwitch"
                                                 >
                                                     <input
@@ -102,19 +102,17 @@ function CreateEditMdl({
                                                         Active
                                                     </label>
                                                 </div>
-                                                <button
-                                                    type="button"
-                                                    className="btn-close"
-                                                    data-bs-dismiss="modal"
-                                                    aria-label="Close"
-                                                    onClick={() =>
-                                                        setOpen(false)
-                                                    }
-                                                ></button>
                                             </div>
                                         ) : (
                                             ''
                                         )}
+                                        <button
+                                            type="button"
+                                            className="btn-close mt-0"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close"
+                                            onClick={() => setOpen(false)}
+                                        ></button>
                                     </div>
                                 </div>
 
