@@ -36,7 +36,7 @@ function RoomView() {
                     <label class="custom-control-label" htmlFor="customCheck1"></label>
                 </div>
             </span>`,
-            className: 'action-check',
+            className: 'action-check table-right',
             render: () =>
                 `
                 <div class="custom-control custom-checkbox">
@@ -45,7 +45,6 @@ function RoomView() {
                 </div>
                 `,
             width: '5%',
-            className: 'table-right',
         },
         { data: 'room_view', label: 'Room View', width: '25%' },
         { data: 'desc', label: 'Description', width: '50%' },

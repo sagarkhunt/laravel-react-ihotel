@@ -31,7 +31,7 @@ function Floor() {
                     <label class="custom-control-label" htmlFor="customCheck1"></label>
                 </div>
             </span>`,
-            className: 'action-check',
+            className: 'action-check table-right',
             render: (data, type, row) =>
                 `
             <div class="custom-control custom-checkbox">
@@ -45,7 +45,6 @@ function Floor() {
             </div>
             `,
             width: '5%',
-            className: 'table-right',
         },
         {
             data: 'name',

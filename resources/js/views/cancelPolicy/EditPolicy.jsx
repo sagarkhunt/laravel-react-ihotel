@@ -17,7 +17,7 @@ function EditPolicy({ setPolicyHide, cpName, cpDetails, cpId, setShowPolicy }) {
         if (cpDetails) {
             setName(cpName);
             setPolicies(cpDetails);
-            // setShowEditForm(true);
+            setShowEditForm(false);
             setShowList(true);
         }
     }, [cpDetails, cpName]);
@@ -60,6 +60,9 @@ function EditPolicy({ setPolicyHide, cpName, cpDetails, cpId, setShowPolicy }) {
         setShowEditForm(false);
         setShowPolicy('');
     };
+    useEffect(() => {
+        // setShowPolicy('');
+    }, [setShowPolicy]);
     return (
         <div>
             {/* <!-- View Policy  --> */}

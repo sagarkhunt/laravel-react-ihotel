@@ -36,7 +36,7 @@ function Section() {
                     <label class="custom-control-label" htmlFor="customCheck1"></label>
                 </div>
             </span>`,
-            className: 'action-check',
+            className: 'action-check table-right',
             render: () =>
                 `
                 <div class="custom-control custom-checkbox">
@@ -45,7 +45,6 @@ function Section() {
                 </div>
                 `,
             width: '5%',
-            className: 'table-right',
         },
         { data: 'name', label: 'Section Name', width: '50%' },
         // { data: 'description', label: 'Description' },

@@ -193,7 +193,6 @@ function Navbar() {
                                                                 />
                                                             </svg>
                                                             <span className="nav-item">
-                                                                {' '}
                                                                 option 1
                                                             </span>
                                                         </Link>
@@ -280,6 +279,45 @@ function Navbar() {
                                                     data-bs-dismiss="offcanvas"
                                                 >
                                                     Inquires
+                                                </span>
+                                            </Link>
+                                        </li>
+
+                                        <li>
+                                            <Link
+                                                className={`nav-line cp ${activeLink === '/front_view' ? 'active' : ''}`}
+                                                to="/front_view"
+                                                onClick={() =>
+                                                    handleLinkClick(
+                                                        '/front_view',
+                                                    )
+                                                }
+                                            >
+                                                <svg
+                                                    width="24"
+                                                    className="icon_svg"
+                                                    height="25"
+                                                    viewBox="0 0 24 25"
+                                                    fill={
+                                                        activeLink ===
+                                                        '/front_view'
+                                                            ? '#FFF'
+                                                            : '#566B7D'
+                                                    }
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        d="M14.59 3.41422C14.21 3.03422 13.7 2.82422 13.17 2.82422H6C4.9 2.82422 4 3.72422 4 4.82422V20.8242C4 21.9242 4.89 22.8242 5.99 22.8242H18C19.1 22.8242 20 21.9242 20 20.8242V9.65422C20 9.12422 19.79 8.61422 19.41 8.24422L14.59 3.41422ZM15 16.8242H13V18.8242C13 19.3742 12.55 19.8242 12 19.8242C11.45 19.8242 11 19.3742 11 18.8242V16.8242H9C8.45 16.8242 8 16.3742 8 15.8242C8 15.2742 8.45 14.8242 9 14.8242H11V12.8242C11 12.2742 11.45 11.8242 12 11.8242C12.55 11.8242 13 12.2742 13 12.8242V14.8242H15C15.55 14.8242 16 15.2742 16 15.8242C16 16.3742 15.55 16.8242 15 16.8242ZM13 8.82422V4.32422L18.5 9.82422H14C13.45 9.82422 13 9.37422 13 8.82422Z"
+                                                        fill=""
+                                                    />
+                                                </svg>
+
+                                                <span
+                                                    type="button"
+                                                    className="nav-item "
+                                                    data-bs-dismiss="offcanvas"
+                                                >
+                                                    Front View
                                                 </span>
                                             </Link>
                                         </li>
@@ -438,7 +476,6 @@ function Navbar() {
                                                                 className="nav-item"
                                                                 data-bs-dismiss="offcanvas"
                                                             >
-                                                                {' '}
                                                                 Floor
                                                             </span>
                                                         </Link>
@@ -572,7 +609,6 @@ function Navbar() {
                                                                 className="nav-item"
                                                                 data-bs-dismiss="offcanvas"
                                                             >
-                                                                {' '}
                                                                 Inquiry
                                                             </span>
                                                         </Link>
@@ -676,6 +712,69 @@ function Navbar() {
                                                             </svg>
                                                             <span className="nav-item">
                                                                 option 2
+                                                            </span>
+                                                        </Link>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div
+                                                className={`nav-line cp ${activeLink === '/house_keeping' ? 'active' : ''}`}
+                                            >
+                                                <svg
+                                                    width="24"
+                                                    className="icon_svg"
+                                                    height="25"
+                                                    viewBox="0 0 24 25"
+                                                    fill={
+                                                        activeLink ===
+                                                        '/house_keeping'
+                                                            ? '#FFF'
+                                                            : '#566B7D'
+                                                    }
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        d="M19.4997 12.8242C19.4997 12.5942 19.4897 12.3742 19.4697 12.1442L21.3297 10.7342C21.7297 10.4342 21.8397 9.87422 21.5897 9.43422L19.7197 6.20422C19.4697 5.76422 18.9297 5.58422 18.4697 5.78422L16.3197 6.69422C15.9497 6.43422 15.5597 6.20422 15.1497 6.01422L14.8597 3.70422C14.7997 3.20422 14.3697 2.82422 13.8697 2.82422H10.1397C9.62967 2.82422 9.19967 3.20422 9.13967 3.70422L8.84967 6.01422C8.43967 6.20422 8.04967 6.43422 7.67967 6.69422L5.52967 5.78422C5.06967 5.58422 4.52967 5.76422 4.27967 6.20422L2.40967 9.44422C2.15967 9.88422 2.26967 10.4342 2.66967 10.7442L4.52967 12.1542C4.50967 12.3742 4.49967 12.5942 4.49967 12.8242C4.49967 13.0542 4.50967 13.2742 4.52967 13.5042L2.66967 14.9142C2.26967 15.2142 2.15967 15.7742 2.40967 16.2142L4.27967 19.4442C4.52967 19.8842 5.06967 20.0642 5.52967 19.8642L7.67967 18.9542C8.04967 19.2142 8.43967 19.4442 8.84967 19.6342L9.13967 21.9442C9.19967 22.4442 9.62967 22.8242 10.1297 22.8242H13.8597C14.3597 22.8242 14.7897 22.4442 14.8497 21.9442L15.1397 19.6342C15.5497 19.4442 15.9397 19.2142 16.3097 18.9542L18.4597 19.8642C18.9197 20.0642 19.4597 19.8842 19.7097 19.4442L21.5797 16.2142C21.8297 15.7742 21.7197 15.2242 21.3197 14.9142L19.4597 13.5042C19.4897 13.2742 19.4997 13.0542 19.4997 12.8242ZM12.0397 16.3242C10.1097 16.3242 8.53967 14.7542 8.53967 12.8242C8.53967 10.8942 10.1097 9.32422 12.0397 9.32422C13.9697 9.32422 15.5397 10.8942 15.5397 12.8242C15.5397 14.7542 13.9697 16.3242 12.0397 16.3242Z"
+                                                        fill=""
+                                                    />
+                                                </svg>
+
+                                                <span className="nav-item">
+                                                    HouseKeeping
+                                                </span>
+                                                <span className="material-icons-round cp downarrow">
+                                                    chevron_right
+                                                </span>
+                                            </div>
+                                            <div className="submenu_box p-3 y_scrolling">
+                                                <ul className="sub-menu-list px-2  row">
+                                                    <li className="col-12 grid_padding">
+                                                        <Link
+                                                            className={`nav-sub-box cp ${activeLink === '/house_keeping' ? 'active' : ''}`}
+                                                            to="/house_keeping"
+                                                            onClick={() =>
+                                                                handleLinkClick(
+                                                                    '/house_keeping',
+                                                                )
+                                                            }
+                                                        >
+                                                            <svg
+                                                                width="40"
+                                                                className="icon_svg"
+                                                                height="40"
+                                                                viewBox="0 0 40 40"
+                                                                fill="#6A6968"
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                            >
+                                                                <path
+                                                                    d="M11 22H15V18H11V22ZM11 27H15V23H11V27ZM11 17H15V13H11V17ZM16 22H29V18H16V22ZM16 27H29V23H16V27ZM16 13V17H29V13H16Z"
+                                                                    fill=""
+                                                                />
+                                                            </svg>
+                                                            <span className="nav-item">
+                                                                House Keeping
                                                             </span>
                                                         </Link>
                                                     </li>

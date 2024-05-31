@@ -58,7 +58,7 @@ function Business() {
                     cancel_presentation
                 </span>
             `,
-            className: "action-container",
+            className: 'action-container',
             width: '10%',
         },
     ];

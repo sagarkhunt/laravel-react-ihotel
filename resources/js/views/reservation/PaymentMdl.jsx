@@ -65,7 +65,7 @@ function PaymentMdl({ open, setOpen }) {
                                             <div className="col-12">
                                                 <div className="form-group mb-3">
                                                     <label
-                                                        for="customInput"
+                                                        htmlFor="customInput"
                                                         className="custom-label"
                                                     >
                                                         Card Number*
@@ -81,7 +81,7 @@ function PaymentMdl({ open, setOpen }) {
                                             <div className="col-12">
                                                 <div className="form-group mb-3">
                                                     <label
-                                                        for="customInput"
+                                                        htmlFor="customInput"
                                                         className="custom-label"
                                                     >
                                                         Card Holder Name*
@@ -97,7 +97,7 @@ function PaymentMdl({ open, setOpen }) {
                                             <div className="col-4">
                                                 <div className="form-group mb-3">
                                                     <label
-                                                        for="customInput"
+                                                        htmlFor="customInput"
                                                         className="custom-label"
                                                     >
                                                         Expiry Date*
@@ -124,7 +124,7 @@ function PaymentMdl({ open, setOpen }) {
                                             <div className="col-4">
                                                 <div className="form-group mb-3">
                                                     <label
-                                                        for="customInput"
+                                                        htmlFor="customInput"
                                                         className="custom-label"
                                                     >
                                                         {' '}
@@ -151,14 +151,14 @@ function PaymentMdl({ open, setOpen }) {
                                             <div className="col-4">
                                                 <div className="form-group mb-3">
                                                     <label
-                                                        for="customInput"
+                                                        htmlFor="customInput"
                                                         className="custom-label"
                                                     >
                                                         CVV*
                                                     </label>
                                                     <input
                                                         type="number"
-                                                        maxlength="6"
+                                                        maxLength="6"
                                                         className="form-control custom-input"
                                                         id="customInput"
                                                         placeholder="CVV"
@@ -168,7 +168,7 @@ function PaymentMdl({ open, setOpen }) {
                                             <div className="col-12">
                                                 <div className="form-group mb-3">
                                                     <label
-                                                        for="customInput"
+                                                        htmlFor="customInput"
                                                         className="custom-label"
                                                     >
                                                         Format
@@ -204,7 +204,7 @@ function PaymentMdl({ open, setOpen }) {
                                             <div className="col-12 px-0">
                                                 <div className="form-group mb-3">
                                                     <label
-                                                        for="customInput"
+                                                        htmlFor="customInput"
                                                         className="custom-label"
                                                     >
                                                         Payment Type
@@ -231,7 +231,7 @@ function PaymentMdl({ open, setOpen }) {
                                             <div className="col-12 px-0">
                                                 <div className="form-group mb-3">
                                                     <label
-                                                        for="customInput"
+                                                        htmlFor="customInput"
                                                         className="custom-label"
                                                     >
                                                         REC/Vou#
@@ -247,7 +247,7 @@ function PaymentMdl({ open, setOpen }) {
                                             <div className="col-7 px-0">
                                                 <div className="form-group mb-3">
                                                     <label
-                                                        for="customInput"
+                                                        htmlFor="customInput"
                                                         className="custom-label"
                                                     >
                                                         Rate

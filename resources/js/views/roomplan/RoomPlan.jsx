@@ -36,7 +36,7 @@ function RoomPlan() {
                     <label class="custom-control-label" htmlFor="customCheck1"></label>
                 </div>
             </span>`,
-            className: 'action-check',
+            className: 'action-check table-right',
             render: () =>
                 `
                 <div class="custom-control custom-checkbox">
@@ -45,7 +45,6 @@ function RoomPlan() {
                 </div>
                 `,
             width: '5%',
-            className: 'table-right',
         },
         { data: 'plan_name', label: 'Plan Name', width: '20%' },
         { data: 'plan_code', label: 'Plan Code', width: '20%' },

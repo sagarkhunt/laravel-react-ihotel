@@ -38,7 +38,7 @@ function Rooms() {
                     <label class="custom-control-label" htmlFor="customCheck1"></label>
                 </div>
             </span>`,
-            className: 'action-check',
+            className: 'action-check table-right',
             render: () =>
                 `
                 <div className="custom-control custom-checkbox">
@@ -47,7 +47,6 @@ function Rooms() {
                 </div>
                 `,
             width: '5%',
-            className: 'table-right',
         },
         { data: 'room_no', label: 'Room Names/Numbers', width: '25%' },
         {
