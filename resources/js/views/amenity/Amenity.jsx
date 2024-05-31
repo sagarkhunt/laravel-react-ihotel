@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import DataTableComponent from '../../components/common/DataTableComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import CreateEditMdl from './CreateEditMdl';
 import actions from '../../redux/Amenity/actions';
 import DeleteMdl from '../../components/common/DeleteMdl';
 import toast from 'react-hot-toast';
 import Spinner from '../../components/Spinner';
+import DataTableComponent from '../../components/common/DataTableComponent';
 
 function Amenity() {
     const [listingData, setListingData] = useState([]);

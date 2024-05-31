@@ -21,7 +21,7 @@ import AddReservation from '../views/reservation/AddReservation.jsx';
 import ReservationList from '../views/reservation/ReservationList.jsx';
 import HotelProfile from '../views/Profile/HotelProfile.jsx';
 import Booking from '../views/bookingSource/Booking.jsx';
-import CPList from '../views/CancellPolicy/CPList.jsx';
+import CPList from '../views/cancelPolicy/CPList.jsx';
 import TncList from '../views/TNC/TncList.jsx';
 import HouseKeeping from '../views/HouseKeeping/HouseKeeping.jsx';
 import FrontView from '../views/frontView/FrontView.jsx';

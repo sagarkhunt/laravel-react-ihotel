@@ -17,6 +17,7 @@ function EditTnc({ setTncPolicyHide, tncName, tncDetails, tncId }) {
         if (tncDetails) {
             setName(tncName);
             setPolicies(tncDetails);
+            setShowEditForm(false);
             setShowList(true);
         }
     }, [tncDetails, tncName]);

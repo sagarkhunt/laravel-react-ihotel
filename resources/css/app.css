@@ -25,6 +25,9 @@ body {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
 }
+.cp {
+    cursor: pointer;
+}
 
 .primary-color {
     color: var(--primary-color);
@@ -1811,4 +1814,30 @@ select,
 
 .width-45p {
     width: 45%;
+}
+
+.scrollable-modal-body {
+    height: 520px; /* Set the maximum height as per your requirement */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+.scrollable-modal-body-1 {
+    height: 340px;
+    overflow-y: auto;
+}
+
+.card-body-height {
+    height: 520px;
+}
+
+.th-custom-p,
+.td-custom-p {
+    padding: 8px;
+    border: none;
+}
+.modal-header-border {
+    border: none;
+}
+
+.custom_input_1 {
+    width: 100%;
 }

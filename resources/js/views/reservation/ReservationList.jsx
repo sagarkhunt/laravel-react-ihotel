@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../../../css/AddReservation.css';
 import AssignRoomMdl from './AssignRoomMdl';
+import BookingCard from './componet/BookingCard';
 function ReservationList() {
     // State to track the current view mode
     const [isGridView, setIsGridView] = useState(true);
@@ -19,6 +20,125 @@ function ReservationList() {
     const toggleView = () => {
         setIsGridView(!isGridView);
     };
+    const data = [
+        {
+            guestName: 'Alex Apolo',
+            resNo: 'RS1234',
+            bookingDate: '12/09/2024',
+            arrivalDate: '12/09/2024',
+            arrivalTime: '11:00 AM',
+            departureDate: '14/09/2024',
+            departureTime: '11:00 AM',
+            roomDetail: 'Duplex Room/American Plan (CP)',
+            resType: 'Confirm Booking',
+            total: '2,000.00',
+            paid: '1,000.00',
+            adults: 2,
+            children: 1,
+        },
+        {
+            guestName: 'Alex Apolo',
+            resNo: 'RS1234',
+            bookingDate: '12/09/2024',
+            arrivalDate: '12/09/2024',
+            arrivalTime: '11:00 AM',
+            departureDate: '14/09/2024',
+            departureTime: '11:00 AM',
+            roomDetail: 'Duplex Room/American Plan (CP)',
+            resType: 'Confirm Booking',
+            total: '2,000.00',
+            paid: '1,000.00',
+            adults: 2,
+            children: 1,
+        },
+        {
+            guestName: 'Alex Apolo',
+            resNo: 'RS1234',
+            bookingDate: '12/09/2024',
+            arrivalDate: '12/09/2024',
+            arrivalTime: '11:00 AM',
+            departureDate: '14/09/2024',
+            departureTime: '11:00 AM',
+            roomDetail: 'Duplex Room/American Plan (CP)',
+            resType: 'Confirm Booking',
+            total: '2,000.00',
+            paid: '1,000.00',
+            adults: 2,
+            children: 1,
+        },
+    ];
+
+    const bookings = [
+        {
+            name: 'Mr. Rohit Patel',
+            id: 'RS1738',
+            checkInDate: '10/12/2024',
+            checkInTime: '10:00 PM',
+            nights: 2,
+            bookingDate: '12/10/2024',
+            adults: 2,
+            children: 2,
+            roomTypes: [
+                { type: 'Duplex Room/American', action: 'Assign Room' },
+                { type: 'Twin Room/American Plan', action: 'Assign Room' },
+            ],
+            total: '₹ 1,000.00',
+            paid: '₹ 0.00',
+            balance: '₹ 1,000.00',
+        },
+        {
+            name: 'Mr. Rohit Patel',
+            id: 'RS1738',
+            checkInDate: '10/12/2024',
+            checkInTime: '10:00 PM',
+            nights: 2,
+            bookingDate: '12/10/2024',
+            adults: 2,
+            children: 2,
+            roomTypes: [
+                { type: 'Duplex Room/American', action: 'Assign Room' },
+                { type: 'Twin Room/American Plan', action: 'Assign Room' },
+            ],
+            total: '₹ 1,000.00',
+            paid: '₹ 0.00',
+            balance: '₹ 1,000.00',
+        },
+        {
+            name: 'Mr. Rohit Patel',
+            id: 'RS1738',
+            checkInDate: '10/12/2024',
+            checkInTime: '10:00 PM',
+            nights: 2,
+            bookingDate: '12/10/2024',
+            adults: 2,
+            children: 2,
+            roomTypes: [
+                { type: 'Duplex Room/American', action: 'Assign Room' },
+                { type: 'Twin Room/American Plan', action: 'Assign Room' },
+            ],
+            total: '₹ 1,000.00',
+            paid: '₹ 0.00',
+            balance: '₹ 1,000.00',
+        },
+        {
+            name: 'Mr. Rohit Patel',
+            id: 'RS1738',
+            checkInDate: '10/12/2024',
+            checkInTime: '10:00 PM',
+            nights: 2,
+            bookingDate: '12/10/2024',
+            adults: 2,
+            children: 2,
+            roomTypes: [
+                { type: 'Duplex Room/American', action: 'Assign Room' },
+                { type: 'Twin Room/American Plan', action: 'Assign Room' },
+            ],
+            total: '₹ 1,000.00',
+            paid: '₹ 0.00',
+            balance: '₹ 1,000.00',
+        },
+        // Add more booking objects here
+    ];
     return (
         <div className="container-fluid py-3 px-4">
             <div className="col-12 mt-3 pannel action-header px-3">
@@ -29,37 +149,45 @@ function ReservationList() {
                             onClick={() => handleClick('reservations')}
                         >
                             Reservations
-                            <span className="subtitle-2m btn-primary rounded-circle">
+                            <span
+                                className={`subtitle-2m ${activeButton === 'reservations' ? 'btn-primary' : ''} rounded-circle`}
+                            >
                                 12
                             </span>
                         </h6>
 
                         <h6
-                            className={`subtitle-1m mb-0 mx-3 ${activeButton === 'arrivals' ? 'btn-primary p-2' : ''}`}
+                            className={`subtitle-1m mb-0 mx-3 p-2 ${activeButton === 'arrivals' ? 'btn-primary' : ''}`}
                             onClick={() => handleClick('arrivals')}
                         >
-                            Arrivals{' '}
-                            <span className="subtitle-2m rounded-circle2">
+                            Arrivals
+                            <span
+                                className={`subtitle-2m ${activeButton === 'arrivals' ? 'btn-primary' : ''} rounded-circle2`}
+                            >
                                 21
                             </span>
                         </h6>
 
                         <h6
-                            className={`subtitle-1m mb-0 mx-3 ${activeButton === 'departure' ? 'btn-primary p-2' : ''}`}
+                            className={`subtitle-1m mb-0 mx-3 p-2 ${activeButton === 'departure' ? 'btn-primary' : ''}`}
                             onClick={() => handleClick('departure')}
                         >
-                            Departure{' '}
-                            <span className="subtitle-2m rounded-circle2">
+                            Departure
+                            <span
+                                className={`subtitle-2m ${activeButton === 'departure' ? 'btn-primary' : ''} rounded-circle2`}
+                            >
                                 32
                             </span>
                         </h6>
 
                         <h6
-                            className={`subtitle-1m mb-0 mx-3 ${activeButton === 'in-house' ? 'btn-primary p-2' : ''}`}
+                            className={`subtitle-1m mb-0 mx-3 p-2 ${activeButton === 'in-house' ? 'btn-primary' : ''}`}
                             onClick={() => handleClick('in-house')}
                         >
-                            In-house{' '}
-                            <span className="subtitle-2m rounded-circle2">
+                            In-house
+                            <span
+                                className={`subtitle-2m ${activeButton === 'in-house' ? 'btn-primary' : ''} rounded-circle2`}
+                            >
                                 34
                             </span>
                         </h6>
@@ -136,7 +264,6 @@ function ReservationList() {
                             className="btn btn-secondary d-flex"
                             data-bs-toggle="modal"
                             data-bs-target="#Assigns_rooms"
-                            onClick={assignRooms}
                         >
                             <div>Print GR</div>
                         </button>
@@ -148,19 +275,19 @@ function ReservationList() {
                     <table className="table custom-table">
                         <thead>
                             <tr>
-                                <th scope="col" className="th-custom" width="">
+                                <th scope="col" className="th-custom">
                                     Guest Name
                                 </th>
-                                <th scope="col" className="th-custom" width="">
+                                <th scope="col" className="th-custom">
                                     Res. No
                                 </th>
-                                <th scope="col" className="th-custom" width="">
+                                <th scope="col" className="th-custom">
                                     Booking Date
                                 </th>
-                                <th scope="col" className="th-custom" width="">
+                                <th scope="col" className="th-custom">
                                     Arrival
                                 </th>
-                                <th scope="col" className="th-custom" width="">
+                                <th scope="col" className="th-custom">
                                     Departure
                                 </th>
                                 <th
@@ -170,13 +297,12 @@ function ReservationList() {
                                 >
                                     Room Detail
                                 </th>
-                                <th scope="col" className="th-custom" width="">
+                                <th scope="col" className="th-custom">
                                     Res. Type
                                 </th>
                                 <th
                                     scope="col"
                                     className="th-custom"
-                                    width=""
                                     style={{ textAlign: 'right' }}
                                 >
                                     Total(Rs)
@@ -184,7 +310,6 @@ function ReservationList() {
                                 <th
                                     scope="col"
                                     className="th-custom"
-                                    width=""
                                     style={{ textAlign: 'right' }}
                                 >
                                     Paid(Rs)
@@ -192,726 +317,92 @@ function ReservationList() {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td className="td-custom subtitle-1m">
-                                    <div className="mt-1">Alex Apolo</div>
-                                    <div className="icons-container d-flex align-items-center mt-1">
-                                        <div className="icon-item d-flex align-items-center">
-                                            <span className="material-icons-outlined align-items-center icon">
-                                                man
-                                            </span>
-                                            <span className="align-items-center">
-                                                2
-                                            </span>
+                            {data.map((row, index) => (
+                                <tr key={index}>
+                                    <td className="td-custom subtitle-1m">
+                                        <div className="mt-1">
+                                            {row.guestName}
                                         </div>
-                                        <div className="icon-item d-flex align-items-center">
-                                            <span className="material-icons-outlined align-items-center icon">
-                                                boy
-                                            </span>
-                                            <span className="align-items-center">
-                                                1
-                                            </span>
+                                        <div className="icons-container d-flex align-items-center mt-1">
+                                            <div className="icon-item d-flex align-items-center">
+                                                <span className="material-icons-outlined align-items-center icon">
+                                                    man
+                                                </span>
+                                                <span className="align-items-center">
+                                                    {row.adults}
+                                                </span>
+                                            </div>
+                                            <div className="icon-item d-flex align-items-center">
+                                                <span className="material-icons-outlined align-items-center icon">
+                                                    boy
+                                                </span>
+                                                <span className="align-items-center">
+                                                    {row.children}
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td className="td-custom body-2">RS1234</td>
-                                <td className="td-custom body-2">12/09/2024</td>
-                                <td className="td-custom body-2">
-                                    <div className="mt-1">12/09/2024</div>
-                                    <div className="mt-1">11:00 AM</div>
-                                </td>
-                                <td className="td-custom body-2">
-                                    <div className="mt-1">14/09/2024</div>
-                                    <div className="mt-1">11:00 AM</div>
-                                </td>
-                                <td className="td-custom body-2">
-                                    <div className="mt-1">
-                                        Duplex Room/American Plan (CP)
-                                    </div>
-                                    <div className="mt-1">
-                                        <p className="assign mt-1 mb-0">
-                                            Assign Room
-                                        </p>
-                                    </div>
-                                </td>
-                                <td className="td-custom body-2" width="8%">
-                                    Confirm Booking
-                                </td>
-                                <td
-                                    className="td-custom body-2"
-                                    style={{ textAlign: 'right' }}
-                                >
-                                    2,000.00
-                                </td>
-                                <td
-                                    className="td-custom body-2"
-                                    style={{ textAlign: 'right' }}
-                                >
-                                    1,000.00
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="td-custom subtitle-1m">
-                                    <div className="mt-1">Alex Apolo</div>
-                                    <div className="icons-container d-flex align-items-center mt-1">
-                                        <div className="icon-item d-flex align-items-center">
-                                            <span className="material-icons-outlined align-items-center icon">
-                                                man
-                                            </span>
-                                            <span className="align-items-center">
-                                                2
-                                            </span>
+                                    </td>
+                                    <td className="td-custom body-2">
+                                        {row.resNo}
+                                    </td>
+                                    <td className="td-custom body-2">
+                                        {row.bookingDate}
+                                    </td>
+                                    <td className="td-custom body-2">
+                                        <div className="mt-1">
+                                            {row.arrivalDate}
                                         </div>
-                                        <div className="icon-item d-flex align-items-center">
-                                            <span className="material-icons-outlined align-items-center icon">
-                                                boy
-                                            </span>
-                                            <span className="align-items-center">
-                                                1
-                                            </span>
+                                        <div className="mt-1">
+                                            {row.arrivalTime}
                                         </div>
-                                    </div>
-                                </td>
-                                <td className="td-custom body-2">RS1234</td>
-                                <td className="td-custom body-2">12/09/2024</td>
-                                <td className="td-custom body-2 Arrival">
-                                    <div className="mt-1">12/09/2024</div>
-                                    <div className="mt-1">11:00 AM</div>
-                                </td>
-                                <td className="td-custom body-2">
-                                    <div className="mt-1">14/09/2024</div>
-                                    <div className="mt-1">11:00 AM</div>
-                                </td>
-                                <td className="td-custom body-2">
-                                    <div className="mt-1">
-                                        Duplex Room/American Plan (CP)
-                                    </div>
-                                    <div className="mt-1">
-                                        <p className="assign mt-1 mb-0">
-                                            Assign Room
-                                        </p>
-                                    </div>
-                                </td>
-                                <td className="td-custom body-2" width="8%">
-                                    Confirm Booking
-                                </td>
-                                <td
-                                    className="td-custom body-2"
-                                    style={{ textAlign: 'right' }}
-                                >
-                                    2,000.00
-                                </td>
-                                <td
-                                    className="td-custom body-2"
-                                    style={{ textAlign: 'right' }}
-                                >
-                                    1,000.00
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="td-custom subtitle-1m">
-                                    <div className="mt-1">Alex Apolo</div>
-                                    <div className="icons-container d-flex align-items-center mt-1">
-                                        <div className="icon-item d-flex align-items-center">
-                                            <span className="material-icons-outlined align-items-center icon">
-                                                man
-                                            </span>
-                                            <span className="align-items-center">
-                                                2
-                                            </span>
+                                    </td>
+                                    <td className="td-custom body-2">
+                                        <div className="mt-1">
+                                            {row.departureDate}
                                         </div>
-                                        <div className="icon-item d-flex align-items-center">
-                                            <span className="material-icons-outlined align-items-center icon">
-                                                boy
-                                            </span>
-                                            <span className="align-items-center">
-                                                1
-                                            </span>
+                                        <div className="mt-1">
+                                            {row.departureTime}
                                         </div>
-                                    </div>
-                                </td>
-                                <td className="td-custom body-2">RS1234</td>
-                                <td className="td-custom body-2">12/09/2024</td>
-                                <td className="td-custom body-2">
-                                    <div className="mt-1">12/09/2024</div>
-                                    <div className="mt-1">11:00 AM</div>
-                                </td>
-                                <td className="td-custom body-2">
-                                    <div className="mt-1">14/09/2024</div>
-                                    <div className="mt-1">11:00 AM</div>
-                                </td>
-                                <td className="td-custom body-2">
-                                    <div className="mt-1">
-                                        Duplex Room/American Plan (CP)
-                                    </div>
-                                    <div className="mt-1">
-                                        <p className="assign mt-1 mb-0">
-                                            Assign Room
-                                        </p>
-                                    </div>
-                                </td>
-                                <td className="td-custom body-2" width="8%">
-                                    Confirm Booking
-                                </td>
-                                <td
-                                    className="td-custom body-2"
-                                    style={{ textAlign: 'right' }}
-                                >
-                                    2,000.00
-                                </td>
-                                <td
-                                    className="td-custom body-2"
-                                    style={{ textAlign: 'right' }}
-                                >
-                                    1,000.00
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="td-custom subtitle-1m">
-                                    <div className="mt-1">Alex Apolo</div>
-                                    <div className="icons-container d-flex align-items-center mt-1">
-                                        <div className="icon-item d-flex align-items-center">
-                                            <span className="material-icons-outlined align-items-center icon">
-                                                man
-                                            </span>
-                                            <span className="align-items-center">
-                                                2
-                                            </span>
+                                    </td>
+                                    <td className="td-custom body-2">
+                                        <div className="mt-1">
+                                            {row.roomDetail}
                                         </div>
-                                        <div className="icon-item d-flex align-items-center">
-                                            <span className="material-icons-outlined align-items-center icon">
-                                                boy
-                                            </span>
-                                            <span className="align-items-center">
-                                                1
-                                            </span>
+                                        <div
+                                            className="mt-1"
+                                            onClick={assignRooms}
+                                        >
+                                            <p className="assign mt-1 mb-0">
+                                                Assign Room
+                                            </p>
                                         </div>
-                                    </div>
-                                </td>
-                                <td className="td-custom body-2">RS1234</td>
-                                <td className="td-custom body-2">12/09/2024</td>
-                                <td className="td-custom body-2">
-                                    <div className="mt-1">12/09/2024</div>
-                                    <div className="mt-1">11:00 AM</div>
-                                </td>
-                                <td className="td-custom body-2">
-                                    <div className="mt-1">14/09/2024</div>
-                                    <div className="mt-1">11:00 AM</div>
-                                </td>
-                                <td className="td-custom body-2">
-                                    <div className="mt-1">
-                                        Duplex Room/American Plan (CP)
-                                    </div>
-                                    <div className="mt-1">
-                                        <p className="assign mt-1 mb-0">
-                                            Assign Room
-                                        </p>
-                                    </div>
-                                </td>
-                                <td className="td-custom body-2" width="8%">
-                                    Confirm Booking
-                                </td>
-                                <td
-                                    className="td-custom body-2"
-                                    style={{ textAlign: 'right' }}
-                                >
-                                    2,000.00
-                                </td>
-                                <td
-                                    className="td-custom body-2"
-                                    style={{ textAlign: 'right' }}
-                                >
-                                    1,000.00
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td className="td-custom body-2">
+                                        {row.resType}
+                                    </td>
+                                    <td
+                                        className="td-custom body-2"
+                                        style={{ textAlign: 'right' }}
+                                    >
+                                        {row.total}
+                                    </td>
+                                    <td
+                                        className="td-custom body-2"
+                                        style={{ textAlign: 'right' }}
+                                    >
+                                        {row.paid}
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
             ) : (
                 <div className="col-12 p-3 container-page">
                     <div className="row">
-                        <div className="col-box">
-                            <div className="card-box">
-                                <div className="card-header cardheader">
-                                    <div>
-                                        <h5 className="subtitle-1m mb-0">
-                                            Mr. Rohit Patel
-                                        </h5>
-                                        <p className="caption-1 mb-0">RS1738</p>
-                                    </div>
-                                    <span className="material-icons-outlined">
-                                        more_vert
-                                    </span>
-                                </div>
-
-                                <div className="card-body">
-                                    <div className="row mb-3 row13">
-                                        <div
-                                            className="col-4 d-flex flex-column justify-content-center surface-l"
-                                            style={{ padding: '10px' }}
-                                        >
-                                            <p className="subtitle-2m text-center mb-0">
-                                                10/12/2024
-                                            </p>
-                                            <p className="caption-1 text-center mb-0">
-                                                10:00 PM
-                                            </p>
-                                        </div>
-                                        <div
-                                            className="col-4 d-flex flex-column justify-content-center"
-                                            style={{
-                                                backgroundColor: '#dee7f1',
-                                                padding: '10px',
-                                            }}
-                                        >
-                                            <p className="subtitle-2m text-center mb-0">
-                                                2
-                                            </p>
-                                            <p className="caption-1 text-center mb-0">
-                                                Nights
-                                            </p>
-                                        </div>
-                                        <div
-                                            className="col-4 d-flex flex-column justify-content-center surface-l"
-                                            style={{ padding: '10px' }}
-                                        >
-                                            <p className="subtitle-2m text-center mb-0">
-                                                10/12/2024
-                                            </p>
-                                            <p className="caption-1 text-center mb-0">
-                                                10:00 PM
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="row">
-                                        <div className="col-6">
-                                            <p className="subtitle-2m mb-0 p-1">
-                                                Booking Date
-                                            </p>
-                                            <p className="body-2 mt-0 p-1">
-                                                12/10/2024
-                                            </p>
-                                        </div>
-                                        <div className="col-6 d-flex align-items-center mb-3 justify-content-end">
-                                            <div>
-                                                <span className="material-icons-outlined align-items-center">
-                                                    man
-                                                </span>
-                                                <span className="align-items-center">
-                                                    2
-                                                </span>
-                                            </div>
-                                            <div className="boy">
-                                                <span className="material-icons-outlined align-items-center">
-                                                    boy
-                                                </span>
-                                                <span className="align-items-center">
-                                                    2
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="container-box mb-3">
-                                        <p className="subtitle-2m">
-                                            Room/Rate Type
-                                        </p>
-                                        <p className="subtitle-2m">
-                                            Confirm Booking
-                                        </p>
-                                    </div>
-                                    <div className="container-box">
-                                        <p className="body-2">
-                                            Duplex Room/American
-                                        </p>
-                                        <p className="assign">Assign Room</p>
-                                    </div>
-                                    <div className="container-box mb-3">
-                                        <p className="body-2">
-                                            Twin Room/American Plan
-                                        </p>
-                                        <p className="assign">Assign Room</p>
-                                    </div>
-                                    <div className="container-box">
-                                        <p className="body-2">Total</p>
-                                        <p className="subtitle-2m">
-                                            ₹ 1,000.00
-                                        </p>
-                                    </div>
-                                    <div className="container-box">
-                                        <p className="body-2">Paid</p>
-                                        <p className="subtitle-2m">₹ 0.00</p>
-                                    </div>
-                                    <div className="container-box">
-                                        <p className="red">Balance</p>
-                                        <p className="darkred">₹ 1,000.00</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-box">
-                            <div className="card-box">
-                                <div className="card-header cardheader">
-                                    <div>
-                                        <h5 className="subtitle-1m mb-0">
-                                            Mr. Rohit Patel
-                                        </h5>
-                                        <p className="caption-1 mb-0">RS1738</p>
-                                    </div>
-                                    <span className="material-icons-outlined">
-                                        more_vert
-                                    </span>
-                                </div>
-
-                                <div className="card-body">
-                                    <div className="row mb-3 row13">
-                                        <div
-                                            className="col-4 d-flex flex-column justify-content-center surface-l"
-                                            style={{ padding: '10px' }}
-                                        >
-                                            <p className="subtitle-2m text-center mb-0">
-                                                10/12/2024
-                                            </p>
-                                            <p className="caption-1 text-center mb-0">
-                                                10:00 PM
-                                            </p>
-                                        </div>
-                                        <div
-                                            className="col-4 d-flex flex-column justify-content-center"
-                                            style={{
-                                                backgroundColor: '#dee7f1',
-                                                padding: '10px',
-                                            }}
-                                        >
-                                            <p className="subtitle-2m text-center mb-0">
-                                                2
-                                            </p>
-                                            <p className="caption-1 text-center mb-0">
-                                                Nights
-                                            </p>
-                                        </div>
-                                        <div
-                                            className="col-4 d-flex flex-column justify-content-center surface-l"
-                                            style={{ padding: '10px' }}
-                                        >
-                                            <p className="subtitle-2m text-center mb-0">
-                                                10/12/2024
-                                            </p>
-                                            <p className="caption-1 text-center mb-0">
-                                                10:00 PM
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="row">
-                                        <div className="col-6">
-                                            <p className="subtitle-2m mb-0 p-1">
-                                                Booking Date
-                                            </p>
-                                            <p className="body-2 mt-0 p-1">
-                                                12/10/2024
-                                            </p>
-                                        </div>
-                                        <div className="col-6 d-flex align-items-center mb-3 justify-content-end">
-                                            <div>
-                                                <span className="material-icons-outlined align-items-center">
-                                                    man
-                                                </span>
-                                                <span className="align-items-center">
-                                                    2
-                                                </span>
-                                            </div>
-                                            <div className="boy">
-                                                <span className="material-icons-outlined align-items-center">
-                                                    boy
-                                                </span>
-                                                <span className="align-items-center">
-                                                    2
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="container-box mb-3">
-                                        <p className="subtitle-2m">
-                                            Room/Rate Type
-                                        </p>
-                                        <p className="subtitle-2m">
-                                            Confirm Booking
-                                        </p>
-                                    </div>
-                                    <div className="container-box">
-                                        <p className="body-2">
-                                            Duplex Room/American
-                                        </p>
-                                        <p className="assign">Assign Room</p>
-                                    </div>
-                                    <div className="container-box mb-3">
-                                        <p className="body-2">
-                                            Twin Room/American Plan
-                                        </p>
-                                        <p className="assign">Assign Room</p>
-                                    </div>
-                                    <div className="container-box">
-                                        <p className="body-2">Total</p>
-                                        <p className="subtitle-2m">
-                                            ₹ 1,000.00
-                                        </p>
-                                    </div>
-                                    <div className="container-box">
-                                        <p className="body-2">Paid</p>
-                                        <p className="subtitle-2m">₹ 0.00</p>
-                                    </div>
-                                    <div className="container-box">
-                                        <p className="red">Balance</p>
-                                        <p className="darkred">₹ 1,000.00</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-box">
-                            <div className="card-box">
-                                <div className="card-header cardheader">
-                                    <div>
-                                        <h5 className="subtitle-1m mb-0">
-                                            Mr. Rohit Patel
-                                        </h5>
-                                        <p className="caption-1 mb-0">RS1738</p>
-                                    </div>
-                                    <span className="material-icons-outlined">
-                                        more_vert
-                                    </span>
-                                </div>
-
-                                <div className="card-body">
-                                    <div className="row mb-3 row13">
-                                        <div
-                                            className="col-4 d-flex flex-column justify-content-center surface-l"
-                                            style={{ padding: '10px' }}
-                                        >
-                                            <p className="subtitle-2m text-center mb-0">
-                                                10/12/2024
-                                            </p>
-                                            <p className="caption-1 text-center mb-0">
-                                                10:00 PM
-                                            </p>
-                                        </div>
-                                        <div
-                                            className="col-4 d-flex flex-column justify-content-center"
-                                            style={{
-                                                backgroundColor: '#dee7f1',
-                                                padding: '10px',
-                                            }}
-                                        >
-                                            <p className="subtitle-2m text-center mb-0">
-                                                2
-                                            </p>
-                                            <p className="caption-1 text-center mb-0">
-                                                Nights
-                                            </p>
-                                        </div>
-                                        <div
-                                            className="col-4 d-flex flex-column justify-content-center surface-l"
-                                            style={{ padding: '10px' }}
-                                        >
-                                            <p className="subtitle-2m text-center mb-0">
-                                                10/12/2024
-                                            </p>
-                                            <p className="caption-1 text-center mb-0">
-                                                10:00 PM
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="row">
-                                        <div className="col-6">
-                                            <p className="subtitle-2m mb-0 p-1">
-                                                Booking Date
-                                            </p>
-                                            <p className="body-2 mt-0 p-1">
-                                                12/10/2024
-                                            </p>
-                                        </div>
-                                        <div className="col-6 d-flex align-items-center mb-3 justify-content-end">
-                                            <div>
-                                                <span className="material-icons-outlined align-items-center">
-                                                    man
-                                                </span>
-                                                <span className="align-items-center">
-                                                    2
-                                                </span>
-                                            </div>
-                                            <div className="boy">
-                                                <span className="material-icons-outlined align-items-center">
-                                                    boy
-                                                </span>
-                                                <span className="align-items-center">
-                                                    2
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="container-box mb-3">
-                                        <p className="subtitle-2m">
-                                            Room/Rate Type
-                                        </p>
-                                        <p className="subtitle-2m">
-                                            Confirm Booking
-                                        </p>
-                                    </div>
-                                    <div className="container-box">
-                                        <p className="body-2">
-                                            Duplex Room/American
-                                        </p>
-                                        <p className="assign">Assign Room</p>
-                                    </div>
-                                    <div className="container-box mb-3">
-                                        <p className="body-2">
-                                            Twin Room/American Plan
-                                        </p>
-                                        <p className="assign">Assign Room</p>
-                                    </div>
-                                    <div className="container-box">
-                                        <p className="body-2">Total</p>
-                                        <p className="subtitle-2m">
-                                            ₹ 1,000.00
-                                        </p>
-                                    </div>
-                                    <div className="container-box">
-                                        <p className="body-2">Paid</p>
-                                        <p className="subtitle-2m">₹ 0.00</p>
-                                    </div>
-                                    <div className="container-box">
-                                        <p className="red">Balance</p>
-                                        <p className="darkred">₹ 1,000.00</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-box">
-                            <div className="card-box">
-                                <div className="card-header cardheader">
-                                    <div>
-                                        <h5 className="subtitle-1m mb-0">
-                                            Mr. Rohit Patel
-                                        </h5>
-                                        <p className="caption-1 mb-0">RS1738</p>
-                                    </div>
-                                    <span className="material-icons-outlined">
-                                        more_vert
-                                    </span>
-                                </div>
-
-                                <div className="card-body">
-                                    <div className="row mb-3 row13">
-                                        <div
-                                            className="col-4 d-flex flex-column justify-content-center surface-l"
-                                            style={{ padding: '10px' }}
-                                        >
-                                            <p className="subtitle-2m text-center mb-0">
-                                                10/12/2024
-                                            </p>
-                                            <p className="caption-1 text-center mb-0">
-                                                10:00 PM
-                                            </p>
-                                        </div>
-                                        <div
-                                            className="col-4 d-flex flex-column justify-content-center"
-                                            style={{
-                                                backgroundColor: '#dee7f1',
-                                                padding: '10px',
-                                            }}
-                                        >
-                                            <p className="subtitle-2m text-center mb-0">
-                                                2
-                                            </p>
-                                            <p className="caption-1 text-center mb-0">
-                                                Nights
-                                            </p>
-                                        </div>
-                                        <div
-                                            className="col-4 d-flex flex-column justify-content-center surface-l"
-                                            style={{ padding: '10px' }}
-                                        >
-                                            <p className="subtitle-2m text-center mb-0">
-                                                10/12/2024
-                                            </p>
-                                            <p className="caption-1 text-center mb-0">
-                                                10:00 PM
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="row">
-                                        <div className="col-6">
-                                            <p className="subtitle-2m mb-0 p-1">
-                                                Booking Date
-                                            </p>
-                                            <p className="body-2 mt-0 p-1">
-                                                12/10/2024
-                                            </p>
-                                        </div>
-                                        <div className="col-6 d-flex align-items-center mb-3 justify-content-end">
-                                            <div>
-                                                <span className="material-icons-outlined align-items-center">
-                                                    man
-                                                </span>
-                                                <span className="align-items-center">
-                                                    2
-                                                </span>
-                                            </div>
-                                            <div className="boy">
-                                                <span className="material-icons-outlined align-items-center">
-                                                    boy
-                                                </span>
-                                                <span className="align-items-center">
-                                                    2
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="container-box mb-3">
-                                        <p className="subtitle-2m">
-                                            Room/Rate Type
-                                        </p>
-                                        <p className="subtitle-2m">
-                                            Confirm Booking
-                                        </p>
-                                    </div>
-                                    <div className="container-box">
-                                        <p className="body-2">
-                                            Duplex Room/American
-                                        </p>
-                                        <p className="assign">Assign Room</p>
-                                    </div>
-                                    <div className="container-box mb-3">
-                                        <p className="body-2">
-                                            Twin Room/American Plan
-                                        </p>
-                                        <p className="assign">Assign Room</p>
-                                    </div>
-                                    <div className="container-box">
-                                        <p className="body-2">Total</p>
-                                        <p className="subtitle-2m">
-                                            ₹ 1,000.00
-                                        </p>
-                                    </div>
-                                    <div className="container-box">
-                                        <p className="body-2">Paid</p>
-                                        <p className="subtitle-2m">₹ 0.00</p>
-                                    </div>
-                                    <div className="container-box">
-                                        <p className="red">Balance</p>
-                                        <p className="darkred">₹ 1,000.00</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {bookings.map((booking, index) => (
+                            <BookingCard key={index} booking={booking} />
+                        ))}
                     </div>
                 </div>
             )}
