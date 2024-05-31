@@ -57,7 +57,7 @@ function CreateEditMdl({
                     aria-modal="true"
                     role="dialog"
                 >
-                    <div className="modal-dialog modal-lg modal-dialog-centered">
+                    <div className="modal-dialog modal-lg modal-center">
                         <form
                             method="post"
                             id="floordata"
@@ -71,14 +71,14 @@ function CreateEditMdl({
                                 value="0"
                             />
                             <div className="modal-content">
-                                <div className="modal-header">
+                                <div className="modal-header d-flex justify-content-between align-items-center">
                                     <h5
                                         className="modal-title"
                                         id="ftable_header"
                                     >
                                         {mode}
                                     </h5>
-                                    <div className="d-flex gap-2 align-items-right">
+                                    <div className="d-flex gap-4 align-items-center">
                                         {mode === 'Edit Booking Source' ? (
                                             <div className="d-flex gap-4 align-items-center">
                                                 <div
@@ -115,7 +115,7 @@ function CreateEditMdl({
 
                                         <button
                                             type="button"
-                                            className="btn-close mt-1"
+                                            className="btn-close"
                                             data-bs-dismiss="modal"
                                             aria-label="Close"
                                             onClick={() => setOpen(false)}

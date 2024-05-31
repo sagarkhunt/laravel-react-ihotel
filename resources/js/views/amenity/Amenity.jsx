@@ -37,7 +37,7 @@ function Amenity() {
                     <label class="custom-control-label" htmlFor="customCheck1"></label>
                 </div>
             </span>`,
-            className: 'action-check',
+            className: 'action-check table-right',
             render: () =>
                 `
                 <div class="custom-control custom-checkbox">
@@ -46,7 +46,6 @@ function Amenity() {
                 </div>
                 `,
             width: '5%',
-            className: 'table-right',
         },
         { data: 'amnt', label: 'Amenities', width: '32.5%' },
         { data: 'description', label: 'Description', width: '42.5%' },

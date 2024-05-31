@@ -39,7 +39,7 @@ function BooingInq() {
                     <label class="custom-control-label" htmlFor="customCheck1"></label>
                 </div>
             </span>`,
-            className: 'th-custom action-check dt-orderable-none',
+            className: 'th-custom action-check dt-orderable-none table-right',
             render: (data, type, row) =>
                 `
             <div class="custom-control custom-checkbox">
@@ -52,7 +52,6 @@ function BooingInq() {
                 <label class="custom-control-label" htmlFor="customCheckAll"></label>
             </div>
             `,
-            className: 'table-right',
             width: '5%',
         },
         {

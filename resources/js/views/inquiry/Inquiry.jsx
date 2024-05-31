@@ -36,7 +36,7 @@ function Inquiry() {
                     <label class="custom-control-label" htmlFor="customCheck1"></label>
                 </div>
             </span>`,
-            className: 'action-check',
+            className: 'action-check table-right',
             render: () =>
                 `
                 <div class="custom-control custom-checkbox">
@@ -45,7 +45,6 @@ function Inquiry() {
                 </div>
                 `,
             width: '5%',
-            className: 'table-right',
         },
         { data: 'inq_type', label: 'Inquiry Type', width: '25%' },
         { data: 'inq_desc', label: 'Description', width: '50%' },

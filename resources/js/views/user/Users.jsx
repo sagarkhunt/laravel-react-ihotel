@@ -41,7 +41,7 @@ function Users() {
                 </div>
                 `,
             width: '5%',
-            className: 'table-right',
+            class: 'table-right',
         },
         { data: 'name', label: 'Name', width: '25%' },
         { data: 'email', label: 'Email', width: '25%' },
