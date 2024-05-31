@@ -17,7 +17,7 @@ function DeleteMdl({ open, setOpen, onSubmit, delId }) {
                 >
                     <div className="modal-dialog modal-xs modal-dialog-centered">
                         <div className="modal-content">
-                            <div className="modal-header">
+                            <div className="modal-header d-flex justify-content-between">
                                 <h5 className="modal-title" id="ftable_header">
                                     Delete
                                 </h5>

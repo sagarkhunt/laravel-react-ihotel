@@ -67,14 +67,14 @@ function CreateEditMdl({
                                 value="0"
                             />
                             <div className="modal-content modal-lf-container">
-                                <div className="modal-header">
+                                <div className="modal-header d-flex justify-content-between">
                                     <h5
                                         className="modal-title"
                                         id="ftable_header"
                                     >
                                         {mode}
                                     </h5>
-                                    <div className="d-flex gap-4 align-items-right">
+                                    <div className="d-flex gap-2 align-items-center">
                                         {mode === 'Edit Inquiry Type' ? (
                                             <div className="d-flex gap-4 align-items-center">
                                                 <div

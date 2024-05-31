@@ -43,7 +43,7 @@ function AddTnc({ setTncPolicyHide, setShowTncPolicy }) {
             </div>
             <form onSubmit={handleSubmit}>
                 <div
-                    className="modal-body policy-container-body"
+                    className="modal-body policy-container-body p-3"
                     // style={{
                     //     height: 'calc(100vh - 220px)',
                     //     overflowY: 'scroll',
@@ -138,7 +138,7 @@ function AddTnc({ setTncPolicyHide, setShowTncPolicy }) {
                     </button>
                 </div>
 
-                <div className="modal-footer">
+                <div className="modal-footer p-3">
                     <button type="submit" className="btn btn-primary">
                         Save
                     </button>

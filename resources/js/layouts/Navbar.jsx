@@ -362,7 +362,7 @@ function Navbar() {
                                                                 className="nav-item"
                                                                 data-bs-dismiss="offcanvas"
                                                             >
-                                                                Cancell Policy
+                                                                Cancel Policy
                                                             </span>
                                                         </Link>
                                                     </li>

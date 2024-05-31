@@ -1554,7 +1554,12 @@ body {
 .policy-sidebar {
     width: 30%;
     max-width: 380px;
-    min-height: calc(100vh - 88px);
+    height: calc(100vh - 88px);
+}
+.sidebar-body {
+    height: calc(100vh - 230px);
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .policy-main-container {
@@ -1563,7 +1568,7 @@ body {
 }
 
 .policy-container-size {
-    min-height: calc(100vh - 88px);
+    height: calc(100vh - 88px);
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -1694,6 +1699,6 @@ select,
     border-radius: 5px;
 }
 .sidebar-masters-submenu {
-    max-height: calc(100vh - 248px);
+    max-height: calc(100vh - 300px);
     overflow-y: scroll;
 }

@@ -8,7 +8,7 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
             handleModal={() => setShowAvaInq(!showAvaInq)}
         >
             <div
-                className="modal right show"
+                className="modal right"
                 id="availibility_inquiry"
                 tabIndex="-1"
                 aria-labelledby="exampleModalLabel"
@@ -20,7 +20,7 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
                     style={{ width: '90%', maxWidth: '1200px' }}
                 >
                     <div className="modal-content modal-lf-container">
-                        <div className="modal-header">
+                        <div className="modal-header d-flex justify-content-between">
                             <h5
                                 className="modal-title headline-h6m"
                                 id="exampleModalLabel"
@@ -88,7 +88,7 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
                                             style={{ minHeight: '50px' }}
                                         >
                                             <option value="">
-                                                Please Select Room Cate
+                                                Select Room Category
                                             </option>{' '}
                                             <option value="room1">
                                                 Room 1
@@ -145,7 +145,7 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
                                         <tr
                                             style={{
                                                 height: '56px',
-                                                backgroundColor: '#f0f3f5',
+                                                backgroundColor: "#000" ,
                                             }}
                                         >
                                             <th
