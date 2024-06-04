@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import PaymentMdl from './PaymentMdl';
+import PaymentMdl from './componet/PaymentMdl';
 import '../../../css/AddReservation.css';
 import { useNavigate } from 'react-router-dom';
 function AddReservation() {
@@ -73,7 +73,6 @@ function AddReservation() {
     };
 
     return (
-        // <div className="">
         <div className="row row mt-3 mx-2">
             <div className="col">
                 <div className="card card_height">
@@ -768,7 +767,6 @@ function AddReservation() {
             </div>
             {open && <PaymentMdl open={open} setOpen={setOpen} />}
         </div>
-        // </div>
     );
 }
 

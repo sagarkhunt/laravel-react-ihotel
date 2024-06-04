@@ -54,10 +54,10 @@
     padding: 10px; /* Adjust as needed */
 }
 
-.button-container {
+/* .button-container {
     display: flex;
-    gap: 10px; /* Adjust space between buttons */
-}
+    gap: 10px; 
+} */
 
 .custom-btn-2 {
     border: 2px solid #dcd9d9; /* Add border to the second button */
@@ -85,7 +85,7 @@
     padding-right: 10px; /* Adjust as needed */
 }
 .col-5 {
-    display: flex;
+    /* display: flex; */
     justify-content: flex-end;
 }
 
@@ -163,7 +163,7 @@
 }
 
 .date {
-    height: 50px;
+    height: 40px;
     width: 170px;
 }
 .modal-dropdown {
@@ -196,6 +196,25 @@
 .dropdown-item-nohover:hover {
     background-color: transparent;
     /* Remove any other hover effects */
+}
+.col-4_span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.row_span {
+    display: flex;
+}
+.bordered-column {
+    width: 177px;
+    height: 112px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+.title-modal {
+    color: #0863b5;
 }
 .card {
     /* background-color: #f8f9fa; */
@@ -254,4 +273,29 @@
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: 15px 0;
+}
+
+.contact-info .icon {
+    margin-right: -1px; /* Adjust the spacing between icons and text */
+}
+
+.contact-info .sapn_header {
+    margin-right: 16px; /* Adjust the spacing after the phone number */
+}
+
+.contact-info span {
+    margin-right: 16px; /* General spacing between text elements */
+}
+.active-btn {
+    background-color: cyan;
+}
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.button-group .right-buttons .btn {
+    margin-left: 10px;
 }

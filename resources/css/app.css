@@ -1304,7 +1304,7 @@ body {
     /* width: 250px; */
 }
 .dropdown-item {
-    display: flex;
+    /* display: flex; */
     align-items: center;
     gap: 10px;
 }
@@ -1840,4 +1840,37 @@ select,
 
 .custom_input_1 {
     width: 100%;
+}
+/* Stay Info Page css */
+.green-btn {
+    color: #0b641f;
+    background-color: rgb(206, 253, 206);
+    padding: 5px;
+    border-radius: 5px;
+    display: inline-block;
+}
+.blue_colour {
+    color: #0863b5;
+}
+.static-height {
+    height: 570px;
+}
+.light-red {
+    color: #e3001f;
+}
+
+.card-footer {
+    margin-top: auto;
+}
+
+.height-adjust {
+    height: 440px;
+}
+.background {
+    background-color: white;
+    height: 30px;
+    width: 30px;
+    align-items: center;
+    display: flex;
+    padding-left: 3px;
 }

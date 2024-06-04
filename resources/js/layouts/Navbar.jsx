@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../../css/sidebar.css';
 import headerLogo from '../../../public/assets/v1/images/header_logo.png';
 import Tooltip from '../components/common/ToolTip';
-import AvailableInqMdl from '../views/reservation/AvailableInqMdl';
+import AvailableInqMdl from '../views/reservation/componet/AvailableInqMdl';
 
 function Navbar() {
     const [activeLink, setActiveLink] = useState(null);

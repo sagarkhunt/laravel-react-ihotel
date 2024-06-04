@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import '../../../css/AddReservation.css';
-import AssignRoomMdl from './AssignRoomMdl';
+import AssignRoomMdl from './componet/AssignRoomMdl';
 import BookingCard from './componet/BookingCard';
 function ReservationList() {
-    // State to track the current view mode
     const [isGridView, setIsGridView] = useState(true);
     const [open, setOpen] = useState(false);
     const [activeButton, setActiveButton] = useState('reservations');
@@ -11,12 +10,9 @@ function ReservationList() {
     const handleClick = (buttonName) => {
         setActiveButton(buttonName);
     };
-
     function assignRooms() {
         setOpen(true);
     }
-
-    // Function to toggle between views
     const toggleView = () => {
         setIsGridView(!isGridView);
     };
@@ -202,7 +198,6 @@ function ReservationList() {
                                 className="form-control search-input"
                                 id="dt-serach-cstm"
                                 placeholder="Search"
-                                value=""
                             />
                         </div>
 
@@ -262,8 +257,8 @@ function ReservationList() {
                         </div>
                         <button
                             className="btn btn-secondary d-flex"
-                            data-bs-toggle="modal"
-                            data-bs-target="#Assigns_rooms"
+                            // data-bs-toggle="modal"
+                            // data-bs-target="#Assigns_rooms"
                         >
                             <div>Print GR</div>
                         </button>
@@ -369,10 +364,10 @@ function ReservationList() {
                                             {row.roomDetail}
                                         </div>
                                         <div
-                                            className="mt-1"
+                                            className="mt-1 cp"
                                             onClick={assignRooms}
                                         >
-                                            <p className="assign mt-1 mb-0">
+                                            <p className="assign mt-1 mb-0 cp">
                                                 Assign Room
                                             </p>
                                         </div>

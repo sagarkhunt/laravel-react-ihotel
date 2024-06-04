@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
+import AssignRoomMdl from './AssignRoomMdl';
 
 function BookingCard({ booking }) {
+    const [open, setOpen] = useState(false);
+    const openAssignRoom = () => {
+        setOpen(true);
+    };
     return (
         <div className="col-box">
             <div className="card-box">
@@ -79,7 +84,9 @@ function BookingCard({ booking }) {
                     {booking.roomTypes.map((room, index) => (
                         <div className="container-box mb-3" key={index}>
                             <p className="body-2">{room.type}</p>
-                            <p className="assign cp">{room.action}</p>
+                            <p className="assign cp" onClick={openAssignRoom}>
+                                {room.action}
+                            </p>
                         </div>
                     ))}
 
@@ -97,6 +104,7 @@ function BookingCard({ booking }) {
                     </div>
                 </div>
             </div>
+            {open && <AssignRoomMdl open={open} setOpen={setOpen} />}
         </div>
     );
 }
