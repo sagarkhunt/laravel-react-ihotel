@@ -211,7 +211,7 @@ function CreateEditMdl({
                                 value="0"
                             />
                             <div className="modal-content modal-lf-container">
-                                <div className="modal-header">
+                                <div className="modal-header d-flex justify-content-between">
                                     <h5
                                         className="modal-title headline-h6m"
                                         id="rctable_header"

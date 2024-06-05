@@ -35,21 +35,12 @@ function AddPolicy({ setPolicyHide, setShowPolicy }) {
         setShowPolicy('');
     };
     return (
-        <div
-            className="container-page policy-container-size"
-            // style={{ minHeight: 'calc(100vh - 88px)' }}
-        >
+        <div className="container-page">
             <div className="modal-header p-3">
                 <h6 className="headline-h6m mb-0">Add Cancellation Policy</h6>
             </div>
             <form onSubmit={handleSubmit}>
-                <div
-                    className="modal-body policy-container-body"
-                    // style={{
-                    //     height: 'calc(100vh - 220px)',
-                    //     overflowX: 'scroll',
-                    // }}
-                >
+                <div className="modal-body policy-container-body p-3">
                     <div className="row mb-3">
                         <div className="col-5 d-flex flex-column">
                             <label htmlFor="name" className="body-2 pb-1">
@@ -58,8 +49,7 @@ function AddPolicy({ setPolicyHide, setShowPolicy }) {
                             <input
                                 type="text"
                                 name="name"
-                                className="custom-input"
-                                style={{ borderWidth: '1px' }}
+                                className="custom-input border-width-1"
                                 placeholder="Name"
                             />
                         </div>
@@ -71,8 +61,7 @@ function AddPolicy({ setPolicyHide, setShowPolicy }) {
                         <div className="col-12 d-flex flex-column">
                             <label
                                 htmlFor="cancellation-policy"
-                                className="body-2 py-3"
-                                style={{ color: '#0863b5', fontWeight: '600' }}
+                                className="body-2 py-3 primary-colori f-weight-600"
                             >
                                 CANCELLATION POLICY
                             </label>
@@ -86,8 +75,7 @@ function AddPolicy({ setPolicyHide, setShowPolicy }) {
                                             onChange={(event) =>
                                                 handleInputChange(index, event)
                                             }
-                                            className="custom-input"
-                                            style={{ borderWidth: '1px' }}
+                                            className="custom-input border-width-1"
                                             placeholder="Add Policy"
                                         />
                                     </div>
@@ -139,7 +127,7 @@ function AddPolicy({ setPolicyHide, setShowPolicy }) {
                     </button>
                 </div>
 
-                <div className="modal-footer">
+                <div className="modal-footer p-3">
                     <button type="submit" className="btn btn-primary">
                         Save
                     </button>

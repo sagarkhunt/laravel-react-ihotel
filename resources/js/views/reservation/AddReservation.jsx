@@ -86,7 +86,7 @@ function AddReservation() {
     return (
         <div className="row row mt-3 mx-2">
             <div className="col">
-                <div className="card card_height">
+                <div className="card m-0 p-2 card_height">
                     <div className="modal-header p-1" onClick={handleBackClick}>
                         <h5 className="headline-h6m mt-1 ms-2">
                             <span className="material-icons-outlined me-1">
@@ -100,7 +100,7 @@ function AddReservation() {
                         encType="multipart/form-data"
                         onSubmit={handleSubmit}
                     >
-                        <div className="card-body scrollable-modal-body">
+                        <div className="card-body scrollable-modal-body y_scrolling">
                             <div className="row">
                                 <div className="col">
                                     <div className="form-group mb-3">
