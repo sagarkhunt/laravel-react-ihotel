@@ -43,6 +43,8 @@ Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' =
     Route::any('update_user', 'HotelUserController@updateUser');
     Route::any('delete_user', 'HotelUserController@deleteUser');
 
+    Route::any('upd_htl_profile', 'HotelUserController@updateHotelProfile');
+
     #--------------Room Management-------------------
     #Floor
     Route::any('get_floors', 'HotelFloorController@getFloor');

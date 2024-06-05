@@ -1,86 +1,90 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import actions from '../Users/actions';
+import actions from '../Reservation/actions';
 
 import {
     postRequest,
-    // getCustomRequest,
     getRequest,
     deleteRequest,
     axiosApi,
 } from '../../config/axiosClient';
-import { message } from 'antd';
-import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
-
-function* userList(action) {
+/**
+ *
+ * @param {reservationList} action
+ */
+function* reservationList(action) {
     try {
-        const response = yield call(postRequest, 'get_users', action.payload);
+        const response = yield call(
+            postRequest,
+            'get_reservation',
+            action.payload,
+        );
         if (response) {
             yield put({
-                type: actions.USER_LIST_SUCCESS,
+                type: actions.RESER_LIST_SUCCESS,
                 payload: response.data,
             });
         }
     } catch (error) {
-        yield put({ type: actions.LOGIN_FAILURE });
+        yield put({ type: actions.RESER_LIST_FAILURE });
         if (error.response.status === 401) {
-            message.error(error.response.data.message);
+            toast.error(error.response.data.message);
         } else if (
             error.response &&
             error.response.data &&
             error.response.data.message
         ) {
             toast.error(error.response.data.message);
-            // message.error(error.response.data.message);
         }
     }
 }
 /**
- * Add user
+ *
+ * @param {createReservation} action
  */
-function* createUser(action) {
+function* createReservation(action) {
     const { payload } = action;
-    // const { navigate } = payload; // Extract navigate from payload
     try {
-        const response = yield call(postRequest, 'create_user', payload);
+        console.log(payload, '==========');
+        const response = yield call(postRequest, 'create_reservation', payload);
         if (response) {
             yield put({
-                type: actions.USER_ADD_SUCCESS,
+                type: actions.RESER_ADD_SUCCESS,
                 payload: response.data,
             });
             toast.success(response.message);
         }
     } catch (error) {
         // Dispatch the register failure action
-        yield put({ type: actions.USER_ADD_FAILURE });
+        yield put({ type: actions.RESER_ADD_FAILURE });
 
         // Handle different error statuses
         if (error.response?.status === 422) {
             const errors = error.response.data.errors;
-            message.error(Object.values(errors).join(', '));
+            toast.error(Object.values(errors).join(', '));
         } else if (error.response?.status === 400) {
-            message.error('Bad request');
+            toast.error('Bad request');
         } else if (error.response?.status === 401) {
-            message.error('Unauthorized');
+            toast.error('Unauthorized');
         } else if (error.response?.status === 500) {
-            message.error('Internal server error');
+            toast.error('Internal server error');
         } else {
-            message.error('Something went wrong');
+            toast.error('Something went wrong');
         }
     }
 }
 
 /**
- * Upate User
+ *
+ * @param {updateReservation} action
  */
-function* updateUser(action) {
+function* updateReservation(action) {
     const { payload } = action;
-    // const { navigate } = payload; // Extract navigate from payload
     try {
-        const response = yield call(postRequest, 'update_user', payload);
+        const response = yield call(postRequest, 'update_reservation', payload);
         if (response) {
             yield put({
-                type: actions.USER_UPDATE_SUCCESS,
+                type: actions.RESER_UPDATE_SUCCESS,
                 payload: response.data,
             });
             if (response?.data == 'fail') {
@@ -91,7 +95,7 @@ function* updateUser(action) {
         }
     } catch (error) {
         // Dispatch the register failure action
-        yield put({ type: actions.USER_UPDATE_FAILURE });
+        yield put({ type: actions.RESER_UPDATE_FAILURE });
 
         // Handle different error statuses
         if (error.response?.status === 422) {
@@ -110,16 +114,15 @@ function* updateUser(action) {
 }
 /**
  *
- * @param {deleteUser} action
+ * @param {deleteReservation} action
  */
-function* deleteUser(action) {
+function* deleteReservation(action) {
     const { payload } = action;
-    // const { navigate } = payload; // Extract navigate from payload
     try {
-        const response = yield call(postRequest, 'delete_user', payload);
+        const response = yield call(postRequest, 'delete_reservation', payload);
         if (response) {
             yield put({
-                type: actions.USER_DELETE_SUCCESS,
+                type: actions.RESER_DELETE_SUCCESS,
                 payload: response.data,
             });
             if (response?.data == 'fail') {
@@ -130,43 +133,7 @@ function* deleteUser(action) {
         }
     } catch (error) {
         // Dispatch the register failure action
-        yield put({ type: actions.USER_DELETE_FAILURE });
-
-        // Handle different error statuses
-        if (error.response?.status === 422) {
-            const errors = error.response.data.errors;
-            toast.error(Object.values(errors).join(', '));
-        } else if (error.response?.status === 401) {
-            toast.error('Unauthorized');
-        } else if (error.response?.status === 500) {
-            toast.error('Internal server error');
-        } else {
-            toast.error('Something went wrong');
-        }
-    }
-}
-/**
- * Upate User Profile
- */
-function* updatHotelProfile(action) {
-    const { payload } = action;
-    // const { navigate } = payload; // Extract navigate from payload
-    try {
-        const response = yield call(postRequest, 'upd_htl_profile', payload);
-        if (response) {
-            yield put({
-                type: actions.PROFILE_UPDATE,
-                payload: response.data,
-            });
-            if (response?.data == 'fail') {
-                toast.error(response.message);
-            } else {
-                toast.success(response.message);
-            }
-        }
-    } catch (error) {
-        // Dispatch the register failure action
-        yield put({ type: actions.PROFILE_UPDATE_FAILURE });
+        yield put({ type: actions.RESER_DELETE_FAILURE });
 
         // Handle different error statuses
         if (error.response?.status === 422) {
@@ -186,10 +153,9 @@ function* updatHotelProfile(action) {
 
 export default function* rootSaga() {
     yield all([
-        takeLatest(actions.USER_LIST, userList),
-        takeLatest(actions.USER_ADD, createUser),
-        takeLatest(actions.USER_UPDATE, updateUser),
-        takeLatest(actions.USER_DELETE, deleteUser),
-        takeLatest(actions.PROFILE_UPDATE, updatHotelProfile),
+        takeLatest(actions.RESER_LIST, reservationList),
+        takeLatest(actions.RESER_ADD, createReservation),
+        takeLatest(actions.RESER_UPDATE, updateReservation),
+        takeLatest(actions.RESER_DELETE, deleteReservation),
     ]);
 }

@@ -19,9 +19,9 @@ class HotelReservationController extends BaseApiController
     /**
      * Show the form for creating a new resource.
      */
-    public function createReservation()
+    public function createReservation(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**

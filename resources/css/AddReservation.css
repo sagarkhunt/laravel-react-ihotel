@@ -54,10 +54,10 @@
     padding: 10px; /* Adjust as needed */
 }
 
-.button-container {
+/* .button-container {
     display: flex;
-    gap: 10px; /* Adjust space between buttons */
-}
+    gap: 10px; 
+} */
 
 .custom-btn-2 {
     border: 2px solid #dcd9d9; /* Add border to the second button */
@@ -85,7 +85,7 @@
     padding-right: 10px; /* Adjust as needed */
 }
 .col-5 {
-    display: flex;
+    /* display: flex; */
     justify-content: flex-end;
 }
 
@@ -134,6 +134,9 @@
     font-size: small;
     color: #0863b5;
 }
+.border-right {
+    border-right: 1px solid #e1e7eb; /* Change #000 to your desired border color */
+}
 
 .icon {
     font-size: medium;
@@ -142,17 +145,63 @@
 .icon-item:last-child {
     margin-right: 0; /* Remove right margin from the last item */
 }
-.assign {
+/* .assign {
     border: 0cm;
     color: #0863b5;
     background-color: #e6eff8;
     font-size: 11px;
     font-weight: 500;
     padding-left: 5px;
-    padding-right: 5px; /* Adjust padding as needed */
+    padding-right: 5px; 
     border-radius: 5px;
-    padding-bottom: 2px; /* Adjust border radius for the square shape */
-    display: inline-block; /* Ensure inline-block display to wrap the content */
+    padding-bottom: 2px; 
+    display: inline-block;
+} */
+.assign {
+    color: #0863b5;
+    background-color: #e6eff8;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 3px 5px;
+    border-radius: 5px;
+    display: inline-block;
+    text-wrap: nowrap;
+    align-items: center;
+}
+.nav-link.active {
+    background-color: var(--primary-color) !important;
+    color: white;
+}
+
+.nav-link {
+    color: black;
+}
+
+.input-no-outline {
+    border: none !important;
+    outline: none !important;
+}
+
+.y_scrolling {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.y_scrolling::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 0px;
+    background-color: #fff;
+}
+
+.y_scrolling::-webkit-scrollbar {
+    width: 0px;
+    background-color: #fff;
+}
+
+.y_scrolling::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #9e9e9d;
 }
 
 .modal-lg {
@@ -163,7 +212,7 @@
 }
 
 .date {
-    height: 50px;
+    height: 40px;
     width: 170px;
 }
 .modal-dropdown {
@@ -197,12 +246,66 @@
     background-color: transparent;
     /* Remove any other hover effects */
 }
+.col-4_span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.row_span {
+    display: flex;
+}
+.bordered-column {
+    width: 177px;
+    height: 112px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+.title-modal {
+    color: #0863b5;
+}
+.scrollable-accordion {
+    max-height: 658px;
+    overflow-y: auto;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for Webkit-based browsers (Chrome, Safari) */
+.scrollable-accordion::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollable-modal-body {
+    max-height: 658px;
+    overflow-y: auto;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;
+}
+
+.scrollable-modal-body::-webkit-scrollbar {
+    display: none;
+}
 .card {
-    /* background-color: #f8f9fa; */
-    border: 1px solid #dee2e6;
-    border-radius: 5px;
+    background-color: #f8f9fa;
+    border: none;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 15px 0;
+    margin-top: 15px;
+}
+.height-40 {
+    height: 40px;
+}
+.btn-group-toggle .active {
+    color: var(--primary-color);
+}
+.surface-d {
+    background-color: #dee7f1 !important;
+}
+
+.card-content-seperator {
+    border: 1px solid #e1e7eb;
+    margin: 10px -1rem !important;
 }
 .card-header {
     background-color: white;
@@ -242,8 +345,8 @@
 }
 
 .align-items-center {
-    display: inline-block;
-    vertical-align: middle;
+    /* display: inline-block; */
+    /* vertical-align: middle; */
 }
 .boy {
     margin-left: 15px;
@@ -254,4 +357,141 @@
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: 15px 0;
+}
+
+.contact-info .icon {
+    margin-right: -1px; /* Adjust the spacing between icons and text */
+}
+
+.contact-info .sapn_header {
+    margin-right: 16px; /* Adjust the spacing after the phone number */
+}
+
+.contact-info span {
+    margin-right: 16px; /* General spacing between text elements */
+    margin-left: 5px;
+}
+.active-btn {
+    background-color: cyan;
+}
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.button-group .right-buttons .btn {
+    margin-left: 10px;
+}
+.green-btn {
+    color: #0b641f;
+    background-color: rgb(206, 253, 206);
+    padding: 5px;
+    border-radius: 5px;
+    display: inline-block;
+}
+.background {
+    background-color: white;
+    align-items: center;
+    display: flex;
+}
+.blue_colour {
+    color: #0863b5;
+}
+.static-height {
+    height: 570px;
+}
+
+.card-footer {
+    margin-top: auto;
+}
+.scrollable-div {
+    height: 478px;
+    overflow-y: scroll;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+.scrollable-div::-webkit-scrollbar {
+    display: none;
+}
+
+.card-footer {
+    margin-top: auto;
+}
+.background {
+    background-color: white;
+    align-items: center;
+    display: flex;
+}
+
+.scrollable-accordion {
+    max-height: 442px;
+    overflow-y: auto;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for Webkit-based browsers (Chrome, Safari) */
+.scrollable-accordion::-webkit-scrollbar {
+    display: none;
+}
+.card-footer-background {
+    background-color: white;
+}
+.border-right {
+    border-right: 1px solid #e1e7eb; /* Change #000 to your desired border color */
+}
+.Neon * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.Neon-input-dragDrop {
+    display: block;
+    height: 135px;
+    margin: 0 auto 25px auto;
+    padding: 25px;
+    color: #8d9499;
+    color: #97a1a8;
+    background: #e6eff8;
+    border: 2px dashed #c8cbce;
+    text-align: center;
+    -webkit-transition:
+        box-shadow 0.3s,
+        border-color 0.3s;
+    -moz-transition:
+        box-shadow 0.3s,
+        border-color 0.3s;
+    transition:
+        box-shadow 0.3s,
+        border-color 0.3s;
+}
+/* Hide the default file input button */
+input[type='file'] {
+    display: none;
+}
+
+/* Style the label to resemble a button */
+label.upload-button {
+    display: inline-block;
+    padding: 10px 15px;
+    color: black;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* Hide overflow of the text within label */
+label.upload-button span {
+    display: inline-block;
+    width: 0;
+    overflow: hidden;
+}
+
+/* Show only the text "Upload Images" */
+label.upload-button:before {
+    content: 'Upload Images';
+}
+.input-group {
+    margin-bottom: 0px !important;
 }

@@ -25,6 +25,7 @@ import CPList from '../views/cancelPolicy/CPList.jsx';
 import TncList from '../views/TNC/TncList.jsx';
 import HouseKeeping from '../views/HouseKeeping/HouseKeeping.jsx';
 import FrontView from '../views/frontView/FrontView.jsx';
+import EditReservtionInfo from '../views/reservation/EditReservtionInfo.jsx';
 
 // Define a function to check if the user is authenticated
 const isAuthenticated = () => {
@@ -96,6 +97,12 @@ const router = createBrowserRouter([
             {
                 path: '/add-reservation',
                 element: <ProtectedRouteWrapper element={<AddReservation />} />,
+            },
+            {
+                path: '/edit_res_info',
+                element: (
+                    <ProtectedRouteWrapper element={<EditReservtionInfo />} />
+                ),
             },
             {
                 path: '/reservation-list',

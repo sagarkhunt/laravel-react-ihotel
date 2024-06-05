@@ -360,4 +360,19 @@ class HotelUserController extends BaseApiController
             return;
         }
     }
+
+    public function updateHotelProfile(Request $request)
+    {
+
+        $user = Auth::user();
+        $user_id = $user->id;
+        $hotel_id = $user->hotel_id;
+        Helper::change_database_using_hotel_id($hotel_id);
+        try {
+            dd($request->all());
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return $this->sendError('Server Error', $e->getMessage());
+        }
+    }
 }
