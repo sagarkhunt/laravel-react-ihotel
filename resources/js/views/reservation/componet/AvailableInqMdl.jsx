@@ -3,10 +3,7 @@ import Modal from '../../../components/common/Modal';
 
 function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
     return (
-        <Modal
-            showAvaInq={showAvaInq}
-            handleModal={() => setShowAvaInq(!showAvaInq)}
-        >
+        <Modal open={showAvaInq} handleModal={() => setShowAvaInq(!showAvaInq)}>
             <div
                 className="modal right show"
                 id="availibility_inquiry"

@@ -216,6 +216,28 @@
 .title-modal {
     color: #0863b5;
 }
+.scrollable-accordion {
+    max-height: 658px;
+    overflow-y: auto;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for Webkit-based browsers (Chrome, Safari) */
+.scrollable-accordion::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollable-modal-body {
+    max-height: 658px;
+    overflow-y: auto;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;
+}
+
+.scrollable-modal-body::-webkit-scrollbar {
+    display: none;
+}
 .card {
     /* background-color: #f8f9fa; */
     border: 1px solid #dee2e6;
@@ -285,6 +307,7 @@
 
 .contact-info span {
     margin-right: 16px; /* General spacing between text elements */
+    margin-left: 5px;
 }
 .active-btn {
     background-color: cyan;

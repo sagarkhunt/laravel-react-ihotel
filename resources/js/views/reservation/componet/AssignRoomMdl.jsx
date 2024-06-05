@@ -162,14 +162,17 @@ function AssignRoomMdl({ open, setOpen }) {
                                     ></button>
                                 </div>
                             </div>
-                            <div className="accordion" id="roomAccordion">
+                            <div
+                                className="accordion scrollable-accordion"
+                                id="roomAccordion"
+                            >
                                 {roomTypes.map((roomType, typeIndex) => (
                                     <div
                                         className="accordion-item"
                                         key={typeIndex}
                                     >
                                         <button
-                                            className="accordion-button"
+                                            className="dropdown-item p-3 d-flex justify-content-between"
                                             type="button"
                                             data-bs-toggle="collapse"
                                             data-bs-target={`#collapse${typeIndex}`}
@@ -177,6 +180,9 @@ function AssignRoomMdl({ open, setOpen }) {
                                             aria-controls={`collapse${typeIndex}`}
                                         >
                                             {roomType.title}
+                                            <span class="material-icons-outlined">
+                                                keyboard_arrow_down
+                                            </span>
                                         </button>
                                         <div
                                             id={`collapse${typeIndex}`}

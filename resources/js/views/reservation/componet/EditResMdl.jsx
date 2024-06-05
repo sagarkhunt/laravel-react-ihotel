@@ -82,10 +82,10 @@ function EditResMdl({ showEdirRes, setShowEditRes, setOpen }) {
                         </div>
 
                         <div
-                            className="modal-body"
+                            className="modal-body scrollable-modal-body"
                             style={{ overflowY: 'auto' }}
                         >
-                            <div className="row">
+                            <div className="row ms-1">
                                 <div className="col-6">
                                     <div>
                                         <p className="mb-0 body-2">

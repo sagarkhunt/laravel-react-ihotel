@@ -14,6 +14,7 @@ import businessManage from './BusinessSource/apiSaga';
 import bookingManage from './BookingSource/apiSaga';
 import cpManage from './CancellPolicy/apiSaga';
 import tncManage from './TermConition/apiSaga';
+import reserManage from './Reservation/apiSaga';
 // Here you can include all the saga which you write for components
 export default function* rootSaga() {
     yield all([
@@ -32,5 +33,6 @@ export default function* rootSaga() {
         bookingManage(),
         cpManage(),
         tncManage(),
+        reserManage(),
     ]);
 }
