@@ -28,8 +28,8 @@ function Booking() {
     const [searchQuery, setSearchQuery] = useState('');
 
     const columnsConfig = [
-        { data: 'id', label: '#', className: 'table-left' },
-        { data: 'name', label: 'Business Resource Name' },
+        { data: 'id', label: '#', className: 'table-left', width: '10%' },
+        { data: 'name', label: 'Business Resource Name', width: '70%' },
         {
             data: 'status',
             label: 'Status',
@@ -44,6 +44,8 @@ function Booking() {
                 </span></div>`;
                 }
             },
+            className: 'table-right',
+            width: '10%',
         },
         {
             data: null,
@@ -57,6 +59,8 @@ function Booking() {
                 edit
             </span>
             `,
+            className: 'action-container',
+            width: '10%',
         },
     ];
 

@@ -5,6 +5,7 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
     return (
         <Modal
             showAvaInq={showAvaInq}
+            open={open}
             handleModal={() => setShowAvaInq(!showAvaInq)}
         >
             <div
