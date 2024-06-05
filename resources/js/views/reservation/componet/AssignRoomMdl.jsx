@@ -180,7 +180,7 @@ function AssignRoomMdl({ open, setOpen }) {
                                             aria-controls={`collapse${typeIndex}`}
                                         >
                                             {roomType.title}
-                                            <span class="material-icons-outlined">
+                                            <span className="material-icons-outlined">
                                                 keyboard_arrow_down
                                             </span>
                                         </button>

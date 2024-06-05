@@ -14,6 +14,7 @@ function ReservationList() {
         setOpen(true);
     }
     const toggleView = () => {
+        console.log('===========sss');
         setIsGridView(!isGridView);
     };
     const data = [
@@ -77,13 +78,53 @@ function ReservationList() {
             roomTypes: [
                 { type: 'Duplex Room/American', action: 'Assign Room' },
                 { type: 'Twin Room/American Plan', action: 'Assign Room' },
+                { type: 'American Plan', action: 'Assign Room' },
+                { type: 'Twin Room', action: 'Assign Room' },
             ],
             total: '₹ 1,000.00',
             paid: '₹ 0.00',
             balance: '₹ 1,000.00',
         },
         {
-            name: 'Mr. Rohit Patel',
+            name: 'Mr. Sahil Patel',
+            id: 'RS1234',
+            checkInDate: '10/12/2024',
+            checkInTime: '10:00 PM',
+            nights: 2,
+            bookingDate: '12/10/2024',
+            adults: 2,
+            children: 2,
+            roomTypes: [
+                { type: 'Duplex Room/American', action: 'Assign Room' },
+                { type: 'Twin Room/American Plan', action: 'Assign Room' },
+                { type: 'American Plan', action: 'Assign Room' },
+                { type: 'Twin Room', action: 'Assign Room' },
+            ],
+            total: '₹ 1,000.00',
+            paid: '₹ 0.00',
+            balance: '₹ 1,000.00',
+        },
+        {
+            name: 'Mr. Pratik Patel',
+            id: 'RS4521',
+            checkInDate: '10/12/2024',
+            checkInTime: '10:00 PM',
+            nights: 2,
+            bookingDate: '12/10/2024',
+            adults: 2,
+            children: 2,
+            roomTypes: [
+                { type: 'Duplex Room/American', action: 'Assign Room' },
+                { type: 'Twin Room/American Plan', action: 'Assign Room' },
+                { type: 'American Plan', action: 'Assign Room' },
+                { type: 'Twin Room', action: 'Assign Room' },
+            ],
+            total: '₹ 1,000.00',
+            paid: '₹ 0.00',
+            balance: '₹ 1,000.00',
+        },
+        {
+            name: 'Mr. Dharmik Patel',
             id: 'RS1738',
             checkInDate: '10/12/2024',
             checkInTime: '10:00 PM',
@@ -94,40 +135,8 @@ function ReservationList() {
             roomTypes: [
                 { type: 'Duplex Room/American', action: 'Assign Room' },
                 { type: 'Twin Room/American Plan', action: 'Assign Room' },
-            ],
-            total: '₹ 1,000.00',
-            paid: '₹ 0.00',
-            balance: '₹ 1,000.00',
-        },
-        {
-            name: 'Mr. Rohit Patel',
-            id: 'RS1738',
-            checkInDate: '10/12/2024',
-            checkInTime: '10:00 PM',
-            nights: 2,
-            bookingDate: '12/10/2024',
-            adults: 2,
-            children: 2,
-            roomTypes: [
-                { type: 'Duplex Room/American', action: 'Assign Room' },
-                { type: 'Twin Room/American Plan', action: 'Assign Room' },
-            ],
-            total: '₹ 1,000.00',
-            paid: '₹ 0.00',
-            balance: '₹ 1,000.00',
-        },
-        {
-            name: 'Mr. Rohit Patel',
-            id: 'RS1738',
-            checkInDate: '10/12/2024',
-            checkInTime: '10:00 PM',
-            nights: 2,
-            bookingDate: '12/10/2024',
-            adults: 2,
-            children: 2,
-            roomTypes: [
-                { type: 'Duplex Room/American', action: 'Assign Room' },
-                { type: 'Twin Room/American Plan', action: 'Assign Room' },
+                { type: 'American Plan', action: 'Assign Room' },
+                { type: 'Twin Room', action: 'Assign Room' },
             ],
             total: '₹ 1,000.00',
             paid: '₹ 0.00',
@@ -136,9 +145,196 @@ function ReservationList() {
         // Add more booking objects here
     ];
     return (
-        <div className="container-fluid py-3 px-4">
-            <div className="col-12 mt-3 pannel action-header px-3">
-                <div className="row">
+        <div className="">
+            <div className="container-page py-2 px-3">
+                <div className="row align-items-center">
+                    {/* <!-- tab navigation  --> */}
+                    <div className="col-6">
+                        <ul
+                            className="nav nav-pills"
+                            id="pills-tab"
+                            role="tablist"
+                        >
+                            <li className="nav-item" role="presentation">
+                                <a
+                                    // className="nav-link active btn d-flex align-items-center gap-2"
+                                    className={`nav-link active d-flex align-items-center gap-2`}
+                                    onClick={() => handleClick('reservations')}
+                                    id="reservation-tab"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#reservation"
+                                    href="#"
+                                    role="tab"
+                                    aria-controls="reservation"
+                                    aria-selected="true"
+                                >
+                                    Reservations
+                                    <span className="tab-counts rounded-circle2">
+                                        19
+                                    </span>
+                                </a>
+                            </li>
+                            <li className="nav-item" role="presentation">
+                                <a
+                                    className="nav-link d-flex align-items-center gap-2"
+                                    id="arrival-tab"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#arrival"
+                                    role="tab"
+                                    aria-controls="arrival"
+                                    aria-selected="false"
+                                >
+                                    Arrivals
+                                    <span className="tab-counts rounded-circle2">
+                                        19
+                                    </span>
+                                </a>
+                            </li>
+                            <li className="nav-item" role="presentation">
+                                <a
+                                    className="nav-link d-flex align-items-center gap-2"
+                                    id="departure-tab"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#departure"
+                                    role="tab"
+                                    aria-controls="departure"
+                                    aria-selected="false"
+                                >
+                                    Departure
+                                    <span className="tab-counts rounded-circle2">
+                                        19
+                                    </span>
+                                </a>
+                            </li>
+                            <li className="nav-item" role="presentation">
+                                <a
+                                    className="nav-link d-flex align-items-center gap-2"
+                                    id="in-house-tab"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#in-house"
+                                    role="tab"
+                                    aria-controls="in-house"
+                                    aria-selected="false"
+                                >
+                                    In-house
+                                    <span className="tab-counts rounded-circle2">
+                                        19
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* <!-- search bar  --> */}
+                    <div className="col-3">
+                        <div className="custom-input border-1 d-flex align-items-center py-0 w-100 gap-2 height-40">
+                            <span className="material-icons-outlined">
+                                search
+                            </span>
+
+                            <input
+                                type="text"
+                                placeholder="Search"
+                                className="input-no-outline"
+                            />
+                        </div>
+                    </div>
+
+                    {/* <!-- toggle buttons   --> */}
+                    <div className="col-1">
+                        <div
+                            className="btn-group btn-group-toggle border rounded w-100"
+                            data-toggle="buttons"
+                        >
+                            <label
+                                className={`btn p-1 align-items-center justify-content-center d-flex w-50 ${!isGridView ? 'active' : ''}`}
+                                onClick={() => {
+                                    if (isGridView) toggleView();
+                                }}
+                            >
+                                <input
+                                    type="radio"
+                                    name="options"
+                                    id="option1"
+                                    autoComplete="off"
+                                    className="d-none"
+                                    required
+                                    checked={isGridView}
+                                    readOnly
+                                />
+                                <span className="material-icons">
+                                    view_comfy
+                                </span>
+                            </label>
+                            <label
+                                className={`btn p-1 align-items-center d-flex justify-content-center w-50 ${isGridView ? 'active' : ''}`}
+                                onClick={() => {
+                                    if (!isGridView) toggleView();
+                                }}
+                            >
+                                <input
+                                    type="radio"
+                                    name="options"
+                                    id="option2"
+                                    autoComplete="off"
+                                    className="d-none"
+                                    required
+                                    checked={!isGridView}
+                                    readOnly
+                                />
+                                <span className="material-icons"> list </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    {/* <!-- actions  --> */}
+                    <div className="col-1">
+                        <div className="dropdown">
+                            <button
+                                className="subtitle-2m btn custom-border btn-secondary d-flex align-items-center dropdown-toggle"
+                                type="button"
+                                id="dropdownMenuButton1"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                Actions
+                            </button>
+                            <ul
+                                className="dropdown-menu"
+                                aria-labelledby="dropdownMenuButton1"
+                            >
+                                <li>
+                                    <a className="dropdown-item" href="#">
+                                        Action
+                                    </a>
+                                </li>
+                                <li>
+                                    <a className="dropdown-item" href="#">
+                                        Another action
+                                    </a>
+                                </li>
+                                <li>
+                                    <a className="dropdown-item" href="#">
+                                        Something else here
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {/* <!-- print gr button  --> */}
+                    <div className="col-1">
+                        <button
+                            className="btn btn-secondary d-flex text-nowrap"
+                            data-bs-toggle="modal"
+                            data-bs-target="#"
+                        >
+                            Print GR
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {/* <div className="row">
                     <div className="col-6 d-flex align-items-center">
                         <h6
                             className={`subtitle-1m mb-0 p-2 ${activeButton === 'reservations' ? 'btn-primary' : ''}`}
@@ -188,83 +384,7 @@ function ReservationList() {
                             </span>
                         </h6>
                     </div>
-                    <div className="col-6 gap-3 action-right">
-                        <div className="form-group position-relative search-container">
-                            <span className="material-icons-outlined search-icon">
-                                search
-                            </span>
-                            <input
-                                type="text"
-                                className="form-control search-input"
-                                id="dt-serach-cstm"
-                                placeholder="Search"
-                            />
-                        </div>
-
-                        {/* <button className="subtitle-2m btn custom-border btn-secondary d-flex">
-                            <span className="material-icons mx-1">
-                                view_comfy
-                            </span>
-                            <span className="material-icons"> list </span>
-                        </button> */}
-                        <button
-                            className="subtitle-2m btn custom-border btn-secondary d-flex"
-                            onClick={toggleView}
-                        >
-                            <span className="material-icons mx-1">
-                                {isGridView ? 'view_list' : 'view_comfy'}
-                            </span>
-                            {isGridView ? 'List' : 'Grid'}
-                        </button>
-
-                        <div className="dropdown">
-                            <button
-                                className="subtitle-2m btn custom-border btn-secondary"
-                                type="button"
-                                id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                            >
-                                Actions
-                                <span
-                                    className="material-icons-outlined primary-icon"
-                                    style={{ color: '#0863b5' }}
-                                >
-                                    keyboard_arrow_down
-                                </span>
-                            </button>
-
-                            <ul
-                                className="dropdown-menu"
-                                aria-labelledby="dropdownMenuButton1"
-                            >
-                                <li>
-                                    <a className="dropdown-item" href="#">
-                                        Action
-                                    </a>
-                                </li>
-                                <li>
-                                    <a className="dropdown-item" href="#">
-                                        Another action
-                                    </a>
-                                </li>
-                                <li>
-                                    <a className="dropdown-item" href="#">
-                                        Something else here
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <button
-                            className="btn btn-secondary d-flex"
-                            // data-bs-toggle="modal"
-                            // data-bs-target="#Assigns_rooms"
-                        >
-                            <div>Print GR</div>
-                        </button>
-                    </div>
-                </div>
-            </div>
+                </div> */}
             {isGridView ? (
                 <div className="col-12 p-3 container-page">
                     <table className="table custom-table">
