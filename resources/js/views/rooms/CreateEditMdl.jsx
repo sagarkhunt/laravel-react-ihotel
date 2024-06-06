@@ -874,8 +874,8 @@ function CreateEditMdl({
                                                         <span id="countAmenity">
                                                             {selectedAmenities.length ??
                                                                 0}
-                                                        </span>
-                                                        {" "}Associated Amenities
+                                                        </span>{' '}
+                                                        Associated Amenities
                                                     </p>
                                                     <p className="body-2 mb-0">
                                                         Add Amenities associated
@@ -1004,7 +1004,7 @@ function CreateEditMdl({
                                                                                     : ''
                                                                             }`}
                                                                         >
-                                                                            <span className="material-icons-outlined">
+                                                                            <span className="material-icons-outlined m-0">
                                                                                 add
                                                                             </span>
                                                                         </button>

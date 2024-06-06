@@ -12,7 +12,8 @@
 .input-group {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    /* margin-bottom: 15px; */
+    align-items: flex-start;
 }
 .form-label {
     margin-bottom: 5px;
@@ -42,13 +43,10 @@
 .custom-table td {
     /* border: none !important; */
 }
-.input-group {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
+
 .dropdown123 {
     width: 100% !important;
+    margin-left: -8px;
 }
 .td-custom {
     padding: 10px; /* Adjust as needed */
@@ -288,7 +286,7 @@
     display: none;
 }
 .card {
-    background-color: #fff;
+    /* background-color: #f8f9fa; */
     border: none;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-top: 15px;
@@ -491,7 +489,4 @@ label.upload-button span {
 /* Show only the text "Upload Images" */
 label.upload-button:before {
     content: 'Upload Images';
-}
-.input-group {
-    margin-bottom: 0px !important;
 }

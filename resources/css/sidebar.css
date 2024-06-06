@@ -60,7 +60,7 @@
 .nav-item {
     position: relative;
     margin-left: 12px;
-    flex: 1;
+    flex: none;
 }
 
 .inner_section_nav {

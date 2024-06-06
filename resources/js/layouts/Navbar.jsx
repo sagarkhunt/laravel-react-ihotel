@@ -383,8 +383,8 @@ function Navbar() {
                                                     chevron_right
                                                 </span>
                                             </div>
-                                            <div className="submenu_box p-3 y_scrolling">
-                                                <ul className="sub-menu-list px-2  row sidebar-masters-submenu mb-2">
+                                            <div className="submenu_box p-3">
+                                                <ul className="sub-menu-list px-2  row sidebar-masters-submenu mb-2 y_scrolling">
                                                     <li className="col-12 grid_padding">
                                                         <Link
                                                             className={`nav-sub-box cp ${activeLink === '/cancell_policy' ? 'active' : ''}`}

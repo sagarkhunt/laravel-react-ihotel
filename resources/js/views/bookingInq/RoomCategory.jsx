@@ -48,7 +48,7 @@ const RoomCategory = ({ category, index, handleInputChange, dropDownData }) => {
                             handleInputChange(e, index, 'no_of_rooms')
                         }
                         className="custom-input"
-                        style={{ marginBottom: '18px' }}
+                        // style={{ marginBottom: '18px' }}
                     />
                     <datalist id="ice-cream-flavors" className="custom-input ">
                         <option value="1"></option>

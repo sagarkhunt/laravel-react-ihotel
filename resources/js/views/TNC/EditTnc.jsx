@@ -67,13 +67,13 @@ function EditTnc({ setTncPolicyHide, tncName, tncDetails, tncId }) {
             {/* <!-- View Policy  --> */}
             {showList && (
                 <div
-                    className="container-page policy-container-size"
+                    className="container-page policy-container-size y_scrolling"
                     // style={{ minHeight: 'calc(100vh - 88px)' }}
                 >
                     <div className="modal-header p-3">
                         <h6 className="headline-h6m mb-0">{tncName}</h6>
                     </div>
-                    <div className="modal-body policy-container-body">
+                    <div className="modal-body policy-container-body y_scrolling">
                         <ul
                             className="w-100 policy-ul"
                             style={{ padding: '0 1rem' }}
@@ -115,13 +115,7 @@ function EditTnc({ setTncPolicyHide, tncName, tncDetails, tncId }) {
                         </h6>
                     </div>
                     <form onSubmit={handleSubmit}>
-                        <div
-                            className="modal-body policy-container-body"
-                            // style={{
-                            //     height: 'calc(100vh - 220px)',
-                            //     overflowY: 'scroll',
-                            // }}
-                        >
+                        <div className="modal-body policy-container-body y_scrolling">
                             <div className="row mb-3">
                                 <div className="col-5 d-flex flex-column">
                                     <label

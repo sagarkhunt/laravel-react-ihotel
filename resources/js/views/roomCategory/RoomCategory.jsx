@@ -256,7 +256,7 @@ function RoomCategory() {
                                 </th>
                                 <th
                                     scope="col"
-                                    className="th-custom border-bnone text-left"
+                                    className="th-custom border-bnone text-center"
                                     style={{ border: 'none !important' }}
                                     width=""
                                 >
@@ -380,7 +380,7 @@ function RoomCategory() {
                                                 <td className="td-custom">
                                                     {item.max_child}
                                                 </td>
-                                                <td className="td-custom">
+                                                <td className="td-custom text-center">
                                                     {item.max_extra_bed}
                                                 </td>
 
@@ -402,9 +402,12 @@ function RoomCategory() {
                                                             : 'Deactive'}
                                                     </div>
                                                 </td>
-                                                <td className='table-right' style={{
-                                                    paddingRight: "25px"
-                                                }} >
+                                                <td
+                                                    className="table-right"
+                                                    style={{
+                                                        paddingRight: '25px',
+                                                    }}
+                                                >
                                                     <span
                                                         className="material-icons-outlined edit-table"
                                                         onClick={() =>
