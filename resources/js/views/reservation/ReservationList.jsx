@@ -145,7 +145,7 @@ function ReservationList() {
         // Add more booking objects here
     ];
     return (
-        <div className="">
+        <div className="m-4">
             <div className="container-page py-2 px-3">
                 <div className="row align-items-center">
                     {/* <!-- tab navigation  --> */}
@@ -386,7 +386,7 @@ function ReservationList() {
                     </div>
                 </div> */}
             {isGridView ? (
-                <div className="col-12 p-3 container-page">
+                <div className="col-12 pt-3">
                     <table className="table custom-table">
                         <thead>
                             <tr>
@@ -420,14 +420,14 @@ function ReservationList() {
                                     className="th-custom"
                                     style={{ textAlign: 'right' }}
                                 >
-                                    Total(Rs)
+                                    Total(₹)
                                 </th>
                                 <th
                                     scope="col"
                                     className="th-custom"
                                     style={{ textAlign: 'right' }}
                                 >
-                                    Paid(Rs)
+                                    Paid(₹)
                                 </th>
                             </tr>
                         </thead>
@@ -513,7 +513,7 @@ function ReservationList() {
                     </table>
                 </div>
             ) : (
-                <div className="col-12 p-3 container-page">
+                <div className="col-12">
                     <div className="row">
                         {bookings.map((booking, index) => (
                             <BookingCard key={index} booking={booking} />

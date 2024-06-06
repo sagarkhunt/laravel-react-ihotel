@@ -875,7 +875,7 @@ function CreateEditMdl({
                                                             {selectedAmenities.length ??
                                                                 0}
                                                         </span>
-                                                        Associated Amenities
+                                                        {" "}Associated Amenities
                                                     </p>
                                                     <p className="body-2 mb-0">
                                                         Add Amenities associated
