@@ -86,10 +86,10 @@ function AddReservation() {
     return (
         <div className="row row mt-3 mx-2">
             <div className="col">
-                <div className="card m-0 p-2 card_height">
+                <div className="card m-0 p-2 card_height mb-3">
                     <div className="modal-header p-1" onClick={handleBackClick}>
                         <h5 className="headline-h6m mt-1 ms-2">
-                            <span className="material-icons-outlined me-1">
+                            <span className="material-icons-outlined me-1 cp">
                                 arrow_back
                             </span>
                             Add Reservation
@@ -489,14 +489,14 @@ function AddReservation() {
             </div>
 
             <div className="col">
-                <div className="card card_height">
+                <div className="card m-0 p-2 card_height mb-3">
                     <div className="modal-header p-1">
                         <h5 className="headline-h6m mt-1 ms-2">Room Details</h5>
                     </div>
                     <div className="card-body card-body-height">
-                        <div className="row scrollable-modal-body-1">
+                        <div className="row scrollable-modal-body-1 y_scrolling">
                             <div className="custom-table flex-column d-flex">
-                                <div className="custom-header d-flex">
+                                <div className="custom-header d-flex ">
                                     <div
                                         className="th-custom"
                                         style={{ width: '30%' }}

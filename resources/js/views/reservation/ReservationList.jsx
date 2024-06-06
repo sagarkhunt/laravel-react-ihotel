@@ -145,7 +145,7 @@ function ReservationList() {
         // Add more booking objects here
     ];
     return (
-        <div className="">
+        <div className="m-4">
             <div className="container-page py-2 px-3">
                 <div className="row align-items-center">
                     {/* <!-- tab navigation  --> */}

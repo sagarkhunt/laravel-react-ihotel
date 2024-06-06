@@ -35,7 +35,7 @@ function AddTnc({ setTncPolicyHide, setShowTncPolicy }) {
     };
     return (
         <div
-            className="container-page policy-container-size"
+            className="container-page policy-container-size y_scrolling"
             // style={{ minHeight: 'calc(100vh - 88px)' }}
         >
             <div className="modal-header p-3">
@@ -43,7 +43,7 @@ function AddTnc({ setTncPolicyHide, setShowTncPolicy }) {
             </div>
             <form onSubmit={handleSubmit}>
                 <div
-                    className="modal-body policy-container-body p-3"
+                    className="modal-body policy-container-body p-3 y_scrolling"
                     // style={{
                     //     height: 'calc(100vh - 220px)',
                     //     overflowY: 'scroll',

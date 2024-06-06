@@ -68,7 +68,7 @@ function EditPolicy({ setPolicyHide, cpName, cpDetails, cpId, setShowPolicy }) {
             {/* <!-- View Policy  --> */}
             {showList && (
                 <div
-                    className="container-page policy-container-size"
+                    className="container-page policy-container-size y_scrolling"
                     // style={{
                     //     minHeight: 'calc(100vh - 88px)',
                     //     overflowY: 'scroll',
@@ -78,7 +78,7 @@ function EditPolicy({ setPolicyHide, cpName, cpDetails, cpId, setShowPolicy }) {
                         <h6 className="headline-h6m mb-0">{cpName}</h6>
                     </div>
                     <div
-                        className="modal-body policy-container-body"
+                        className="modal-body policy-container-body y_scrolling"
                         // style={{
                         //     height: 'calc(100vh - 120px)',
                         // }}
@@ -127,13 +127,7 @@ function EditPolicy({ setPolicyHide, cpName, cpDetails, cpId, setShowPolicy }) {
                         </h6>
                     </div>
                     <form onSubmit={handleSubmit}>
-                        <div
-                            className="modal-body policy-container-body"
-                            // style={{
-                            //     height: 'calc(100vh - 220px)',
-                            //     overflowY: 'scroll',
-                            // }}
-                        >
+                        <div className="modal-body policy-container-body y_scrolling">
                             <div className="row mb-3">
                                 <div className="col-5 d-flex flex-column">
                                     <label

@@ -78,7 +78,7 @@ class HotelBooingInqController extends BaseApiController
                     'mobile' => $request["mobile_no"],
                     'email' => $request["email"],
                     'cust_cat_id' => $request["cust_cat_id"],
-                    'bus_sou_id' => $request["bus_sou_id"],
+                    'bsns_src_id' => $request["bus_sou_id"],
                     'adult' => $request["adult"],
                     'child' => $request["child"],
                     'sp_req' => $request["sp_req"],
@@ -121,7 +121,7 @@ class HotelBooingInqController extends BaseApiController
                     $chkBookingInq->mobile = (isset($request['mobile_no']) ? (empty($request['mobile_no']) ? "" : $request['mobile_no']) : $chkBookingInq->mobile_no);
                     $chkBookingInq->email = (isset($request['email']) ? (empty($request['email']) ? "" : $request['email']) : $chkBookingInq->email);
                     $chkBookingInq->cust_cat_id = (isset($request['cust_cat_id']) ? (empty($request['cust_cat_id']) ? NULL : $request['cust_cat_id']) : $chkBookingInq->cust_cat_id);
-                    $chkBookingInq->bus_sou_id = (isset($request['bus_sou_id']) ? (empty($request['bus_sou_id']) ? NULL : $request['bus_sou_id']) : $chkBookingInq->bus_sou_id);
+                    $chkBookingInq->bsns_src_id = (isset($request['bus_sou_id']) ? (empty($request['bus_sou_id']) ? NULL : $request['bus_sou_id']) : $chkBookingInq->bsns_src_id);
                     $chkBookingInq->adult = (isset($request['adult']) ? (empty($request['adult']) ? 0 : $request['adult']) : $chkBookingInq->adult);
                     $chkBookingInq->child = (isset($request['child']) ? (empty($request['child']) ? 0 : $request['child']) : $chkBookingInq->child);
                     $chkBookingInq->sp_req = (isset($request['sp_req']) ? (empty($request['sp_req']) ? "" : $request['sp_req']) : $chkBookingInq->sp_req);

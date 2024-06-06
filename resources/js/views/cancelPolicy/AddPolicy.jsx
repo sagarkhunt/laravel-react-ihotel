@@ -40,7 +40,7 @@ function AddPolicy({ setPolicyHide, setShowPolicy }) {
                 <h6 className="headline-h6m mb-0">Add Cancellation Policy</h6>
             </div>
             <form onSubmit={handleSubmit}>
-                <div className="modal-body policy-container-body p-3">
+                <div className="modal-body policy-container-body p-3 y_scrolling">
                     <div className="row mb-3">
                         <div className="col-5 d-flex flex-column">
                             <label htmlFor="name" className="body-2 pb-1">

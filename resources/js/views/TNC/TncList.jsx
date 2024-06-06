@@ -124,7 +124,7 @@ function TncList() {
                         </div>
                     </div>
 
-                    <div className='sidebar-body'>
+                    <div className="sidebar-body y_scrolling">
                         {loader ? (
                             <Spinner />
                         ) : hasItems ? (

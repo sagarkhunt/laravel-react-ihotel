@@ -15,7 +15,9 @@ function CreateEditMdl({
     const [dropDownData, setDropDownData] = useState([]);
     const [followUpText, setFollowUpText] = useState('');
     const [followUpList, setFollowUpList] = useState([]);
-
+    const { dropDownList, followUpAdd } = useSelector(
+        (state) => state?.booingInqReducer,
+    );
     const [isOfferGiven, setIsOfferGiven] = useState(
         booingInqData && booingInqData.off_give ? true : false,
     );
@@ -25,35 +27,35 @@ function CreateEditMdl({
     // Function to get the current date in YYYY-MM-DD format
     const getCurrentDate = () => {
         const today = new Date();
-        const year = today.getFullYear();
-        let month = today.getMonth() + 1;
-        let day = today.getDate();
+        return formatDate(today);
+    };
 
-        // Add leading zero if month or day is less than 10
+    const getMinCheckOutDate = (checkInDate) => {
+        const date = new Date(checkInDate);
+        date.setDate(date.getDate() + 1);
+        return formatDate(date);
+    };
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+
         month = month < 10 ? '0' + month : month;
         day = day < 10 ? '0' + day : day;
 
         return `${year}-${month}-${day}`;
     };
 
-    // Function to get the minimum check-out date (one day ahead of current date)
-    const getMinCheckOutDate = () => {
-        const today = new Date();
-        today.setDate(today.getDate() + 1); // Add one day to today's date
-        const year = today.getFullYear();
-        let month = today.getMonth() + 1;
-        let day = today.getDate();
-
-        // Add leading zero if month or day is less than 10
-        month = month < 10 ? '0' + month : month;
-        day = day < 10 ? '0' + day : day;
-
-        return `${year}-${month}-${day}`;
+    const isValidDate = (dateString) => {
+        const date = Date.parse(dateString);
+        return !isNaN(date);
     };
+
     const [formData, setFormData] = useState({
         booking_inq_id: booingInqData?.id || '0',
         chk_in_dt: booingInqData?.chk_in_dt || getCurrentDate(),
-        chk_out_dt: booingInqData?.chk_out_dt || getMinCheckOutDate(),
+        chk_out_dt:
+            booingInqData?.chk_out_dt || getMinCheckOutDate(getCurrentDate()),
         cust_name: booingInqData?.cust_name || '',
         mobile_no: booingInqData?.mobile || '',
         email: booingInqData?.email || '',
@@ -69,9 +71,7 @@ function CreateEditMdl({
         bus_sou_id: booingInqData?.bus_sou_id || '',
         status: booingInqData?.status || 1,
     });
-    const { dropDownList, followUpAdd } = useSelector(
-        (state) => state?.booingInqReducer,
-    );
+
     // Function to handle checkbox change
     const handleOfferGiven = (event) => {
         setIsOfferGiven(event.target.checked);
@@ -81,73 +81,55 @@ function CreateEditMdl({
     };
     const dispatch = useDispatch();
     const [statusValue, setStatusValue] = useState(booingInqData?.status || 0);
-    function handleChange(event) {
+    // Track the latest selected check-out date
+    const [lastCheckOutDate, setLastCheckOutDate] = useState(
+        booingInqData?.chk_out_dt || getMinCheckOutDate(getCurrentDate()),
+    );
+    const handleChange = (event) => {
         const { name, value, checked, type } = event.target;
+
         if (type === 'checkbox') {
             setFormData({
                 ...formData,
                 [name]: checked,
             });
         } else if (name === 'chk_in_dt' || name === 'chk_out_dt') {
-            let checkInDate = new Date(formData.chk_in_dt);
-            let checkOutDate = new Date(formData.chk_out_dt);
+            const newFormData = { ...formData, [name]: value };
+            let checkInDate = new Date(newFormData.chk_in_dt);
+            let checkOutDate = new Date(newFormData.chk_out_dt);
 
-            // Parse dates only if they are valid
             if (name === 'chk_in_dt' && isValidDate(value)) {
                 checkInDate = new Date(value);
-                // Update min check-out date to check-in date + 1
                 checkOutDate = new Date(checkInDate);
                 checkOutDate.setDate(checkOutDate.getDate() + 1);
+                newFormData.chk_out_dt = formatDate(checkOutDate);
             } else if (name === 'chk_out_dt' && isValidDate(value)) {
-                if (isValidDate(value)) {
-                    checkOutDate = new Date(value);
-                    // Ensure check-out date is not earlier than check-in date
-                    if (checkOutDate <= checkInDate) {
-                        checkOutDate = new Date(checkInDate);
-                        checkOutDate.setDate(checkOutDate.getDate() + 1);
-                        toast.error(
-                            'Check-out date cannot be earlier than or same as check-in date.',
-                        );
-                    }
-                } else {
-                    // Handle invalid check-out date
+                checkOutDate = new Date(value);
+                console.log('🚀 ~ handleChange ~ checkOutDate:', checkOutDate);
+                if (checkOutDate <= checkInDate) {
+                    toast.error(
+                        'Check-out date cannot be earlier than or same as check-in date.',
+                    );
+                    checkOutDate = new Date(checkInDate);
+                    checkOutDate.setDate(checkOutDate.getDate() + 1);
+                    newFormData.chk_out_dt = formatDate(checkOutDate);
                 }
-            }
-
-            // Ensure check-out date is not earlier than check-in date
-            if (checkOutDate < checkInDate) {
-                checkOutDate = new Date(checkInDate);
-                checkOutDate.setDate(checkOutDate.getDate() + 1);
             }
 
             const timeDifference =
                 checkOutDate.getTime() - checkInDate.getTime();
             const nightCount = Math.ceil(timeDifference / (1000 * 3600 * 24));
 
-            setFormData({
-                ...formData,
-                [name]: formatDate(checkInDate), // Update with formatted date string
-                chk_out_dt: formatDate(checkOutDate), // Update with formatted date string
-                total_day: nightCount,
-            });
+            newFormData.total_day = nightCount;
+
+            setFormData(newFormData);
         } else {
             setFormData({
                 ...formData,
                 [name]: value,
             });
         }
-    }
-
-    // Helper function to check if a date string is valid
-    function isValidDate(dateString) {
-        const regEx = /^\d{4}-\d{2}-\d{2}$/;
-        return dateString.match(regEx) !== null;
-    }
-
-    // Helper function to format date as yyyy-mm-dd
-    function formatDate(date) {
-        return date.toISOString().split('T')[0];
-    }
+    };
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -249,6 +231,7 @@ function CreateEditMdl({
         if (followUpAdd && followUpAdd.follow_up) {
             try {
                 const parsedFollowUp = JSON.parse(followUpAdd.follow_up);
+                console.log('🚀 ~ useEffect ~ parsedFollowUp:', parsedFollowUp);
                 setFollowUpList(parsedFollowUp);
             } catch (error) {
                 console.error('Error parsing JSON string:', error);
@@ -423,7 +406,7 @@ function CreateEditMdl({
                                                 data-bs-toggle="pill"
                                                 href="#follo_Up"
                                             >
-                                                FolloUp
+                                                Follow Up
                                             </a>
                                         </li>
                                     </>
@@ -451,7 +434,7 @@ function CreateEditMdl({
                                 )}
                             </ul>
                             <div
-                                className="modal-body modal-lft-body"
+                                className="modal-body modal-lft-body y_scrolling"
                                 style={{ minWidth: '500px' }}
                             >
                                 <div className="tab-content">
@@ -461,9 +444,9 @@ function CreateEditMdl({
                                     >
                                         <div className="row">
                                             <div className="col">
-                                                <div className="form-group  mb-3">
+                                                <div className="form-group mb-3">
                                                     <label
-                                                        htmlFor="customInput"
+                                                        htmlFor="chk_in_dt"
                                                         className="custom-label"
                                                     >
                                                         Check In Date
@@ -478,7 +461,6 @@ function CreateEditMdl({
                                                             formData.chk_in_dt
                                                         }
                                                         onChange={handleChange}
-                                                        placeholder=""
                                                         required
                                                     />
                                                 </div>
@@ -486,13 +468,9 @@ function CreateEditMdl({
                                             <div className="col-auto">
                                                 <div className="night-count">
                                                     <p className="caption-2 font-white text-center mb-0">
-                                                        Night
+                                                        Nights
                                                     </p>
-                                                    <p
-                                                        className="caption-1b font-white mt-1 text-center mb-0"
-                                                        id="total_day"
-                                                        name="total_day"
-                                                    >
+                                                    <p className="caption-1b font-white mt-1 text-center mb-0">
                                                         {isNaN(
                                                             formData.total_day,
                                                         )
@@ -502,9 +480,9 @@ function CreateEditMdl({
                                                 </div>
                                             </div>
                                             <div className="col">
-                                                <div className="form-group  mb-3">
+                                                <div className="form-group mb-3">
                                                     <label
-                                                        htmlFor="customInput"
+                                                        htmlFor="chk_out_dt"
                                                         className="custom-label"
                                                     >
                                                         Check Out Date
@@ -514,12 +492,13 @@ function CreateEditMdl({
                                                         className="form-control custom-input"
                                                         id="chk_out_dt"
                                                         name="chk_out_dt"
-                                                        min={getMinCheckOutDate()}
+                                                        min={getMinCheckOutDate(
+                                                            formData.chk_in_dt,
+                                                        )}
                                                         value={
                                                             formData.chk_out_dt
                                                         }
                                                         onChange={handleChange}
-                                                        placeholder=""
                                                         required
                                                     />
                                                 </div>
@@ -578,8 +557,7 @@ function CreateEditMdl({
                                                         onChange={handleChange}
                                                     >
                                                         <option value="">
-                                                            Please Select
-                                                            Business Source
+                                                            Select
                                                         </option>
                                                         {dropDownData?.bus_sou &&
                                                             dropDownData.bus_sou.map(
@@ -761,7 +739,6 @@ function CreateEditMdl({
                                                             formData.ref_name
                                                         }
                                                         onChange={handleChange}
-                                                        required
                                                     />
                                                 </div>
                                             </div>
@@ -984,7 +961,7 @@ function CreateEditMdl({
                                         <div className="col-12">
                                             <div className="form-group mb-3">
                                                 <textarea
-                                                    rows="2"
+                                                    rows="4"
                                                     className="form-control custom-input"
                                                     id="sp_remark"
                                                     name="sp_remark"
@@ -996,15 +973,15 @@ function CreateEditMdl({
                                                     }}
                                                     placeholder="Special Remarks"
                                                 ></textarea>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-primary mt-3"
+                                                    style={{ float: 'right' }}
+                                                    onClick={submitFollowUp}
+                                                >
+                                                    Save
+                                                </button>
                                             </div>
-                                            <button
-                                                type="button"
-                                                className="btn btn-primary"
-                                                style={{ float: 'right' }}
-                                                onClick={submitFollowUp}
-                                            >
-                                                Save
-                                            </button>
                                         </div>
                                         <div className="mt-5">
                                             <div className="row mt-2  m-0">
@@ -1014,15 +991,15 @@ function CreateEditMdl({
                                                     </p>
                                                 </div>
                                             </div>
-                                            <div className="row m-0 listing_box">
-                                                {followUpList &&
-                                                    followUpList.length > 0 &&
-                                                    followUpList.map(
-                                                        (item, index) => (
-                                                            <div
-                                                                className="row m-0 mt-4"
-                                                                key={index}
-                                                            >
+                                            {followUpList &&
+                                                followUpList.length > 0 &&
+                                                followUpList.map(
+                                                    (item, index) => (
+                                                        <div
+                                                            className=""
+                                                            key={index}
+                                                        >
+                                                            <div className="row m-1 listing_box ms-0">
                                                                 <div className="col-6 mb-1">
                                                                     <p
                                                                         className="subtitle-2m primary-color mb-0"
@@ -1059,17 +1036,16 @@ function CreateEditMdl({
                                                                     </p>
                                                                 </div>
                                                             </div>
-                                                        ),
-                                                    )}
-                                                {!followUpList ||
-                                                    (followUpList.length ===
-                                                        0 && (
-                                                        <p>
-                                                            No follow-up data
-                                                            available
-                                                        </p>
-                                                    ))}
-                                            </div>
+                                                        </div>
+                                                    ),
+                                                )}
+                                            {!followUpList ||
+                                                (followUpList.length === 0 && (
+                                                    <p>
+                                                        No follow-up data
+                                                        available
+                                                    </p>
+                                                ))}
                                         </div>
                                     </div>
                                 </div>
@@ -1087,7 +1063,7 @@ function CreateEditMdl({
                                     type="submit"
                                     className="btn btn-primary"
                                 >
-                                    SaveInquiry
+                                    Save
                                 </button>
                             </div>
                         </div>

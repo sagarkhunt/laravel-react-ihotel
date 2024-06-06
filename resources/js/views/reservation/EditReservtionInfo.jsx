@@ -1680,7 +1680,7 @@ function EditReservtionInfo() {
                                                                     ID Type
                                                                 </label>
                                                             </div>
-                                                            <div className="input-group">
+                                                            <div className="">
                                                                 <select
                                                                     className="form-select custom-input"
                                                                     id="reservationTypeDropdown"
@@ -1868,12 +1868,12 @@ function EditReservtionInfo() {
                                                 </button>
                                                 <button
                                                     type="button"
-                                                    className="btn-sm btn-secondary"
+                                                    className="btn-sm btn-secondary ms-1"
                                                     data-bs-dismiss="modal"
                                                 >
                                                     C Form
                                                 </button>
-                                                <div className="btn-group">
+                                                <div className="btn-group ms-1">
                                                     <button
                                                         className="btn-sm btn-secondary d-flex align-items-center"
                                                         type="button"
@@ -1927,7 +1927,7 @@ function EditReservtionInfo() {
                                                 </div>
                                                 <button
                                                     type="button"
-                                                    className="btn-sm btn-primary"
+                                                    className="btn-sm btn-primary ms-1"
                                                     data-bs-dismiss="modal"
                                                 >
                                                     Save
