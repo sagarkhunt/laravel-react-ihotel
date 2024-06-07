@@ -504,41 +504,6 @@ function CreateEditMdl({
                                                 </div>
                                             </div>
                                             <div className="col-6">
-                                                {/* <div className="form-group  mb-3">
-                                                    <label
-                                                        htmlFor="customInput"
-                                                        className="custom-label"
-                                                    >
-                                                        Customer Category
-                                                    </label>
-                                                    <select
-                                                        className="form-select custom-input "
-                                                        aria-label=".form-select-sm example"
-                                                        id="cust_cat_id"
-                                                        name="cust_cat_id"
-                                                        value={
-                                                            formData.cust_cat_id
-                                                        } // Set value based on state
-                                                        onChange={handleChange}
-                                                    >
-                                                        <option value="">
-                                                            Please Select Cust
-                                                            Cate
-                                                        </option>{' '}
-                                                        <option value="1">
-                                                            Travel Agent
-                                                        </option>
-                                                        <option value="2">
-                                                            Direct Booking
-                                                        </option>
-                                                        <option value="3">
-                                                            Corporates
-                                                        </option>
-                                                        <option value="4">
-                                                            Referential
-                                                        </option>
-                                                    </select>
-                                                </div> */}
                                                 <div className="form-group  mb-3">
                                                     <label
                                                         htmlFor="customInput"

@@ -576,7 +576,7 @@ body {
 
 .btn-secondary-add {
     display: flex !important;
-    width: 32px;
+    /* width: 32px; */
     align-items: center;
     justify-content: center;
     height: 32px;
@@ -625,7 +625,7 @@ body {
 /* Custom styles for input label */
 .custom-label {
     /* overflow: hidden; */
-    /* color: var(--secondary-color); */
+    color: var(--secondary-color);
     font-feature-settings:
         'clig' off,
         'liga' off;
@@ -1912,5 +1912,5 @@ select,
     width: 30px;
     align-items: center;
     display: flex;
-    padding-left: 3px;
+    padding-left: 2px;
 }

@@ -9,12 +9,12 @@
     margin-left: -7px;
     margin-right: -5px;
 }
-.input-group {
+/* .input-group {
     display: flex;
     flex-direction: column;
-    /* margin-bottom: 15px; */
+    margin-bottom: 15px;
     align-items: flex-start;
-}
+} */
 .form-label {
     margin-bottom: 5px;
     font-weight: bold;
@@ -389,11 +389,6 @@
     border-radius: 5px;
     display: inline-block;
 }
-.background {
-    background-color: white;
-    align-items: center;
-    display: flex;
-}
 .blue_colour {
     color: #0863b5;
 }
@@ -489,4 +484,36 @@ label.upload-button span {
 /* Show only the text "Upload Images" */
 label.upload-button:before {
     content: 'Upload Images';
+}
+.upload-image {
+    margin-top: -35px;
+}
+.upload-button {
+    padding-top: 3px;
+}
+.upload-images-btn {
+    border: none;
+    background-color: #e6eff8;
+}
+.accordion_btn {
+    border: none;
+    background-color: white;
+}
+
+.Neon-input-dragDrop {
+    position: relative;
+}
+
+.Neon-input-dragDrop img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    opacity: 1;
+}
+
+.accordion-body {
+    padding: 0rem 1.55rem;
 }
