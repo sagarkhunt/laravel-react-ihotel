@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Reservation</title>
+    <!-- Style -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+    <!-- Data table -->
+    <!--  <link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css" />
+       <script src="https://cdn.datatables.net/2.0.0/js/dataTables.js"></script> -->
+ </head>
+<style>
+body {
+  font-family: Arial, sans-serif;
+}
+.row {
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: wrap; /* IE10 */
+  flex-wrap: wrap;
+  margin: 0 -16px;
+}
+
+.col-25 {
+  -ms-flex: 25%; /* IE10 */
+  flex: 25%;
+}
+
+.col-50 {
+  width: 50%;
+  display: inline-block;
+}
+
+.col-75 {
+  -ms-flex: 75%; /* IE10 */
+  flex: 75%;
+}
+
+
+.col-25{
+  width: 25%;
+  display: inline-block;
+}
+
+form {
+  margin-top: 20px;
+}
+
+.col-25,
+.col-50,
+.col-75 {
+  padding: 0 4px;
+}
+
+.container {
+  display: inline-block;
+  width: 65%;
+  background-color: #ffffff;
+  padding: 5px 20px 15px 30px;
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+  margin-left: 40px;
+}
+
+.container2{
+  display: inline-block;
+  width: 90%;
+  background-color: #fffafa;
+  padding: 5px 10px 15px 20px;
+  margin-left: 10px;
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+}
+
+input[type=text] {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+label {
+  margin-bottom: 10px;
+  display: block;
+}
+
+.icon-container {
+  margin-bottom: 20px;
+  padding: 7px 0;
+  font-size: 24px;
+}
+input[type="date"],
+input[type="time"]{
+  width: 85%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+#bus_sou_id{
+  width: 275px;
+  height: 43px;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+#bus_sou_id1{
+  width: 100%;
+  height: 43px;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+
+
+.input-group {
+  display: flex;
+}
+
+.input-row {
+  flex: 1;
+  margin-right: 10px;
+}
+
+input[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+.btn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  width: 100%;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 17px;
+}
+
+.btn:hover {
+  background-color: #45a049;
+}
+
+.checkDiv{
+  /* display: flex; */
+  margin-right: -25px;
+}
+
+span.price {
+  float: right;
+  color: grey;
+}
+
+.due1{
+  float: right;
+  color: blue;
+}
+
+.title{
+  margin-bottom: 0px;
+  margin-top: 5px;
+}
+#night{
+  width: 38px;
+ height: 40px;
+  margin-top: 31px;
+  margin-right: 20px;
+}
+
+.datetime-container {
+    margin-bottom: 10px;
+    display: flex;
+    /* justify-content: space-between; */
+  }
+  .datetime-container label,
+  .datetime-container input[type="date"],
+  .datetime-container input[type="time"] {
+    flex: 1;
+    margin-right: 30px;
+  }
+
+  .row2 {
+    display: flex;
+   
+}
+
+.div-title{
+  color: rgb(49, 49, 219);
+  margin: 20px 0 20px ;
+}
+h5{
+  margin: 20px 0 20px -8px;
+}
+.row2 label,
+.row2 select {
+    margin-right: 0px; /* Adjust spacing between elements */
+}
+
+.checkbox {
+  margin-left: 8px;
+    display: flex;
+    align-items: center; /* Align items vertically */
+}
+
+.checkbox input[type="checkbox"] {
+    margin-right: 8px; /* Add spacing between checkboxes and labels */
+}
+
+.checkbox h5 {
+    margin-right: 500px; /* Add spacing between h5 and checkboxes */
+}
+
+.box {
+    border: 1px solid rgb(208, 208, 208); /* You can adjust the width and color as needed */
+    padding: 17px 4px 4px 4px; 
+    border-radius: 10px;
+}
+.checktitle{
+    margin-top: 8px;
+}
+.checkbox1{
+  margin-right: 20px;
+}
+.button-container {
+    text-align: right;
+  }
+.button-container2{
+  margin-top: 20px;
+  text-align: left;
+}
+  .button-container button {
+    margin-left: 10px; /* Add some space between buttons */
+  }
+.due{
+  color: blue;
+}
+
+.billTo{
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+.booking_summary{
+  margin-top: 18px;
+}
+
+.button{
+  width: 115px;
+  height: 30px;
+  
+}
+.form12{
+  display: flex;
+}
+.col-four{
+  width: 100px;
+  margin-left: 15px;
+}
+.extrarow{
+  margin-left: -2px;
+  margin-right: 0px;
+}
+.custom-select {
+    width: 100%; /* Adjust the width as needed */
+    height: 40px; /* Adjust the height as needed */
+  }
+
+#checkout-time{
+  margin-top: 29px;
+}
+
+
+
+#checkin-time{
+    margin-top: 29px;
+}
+
+
+
+
+/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (and change the direction - make the "cart" column go on top) */
+@media screen and (max-width: 600px) {
+  .container {
+    width: 100%;
+  }
+  .container2 {
+    width: 100%;
+  }
+  input[type=text] {
+    width: 100%;
+  }
+  input[type="date"],
+  input[type="time"] {
+    width: 100%;
+  }
+}
+
+</style>
+<body>
+  <div class="row">
+      <div class="container">
+        <form action="/action_page.php">
+  
+          <div class="row">
+            <div class="col-100">
+              
+              <h4> &#8592; Add Reservation</h4>
+              <hr>
+              <div class="datetime-container">
+                <div class="checkDiv">
+                  <label class="title"  for="checkin-date">Check In</label>
+                  <input type="date" id="checkin-date" name="checkin-date">
+                </div>
+                <div>
+                  <input type="time" id="checkin-time" name="checkin-time">
+                </div>
+                <div>
+                  <input type="number" id="night" name="Night">
+                </div>
+                <div class="checkDiv">
+                  <label class="title" for="checkout-date">Check Out</label>
+                  <input type="date" id="checkout-date" name="checkout-date">
+                </div>
+                <div>
+                  <input type="time" id="checkout-time" name="checkout-time">
+                </div>
+              </div>
+              <div class="row2">
+                <div class="col">
+                    <label class="title" htmlFor="bus_sou_id" className="custom-label">
+                        Reservation Type
+                    </label>
+                    <select
+                        className="resType form-select custom-input"
+                        aria-label=".form-select-sm example"
+                        id="bus_sou_id"
+                        name="bus_sou_id"
+                    >
+                        <option value="">Confirm Booking</option>
+                        <!-- Add options here -->
+                    </select>
+                </div>
+                <div class="col">
+                    <label class="title" htmlFor="bus_sou_id" className="custom-label">
+                        Booking Source
+                    </label>
+                    <select
+                        className="resType form-select custom-input"
+                        aria-label=".form-select-sm example"
+                        id="bus_sou_id"
+                        name="bus_sou_id"
+                    >
+                        <option value="">Direct</option>
+                        <!-- Add options here -->
+                    </select>
+                </div>
+                <div class="col">
+                  <label class="title" htmlFor="bus_sou_id" className="custom-label">
+                      Business Source
+                  </label>
+                  <select
+                      className="resType form-select custom-input"
+                      aria-label=".form-select-sm example"
+                      id="bus_sou_id"
+                      name="bus_sou_id"
+                  >
+                      <option value="">Select</option>
+                      <!-- Add options here -->
+                  </select>
+              </div>
+            </div>
+          <div>
+              <div class="checkbox">
+            <h5>Offered</h5>
+            <input type="checkbox" id="offeredCheckbox1" name="offeredCheckbox1">
+            <label class="checktitle checkbox1" for="offeredCheckbox1">Book All Available Rooms</label>
+            <input type="checkbox" id="offeredCheckbox2" name="offeredCheckbox2">
+            <label class="checktitle" for="offeredCheckbox2">Complimentary Room</label>
+            </div>
+            <div class="row extrarow">
+              <div class="col-25 four">
+                <label class="title" for="country">Country</label>
+                <select id="country" name="country" class="custom-select">
+                  <option value="USA">USA</option>
+                  <option value="UK">UK</option>
+                  <option value="Canada">Canada</option>
+                  <!-- Add more options as needed -->
+                </select>
+              </div>
+              <div class="col-25 four">
+                <label class="title" for="state">State</label>
+                <select id="state" name="state" class="custom-select">
+                  <option value="California">California</option>
+                  <option value="New York">New York</option>
+                  <option value="Texas">Texas</option>
+                  <!-- Add more options as needed -->
+                </select>
+              </div>
+              <div class="col-50 form12">
+                <div class="col-four">
+                  <label class="title" for="room">Room</label>
+                  <select id="room" name="room" class="custom-select">
+                    <option value="Single">Single</option>
+                    <option value="Double">Double</option>
+                    <option value="Suite">Suite</option>
+                    <!-- Add more options as needed -->
+                  </select>
+                </div>
+                <div class="col-four">
+                  <label class="title" for="adults">Adults</label>
+                  <select id="adults" name="adults" class="custom-select">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <!-- Add more options as needed -->
+                  </select>
+                </div>
+                <div class="col-four">
+                  <label class="title" for="children">Children</label>
+                  <select id="children" name="children" class="custom-select">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <!-- Add more options as needed -->
+                  </select>
+                </div>
+                <div class="col-four">
+                  <label class="title" for="rates">Rates(Rs.)</label>
+                  <select id="rates" name="rates" class="custom-select">
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                    <option value="300">300</option>
+                    <!-- Add more options as needed -->
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="button-container2">
+              <button class="button">+ Room</button>
+              <button class="button">+ Discount</button>
+            </div>
+          </div>
+            
+           
+           
+          <div>
+            <h5 class="div-title">Guest Information</h5>
+              <label class="title" for="city"><i class="fa fa-institution"></i>Name</label>
+              <input type="text" id="city" name="city" placeholder="Name">
+  
+              <div class="row extrarow">
+                <div class="col-50">
+                  <label class="title" for="state">Mobile Number</label>
+                  <input type="text" id="state" name="state" placeholder="Mobile Number">
+                </div>
+                <div class="col-50 extracol">
+                  <label class="title" for="zip">Email</label>
+                  <input type="text" id="zip" name="zip" placeholder="Email">
+                </div>
+              </div>
+              <label class="title" for="adr"><i class="fa fa-address-card-o"></i>Address</label>
+              <input type="text" id="adr" name="address" placeholder="Address">
+            </div>
+            <div class="row extrarow">
+              <div class="col-25">
+                <label class="title" for="state">Country</label>
+                <input type="text" id="state" name="state" placeholder="Country">
+              </div>
+              <div class="col-25">
+                <label class="title" for="zip">State</label>
+                <input type="text" id="zip" name="zip" placeholder="State">
+              </div>
+              <div class="col-25">
+                <label class="title" for="state">City</label>
+                <input type="text" id="state" name="state" placeholder="City">
+              </div>
+              <div class="col-25">
+                <label class="title" for="zip">Zip Code</label>
+                <input type="text" id="zip" name="zip" placeholder="Zip Code">
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="button-container">
+            <button>Cancel</button>
+            <button>Reservation</button>
+          </div>
+        </form>
+      </div>
+    
+  
+    <div class="col-25">
+      <div class="container2">
+        <div class="booking_summary">
+          <h4>Booking Summary
+          <span class="price" style="color:black">
+            <i class="fa fa-shopping-cart"></i>
+            <b>Confirm Booking</b>
+          </span>
+        </h4>
+        <hr></div>
+        
+
+
+        <div class="box">
+          <p> Room Charges <span class="price">₹11200</span></p>
+          <p> Taxes <span class="price">₹800</span></p>
+          <p class="due"> Due Amount <span class="due1">₹12000</span></p>
+          
+        </div>
+        <div class="billTo">
+          <label class="title" htmlFor="bus_sou_id" className="custom-label">
+            Bill To
+        </label>
+          <select
+                        className="resType form-select custom-input"
+                        aria-label=".form-select-sm example"
+                        id="bus_sou_id1"
+                        name="bus_sou_id"
+                    >
+                        <option value="">Select</option>
+                        <!-- Add options here -->
+                    </select>
+        </div>
+        <hr>
+        <div class="button-container">
+          <button>Add Payments</button>
+        </div>
+      
+       
+      </div>
+    </div>
+  </div>
+</body>
+</html>
