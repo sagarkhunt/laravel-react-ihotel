@@ -789,7 +789,7 @@ function HotelProfile() {
                             <select
                                 name="country"
                                 id="country"
-                                className="custom-input w-100 border-width-1"
+                                className="form-select custom-input w-100 border-width-1"
                                 value={formData.country}
                                 onChange={handleInputChange}
                             >
@@ -805,7 +805,7 @@ function HotelProfile() {
                             <select
                                 name="state"
                                 id="state"
-                                className="custom-input w-100 border-width-1"
+                                className="form-select custom-input w-100 border-width-1"
                                 value={formData.state}
                                 onChange={handleInputChange}
                             >
@@ -823,7 +823,7 @@ function HotelProfile() {
                             <select
                                 name="city"
                                 id="city"
-                                className="custom-input w-100 border-width-1"
+                                className="form-select custom-input w-100 border-width-1"
                                 value={formData.city}
                                 onChange={handleInputChange}
                             >
@@ -957,7 +957,7 @@ function HotelProfile() {
                                 <select
                                     name="billingCountry"
                                     id="billingCountry"
-                                    className="custom-input w-100 border-width-1"
+                                    className="form-select custom-input w-100 border-width-1"
                                     value={formData.billingCountry}
                                     onChange={handleInputChange}
                                 >
@@ -978,7 +978,7 @@ function HotelProfile() {
                                 <select
                                     name="billingState"
                                     id="billingState"
-                                    className="custom-input w-100 border-width-1"
+                                    className="form-select custom-input w-100 border-width-1"
                                     value={formData.billingState}
                                     onChange={handleInputChange}
                                 >
@@ -999,7 +999,7 @@ function HotelProfile() {
                                 <select
                                     name="billingCity"
                                     id="billingCity"
-                                    className="custom-input w-100 border-width-1"
+                                    className="form-select custom-input w-100 border-width-1"
                                     value={formData.billingCity}
                                     onChange={handleInputChange}
                                 >

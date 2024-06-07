@@ -1,0 +1,28 @@
+{
+  "public/assets/v1/images/header_logo.png": {
+    "file": "assets/header_logo-CBS6ENxh.png",
+    "src": "public/assets/v1/images/header_logo.png"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-Ckop-KWs.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-DWkv5EKr.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "css": [
+      "assets/app-D0U6eOLO.css"
+    ],
+    "assets": [
+      "assets/header_logo-CBS6ENxh.png"
+    ]
+  },
+  "resources/sass/app.scss": {
+    "file": "assets/app-BKdXf7ii.css",
+    "src": "resources/sass/app.scss",
+    "isEntry": true
+  }
+}

@@ -164,13 +164,14 @@ function Navbar() {
                                                         fill=""
                                                     />
                                                 </svg>
-
-                                                <span className="nav-item">
-                                                    Room Operations
-                                                </span>
-                                                <span className="material-icons-round cp downarrow">
-                                                    chevron_right
-                                                </span>
+                                                <div className="d-flex justify-content-between w-100">
+                                                    <span className="nav-item">
+                                                        Room Operations
+                                                    </span>
+                                                    <span className="material-icons-round cp downarrow">
+                                                        chevron_right
+                                                    </span>
+                                                </div>
                                             </div>
                                             <div className="submenu_box p-3 y_scrolling">
                                                 <ul className="sub-menu-list px-2  row">
@@ -375,13 +376,14 @@ function Navbar() {
                                                         fill=""
                                                     />
                                                 </svg>
-
-                                                <span className="nav-item">
-                                                    Masters
-                                                </span>
-                                                <span className="material-icons-round cp downarrow">
-                                                    chevron_right
-                                                </span>
+                                                <div className="d-flex justify-content-between w-100">
+                                                    <span className="nav-item">
+                                                        Masters
+                                                    </span>
+                                                    <span className="material-icons-round cp downarrow">
+                                                        chevron_right
+                                                    </span>
+                                                </div>
                                             </div>
                                             <div className="submenu_box p-3">
                                                 <ul className="sub-menu-list px-2  row sidebar-masters-submenu mb-2 y_scrolling">
@@ -638,13 +640,14 @@ function Navbar() {
                                                         fill=""
                                                     />
                                                 </svg>
-
-                                                <span className="nav-item">
-                                                    Settings
-                                                </span>
-                                                <span className="material-icons-round cp downarrow">
-                                                    chevron_right
-                                                </span>
+                                                <div className="d-flex justify-content-between w-100">
+                                                    <span className="nav-item">
+                                                        Settings
+                                                    </span>
+                                                    <span className="material-icons-round cp downarrow">
+                                                        chevron_right
+                                                    </span>
+                                                </div>
                                             </div>
                                             <div className="submenu_box p-3 y_scrolling">
                                                 <ul className="sub-menu-list px-2  row">
@@ -740,13 +743,14 @@ function Navbar() {
                                                         fill=""
                                                     />
                                                 </svg>
-
-                                                <span className="nav-item">
-                                                    HouseKeeping
-                                                </span>
-                                                <span className="material-icons-round cp downarrow">
-                                                    chevron_right
-                                                </span>
+                                                <div className="d-flex justify-content-between w-100">
+                                                    <span className="nav-item">
+                                                        HouseKeeping
+                                                    </span>
+                                                    <span className="material-icons-round cp downarrow">
+                                                        chevron_right
+                                                    </span>
+                                                </div>
                                             </div>
                                             <div className="submenu_box p-3 y_scrolling">
                                                 <ul className="sub-menu-list px-2  row">
@@ -841,13 +845,14 @@ function Navbar() {
                                                         fill=""
                                                     />
                                                 </svg>
-
-                                                <span className="nav-item">
-                                                    Reports
-                                                </span>
-                                                <span className="material-icons-round cp downarrow">
-                                                    chevron_right
-                                                </span>
+                                                <div className="d-flex justify-content-between w-100">
+                                                    <span className="nav-item">
+                                                        Reports
+                                                    </span>
+                                                    <span className="material-icons-round cp downarrow">
+                                                        chevron_right
+                                                    </span>
+                                                </div>
                                             </div>
                                             <div className="submenu_box p-3 y_scrolling">
                                                 <ul className="sub-menu-list px-2  row">
@@ -953,13 +958,14 @@ function Navbar() {
                                                         fill=""
                                                     />
                                                 </svg>
-
-                                                <span className="nav-item">
-                                                    Maintenance
-                                                </span>
-                                                <span className="material-icons-round cp downarrow">
-                                                    chevron_right
-                                                </span>
+                                                <div className="d-flex justify-content-between w-100">
+                                                    <span className="nav-item">
+                                                        Maintenance
+                                                    </span>
+                                                    <span className="material-icons-round cp downarrow">
+                                                        chevron_right
+                                                    </span>
+                                                </div>
                                             </div>
                                             <div className="submenu_box p-3 y_scrolling">
                                                 <ul className="sub-menu-list px-2  row">
