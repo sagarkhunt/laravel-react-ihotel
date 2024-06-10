@@ -7,7 +7,7 @@ function HouseKeeoing() {
         setOpen(true);
     }
     return (
-        <main className="container-fluid px-4 d-flex justify-content-between main-container">
+        <main className="container-fluid px-4 d-flex justify-content-between main-container pb-3">
             <section className="container-page width-60p">
                 <div className="header p-4 pb-2">
                     <h6 className="headline-h6m">House Keeping</h6>

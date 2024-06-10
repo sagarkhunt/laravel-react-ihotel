@@ -54,14 +54,19 @@ function* createBookingInq(action) {
                 type: actions.BOOKINGINQ_ADD_SUCCESS,
                 payload: response.data,
             });
-            toast.success(response.message);
+            if (response?.success === false) {
+                const errors = response.data.errors;
+                toast.error(Object.values(errors).join(', '));
+            } else {
+                toast.success(response.message);
+            }
         }
     } catch (error) {
         // Dispatch the register failure action
         yield put({ type: actions.BOOKINGINQ_ADD_FAILURE });
 
         // Handle different error statuses
-        if (error.response?.status === 422) {
+        if (error.response?.status === false) {
             const errors = error.response.data.errors;
             toast.error(Object.values(errors).join(', '));
         } else if (error.response?.status === 400) {
