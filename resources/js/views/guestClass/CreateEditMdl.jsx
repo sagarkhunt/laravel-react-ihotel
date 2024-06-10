@@ -23,7 +23,7 @@ function CreateEditMdl({
 
     // Effect to update form data when userData prop changes
     useEffect(() => {
-        if (mode === 'Edit Business Source') {
+        if (mode === 'Edit Guest Class') {
             setStatusValue(userData.status);
 
             // Create a new object with userData,
@@ -79,7 +79,7 @@ function CreateEditMdl({
                                         {mode}
                                     </h5>
                                     <div className="d-flex gap-4 align-items-right">
-                                        {mode === 'Edit Business Source' ? (
+                                        {mode === 'Edit Guest Class' ? (
                                             <div className="d-flex gap-4 align-items-center">
                                                 <div
                                                     className="form-check form-switch"

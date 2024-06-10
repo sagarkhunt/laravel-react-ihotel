@@ -107,13 +107,13 @@ function* updateGuest(action) {
 }
 
 /**
- * Deletes a new business.
- * @param {deleteGuest} action The action containing payload for deleting a new business.
+ * Deletes a new guest.
+ * @param {deleteGuest} action The action containing payload for deleting a new guest.
  */
 function* deleteGuest(action) {
     const { payload } = action;
     try {
-        const response = yield call(postRequest, 'upd_guest_cls', payload);
+        const response = yield call(postRequest, 'del_guest_cls', payload);
         if (response) {
             yield put({
                 type: actions.GUEST_DELETE_SUCCESS,

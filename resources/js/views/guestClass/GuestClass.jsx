@@ -88,7 +88,7 @@ function GuestClass() {
         } else {
             const updatedFormData = {
                 name: formData.name,
-                bus_sou_id: formData.id,
+                guest_class_id: formData.id,
                 status: statusValue,
             };
             dispatch({
@@ -107,12 +107,14 @@ function GuestClass() {
         if (item && item.id) {
             setShowDel(true);
             setDelId(item.id);
+        } else {
+            console.log('id is missing');
         }
     };
 
     const handleDelSubmit = () => {
         const guestId = {
-            bus_sou_id: delId,
+            guest_class_id: delId,
         };
         dispatch({
             type: actions.GUEST_DELETE,
