@@ -1969,3 +1969,39 @@ select,
     left: 3px;
     transition: background-color 0.2s ease-in-out;
 }
+.td-custom {
+    position: relative;
+}
+
+.dropdown-menu-re {
+    position: absolute;
+    top: 100%;
+    left: -260%;
+    display: none;
+    z-index: 1000;
+    float: left;
+    min-width: 10rem;
+    padding: 0.5rem 0;
+    margin: 0.125rem 0 0;
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0.25rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+}
+
+.dropdown-menu-re.show {
+    display: block;
+}
+
+.material-icons-outlined {
+    cursor: pointer;
+}
+
+.dropdown .material-icons-outlined:hover {
+    color: #007bff;
+}
