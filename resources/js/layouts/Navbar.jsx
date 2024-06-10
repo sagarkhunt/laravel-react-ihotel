@@ -446,6 +446,25 @@ function Navbar() {
                                                     </li>
                                                     <li className="col-12 grid_padding">
                                                         <Link
+                                                            className={`nav-sub-box cp ${activeLink === '/guest_class' ? 'active' : ''}`}
+                                                            to="/guest_class"
+                                                            onClick={() =>
+                                                                handleLinkClick(
+                                                                    '/guest_class',
+                                                                )
+                                                            }
+                                                        >
+                                                            <span
+                                                                type="button"
+                                                                className="nav-item"
+                                                                data-bs-dismiss="offcanvas"
+                                                            >
+                                                                Guest Class
+                                                            </span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="col-12 grid_padding">
+                                                        <Link
                                                             className={`nav-sub-box cp ${activeLink === '/booking_source' ? 'active' : ''}`}
                                                             to="/booking_source"
                                                             onClick={() =>

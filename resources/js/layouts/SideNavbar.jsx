@@ -240,6 +240,23 @@ function SideNavbar({ activeLink }) {
                             </li>
                             <li className="col-12 grid_padding">
                                 <Link
+                                    className={`nav-sub-box cp ${activeLink === '/room_view' ? 'active' : ''}`}
+                                    to="/room_view"
+                                    onClick={() =>
+                                        handleLinkClick('/room_view')
+                                    }
+                                >
+                                    <span
+                                        type="button"
+                                        className="nav-item"
+                                        data-bs-dismiss="offcanvas"
+                                    >
+                                        Guest Class
+                                    </span>
+                                </Link>
+                            </li>
+                            <li className="col-12 grid_padding">
+                                <Link
                                     className={`nav-sub-box cp ${activeLink === '/section' ? 'active' : ''}`}
                                     to="/section"
                                     onClick={() => handleLinkClick('/section')}

@@ -26,6 +26,7 @@ import TncList from '../views/TNC/TncList.jsx';
 import HouseKeeping from '../views/HouseKeeping/HouseKeeping.jsx';
 import FrontView from '../views/frontView/FrontView.jsx';
 import EditReservtionInfo from '../views/reservation/EditReservtionInfo.jsx';
+import GuestClass from '../views/guestClass/GuestClass.jsx';
 
 // Define a function to check if the user is authenticated
 const isAuthenticated = () => {
@@ -145,6 +146,10 @@ const router = createBrowserRouter([
             {
                 path: '/front_view',
                 element: <ProtectedRouteWrapper element={<FrontView />} />,
+            },
+            {
+                path: '/guest_class',
+                element: <ProtectedRouteWrapper element={<GuestClass />} />,
             },
         ],
     },

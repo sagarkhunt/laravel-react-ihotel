@@ -14,6 +14,7 @@ import bookingReducer from './BookingSource/reducer';
 import cpReducer from './CancellPolicy/reducer';
 import tncReducer from './TermConition/reducer';
 import reserReducer from './Reservation/reducer';
+import guestReducer from './GuestClass/reducer';
 //Include all the reducer to combine and provide to configure store.
 export default {
     authenticateReducer,
@@ -32,4 +33,5 @@ export default {
     cpReducer,
     tncReducer,
     reserReducer,
+    guestReducer,
 };
