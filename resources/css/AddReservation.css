@@ -342,10 +342,6 @@
     vertical-align: middle;
 }
 
-.align-items-center {
-    /* display: inline-block; */
-    /* vertical-align: middle; */
-}
 .boy {
     margin-left: 15px;
 }
@@ -401,9 +397,6 @@
     height: 570px;
 }
 
-.card-footer {
-    margin-top: auto;
-}
 .scrollable-div {
     height: 478px;
     overflow-y: scroll;
@@ -414,9 +407,6 @@
     display: none;
 }
 
-.card-footer {
-    margin-top: auto;
-}
 .background {
     background-color: white;
     align-items: center;
@@ -433,9 +423,6 @@
 /* Hide scrollbar for Webkit-based browsers (Chrome, Safari) */
 .scrollable-accordion::-webkit-scrollbar {
     display: none;
-}
-.card-footer-background {
-    background-color: white;
 }
 .border-right {
     border-right: 1px solid #e1e7eb; /* Change #000 to your desired border color */
@@ -489,4 +476,48 @@ label.upload-button span {
 /* Show only the text "Upload Images" */
 label.upload-button:before {
     content: 'Upload Images';
+}
+
+.payment-button {
+    font-size: 12px;
+    background-color: var(--primary-color);
+    padding: none !important;
+    color: white;
+}
+
+.person-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    background-color: var(--primary-color100);
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+.person-icon:hover {
+    background-color: var(--primary-color200) !important;
+}
+
+/* ************ drop down list **************  */
+.list-container {
+    background-color: white;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: scroll;
+    border: 1px solid #A6B6C4;
+    border-radius: 5px;
+}
+
+.list-container ul {
+    padding: 0;
+}
+
+.list-container ul li {
+    list-style: none;
+    padding: 0.5rem 1rem;
+}
+
+.list-container ul li:hover {
+    background-color: #E6EFF8;
 }

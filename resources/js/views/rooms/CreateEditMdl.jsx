@@ -3,13 +3,7 @@ import Modal from '../../components/common/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import actions from '../../redux/Rooms/actions';
 import amntActions from '../../redux/Amenity/actions';
-function CreateEditMdl({
-    open,
-    setOpen,
-    mode,
-    // onSubmit,
-    roomsData,
-}) {
+function CreateEditMdl({ open, setOpen, mode, roomsData }) {
     const [amenities, setAmenities] = useState();
     const [saveToDupli, setSaveToDupli] = useState('');
     const { amenityListData } = useSelector((state) => state?.amenityReducer);

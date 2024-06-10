@@ -1933,6 +1933,10 @@ select,
 
 .card-footer {
     margin-top: auto;
+    background-color: white !important;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
 }
 
 .height-adjust {
