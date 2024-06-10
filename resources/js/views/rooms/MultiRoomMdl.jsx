@@ -115,7 +115,7 @@ function MultiRoomMdl({ open, setOpen }) {
                                     </div>
                                 </div>
 
-                                <div className="modal-body modal-lf-body">
+                                <div className="modal-body modal-lf-body y_scrolling">
                                     <div className="row">
                                         <div className="custom-control custom-radio mb-3">
                                             <input
@@ -130,7 +130,7 @@ function MultiRoomMdl({ open, setOpen }) {
                                                 checked={!showRoomNos}
                                             />
                                             <label
-                                                className="custom-control-label subtitle-2m"
+                                                className="custom-control-label subtitle-2m ms-1"
                                                 htmlFor="rooms_name"
                                             >
                                                 Add Rooms Names*
@@ -187,7 +187,7 @@ function MultiRoomMdl({ open, setOpen }) {
                                                 checked={showRoomNos}
                                             />
                                             <label
-                                                className="custom-control-label subtitle-2m"
+                                                className="custom-control-label subtitle-2m ms-1"
                                                 htmlFor="rooms_nos"
                                             >
                                                 Add Room Nos*

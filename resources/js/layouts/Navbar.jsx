@@ -164,13 +164,14 @@ function Navbar() {
                                                         fill=""
                                                     />
                                                 </svg>
-
-                                                <span className="nav-item">
-                                                    Room Operations
-                                                </span>
-                                                <span className="material-icons-round cp downarrow">
-                                                    chevron_right
-                                                </span>
+                                                <div className="d-flex justify-content-between w-100">
+                                                    <span className="nav-item">
+                                                        Room Operations
+                                                    </span>
+                                                    <span className="material-icons-round cp downarrow">
+                                                        chevron_right
+                                                    </span>
+                                                </div>
                                             </div>
                                             <div className="submenu_box p-3 y_scrolling">
                                                 <ul className="sub-menu-list px-2  row">
@@ -375,13 +376,14 @@ function Navbar() {
                                                         fill=""
                                                     />
                                                 </svg>
-
-                                                <span className="nav-item">
-                                                    Masters
-                                                </span>
-                                                <span className="material-icons-round cp downarrow">
-                                                    chevron_right
-                                                </span>
+                                                <div className="d-flex justify-content-between w-100">
+                                                    <span className="nav-item">
+                                                        Masters
+                                                    </span>
+                                                    <span className="material-icons-round cp downarrow">
+                                                        chevron_right
+                                                    </span>
+                                                </div>
                                             </div>
                                             <div className="submenu_box p-3">
                                                 <ul className="sub-menu-list px-2  row sidebar-masters-submenu mb-2 y_scrolling">
@@ -439,6 +441,25 @@ function Navbar() {
                                                                 data-bs-dismiss="offcanvas"
                                                             >
                                                                 Bussiness Source
+                                                            </span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="col-12 grid_padding">
+                                                        <Link
+                                                            className={`nav-sub-box cp ${activeLink === '/guest_class' ? 'active' : ''}`}
+                                                            to="/guest_class"
+                                                            onClick={() =>
+                                                                handleLinkClick(
+                                                                    '/guest_class',
+                                                                )
+                                                            }
+                                                        >
+                                                            <span
+                                                                type="button"
+                                                                className="nav-item"
+                                                                data-bs-dismiss="offcanvas"
+                                                            >
+                                                                Guest Class
                                                             </span>
                                                         </Link>
                                                     </li>
@@ -638,13 +659,14 @@ function Navbar() {
                                                         fill=""
                                                     />
                                                 </svg>
-
-                                                <span className="nav-item">
-                                                    Settings
-                                                </span>
-                                                <span className="material-icons-round cp downarrow">
-                                                    chevron_right
-                                                </span>
+                                                <div className="d-flex justify-content-between w-100">
+                                                    <span className="nav-item">
+                                                        Settings
+                                                    </span>
+                                                    <span className="material-icons-round cp downarrow">
+                                                        chevron_right
+                                                    </span>
+                                                </div>
                                             </div>
                                             <div className="submenu_box p-3 y_scrolling">
                                                 <ul className="sub-menu-list px-2  row">
@@ -740,13 +762,14 @@ function Navbar() {
                                                         fill=""
                                                     />
                                                 </svg>
-
-                                                <span className="nav-item">
-                                                    HouseKeeping
-                                                </span>
-                                                <span className="material-icons-round cp downarrow">
-                                                    chevron_right
-                                                </span>
+                                                <div className="d-flex justify-content-between w-100">
+                                                    <span className="nav-item">
+                                                        HouseKeeping
+                                                    </span>
+                                                    <span className="material-icons-round cp downarrow">
+                                                        chevron_right
+                                                    </span>
+                                                </div>
                                             </div>
                                             <div className="submenu_box p-3 y_scrolling">
                                                 <ul className="sub-menu-list px-2  row">
@@ -841,13 +864,14 @@ function Navbar() {
                                                         fill=""
                                                     />
                                                 </svg>
-
-                                                <span className="nav-item">
-                                                    Reports
-                                                </span>
-                                                <span className="material-icons-round cp downarrow">
-                                                    chevron_right
-                                                </span>
+                                                <div className="d-flex justify-content-between w-100">
+                                                    <span className="nav-item">
+                                                        Reports
+                                                    </span>
+                                                    <span className="material-icons-round cp downarrow">
+                                                        chevron_right
+                                                    </span>
+                                                </div>
                                             </div>
                                             <div className="submenu_box p-3 y_scrolling">
                                                 <ul className="sub-menu-list px-2  row">
@@ -953,13 +977,14 @@ function Navbar() {
                                                         fill=""
                                                     />
                                                 </svg>
-
-                                                <span className="nav-item">
-                                                    Maintenance
-                                                </span>
-                                                <span className="material-icons-round cp downarrow">
-                                                    chevron_right
-                                                </span>
+                                                <div className="d-flex justify-content-between w-100">
+                                                    <span className="nav-item">
+                                                        Maintenance
+                                                    </span>
+                                                    <span className="material-icons-round cp downarrow">
+                                                        chevron_right
+                                                    </span>
+                                                </div>
                                             </div>
                                             <div className="submenu_box p-3 y_scrolling">
                                                 <ul className="sub-menu-list px-2  row">
@@ -1112,7 +1137,7 @@ function Navbar() {
                                     </svg>
                                 </Link>
                             </Tooltip>
-                            <Tooltip text="Add Reservation">
+                            {/* <Tooltip text="Add Reservation">
                                 <Link
                                     to="/add-reservation"
                                     href="#default"
@@ -1147,7 +1172,7 @@ function Navbar() {
                                         />
                                     </svg>
                                 </Link>
-                            </Tooltip>
+                            </Tooltip> */}
                             <Tooltip text="Avilability Inquiry">
                                 <button
                                     className="header_icons ms-3"
@@ -1227,11 +1252,6 @@ function Navbar() {
                                             Another action
                                         </a>
                                     </li>
-                                    {/* <li>
-                                        <a className="dropdown-item" href="#">
-                                            Something else here
-                                        </a>
-                                    </li> */}
 
                                     <li>
                                         <Link

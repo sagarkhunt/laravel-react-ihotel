@@ -296,7 +296,7 @@ function CreateEditMdl({
                                 </ul>
 
                                 <div
-                                    className="modal-body modal-lft-body"
+                                    className="modal-body modal-lft-body y_scrolling"
                                     style={{ minWidth: '500px' }}
                                 >
                                     <div className="tab-content ">
@@ -311,7 +311,7 @@ function CreateEditMdl({
                                                             htmlFor="customInput"
                                                             className="custom-label"
                                                         >
-                                                            Room Category Name*{' '}
+                                                            Room Category Name*
                                                         </label>
                                                         <input
                                                             type="text"
@@ -430,7 +430,7 @@ function CreateEditMdl({
                                                             onChange={
                                                                 handleChange
                                                             }
-                                                            className="custom-input"
+                                                            className="form-control custom-input"
                                                         />
                                                         <datalist
                                                             id="ice-cream-flavors"
@@ -463,7 +463,7 @@ function CreateEditMdl({
                                                             onChange={
                                                                 handleChange
                                                             }
-                                                            className="custom-input"
+                                                            className="form-control custom-input"
                                                         />
                                                         <datalist
                                                             id="ice-cream-flavors"
@@ -489,7 +489,7 @@ function CreateEditMdl({
                                                             list="ice-cream-flavors"
                                                             id="max_adult"
                                                             name="max_adult"
-                                                            className="custom-input"
+                                                            className="form-control custom-input"
                                                             value={
                                                                 formData.max_adult ||
                                                                 ''
@@ -522,7 +522,7 @@ function CreateEditMdl({
                                                             list="ice-cream-flavors"
                                                             id="max_child"
                                                             name="max_child"
-                                                            className="custom-input"
+                                                            className="form-control custom-input"
                                                             value={
                                                                 formData.max_child ||
                                                                 ''
@@ -702,7 +702,7 @@ function CreateEditMdl({
                                                         <span id="countAmenity">
                                                             {selectedAmenities.length ??
                                                                 0}
-                                                        </span>
+                                                        </span>{' '}
                                                         Associated Amenities
                                                     </p>
                                                     <p className="body-2 mb-0">
@@ -787,7 +787,7 @@ function CreateEditMdl({
                                                                     key={
                                                                         amenity.id
                                                                     }
-                                                                    className={`row listing_box cp selecteItem_${amenity.id} ${
+                                                                    className={`row listing_box cp mb-2 selecteItem_${amenity.id} ${
                                                                         isSelected(
                                                                             amenity,
                                                                         )
@@ -832,7 +832,7 @@ function CreateEditMdl({
                                                                                     : ''
                                                                             }`}
                                                                         >
-                                                                            <span className="material-icons-outlined">
+                                                                            <span className="material-icons-outlined m-0">
                                                                                 add
                                                                             </span>
                                                                         </button>

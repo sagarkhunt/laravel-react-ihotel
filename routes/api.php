@@ -124,4 +124,13 @@ Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' =
     Route::POST('cr_cp', 'HotelTncCnpController@createCp');
     Route::POST('upd_cp', 'HotelTncCnpController@updateCp');
     Route::POST('del_cp', 'HotelTncCnpController@deleteCp');
+    #Guest
+    Route::any('get_guest', 'HotelGuestController@getGuest');
+    Route::any('cr_guest', 'HotelGuestController@createGuest');
+    Route::any('upd_guest', 'HotelGuestController@updateGuest');
+    Route::any('del_guest', 'HotelGuestController@deleteGuest');
+    Route::POST('get_guest_cls', 'HotelGuestController@getGuestClass');
+    Route::POST('cr_guest_cls', 'HotelGuestController@createGuestClass');
+    Route::POST('upd_guest_cls', 'HotelGuestController@updateGuestClass');
+    Route::POST('del_guest_cls', 'HotelGuestController@deleteGuestClass');
 });

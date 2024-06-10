@@ -122,7 +122,7 @@ function CreateEditMdl({
                                     </div>
                                 </div>
 
-                                <div className="modal-body modal-lf-body">
+                                <div className="modal-body modal-lf-body y_scrolling">
                                     <div className="row">
                                         <div className="col-12 ">
                                             <p className="subtitle-2m  heading_box text-uppercase primary-color">

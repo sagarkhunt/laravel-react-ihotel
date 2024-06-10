@@ -2,8 +2,10 @@ import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Form, Row, Col, Button } from 'react-bootstrap';
+import ImgUpMdl from './componet/ImgUpMdl';
 function EditReservtionInfo() {
     const navigate = useNavigate();
+    const [showImgMdl, setShowImgMdl] = useState(false);
     const [activeTab, setActiveTab] = useState('folioOperation');
     const handleBackClick = () => {
         navigate(-1); // This will navigate to the previous page
@@ -51,6 +53,9 @@ function EditReservtionInfo() {
             document.getElementById('image-dimension-label').style.display =
                 'none';
         }
+    };
+    const uploadImgMdlShow = () => {
+        setShowImgMdl(true);
     };
     return (
         <div className="container-fluid py-3 px-4">
@@ -123,7 +128,7 @@ function EditReservtionInfo() {
                         <a
                             className={`nav-link nav-link-custom ${activeTab === 'folioOperation' ? 'active' : ''}`}
                             onClick={() => handleTabClick('folioOperation')}
-                            href="#folioOperation"
+                            // href="#folioOperation"
                         >
                             Folio Operation
                         </a>
@@ -132,7 +137,7 @@ function EditReservtionInfo() {
                         <a
                             className={`nav-link nav-link-custom ${activeTab === 'bookingDetails' ? 'active' : ''}`}
                             onClick={() => handleTabClick('bookingDetails')}
-                            href="#bookingDetails"
+                            // href="#bookingDetails"
                         >
                             Booking Details
                         </a>
@@ -141,7 +146,7 @@ function EditReservtionInfo() {
                         <a
                             className={`nav-link nav-link-custom ${activeTab === 'guestDetails' ? 'active' : ''}`}
                             onClick={() => handleTabClick('guestDetails')}
-                            href="#guestDetails"
+                            // href="#guestDetails"
                         >
                             Guest Details
                         </a>
@@ -150,13 +155,13 @@ function EditReservtionInfo() {
                         <a
                             className={`nav-link nav-link-custom ${activeTab === 'roomCharges' ? 'active' : ''}`}
                             onClick={() => handleTabClick('roomCharges')}
-                            href="#roomCharges"
+                            // href="#roomCharges"
                         >
                             Room Charges
                         </a>
                     </li>
                 </ul>
-                <div className="modal-body">
+                <div className="modal-body pt-0">
                     <div className="tab-content">
                         {activeTab === 'folioOperation' && (
                             <div
@@ -525,63 +530,56 @@ function EditReservtionInfo() {
                             </div>
                         )}
                         {activeTab === 'guestDetails' && (
-                            <div
-                                id="folioOperationo"
-                                className="tab-pane active"
-                            >
+                            <div id="guestDetails" className="tab-pane active">
                                 <div className="row">
                                     <div className="col-3 p-0 d-flex flex-column border-right">
-                                        <div className="button-container p-1">
+                                        <div className="button-container mt-2">
                                             <div
-                                                className="btn subtitle-2m p-1 col-12 d-flex text-left"
+                                                className="btn subtitle-2m ms-2 col-12 d-flex align-items-center text-left pt-2"
                                                 type="button"
                                             >
-                                                Guest
-                                                <button className="ms-auto border border-primary rounded background">
-                                                    <span className="material-icons-outlined primary-icon blue_colour">
+                                                Room/Folio
+                                                <button className="ms-auto me-2 border border-primary rounded background">
+                                                    <span className="material-icons-outlined primary-icon blue_colour text-center">
                                                         add
                                                     </span>
                                                 </button>
                                             </div>
+
                                             <div
-                                                className="accordion"
+                                                className="accordion scrollable-accordion"
                                                 id="accordionExample"
                                             >
-                                                <div className="accordion-item border-none mt-2">
-                                                    <h2
-                                                        className="accordion-header"
-                                                        id="headingOne"
+                                                <div className="accordion-item m-2">
+                                                    <button
+                                                        className="accordion-button collapsed body-2 py-2 col-8 d-flex text-left"
+                                                        type="button"
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#collapseOne"
+                                                        aria-expanded="true"
+                                                        aria-controls="collapseOne"
                                                     >
-                                                        <button
-                                                            className="accordion-button collapsed body-2 btn-secondary-add py-3 col-12 d-flex text-left"
-                                                            type="button"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#collapseOne"
-                                                            aria-expanded="true"
-                                                            aria-controls="collapseOne"
-                                                        >
-                                                            102
-                                                        </button>
-                                                    </h2>
+                                                        102
+                                                    </button>
                                                     <div
                                                         id="collapseOne"
                                                         className="accordion-collapse collapse"
                                                         aria-labelledby="headingOne"
                                                         data-bs-parent="#accordionExample"
                                                     >
-                                                        <div className="accordion-body p-0">
+                                                        <div className="p-0">
                                                             <button
                                                                 className="btn body-2 p-2 col-12 d-flex text-left modal-dropdown"
                                                                 type="button"
                                                                 id="dropdownMenuButton2"
                                                                 aria-expanded="false"
                                                             >
-                                                                <span className="dropdown-icon material-icons-outlined primary-icon blue_colour">
+                                                                <span className="dropdown-icon material-icons-outlined primary-icon blue_colour mx-2">
                                                                     person_outline
                                                                 </span>
                                                                 324 - Mr Alex
                                                                 Polo
-                                                                <span className="dropdown-icon material-icons-outlined primary-icon ms-auto blue_colour">
+                                                                <span className="dropdown-icon material-icons-outlined primary-icon ms-auto blue_colour me-2">
                                                                     chevron_right
                                                                 </span>
                                                             </button>
@@ -617,675 +615,6 @@ function EditReservtionInfo() {
                                             </div>
                                         </div>
                                     </div>
-
-                                    {/* <div className="col-9 p-0">
-                                        <div
-                                            className="ps-3 height-adjust pe-1"
-                                            style={{ overflowY: 'auto' }}
-                                        >
-                                            <form>
-                                                <div className="row">
-                                                    <div className="col-4">
-                                                        <div className="row">
-                                                            <div className="col-4 pe-0">
-                                                                <label
-                                                                    htmlFor="guestName"
-                                                                    className="custom-label"
-                                                                >
-                                                                    Name
-                                                                </label>
-                                                                <select
-                                                                    className="form-select custom-input custom_input_1"
-                                                                    name="gender"
-                                                                >
-                                                                    <option value="">
-                                                                        Mr.
-                                                                    </option>
-                                                                    <option value="1">
-                                                                        1
-                                                                    </option>
-                                                                    <option value="2">
-                                                                        2
-                                                                    </option>
-                                                                    <option value="3">
-                                                                        3
-                                                                    </option>
-                                                                </select>
-                                                            </div>
-                                                            <div className="col-8 ps-0">
-                                                                <div className="mb-2">
-                                                                    <label
-                                                                        htmlFor="guestName"
-                                                                        className="custom-label"
-                                                                    ></label>
-                                                                    <input
-                                                                        type="text"
-                                                                        className="form-control custom-input"
-                                                                        id="guestName"
-                                                                        name="guestName"
-                                                                        placeholder="Enter Guest Name"
-                                                                        style={{
-                                                                            marginTop:
-                                                                                '2px',
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="col-4 ps-1">
-                                                        <div className="form-group mb-2">
-                                                            <label
-                                                                htmlFor="mobile"
-                                                                className="custom-label"
-                                                            >
-                                                                Mobile
-                                                            </label>
-                                                            <input
-                                                                type="number"
-                                                                className="form-control custom-input"
-                                                                id="guestName"
-                                                                name="mobile"
-                                                                placeholder="Enter Mobile Number"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-4 ps-1">
-                                                        <div className="form-group mb-2">
-                                                            <label
-                                                                htmlFor="phone"
-                                                                className="custom-label"
-                                                            >
-                                                                Phone
-                                                            </label>
-                                                            <input
-                                                                type="number"
-                                                                className="form-control custom-input"
-                                                                id="phone"
-                                                                name="phone"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="row">
-                                                    <div className="col-3">
-                                                        <div className="form-group mb-2">
-                                                            <label
-                                                                htmlFor="email"
-                                                                className="custom-label"
-                                                            >
-                                                                Email
-                                                            </label>
-                                                            <input
-                                                                type="email"
-                                                                className="form-control custom-input"
-                                                                id="email"
-                                                                name="email"
-                                                                placeholder="Enter Email"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-3 ps-1">
-                                                        <label
-                                                            htmlFor="gender"
-                                                            className="custom-label"
-                                                        >
-                                                            Gender
-                                                        </label>
-                                                        <select
-                                                            className="form-select custom-input custom_input_1"
-                                                            name="gender"
-                                                        >
-                                                            <option value="">
-                                                                Select Gender
-                                                            </option>
-                                                            <option value="1">
-                                                                1
-                                                            </option>
-                                                            <option value="2">
-                                                                2
-                                                            </option>
-                                                            <option value="3">
-                                                                3
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                    <div className="col-3 ps-1">
-                                                        <label
-                                                            htmlFor="geuestType"
-                                                            className="custom-label"
-                                                        >
-                                                            Guest Type
-                                                        </label>
-                                                        <select
-                                                            className="form-select custom-input custom_input_1"
-                                                            name="geust_type"
-                                                        >
-                                                            <option value="">
-                                                                Select guest
-                                                                type
-                                                            </option>
-                                                            <option value="1">
-                                                                1
-                                                            </option>
-                                                            <option value="2">
-                                                                2
-                                                            </option>
-                                                            <option value="3">
-                                                                3
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                    <div className="col-3 ps-1">
-                                                        <label
-                                                            htmlFor="vipstatus"
-                                                            className="custom-label"
-                                                        >
-                                                            VIP Status
-                                                        </label>
-                                                        <select
-                                                            className="form-select custom-input custom_input_1"
-                                                            name="vip_status"
-                                                        >
-                                                            <option value="">
-                                                                Select vip
-                                                                status
-                                                            </option>
-                                                            <option value="1">
-                                                                1
-                                                            </option>
-                                                            <option value="2">
-                                                                2
-                                                            </option>
-                                                            <option value="3">
-                                                                3
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div className="row">
-                                                    <div className=" col-12">
-                                                        <div className="mt-1 mb-3">
-                                                            <label
-                                                                htmlFor="address"
-                                                                className="custom-label"
-                                                            >
-                                                                Address
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                className="form-control custom-input"
-                                                                id="addres"
-                                                                name="address"
-                                                                placeholder="Enter Address"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="row">
-                                                    <div className="col-3">
-                                                        <div className="mt-1 mb-3">
-                                                            <label
-                                                                htmlFor="city"
-                                                                className="custom-label"
-                                                            >
-                                                                City
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                className="form-control custom-input"
-                                                                id="city"
-                                                                name="City"
-                                                                placeholder="Enter City"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-3 ps-1">
-                                                        <div className="mt-1 mb-3">
-                                                            <label
-                                                                htmlFor="state"
-                                                                className="custom-label"
-                                                            >
-                                                                State
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                className="form-control custom-input"
-                                                                id="stae"
-                                                                name="state"
-                                                                placeholder="Enter State"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-3 ps-1">
-                                                        <div className="mt-1 mb-3">
-                                                            <label
-                                                                htmlFor="country"
-                                                                className="custom-label"
-                                                            >
-                                                                Country
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                className="form-control custom-input"
-                                                                id="country"
-                                                                name="country"
-                                                                placeholder="Enter Country"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-3 ps-1">
-                                                        <div className="mt-1 mb-3">
-                                                            <label
-                                                                htmlFor="zipCode"
-                                                                className="custom-label"
-                                                            >
-                                                                Zip
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                className="form-control custom-input"
-                                                                id="zip"
-                                                                name="zip"
-                                                                placeholder="Enter Zip code"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="row">
-                                                    <div className="col-3">
-                                                        <div className="mt-1 mb-3">
-                                                            <label
-                                                                htmlFor="nantionality"
-                                                                className="custom-label"
-                                                            >
-                                                                Nationality
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                className="form-control custom-input"
-                                                                id="nationality"
-                                                                name="nationality"
-                                                                placeholder="Enter Nationality"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-3 ps-1">
-                                                        <div className="mt-1 mb-3">
-                                                            <label
-                                                                htmlFor="company"
-                                                                className="custom-label"
-                                                            >
-                                                                Company
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                className="form-control custom-input"
-                                                                id="company"
-                                                                name="company"
-                                                                placeholder="Enter Company"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-3 ps-1">
-                                                        <div className="mt-1 mb-3">
-                                                            <label
-                                                                htmlFor="fax"
-                                                                className="custom-label"
-                                                            >
-                                                                Country
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                className="form-control custom-input"
-                                                                id="fax"
-                                                                name="fax"
-                                                                placeholder="Enter Fax"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-3 ps-1">
-                                                        <div className="mt-1 mb-3">
-                                                            <label
-                                                                htmlFor="registrationNo"
-                                                                className="custom-label"
-                                                            >
-                                                                Registration No
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                className="form-control custom-input"
-                                                                id="registrationNo"
-                                                                name="registrationNo"
-                                                                placeholder="Enter Registration No"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <h6>Identity Information</h6>
-                                                <div className="row my-3">
-                                                    <div className="col-3">
-                                                        <label
-                                                            htmlFor="hotel_name"
-                                                            className="body-2 pb-1"
-                                                        >
-                                                            Upload Company Logo
-                                                        </label>
-                                                        <div
-                                                            id="uploader1"
-                                                            ref={uploaderRef}
-                                                            className="uploader"
-                                                            onDragOver={
-                                                                handleDragOver
-                                                            }
-                                                            onDragLeave={
-                                                                handleDragLeave
-                                                            }
-                                                            onDrop={handleDrop}
-                                                            onClick={
-                                                                handleClick
-                                                            }
-                                                        >
-                                                            <svg
-                                                                width="24"
-                                                                height="25"
-                                                                viewBox="0 0 24 25"
-                                                                fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                            >
-                                                                <path
-                                                                    d="M9 16.9121H15V10.9121H19L12 3.91211L5 10.9121H9V16.9121ZM12 6.74211L14.17 8.91211H13V14.9121H11V8.91211H9.83L12 6.74211ZM5 18.9121H19V20.9121H5V18.9121Z"
-                                                                    fill="#0863B5"
-                                                                />
-                                                            </svg>
-                                                            <p
-                                                                id="upload-image-label"
-                                                                className="subtitle-2m my-2"
-                                                            >
-                                                                Upload Image
-                                                            </p>
-                                                            <p
-                                                                id="image-dimension-label"
-                                                                className="caption-1"
-                                                            >
-                                                                Image Dimensions
-                                                                300px x 225px
-                                                            </p>
-                                                            <p id="file-name1">
-                                                                {fileName || ''}
-                                                            </p>
-                                                            <input
-                                                                type="file"
-                                                                id="file-input1"
-                                                                ref={
-                                                                    fileInputRef
-                                                                }
-                                                                className="d-none"
-                                                                onChange={
-                                                                    handleFileChange
-                                                                }
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-9">
-                                                        <div className="row">
-                                                            <div className="col-4">
-                                                                <div className="mt-1 mb-3">
-                                                                    <label
-                                                                        htmlFor="idnumber`"
-                                                                        className="custom-label"
-                                                                    >
-                                                                        ID
-                                                                        Number
-                                                                    </label>
-                                                                    <input
-                                                                        type="text"
-                                                                        className="form-control custom-input"
-                                                                        id="idnumber"
-                                                                        name="idnumber"
-                                                                        placeholder="Enter ID Number"
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-4">
-                                                                <div className="mt-1 mb-3">
-                                                                    <label
-                                                                        htmlFor="idType"
-                                                                        className="custom-label"
-                                                                    >
-                                                                        ID Type
-                                                                    </label>
-                                                                    <select
-                                                                        className="form-select custom-input custom_input_1"
-                                                                        name="gender"
-                                                                    >
-                                                                        <option value="">
-                                                                            Select
-                                                                            id
-                                                                            type
-                                                                        </option>
-                                                                        <option value="1">
-                                                                            Election
-                                                                            id
-                                                                        </option>
-                                                                        <option value="2">
-                                                                            Pan
-                                                                            card
-                                                                        </option>
-                                                                        <option value="3">
-                                                                            Adhar
-                                                                            Card
-                                                                        </option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="row">
-                                                            <div className="col-4">
-                                                                <div className="mt-1 mb-3">
-                                                                    <label
-                                                                        htmlFor="issuinfcountry"
-                                                                        className="custom-label"
-                                                                    >
-                                                                        Issuing
-                                                                        Country
-                                                                    </label>
-                                                                    <input
-                                                                        type="text"
-                                                                        className="form-control custom-input"
-                                                                        id="issuingcountry"
-                                                                        name="iss_country"
-                                                                        placeholder="Enter Issuing Country"
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-4">
-                                                                <div className="mt-1 mb-3">
-                                                                    <label
-                                                                        htmlFor="isuuing city"
-                                                                        className="custom-label"
-                                                                    >
-                                                                        Issuing
-                                                                        City
-                                                                    </label>
-                                                                    <input
-                                                                        type="text"
-                                                                        className="form-control custom-input"
-                                                                        id="iss_city"
-                                                                        name="iss_City"
-                                                                        placeholder="Enter Issuing City"
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-4">
-                                                                <div className="mt-1 mb-3">
-                                                                    <label
-                                                                        htmlFor="ex_date"
-                                                                        className="custom-label"
-                                                                    >
-                                                                        Expiry
-                                                                        Date
-                                                                    </label>
-                                                                    <input
-                                                                        type="date"
-                                                                        className="form-control custom-input"
-                                                                        id="city"
-                                                                        name="City"
-                                                                        placeholder="Enter City"
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <h6>Other Information</h6>
-                                                <div className="row">
-                                                    <div className="col-3">
-                                                        <div className="mt-1 mb-3">
-                                                            <label
-                                                                htmlFor="birthdate"
-                                                                className="custom-label"
-                                                            >
-                                                                Birthdate
-                                                            </label>
-                                                            <input
-                                                                type="date"
-                                                                className="form-control custom-input"
-                                                                id="birthdate"
-                                                                name="birthdate"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-3 ps-1">
-                                                        <div className="mt-1 mb-3">
-                                                            <label
-                                                                htmlFor="weddingdate"
-                                                                className="custom-label"
-                                                            >
-                                                                Weding Date
-                                                            </label>
-                                                            <input
-                                                                type="date"
-                                                                className="form-control custom-input"
-                                                                id="wdate"
-                                                                name="wdates"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-3 ps-1">
-                                                        <div className="mt-1 mb-3">
-                                                            <label
-                                                                htmlFor="Birthcity"
-                                                                className="custom-label"
-                                                            >
-                                                                Birth City
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                className="form-control custom-input"
-                                                                id="birthcity"
-                                                                name="birth_date"
-                                                                placeholder="Enter Country"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-3 ps-1">
-                                                        <div className="mt-1 mb-3">
-                                                            <label
-                                                                htmlFor="birth_city"
-                                                                className="custom-label"
-                                                            >
-                                                                Birth Country
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                className="form-control custom-input"
-                                                                id="birth_country"
-                                                                name="birthcountry"
-                                                                placeholder="Enter Birth Country"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="row">
-                                                    <div className="col-3">
-                                                        <div className="mt-1 mb-3">
-                                                            <label
-                                                                htmlFor="spousebithadte"
-                                                                className="custom-label"
-                                                            >
-                                                                Spouse Birthdate
-                                                            </label>
-                                                            <input
-                                                                type="date"
-                                                                className="form-control custom-input"
-                                                                id="spouse_bithadte"
-                                                                name="spouse_bithadte"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div className="card-footer pt-1 p-0">
-                                            <div className="row">
-                                                <div className="button-group">
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                    >
-                                                        Black List
-                                                    </button>
-                                                    <div className="right-buttons me-3">
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-secondary"
-                                                        >
-                                                            Pick Up / Drop Off
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-secondary"
-                                                        >
-                                                            C Form
-                                                        </button>
-                                                        <div className="btn-group">
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-secondary dropdown-toggle"
-                                                                data-toggle="dropdown"
-                                                                aria-haspopup="true"
-                                                                aria-expanded="false"
-                                                            >
-                                                                More
-                                                            </button>
-                                                            <div className="dropdown-menu">
-                                                                <a
-                                                                    className="dropdown-item"
-                                                                    href="#"
-                                                                >
-                                                                    Action 1
-                                                                </a>
-                                                                <a
-                                                                    className="dropdown-item"
-                                                                    href="#"
-                                                                >
-                                                                    Action 2
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-primary"
-                                                        >
-                                                            Save
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>   */}
                                     <div className="col-9 p-0">
                                         <div className="ms-3 scrollable-div p-2">
                                             <div className="row">
@@ -1297,7 +626,7 @@ function EditReservtionInfo() {
                                                                     Name
                                                                 </label>
                                                             </div>
-                                                            <div className="">
+                                                            <div className="input-group">
                                                                 <select
                                                                     className="form-select custom-input"
                                                                     id="reservationTypeDropdown"
@@ -1393,7 +722,7 @@ function EditReservtionInfo() {
                                                             Gender
                                                         </label>
                                                     </div>
-                                                    <div className="">
+                                                    <div className="input-group">
                                                         <select
                                                             className="form-select custom-input"
                                                             id="reservationTypeDropdown"
@@ -1417,7 +746,7 @@ function EditReservtionInfo() {
                                                             Guest Type
                                                         </label>
                                                     </div>
-                                                    <div className="">
+                                                    <div className="input-group">
                                                         <select
                                                             className="form-select custom-input"
                                                             id="reservationTypeDropdown"
@@ -1441,7 +770,7 @@ function EditReservtionInfo() {
                                                             VIP Status
                                                         </label>
                                                     </div>
-                                                    <div className="">
+                                                    <div className="input-group">
                                                         <select
                                                             className="form-select custom-input"
                                                             id="reservationTypeDropdown"
@@ -1609,240 +938,281 @@ function EditReservtionInfo() {
                                                         />
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div className="subtitle-2m d-flex align-items-center">
-                                                <span className="material-icons-outlined">
-                                                    keyboard_arrow_down
-                                                </span>
-                                                Identity Information
-                                            </div>
 
-                                            <div className="row">
-                                                <div className="col-4 mt-2">
-                                                    <div
-                                                        className="Neon-input-dragDrop"
-                                                        style={{
-                                                            display: 'flex',
-                                                            flexDirection:
-                                                                'column',
-                                                            alignItems:
-                                                                'center',
-                                                            textAlign: 'center',
-                                                        }}
-                                                    >
-                                                        <span
-                                                            className="material-icons-outlined primary-icon blue_colour"
-                                                            style={{
-                                                                marginBottom:
-                                                                    '0',
-                                                            }}
+                                                <div
+                                                    className="accordion px-0"
+                                                    id="identityAccordion"
+                                                >
+                                                    <div className="accordion-item accordion_btn">
+                                                        <button
+                                                            className="accordion_btn d-flex align-items-center mt-2 ps-0"
+                                                            type="button"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#identityCollapse"
+                                                            aria-expanded="true"
+                                                            aria-controls="identityCollapse"
                                                         >
-                                                            upload
-                                                        </span>
-                                                        <label
-                                                            className="upload-button pt-0"
-                                                            htmlFor="filer_input2"
-                                                        >
-                                                            <span>
-                                                                Upload Images
+                                                            <span className="material-icons-outlined">
+                                                                keyboard_arrow_down
                                                             </span>
-                                                        </label>
-                                                        <input
-                                                            name="files[]"
-                                                            id="filer_input2"
-                                                            multiple="multiple"
-                                                            type="file"
-                                                        />
-                                                    </div>
-                                                </div>
+                                                            Identity Information
+                                                        </button>
 
-                                                <div className="col-8">
-                                                    <div className="row">
-                                                        <div className="col-4">
-                                                            <div className="form-group mb-3">
-                                                                <label
-                                                                    htmlFor="customInput"
-                                                                    className="custom-label"
-                                                                >
-                                                                    ID Number
-                                                                </label>
-                                                                <input
-                                                                    type="text"
-                                                                    className="form-control custom-input"
-                                                                    id="customInput"
-                                                                    placeholder="9898989898"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-4">
-                                                            <div className="input-group">
-                                                                <label className="custom-label mb-1">
-                                                                    ID Type
-                                                                </label>
-                                                            </div>
-                                                            <div className="">
-                                                                <select
-                                                                    className="form-select custom-input"
-                                                                    id="reservationTypeDropdown"
-                                                                    aria-label="Reservation Type Dropdown"
-                                                                >
-                                                                    <option
-                                                                        selected
-                                                                        value="1"
+                                                        <div
+                                                            id="identityCollapse"
+                                                            className="accordion-collapse collapse"
+                                                            aria-labelledby="identityHeading"
+                                                            data-bs-parent="#identityAccordion"
+                                                        >
+                                                            <div className="accordion-body pb-0">
+                                                                <div className="row">
+                                                                    <div
+                                                                        className="col-4 mt-2 ps-0 cp"
+                                                                        onClick={
+                                                                            uploadImgMdlShow
+                                                                        }
                                                                     >
-                                                                        Election
-                                                                        Card
-                                                                    </option>
-                                                                    <option value="2">
-                                                                        Adhar
-                                                                        Card
-                                                                    </option>
-                                                                    <option value="3"></option>
-                                                                    <option value="4"></option>
-                                                                </select>
+                                                                        <div className="Neon-input-dragDrop d-flex text-center flex-column align-items-center">
+                                                                            <span className="material-icons-outlined primary-icon blue_colour upload-button mt-2">
+                                                                                upload
+                                                                            </span>
+                                                                            <button
+                                                                                type="button "
+                                                                                className="upload-images-btn subtitle-2m d-flex align-items-center mt-2"
+
+                                                                                // data-bs-toggle="modal"
+                                                                                // data-bs-target="#uploadImages"
+                                                                            >
+                                                                                Upload
+                                                                                Images
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className="col-8">
+                                                                        <div className="row">
+                                                                            <div className="col-4">
+                                                                                <div className="form-group mb-3">
+                                                                                    <label
+                                                                                        htmlFor="customInput"
+                                                                                        className="custom-label"
+                                                                                    >
+                                                                                        ID
+                                                                                        Number
+                                                                                    </label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="form-control custom-input"
+                                                                                        id="customInput"
+                                                                                        placeholder="9898989898"
+                                                                                    />
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="col-4">
+                                                                                <div className="input-group">
+                                                                                    <label className="custom-label mb-1">
+                                                                                        ID
+                                                                                        Type
+                                                                                    </label>
+                                                                                </div>
+                                                                                <div className="input-group">
+                                                                                    <select
+                                                                                        className="form-select custom-input"
+                                                                                        id="reservationTypeDropdown"
+                                                                                        aria-label="Reservation Type Dropdown"
+                                                                                    >
+                                                                                        <option
+                                                                                            selected
+                                                                                            value="1"
+                                                                                        >
+                                                                                            Election
+                                                                                            Card
+                                                                                        </option>
+                                                                                        <option value="2">
+                                                                                            Adhar
+                                                                                            Card
+                                                                                        </option>
+                                                                                        <option value="3"></option>
+                                                                                        <option value="4"></option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="row">
+                                                                            <div className="col-4">
+                                                                                <div className="form-group mb-3">
+                                                                                    <label
+                                                                                        htmlFor="customInput"
+                                                                                        className="custom-label"
+                                                                                    >
+                                                                                        Issuing
+                                                                                        County
+                                                                                    </label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="form-control custom-input"
+                                                                                        id="customInput"
+                                                                                        placeholder="India"
+                                                                                    />
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="col-4">
+                                                                                <div className="form-group mb-3">
+                                                                                    <label
+                                                                                        htmlFor="customInput"
+                                                                                        className="custom-label"
+                                                                                    >
+                                                                                        Issuing
+                                                                                        City
+                                                                                    </label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="form-control custom-input"
+                                                                                        id="customInput"
+                                                                                        placeholder="Mumbai"
+                                                                                    />
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="col-4 pe-1">
+                                                                                <div className="form-group mb-3">
+                                                                                    <label
+                                                                                        htmlFor="customInput"
+                                                                                        className="custom-label"
+                                                                                    >
+                                                                                        Expiry
+                                                                                        Date
+                                                                                    </label>
+                                                                                    <input
+                                                                                        type="date"
+                                                                                        className="form-control custom-input"
+                                                                                        id="checkin-date"
+                                                                                        placeholder=""
+                                                                                    />
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="row">
-                                                        <div className="col-4">
-                                                            <div className="form-group mb-3">
-                                                                <label
-                                                                    htmlFor="customInput"
-                                                                    className="custom-label"
-                                                                >
-                                                                    Issuing
-                                                                    County
-                                                                </label>
-                                                                <input
-                                                                    type="text"
-                                                                    className="form-control custom-input"
-                                                                    id="customInput"
-                                                                    placeholder="India"
-                                                                />
+                                                </div>
+                                                <div
+                                                    className="accordion px-0"
+                                                    id="OtherAccordion"
+                                                >
+                                                    <div className="accordion-item accordion_btn">
+                                                        <button
+                                                            className="d-flex align-items-center accordion_btn mt-3 ps-0"
+                                                            type="button"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#OtherCollapse"
+                                                            aria-expanded="true"
+                                                            aria-controls="OtherCollapse"
+                                                        >
+                                                            <span className="material-icons-outlined">
+                                                                keyboard_arrow_down
+                                                            </span>
+                                                            Other Information
+                                                        </button>
+                                                        <div
+                                                            id="OtherCollapse"
+                                                            className="accordion-collapse collapse"
+                                                            aria-labelledby="OtherHeading"
+                                                            data-bs-parent="#OtherAccordion"
+                                                        >
+                                                            <div className="accordion-body">
+                                                                <div className="row">
+                                                                    <div className="col ps-0">
+                                                                        <div className="form-group mb-3">
+                                                                            <label
+                                                                                htmlFor="customInput"
+                                                                                className="custom-label"
+                                                                            >
+                                                                                Birth
+                                                                                Date
+                                                                            </label>
+                                                                            <input
+                                                                                type="date"
+                                                                                className="form-control custom-input"
+                                                                                id="checkin-date"
+                                                                                placeholder=""
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="col">
+                                                                        <div className="form-group mb-3">
+                                                                            <label
+                                                                                htmlFor="customInput"
+                                                                                className="custom-label"
+                                                                            >
+                                                                                Wedding
+                                                                                Date
+                                                                            </label>
+                                                                            <input
+                                                                                type="date"
+                                                                                className="form-control custom-input"
+                                                                                id="checkin-date"
+                                                                                placeholder=""
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="col">
+                                                                        <div className="form-group mb-3">
+                                                                            <label
+                                                                                htmlFor="customInput"
+                                                                                className="custom-label"
+                                                                            >
+                                                                                Birth
+                                                                                City
+                                                                            </label>
+                                                                            <input
+                                                                                type="text"
+                                                                                className="form-control custom-input"
+                                                                                id="customInput"
+                                                                                placeholder="Pune"
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="col pe-1">
+                                                                        <div className="form-group mb-3">
+                                                                            <label
+                                                                                htmlFor="customInput"
+                                                                                className="custom-label"
+                                                                            >
+                                                                                Birth
+                                                                                Country
+                                                                            </label>
+                                                                            <input
+                                                                                type="text"
+                                                                                className="form-control custom-input"
+                                                                                id="customInput"
+                                                                                placeholder="India"
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="row">
+                                                                    <div className="col-3 ps-0">
+                                                                        <div className="form-group mb-3">
+                                                                            <label
+                                                                                htmlFor="customInput"
+                                                                                className="custom-label"
+                                                                            >
+                                                                                Spouse
+                                                                                Birthdate
+                                                                            </label>
+                                                                            <input
+                                                                                type="date"
+                                                                                className="form-control custom-input"
+                                                                                id="checkin-date"
+                                                                                placeholder=""
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div className="col-4">
-                                                            <div className="form-group mb-3">
-                                                                <label
-                                                                    htmlFor="customInput"
-                                                                    className="custom-label"
-                                                                >
-                                                                    Issuing City
-                                                                </label>
-                                                                <input
-                                                                    type="text"
-                                                                    className="form-control custom-input"
-                                                                    id="customInput"
-                                                                    placeholder="Mumbai"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-4">
-                                                            <div className="form-group mb-3">
-                                                                <label
-                                                                    htmlFor="customInput"
-                                                                    className="custom-label"
-                                                                >
-                                                                    Expiry Date
-                                                                </label>
-                                                                <input
-                                                                    type="date"
-                                                                    className="form-control custom-input"
-                                                                    id="checkin-date"
-                                                                    placeholder=""
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="subtitle-2m d-flex align-items-center">
-                                                <span className="material-icons-outlined">
-                                                    keyboard_arrow_down
-                                                </span>
-                                                Other Information
-                                            </div>
-                                            <div className="row">
-                                                <div className="col">
-                                                    <div className="form-group mb-3">
-                                                        <label
-                                                            htmlFor="customInput"
-                                                            className="custom-label"
-                                                        >
-                                                            Birth Date
-                                                        </label>
-                                                        <input
-                                                            type="date"
-                                                            className="form-control custom-input"
-                                                            id="checkin-date"
-                                                            placeholder=""
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="col">
-                                                    <div className="form-group mb-3">
-                                                        <label
-                                                            htmlFor="customInput"
-                                                            className="custom-label"
-                                                        >
-                                                            Wedding Date
-                                                        </label>
-                                                        <input
-                                                            type="date"
-                                                            className="form-control custom-input"
-                                                            id="checkin-date"
-                                                            placeholder=""
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="col">
-                                                    <div className="form-group mb-3">
-                                                        <label
-                                                            htmlFor="customInput"
-                                                            className="custom-label"
-                                                        >
-                                                            Birth City
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            className="form-control custom-input"
-                                                            id="customInput"
-                                                            placeholder="Pune"
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="col">
-                                                    <div className="form-group mb-3">
-                                                        <label
-                                                            htmlFor="customInput"
-                                                            className="custom-label"
-                                                        >
-                                                            Birth Country
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            className="form-control custom-input"
-                                                            id="customInput"
-                                                            placeholder="India"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-3">
-                                                    <div className="form-group mb-3">
-                                                        <label
-                                                            htmlFor="customInput"
-                                                            className="custom-label"
-                                                        >
-                                                            Spouse Birthdate
-                                                        </label>
-                                                        <input
-                                                            type="date"
-                                                            className="form-control custom-input"
-                                                            id="checkin-date"
-                                                            placeholder=""
-                                                        />
                                                     </div>
                                                 </div>
                                             </div>
@@ -1873,9 +1243,9 @@ function EditReservtionInfo() {
                                                 >
                                                     C Form
                                                 </button>
-                                                <div className="btn-group ms-1">
+                                                <div className="btn-group">
                                                     <button
-                                                        className="btn-sm btn-secondary d-flex align-items-center"
+                                                        className="btn-sm btn-secondary d-flex align-items-center ms-1"
                                                         type="button"
                                                         id="dropdownMenuButton1"
                                                         data-bs-toggle="dropdown"
@@ -1951,6 +1321,12 @@ function EditReservtionInfo() {
                     </div>
                 </div>
             </div>
+            {showImgMdl && (
+                <ImgUpMdl
+                    showImgMdl={showImgMdl}
+                    setShowImgMdl={setShowImgMdl}
+                />
+            )}
         </div>
     );
 }

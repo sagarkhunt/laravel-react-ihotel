@@ -5,22 +5,17 @@ import CreateEditMdl from './CreateEditMdl';
 import DeleteMdl from '../../components/common/DeleteMdl';
 import Spinner from '../../components/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
-import actions from '../../redux/BookingSource/actions';
+import actions from '../../redux/GuestClass/actions';
 
-function Booking() {
+function GuestClass() {
     const [listingData, setListingData] = useState([]);
 
     const dispatch = useDispatch();
-    const {
-        loader,
-        bookingListData,
-        bookingCreated,
-        bookingUpdate,
-        bookingDelete,
-    } = useSelector((state) => state?.bookingReducer);
+    const { loader, guestListData, guestCreated, guestUpdate, guestDelete } =
+        useSelector((state) => state?.guestReducer);
     const [open, setOpen] = useState(false);
-    const [mode, setMode] = useState('Add Booikng Source'); // 'add' or 'edit'
-    const [businessData, setBusinessData] = useState(null); // Data of user being edited
+    const [mode, setMode] = useState('Add Guest Class');
+    const [guestData, setGuestData] = useState(null);
     const [statusValue, setStatusValue] = useState(0);
     const [selectedIds, setSelectedIds] = useState([]);
     const [showDel, setShowDel] = useState(false);
@@ -29,19 +24,19 @@ function Booking() {
 
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left', width: '10%' },
-        { data: 'name', label: 'Business Resource Name', width: '70%' },
+        { data: 'name', label: 'Guest Class Name', width: '70%' },
         {
             data: 'status',
             label: 'Status',
             render: function (data, type, row) {
                 if (data == 1) {
                     return `<div class=""><span class="material-icons-outlined check-table">
-                    check_circle
-                </span></div>`;
+                                check_circle
+                            </span></div>`;
                 } else {
                     return `<div class=""><span class="material-icons-outlined cancel-table">
-                    cancel
-                </span></div>`;
+                                cancel
+                            </span></div>`;
                 }
             },
             className: 'table-right',
@@ -50,10 +45,9 @@ function Booking() {
         {
             data: null,
             label: 'Action',
-            render: () =>
-                `
+            render: () => `
                 <span class="material-icons-outlined edit-table">
-                edit
+                    edit
                 </span>
                 <span class="material-icons-outlined delete-table">
                     cancel_presentation
@@ -65,19 +59,19 @@ function Booking() {
     ];
 
     /***
-     * @param {handleAddBusinessResource}
+     * @param {handleAddGuestResource}
      */
-    function handleAddBusinessResource() {
-        setMode('Add Booking Source');
+    function handleAddGuestResource() {
+        setMode('Add Guest Class');
         setOpen(true);
     }
     /**
      *
-     * @param {handleEditBusinessResource} user
+     * @param {handleEditGuestResource} user
      */
-    function handleEditBusinessResource(user) {
-        setMode('Edit Booking Source');
-        setBusinessData(user);
+    function handleEditGuestResource(user) {
+        setMode('Edit Guest Class');
+        setGuestData(user);
         setOpen(true);
     }
 
@@ -86,19 +80,19 @@ function Booking() {
      * @param {handleSubmit} formData
      */
     function handleSubmit(formData) {
-        if (mode === 'Add Booking Source') {
+        if (mode === 'Add Guest Class') {
             dispatch({
-                type: actions.BOOKING_ADD,
+                type: actions.GUEST_ADD,
                 payload: formData,
             });
         } else {
             const updatedFormData = {
                 name: formData.name,
-                booking_sou_id: formData.id,
+                guest_class_id: formData.id,
                 status: statusValue,
             };
             dispatch({
-                type: actions.BOOKING_UPDATE,
+                type: actions.GUEST_UPDATE,
                 payload: updatedFormData,
             });
         }
@@ -110,42 +104,32 @@ function Booking() {
      */
     const handleDelete = (item) => {
         // onDelete(item);
-        console.log('delete item', item);
         if (item && item.id) {
             setShowDel(true);
             setDelId(item.id);
-        }
-    };
-    /**
-     * Remove multiple
-     */
-    const removeMultiple = () => {
-        if (selectedIds?.length === 0) {
-            toast.error('Please select any one business');
         } else {
-            setShowDel(true);
-            setDelId(selectedIds);
+            console.log('id is missing');
         }
     };
+
     const handleDelSubmit = () => {
-        console.log('inside the handledelete', delId);
-        const businessId = {
-            booking_sou_id: delId,
+        const guestId = {
+            guest_class_id: delId,
         };
         dispatch({
-            type: actions.BOOKING_DELETE,
-            payload: businessId,
+            type: actions.GUEST_DELETE,
+            payload: guestId,
         });
         setShowDel(false);
     };
     useEffect(() => {
-        setListingData(bookingListData);
-    }, [bookingListData]);
+        setListingData(guestListData);
+    }, [guestListData]);
     useEffect(() => {
         dispatch({
-            type: actions.BOOKING_LIST,
+            type: actions.GUEST_LIST,
         });
-    }, [bookingCreated, bookingUpdate, bookingDelete]);
+    }, [guestCreated, guestUpdate, guestDelete]);
 
     return (
         <>
@@ -164,7 +148,7 @@ function Booking() {
                                     className="breadcrumb-item active"
                                     aria-current="page"
                                 >
-                                    Booking Source Master
+                                    Guest Class
                                 </li>
                             </ol>
                         </nav>
@@ -173,7 +157,7 @@ function Booking() {
                         <div className="row">
                             <div className="col-4 d-flex align-items-center">
                                 <h5 className="headline-h6m mb-0 ">
-                                    Booking Source List
+                                    Guest Class List
                                 </h5>
                             </div>
                             <div className="col-8 gap-3 action-right">
@@ -202,12 +186,12 @@ function Booking() {
                                 </div>
                                 <button
                                     className="btn btn-primary d-flex "
-                                    onClick={handleAddBusinessResource}
+                                    onClick={handleAddGuestResource}
                                 >
                                     <span className="material-icons-outlined">
                                         add
                                     </span>
-                                    New Booking Source
+                                    New Guest Class
                                 </button>
 
                                 {/* <button
@@ -227,7 +211,7 @@ function Booking() {
                         <div className="col-12 p-3 container-page">
                             <DataTableComponent
                                 data={listingData}
-                                onEdit={handleEditBusinessResource}
+                                onEdit={handleEditGuestResource}
                                 columnsConfig={columnsConfig}
                                 onDelete={handleDelete}
                                 selectedIds={selectedIds}
@@ -244,7 +228,7 @@ function Booking() {
                         setOpen={setOpen}
                         mode={mode}
                         onSubmit={handleSubmit}
-                        userData={businessData}
+                        userData={guestData}
                         statusValue={statusValue}
                         setStatusValue={setStatusValue}
                     />
@@ -262,4 +246,4 @@ function Booking() {
     );
 }
 
-export default Booking;
+export default GuestClass;

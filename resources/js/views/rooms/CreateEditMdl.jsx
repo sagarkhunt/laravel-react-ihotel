@@ -307,7 +307,7 @@ function CreateEditMdl({ open, setOpen, mode, roomsData }) {
                                 </ul>
 
                                 <div
-                                    className="modal-body modal-lft-body"
+                                    className="modal-body modal-lft-body y_scrolling"
                                     style={{ minWidth: '500px' }}
                                 >
                                     <div className="tab-content ">
@@ -953,7 +953,7 @@ function CreateEditMdl({ open, setOpen, mode, roomsData }) {
                                                                     key={
                                                                         amenity.id
                                                                     }
-                                                                    className={`row listing_box cp selecteItem_${amenity.id} ${
+                                                                    className={`row listing_box cp mb-2 selecteItem_${amenity.id} ${
                                                                         isSelected(
                                                                             amenity,
                                                                         )

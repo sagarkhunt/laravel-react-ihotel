@@ -22,7 +22,7 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
                                 className="modal-title headline-h6m"
                                 id="exampleModalLabel"
                             >
-                                Availibility Inquiry
+                                Availability Inquiry
                             </h5>
                             <div className="d-flex gap-4 align-items-center">
                                 <button
@@ -48,13 +48,23 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
                                 </div>
 
                                 {/* <!-- Nights --> */}
-                                <div
+                                <div className="col-auto">
+                                    <div className="night-count">
+                                        <p className="caption-2 font-white text-center mb-0">
+                                            Nights
+                                        </p>
+                                        <p className="caption-1b font-white mt-1 text-center mb-0">
+                                            1
+                                        </p>
+                                    </div>
+                                </div>
+                                {/* <div
                                     className="border rounded surface-d text-center py-2"
                                     style={{ width: '5%' }}
                                 >
                                     <p className="mb-1">Nights</p>
                                     <span>4</span>
-                                </div>
+                                </div> */}
 
                                 {/* <!-- Check Out --> */}
                                 <div className="" style={{ width: '20%' }}>
@@ -73,7 +83,7 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
                                         id="tag-container"
                                         style={{
                                             // border: '2px solid #a6b6c4',
-                                            minHeight: '50px',
+                                            minHeight: '50%',
                                         }}
                                         className=""
                                     >
@@ -82,7 +92,7 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
                                             aria-label=".form-select-sm example"
                                             id="cust_cat_id"
                                             name="cust_cat_id"
-                                            style={{ minHeight: '50px' }}
+                                            style={{ minHeight: '43px' }}
                                         >
                                             <option value="">
                                                 Select Room Category
@@ -142,7 +152,7 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
                                         <tr
                                             style={{
                                                 height: '56px',
-                                                backgroundColor: "#000" ,
+                                                backgroundColor: '#000',
                                             }}
                                         >
                                             <th

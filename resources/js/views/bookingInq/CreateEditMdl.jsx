@@ -81,6 +81,7 @@ function CreateEditMdl({
     };
     const dispatch = useDispatch();
     const [statusValue, setStatusValue] = useState(booingInqData?.status || 0);
+    const [errors, setErrors] = useState({});
     // Track the latest selected check-out date
     const [lastCheckOutDate, setLastCheckOutDate] = useState(
         booingInqData?.chk_out_dt || getMinCheckOutDate(getCurrentDate()),
@@ -131,7 +132,27 @@ function CreateEditMdl({
         }
     };
 
-    function handleSubmit(event) {
+    const validateForm = () => {
+        // Perform validation
+        const newErrors = {};
+        // Example validation logic
+        if (!formData.cust_name) newErrors.cust_name = 'Cust name is required';
+        if (!formData.mobile_no) newErrors.mobile_no = 'Mobile is required';
+        if (!formData.email) newErrors.email = 'Email is required';
+        // Add other validations as needed
+
+        setErrors(newErrors);
+
+        if (Object.keys(newErrors).length > 0) {
+            Object.values(newErrors).forEach((error) => {
+                toast.error(error);
+            });
+        }
+
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
         if (mode === 'Add Inquiry') {
             const isValidRoomCategories = roomCategories.every(
@@ -145,12 +166,20 @@ function CreateEditMdl({
                 toast.error('Please fill in all fields for room categories.');
                 return;
             }
+            if (!validateForm()) {
+                return; // Don't proceed if validation fails
+            }
             // Dispatch action to add inquiry
             formData.room_req = roomCategories;
-            dispatch({
-                type: actions.BOOKINGINQ_ADD, // Replace with your actual action type
+            // dispatch({
+            //     type: actions.BOOKINGINQ_ADD, // Replace with your actual action type
+            //     payload: formData,
+            // });
+            const response = await dispatch({
+                type: actions.BOOKINGINQ_ADD,
                 payload: formData,
             });
+            console.log('🚀 ~ handleSubmit ~ response:', response);
         } else if (mode === 'Edit Inquiry') {
             formData.room_req = roomCategories;
             formData.status = statusValue;
@@ -162,7 +191,7 @@ function CreateEditMdl({
         }
         // Close the modal after submission
         setOpen(false);
-    }
+    };
 
     useEffect(() => {
         setDropDownData(dropDownList);
@@ -504,41 +533,6 @@ function CreateEditMdl({
                                                 </div>
                                             </div>
                                             <div className="col-6">
-                                                {/* <div className="form-group  mb-3">
-                                                    <label
-                                                        htmlFor="customInput"
-                                                        className="custom-label"
-                                                    >
-                                                        Customer Category
-                                                    </label>
-                                                    <select
-                                                        className="form-select custom-input "
-                                                        aria-label=".form-select-sm example"
-                                                        id="cust_cat_id"
-                                                        name="cust_cat_id"
-                                                        value={
-                                                            formData.cust_cat_id
-                                                        } // Set value based on state
-                                                        onChange={handleChange}
-                                                    >
-                                                        <option value="">
-                                                            Please Select Cust
-                                                            Cate
-                                                        </option>{' '}
-                                                        <option value="1">
-                                                            Travel Agent
-                                                        </option>
-                                                        <option value="2">
-                                                            Direct Booking
-                                                        </option>
-                                                        <option value="3">
-                                                            Corporates
-                                                        </option>
-                                                        <option value="4">
-                                                            Referential
-                                                        </option>
-                                                    </select>
-                                                </div> */}
                                                 <div className="form-group  mb-3">
                                                     <label
                                                         htmlFor="customInput"
@@ -914,7 +908,7 @@ function CreateEditMdl({
                                             <div className="col-6">
                                                 <div className="form-group  mb-3">
                                                     <label
-                                                        htmlFor="customInput"
+                                                        htmlFor="mobile_no"
                                                         className="custom-label"
                                                     >
                                                         Mobile No

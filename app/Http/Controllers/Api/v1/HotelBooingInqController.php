@@ -42,6 +42,9 @@ class HotelBooingInqController extends BaseApiController
         $rule = [
             'chk_in_dt' => 'required',
             'chk_out_dt' => 'required',
+            'cust_name' => 'required',
+            'mobile_no' => 'required',
+            'email' => 'required'
         ];
 
         $validate = Validator::make($request->all(), $rule);
@@ -128,7 +131,7 @@ class HotelBooingInqController extends BaseApiController
                     // $chkBookingInq->sp_req = (isset($request['sp_req']) ? (empty($request['sp_req']) ? "" : $request['sp_req']) : $chkBookingInq->sp_req);
                     $chkBookingInq->ref_name = (isset($request['ref_name']) ? (empty($request['ref_name']) ? "" : $request['ref_name']) : $chkBookingInq->ref_name);
                     $chkBookingInq->off_give = (isset($request['off_give']) ? (empty($request['off_give']) ? "" : $request['off_give']) : $chkBookingInq->off_give);
-                    $chkBookingInq->cust_name = (isset($request['cust_name']) ? (empty($request['cust_name']) ? "" : $request['cust_name']) : $chkBookingInq->cust_name);
+                    $chkBookingInq->cust_req = (isset($request['cust_req']) ? (empty($request['cust_req']) ? "" : $request['cust_req']) : $chkBookingInq->cust_req);
                     $chkBookingInq->total = (isset($request['total']) ? (empty($request['total']) ? "" : $request['total']) : $chkBookingInq->total);
                     $chkBookingInq->status = (isset($request['status']) ? ($request['status'] == 0 ? 0 : 1) : $chkBookingInq->status);
                     $chkBookingInq->updated_by = $user_id;;
