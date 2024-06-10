@@ -2,11 +2,17 @@ import React, { useState } from 'react';
 import '../../../css/AddReservation.css';
 import AssignRoomMdl from './componet/AssignRoomMdl';
 import BookingCard from './componet/BookingCard';
+import { Link, useNavigate } from 'react-router-dom';
 function ReservationList() {
     const [isGridView, setIsGridView] = useState(true);
     const [open, setOpen] = useState(false);
     const [activeButton, setActiveButton] = useState('reservations');
+    const navigate = useNavigate();
+    const [dropdownIndex, setDropdownIndex] = useState(null);
 
+    const toggleDropdown = (index) => {
+        setDropdownIndex(dropdownIndex === index ? null : index);
+    };
     const handleClick = (buttonName) => {
         setActiveButton(buttonName);
     };
@@ -14,7 +20,6 @@ function ReservationList() {
         setOpen(true);
     }
     const toggleView = () => {
-        console.log('===========sss');
         setIsGridView(!isGridView);
     };
     const data = [
@@ -146,104 +151,79 @@ function ReservationList() {
     ];
     return (
         <div className="m-4">
-            <div className="container-page py-2 px-3">
-                <div className="row align-items-center">
-                    {/* <!-- tab navigation  --> */}
-                    <div className="col-6">
-                        <ul
-                            className="nav nav-pills"
-                            id="pills-tab"
-                            role="tablist"
-                        >
-                            <li className="nav-item" role="presentation">
-                                <a
-                                    // className="nav-link active btn d-flex align-items-center gap-2"
-                                    className={`nav-link active d-flex align-items-center gap-2`}
-                                    onClick={() => handleClick('reservations')}
-                                    id="reservation-tab"
-                                    data-bs-toggle="pill"
-                                    data-bs-target="#reservation"
-                                    href="#"
-                                    role="tab"
-                                    aria-controls="reservation"
-                                    aria-selected="true"
-                                >
-                                    Reservations
-                                    <span className="tab-counts rounded-circle2">
-                                        19
-                                    </span>
-                                </a>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                                <a
-                                    className="nav-link d-flex align-items-center gap-2"
-                                    id="arrival-tab"
-                                    data-bs-toggle="pill"
-                                    data-bs-target="#arrival"
-                                    role="tab"
-                                    aria-controls="arrival"
-                                    aria-selected="false"
-                                >
-                                    Arrivals
-                                    <span className="tab-counts rounded-circle2">
-                                        19
-                                    </span>
-                                </a>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                                <a
-                                    className="nav-link d-flex align-items-center gap-2"
-                                    id="departure-tab"
-                                    data-bs-toggle="pill"
-                                    data-bs-target="#departure"
-                                    role="tab"
-                                    aria-controls="departure"
-                                    aria-selected="false"
-                                >
-                                    Departure
-                                    <span className="tab-counts rounded-circle2">
-                                        19
-                                    </span>
-                                </a>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                                <a
-                                    className="nav-link d-flex align-items-center gap-2"
-                                    id="in-house-tab"
-                                    data-bs-toggle="pill"
-                                    data-bs-target="#in-house"
-                                    role="tab"
-                                    aria-controls="in-house"
-                                    aria-selected="false"
-                                >
-                                    In-house
-                                    <span className="tab-counts rounded-circle2">
-                                        19
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    {/* <!-- search bar  --> */}
-                    <div className="col-3">
-                        <div className="custom-input border-1 d-flex align-items-center py-0 w-100 gap-2 height-40">
-                            <span className="material-icons-outlined">
-                                search
+            <div className="col-12 mt-3 pannel action-header px-3">
+                <div className="row">
+                    <div className="col-6 d-flex align-items-center">
+                        {/* <h6 className="subtitle-1m btn-primary reservations mb-0 p-2">
+                            Reservations
+                            <span className="subtitle-2m btn-primary rounded-circle">
+                                12
                             </span>
+                        </h6>
 
-                            <input
-                                type="text"
-                                placeholder="Search"
-                                className="input-no-outline"
-                            />
+                        <h6 className="subtitle-1m mb-0 mx-3">
+                            Arrivals
+                            <span className="subtitle-2m rounded-circle2">
+                                21
+                            </span>
+                        </h6> */}
+                        <div className="col-6 d-flex align-items-end">
+                            <h6
+                                className={`subtitle-1m mb-0 p-2 cp ${
+                                    activeButton === 'reservations'
+                                        ? 'btn-primary reservations'
+                                        : ''
+                                }`}
+                                onClick={() => setActiveButton('reservations')}
+                            >
+                                Reservations
+                                <span
+                                    className={`subtitle-2m ${
+                                        activeButton === 'reservations'
+                                            ? 'btn-primary rounded-circle'
+                                            : ''
+                                    }`}
+                                >
+                                    12
+                                </span>
+                            </h6>
+
+                            <h6
+                                className={`subtitle-1m mb-0 mx-3 p-2 cp ${
+                                    activeButton === 'arrivals'
+                                        ? 'btn-primary'
+                                        : ''
+                                }`}
+                                onClick={() => setActiveButton('arrivals')}
+                            >
+                                Arrivals
+                                <span
+                                    className={`subtitle-2m ${
+                                        activeButton === 'arrivals'
+                                            ? 'btn-primary rounded-circle'
+                                            : 'rounded-circle2'
+                                    }`}
+                                >
+                                    21
+                                </span>
+                            </h6>
                         </div>
                     </div>
+                    <div className="col-6 gap-3 action-right">
+                        <div className="form-group mt-3 mb-3 position-relative search-container">
+                            <span className="material-icons-outlined search-icon">
+                                search
+                            </span>
+                            <input
+                                type="text"
+                                className="form-control search-input"
+                                id="dt-serach-cstm"
+                                placeholder="Search"
+                            />
+                        </div>
 
-                    {/* <!-- toggle buttons   --> */}
-                    <div className="col-1">
                         <div
-                            className="btn-group btn-group-toggle border rounded w-100"
+                            className="btn-group btn-group-toggle border rounded"
                             data-toggle="buttons"
                         >
                             <label
@@ -285,106 +265,31 @@ function ReservationList() {
                                 <span className="material-icons"> list </span>
                             </label>
                         </div>
-                    </div>
 
-                    {/* <!-- actions  --> */}
-                    <div className="col-1">
-                        <div className="dropdown">
-                            <button
-                                className="subtitle-2m btn custom-border btn-secondary d-flex align-items-center dropdown-toggle"
-                                type="button"
-                                id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                            >
-                                Actions
-                            </button>
-                            <ul
-                                className="dropdown-menu"
-                                aria-labelledby="dropdownMenuButton1"
-                            >
-                                <li>
-                                    <a className="dropdown-item" href="#">
-                                        Action
-                                    </a>
-                                </li>
-                                <li>
-                                    <a className="dropdown-item" href="#">
-                                        Another action
-                                    </a>
-                                </li>
-                                <li>
-                                    <a className="dropdown-item" href="#">
-                                        Something else here
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    {/* <!-- print gr button  --> */}
-                    <div className="col-1">
                         <button
-                            className="btn btn-secondary d-flex text-nowrap"
-                            data-bs-toggle="modal"
-                            data-bs-target="#"
+                            className="btn btn-secondary d-flex w-auto "
+                            // onClick={showFilter}
                         >
-                            Print GR
+                            {/* <span className="material-icons-outlined">
+                                        tune
+                                    </span> */}
+                            <span className="material-icons-outlined me-0">
+                                filter_alt
+                            </span>
+                        </button>
+                        <button
+                            className="btn btn-primary d-flex "
+                            onClick={() => {
+                                navigate('/add-reservation');
+                            }}
+                        >
+                            <span className="material-icons-outlined">add</span>
+                            Reservation
                         </button>
                     </div>
                 </div>
             </div>
-            {/* <div className="row">
-                    <div className="col-6 d-flex align-items-center">
-                        <h6
-                            className={`subtitle-1m mb-0 p-2 ${activeButton === 'reservations' ? 'btn-primary' : ''}`}
-                            onClick={() => handleClick('reservations')}
-                        >
-                            Reservations
-                            <span
-                                className={`subtitle-2m ${activeButton === 'reservations' ? 'btn-primary' : ''} rounded-circle`}
-                            >
-                                12
-                            </span>
-                        </h6>
 
-                        <h6
-                            className={`subtitle-1m mb-0 mx-3 p-2 ${activeButton === 'arrivals' ? 'btn-primary' : ''}`}
-                            onClick={() => handleClick('arrivals')}
-                        >
-                            Arrivals
-                            <span
-                                className={`subtitle-2m ${activeButton === 'arrivals' ? 'btn-primary' : ''} rounded-circle2`}
-                            >
-                                21
-                            </span>
-                        </h6>
-
-                        <h6
-                            className={`subtitle-1m mb-0 mx-3 p-2 ${activeButton === 'departure' ? 'btn-primary' : ''}`}
-                            onClick={() => handleClick('departure')}
-                        >
-                            Departure
-                            <span
-                                className={`subtitle-2m ${activeButton === 'departure' ? 'btn-primary' : ''} rounded-circle2`}
-                            >
-                                32
-                            </span>
-                        </h6>
-
-                        <h6
-                            className={`subtitle-1m mb-0 mx-3 p-2 ${activeButton === 'in-house' ? 'btn-primary' : ''}`}
-                            onClick={() => handleClick('in-house')}
-                        >
-                            In-house
-                            <span
-                                className={`subtitle-2m ${activeButton === 'in-house' ? 'btn-primary' : ''} rounded-circle2`}
-                            >
-                                34
-                            </span>
-                        </h6>
-                    </div>
-                </div> */}
             {isGridView ? (
                 <div className="col-12 p-3 container-page">
                     <table className="table custom-table">
@@ -429,6 +334,11 @@ function ReservationList() {
                                 >
                                     Paid(Rs)
                                 </th>
+                                <th
+                                    scope="col"
+                                    className="th-custom"
+                                    style={{ textAlign: 'right' }}
+                                ></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -485,7 +395,7 @@ function ReservationList() {
                                         </div>
                                         <div
                                             className="mt-1 cp"
-                                            onClick={assignRooms}
+                                            onClick={() => alert('Assign Room')}
                                         >
                                             <p className="assign mt-1 mb-0 cp">
                                                 Assign Room
@@ -506,6 +416,51 @@ function ReservationList() {
                                         style={{ textAlign: 'right' }}
                                     >
                                         {row.paid}
+                                    </td>
+                                    <td className="td-custom body-2 text-center">
+                                        <div className="dropdown">
+                                            <span
+                                                className="material-icons-outlined"
+                                                onClick={() =>
+                                                    toggleDropdown(index)
+                                                }
+                                                style={{ cursor: 'pointer' }}
+                                            >
+                                                more_vert
+                                            </span>
+                                            {dropdownIndex === index && (
+                                                <div className="dropdown-menu-re show">
+                                                    <a
+                                                        className="dropdown-item"
+                                                        href="#"
+                                                    >
+                                                        <span
+                                                            className="material-icons-outlined me-1"
+                                                            style={{
+                                                                cursor: 'pointer',
+                                                            }}
+                                                        >
+                                                            print
+                                                        </span>
+                                                        Print GRC
+                                                    </a>
+                                                    <a
+                                                        className="dropdown-item"
+                                                        href="#"
+                                                    >
+                                                        <span
+                                                            className="material-icons-outlined me-1"
+                                                            style={{
+                                                                cursor: 'pointer',
+                                                            }}
+                                                        >
+                                                            exit_to_app
+                                                        </span>
+                                                        Check In
+                                                    </a>
+                                                </div>
+                                            )}
+                                        </div>
                                     </td>
                                 </tr>
                             ))}

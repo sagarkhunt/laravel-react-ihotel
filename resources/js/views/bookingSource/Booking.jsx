@@ -52,12 +52,12 @@ function Booking() {
             label: 'Action',
             render: () =>
                 `
-            <span class="material-icons-outlined delete-table">
-                cancel_presentation
-            </span>
-            <span class="material-icons-outlined edit-table">
+                <span class="material-icons-outlined edit-table">
                 edit
-            </span>
+                </span>
+                <span class="material-icons-outlined delete-table">
+                    cancel_presentation
+                </span>
             `,
             className: 'action-container',
             width: '10%',

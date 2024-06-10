@@ -1137,7 +1137,7 @@ function Navbar() {
                                     </svg>
                                 </Link>
                             </Tooltip>
-                            <Tooltip text="Add Reservation">
+                            {/* <Tooltip text="Add Reservation">
                                 <Link
                                     to="/add-reservation"
                                     href="#default"
@@ -1172,7 +1172,7 @@ function Navbar() {
                                         />
                                     </svg>
                                 </Link>
-                            </Tooltip>
+                            </Tooltip> */}
                             <Tooltip text="Avilability Inquiry">
                                 <button
                                     className="header_icons ms-3"
@@ -1252,11 +1252,6 @@ function Navbar() {
                                             Another action
                                         </a>
                                     </li>
-                                    {/* <li>
-                                        <a className="dropdown-item" href="#">
-                                            Something else here
-                                        </a>
-                                    </li> */}
 
                                     <li>
                                         <Link

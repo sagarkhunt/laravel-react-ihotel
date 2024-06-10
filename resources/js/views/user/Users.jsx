@@ -7,6 +7,7 @@ import CreateEditMdl from './CreateEditMdl';
 import DeleteMdl from '../../components/common/DeleteMdl';
 import toast from 'react-hot-toast';
 import Spinner from '../../components/Spinner';
+import FilterMdl from './FilterMdl';
 function Users() {
     const [listingData, setListingData] = useState([]);
 
@@ -14,6 +15,7 @@ function Users() {
     const { loader, userListData, userCreateed, userUpdate, userDelete } =
         useSelector((state) => state?.usersReducer);
     const [open, setOpen] = useState(false);
+    const [openFilter, setOpenFilter] = useState(false);
     const [showDel, setShowDel] = useState(false);
     const [delId, setDelId] = useState('');
     const [mode, setMode] = useState('Add User'); // 'add' or 'edit'
@@ -87,6 +89,9 @@ function Users() {
         setMode('Add User');
         setOpen(true);
     }
+    const showFilter = () => {
+        setOpenFilter(true);
+    };
     /**
      *
      * @param {handleEditUser} user
@@ -211,13 +216,19 @@ function Users() {
                                         </span>
                                     )}
                                 </div>
-                                <button className="btn btn-secondary d-flex">
-                                    <span className="material-icons-outlined">
+                                <button
+                                    className="btn btn-secondary d-flex"
+                                    onClick={showFilter}
+                                >
+                                    {/* <span className="material-icons-outlined">
                                         tune
+                                    </span> */}
+                                    <span className="material-icons-outlined me-0">
+                                        filter_alt
                                     </span>
                                 </button>
                                 <button className="btn btn-secondary d-flex">
-                                    <span className="material-icons-outlined">
+                                    <span className="material-icons-outlined me-0">
                                         add
                                     </span>{' '}
                                     Designation
@@ -377,6 +388,12 @@ function Users() {
                         setOpen={setShowDel}
                         onSubmit={handleDelSubmit}
                         delId={setDelId}
+                    />
+                )}
+                {openFilter && (
+                    <FilterMdl
+                        openFilter={openFilter}
+                        setOpenFilter={setOpenFilter}
                     />
                 )}
             </div>
