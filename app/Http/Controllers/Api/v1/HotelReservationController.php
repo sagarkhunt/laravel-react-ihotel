@@ -25,7 +25,13 @@ class HotelReservationController extends BaseApiController
     {
         $bookings = RoomBookingMaster::all();
 
-        return $this->sendResponse(['bookings', $bookings], "");
+        if (count($bookings) > 0) {
+
+            return $this->sendResponse($bookings, "Get Reservation list successfully!.");
+        }
+        return $this->sendResponse([], "No Data found!.");
+
+        // return $this->sendResponse(['bookings', $bookings], "");
     }
 
     /**
@@ -195,28 +201,6 @@ class HotelReservationController extends BaseApiController
             $totalNight = $interval->days;
             $bookingPost['non'] = $totalNight;
 
-            // $guest_id = $request->input('guest_id');
-            // $guestArr = GuestMaster::leftjoin("", "city_id")->find($guest_id);
-            // $guest = array(
-            //     "add" => $guestArr->full_name,
-            //     "nlt" => $guestArr->nationality,
-            //     "city" => $guestArr->city,
-            //     "city_id" => $guestArr->city_id,
-            //     "email_id" => $guestArr->email
-            // );
-
-            // $rooms = [];
-            // foreach ($room_inventory as $room) {
-            //     $rooms[] = array(
-            //         "rcid" => $room_inventory['rcid'],
-            //         "pid" => $room_inventory['pid'],
-            //         "rid" => $room_inventory['rid'],
-            //         "non" => $totalNight,
-            //         "nor" => $room_inventory['nor'],
-            //         "rate" => $room_inventory['rate'],
-            //     );
-            // }
-
             $roomBooking = new RoomBookingMaster();
 
             // Set the attributes
@@ -224,6 +208,8 @@ class HotelReservationController extends BaseApiController
             $roomBooking->fy_id = 1;
             $roomBooking->frm_dt = $request->input('frm_dt');
             $roomBooking->to_dt = $request->input('to_dt');
+            $roomBooking->nor = count($room_inventory);
+            $roomBooking->non = $totalNight;
             $roomBooking->bsns_src_id = $request->input('bsns_src_id');
             $roomBooking->booking_src_id = $request->input('booking_src_id');
             $roomBooking->sls_prsn_id = $request->input('sls_prsn_id');
@@ -233,12 +219,13 @@ class HotelReservationController extends BaseApiController
             $roomBooking->cncl_policy_id = $request->input('cncl_policy_id');
             $roomBooking->terms_con_id = $request->input('terms_con_id');
             $roomBooking->sp_req_json = '{"name":"Pratik"}';
-            $roomBooking->sp_remarks = 'Test';
+            $roomBooking->sp_remarks = $request->input('sp_remarks');
+            // $roomBooking->room_charge = $totalRate;
+            // $roomBooking->taxes = $request->input('taxes');
+            // $roomBooking->advance_recive = $request->input('advance_recive');
+            // $roomBooking->total_amt = $request->input('due_amntss');
             $roomBooking->created_by = $user_id;
             $roomBooking->created_at = now();
-
-
-            // Save the model
             $roomBooking->save();
 
             return $this->sendResponse($roomBooking, 'Booking created successfully.');
@@ -269,12 +256,13 @@ class HotelReservationController extends BaseApiController
 
         $booking = RoomBookingMaster::find($rbm_id);
 
+
         if (!$booking) {
             return response()->json(['message' => 'Booking not found.'], 404);
         }
 
         // Include associated room inventory
-        $booking->load('roomInventory');
+        // $booking->load('roomInventory');
 
         return $this->sendResponse(['booking' => $booking], '');
     }

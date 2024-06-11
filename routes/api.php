@@ -111,6 +111,7 @@ Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' =
     #Hotel Reservation Api
     Route::any('get_reservation', 'HotelReservationController@getReservation');
     Route::any('cr_reservation', 'HotelReservationController@createReservation');
+    Route::any('get_res_detail', 'HotelReservationController@getReservationDetails');
     Route::any('upd_reservation', 'HotelReservationController@updateReservation');
     Route::any('del_reservation', 'HotelReservationController@deleteReservation');
     #Terms & Condition
