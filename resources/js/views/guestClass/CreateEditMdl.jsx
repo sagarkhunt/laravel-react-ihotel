@@ -78,9 +78,9 @@ function CreateEditMdl({
                                     >
                                         {mode}
                                     </h5>
-                                    <div className="d-flex gap-4 align-items-right">
+                                    <div className="d-flex gap-2 align-items-right">
                                         {mode === 'Edit Guest Class' ? (
-                                            <div className="d-flex gap-4 align-items-center">
+                                            <div className="d-flex gap-4 align-items-center mt-1">
                                                 <div
                                                     className="form-check form-switch"
                                                     id="customSwitch"
@@ -115,7 +115,7 @@ function CreateEditMdl({
 
                                         <button
                                             type="button"
-                                            className="btn-close"
+                                            className="btn-close mt-1"
                                             data-bs-dismiss="modal"
                                             aria-label="Close"
                                             onClick={() => setOpen(false)}

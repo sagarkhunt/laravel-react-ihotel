@@ -110,9 +110,9 @@ Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' =
 
     #Hotel Reservation Api
     Route::any('get_reservation', 'HotelReservationController@getReservation');
-    Route::any('create_reservation', 'HotelReservationController@createReservation');
-    Route::any('update_reservation', 'HotelReservationController@updateReservation');
-    Route::any('delete_reservation', 'HotelReservationController@deleteReservation');
+    Route::any('cr_reservation', 'HotelReservationController@createReservation');
+    Route::any('upd_reservation', 'HotelReservationController@updateReservation');
+    Route::any('del_reservation', 'HotelReservationController@deleteReservation');
     #Terms & Condition
     Route::POST('get_tnc', 'HotelTncCnpController@getTnc');
     Route::POST('cr_tnc', 'HotelTncCnpController@createTnc');
@@ -124,6 +124,7 @@ Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' =
     Route::POST('cr_cp', 'HotelTncCnpController@createCp');
     Route::POST('upd_cp', 'HotelTncCnpController@updateCp');
     Route::POST('del_cp', 'HotelTncCnpController@deleteCp');
+
     #Guest
     Route::any('get_guest', 'HotelGuestController@getGuest');
     Route::any('cr_guest', 'HotelGuestController@createGuest');
@@ -133,4 +134,16 @@ Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' =
     Route::POST('cr_guest_cls', 'HotelGuestController@createGuestClass');
     Route::POST('upd_guest_cls', 'HotelGuestController@updateGuestClass');
     Route::POST('del_guest_cls', 'HotelGuestController@deleteGuestClass');
+
+    #Salaes Person
+    Route::POST('get_sls_prsn', 'HotelSalesPersonController@getSalasePerson');
+    Route::POST('cr_sls_prsn', 'HotelSalesPersonController@createSalasePerson');
+    Route::POST('upd_sls_prsn', 'HotelSalesPersonController@updateSalasePerson');
+    Route::POST('del_sls_prsn', 'HotelSalesPersonController@deleteSalasePerson');
+
+    #Market Segment
+    Route::POST('get_mkrt_sgmt', 'HotelMrktSegmentController@getMarketSegment');
+    Route::POST('cr_mkrt_sgmt', 'HotelMrktSegmentController@createMarketSegment');
+    Route::POST('upd_mkrt_sgmt', 'HotelMrktSegmentController@updateMarketSegment');
+    Route::POST('del_mkrt_sgmt', 'HotelMrktSegmentController@deleteMarketSegment');
 });

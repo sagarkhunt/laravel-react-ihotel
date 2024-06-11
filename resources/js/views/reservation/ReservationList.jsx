@@ -395,7 +395,7 @@ function ReservationList() {
                                         </div>
                                         <div
                                             className="mt-1 cp"
-                                            onClick={() => alert('Assign Room')}
+                                            onClick={() => assignRooms()}
                                         >
                                             <p className="assign mt-1 mb-0 cp">
                                                 Assign Room

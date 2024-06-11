@@ -620,7 +620,7 @@ body {
     border-radius: 6px;
     padding: 10px;
     transition: border-color 0.3s ease;
-    min-height: 56px;
+    /* min-height: 56px; */
 }
 .custom-input {
     font-family: var(--main-font) !important;
