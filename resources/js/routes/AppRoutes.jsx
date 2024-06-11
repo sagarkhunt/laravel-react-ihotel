@@ -27,6 +27,8 @@ import HouseKeeping from '../views/HouseKeeping/HouseKeeping.jsx';
 import FrontView from '../views/frontView/FrontView.jsx';
 import EditReservtionInfo from '../views/reservation/EditReservtionInfo.jsx';
 import GuestClass from '../views/guestClass/GuestClass.jsx';
+import SalesPerson from '../views/salesPerson/SalesPerson.jsx';
+import MarketSegment from '../views/marketSegment/MarketSegment.jsx';
 
 // Define a function to check if the user is authenticated
 const isAuthenticated = () => {
@@ -150,6 +152,14 @@ const router = createBrowserRouter([
             {
                 path: '/guest_class',
                 element: <ProtectedRouteWrapper element={<GuestClass />} />,
+            },
+            {
+                path: '/sales_person',
+                element: <ProtectedRouteWrapper element={<SalesPerson />} />,
+            },
+            {
+                path: '/market_segment',
+                element: <ProtectedRouteWrapper element={<MarketSegment />} />,
             },
         ],
     },

@@ -58,7 +58,7 @@ function AddReservation() {
         specialRequest: '',
         specialRemark: '',
         roomDetails: [],
-        paymentDetails: null
+        paymentDetails: null,
     });
 
     const [totalAmount, setTotalAmount] = useState('0.00');
