@@ -421,7 +421,7 @@ function Navbar() {
                                                                 className="nav-item"
                                                                 data-bs-dismiss="offcanvas"
                                                             >
-                                                                Terms & Conition
+                                                                Terms & Condition
                                                             </span>
                                                         </Link>
                                                     </li>
