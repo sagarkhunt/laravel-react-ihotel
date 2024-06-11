@@ -93,7 +93,7 @@ function SalesPerson() {
         } else {
             const updatedFormData = {
                 name: formData.name,
-                sales_person_id: formData.id,
+                sls_psrn_id: formData.id,
                 status: statusValue,
             };
             dispatch({
@@ -117,7 +117,7 @@ function SalesPerson() {
 
     const handleDelSubmit = () => {
         const salesPersonId = {
-            sales_person_id: delId,
+            sls_psrn_id: delId,
         };
         dispatch({
             type: actions.SALESPERSON_DELETE,

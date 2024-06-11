@@ -93,7 +93,7 @@ function MarketSegment() {
         } else {
             const updatedFormData = {
                 name: formData.name,
-                market_segment_id: formData.id,
+                mrkt_sgmt_id: formData.id,
                 status: statusValue,
             };
             dispatch({
@@ -116,7 +116,7 @@ function MarketSegment() {
 
     const handleDelSubmit = () => {
         const marketSegmentId = {
-            market_segment_id: delId,
+            mrkt_sgmt_id: delId,
         };
         dispatch({
             type: actions.MARKETSEGMENT_DELETE,
