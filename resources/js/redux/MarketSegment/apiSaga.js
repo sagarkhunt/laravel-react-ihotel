@@ -1,23 +1,27 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import actions from '../BusinessSource/actions';
-import { postRequest } from '../../config/axiosClient'; // Assuming postRequest is used for all API requests
-import toast from 'react-hot-toast'; // Assuming react-hot-toast is used for toast notifications
+import actions from './actions';
+import { postRequest } from '../../config/axiosClient';
+import toast from 'react-hot-toast';
 
 /**
- * Fetches the list of businesses.
- * @param {businessList} action The action containing payload for fetching business list.
+ * Fetches the list of market segments.
+ * @param {marketSegmentList} action The action containing payload for fetching market segment list.
  */
-function* businessList(action) {
+function* marketSegmentList(action) {
     try {
-        const response = yield call(postRequest, 'get_bus_sou', action.payload);
+        const response = yield call(
+            postRequest,
+            'get_mkrt_sgmt',
+            action.payload,
+        );
         if (response) {
             yield put({
-                type: actions.BUSINESS_LIST_SUCCESS,
+                type: actions.MARKETSEGMENT_LIST_SUCCESS,
                 payload: response.data,
             });
         }
     } catch (error) {
-        yield put({ type: actions.BUSINESS_LIST_FAILURE });
+        yield put({ type: actions.MARKETSEGMENT_LIST_FAILURE });
         // Handle different error statuses
         if (error.response?.status === 401) {
             toast.error(error.response.data.message);
@@ -32,22 +36,22 @@ function* businessList(action) {
 }
 
 /**
- * Creates a new business.
- * @param {createBusiness} action The action containing payload for creating a new business.
+ * Creates a new market segment.
+ * @param {createMarketSegment} action The action containing payload for creating a new market segment.
  */
-function* createBusiness(action) {
+function* createMarketSegment(action) {
     const { payload } = action;
     try {
-        const response = yield call(postRequest, 'create_bus_sou', payload);
+        const response = yield call(postRequest, 'cr_mkrt_sgmt', payload);
         if (response) {
             yield put({
-                type: actions.BUSINESS_ADD_SUCCESS,
+                type: actions.MARKETSEGMENT_ADD_SUCCESS,
                 payload: response.data,
             });
             toast.success(response.message);
         }
     } catch (error) {
-        yield put({ type: actions.BUSINESS_ADD_FAILURE });
+        yield put({ type: actions.MARKETSEGMENT_ADD_FAILURE });
         // Handle different error statuses
         if (error.response?.status === 422) {
             const errors = error.response.data.errors;
@@ -65,16 +69,16 @@ function* createBusiness(action) {
 }
 
 /**
- * Updates a new business.
- * @param {updateBusiness} action The action containing payload for updating a new business.
+ * Updates a market segment.
+ * @param {updateMarketSegment} action The action containing payload for updating a market segment.
  */
-function* updateBusiness(action) {
+function* updateMarketSegment(action) {
     const { payload } = action;
     try {
-        const response = yield call(postRequest, 'update_bus_sou', payload);
+        const response = yield call(postRequest, 'upd_mkrt_sgmt', payload);
         if (response) {
             yield put({
-                type: actions.BUSINESS_UPDATE_SUCCESS,
+                type: actions.MARKETSEGMENT_UPDATE_SUCCESS,
                 payload: response.data,
             });
             if (response.data === 'fail') {
@@ -84,7 +88,7 @@ function* updateBusiness(action) {
             }
         }
     } catch (error) {
-        yield put({ type: actions.BUSINESS_UPDATE_FAILURE });
+        yield put({ type: actions.MARKETSEGMENT_UPDATE_FAILURE });
         // Handle different error statuses
         if (error.response?.status === 422) {
             const errors = error.response.data.errors;
@@ -102,16 +106,16 @@ function* updateBusiness(action) {
 }
 
 /**
- * Deletes a new business.
- * @param {deleteBusiness} action The action containing payload for deleting a new business.
+ * Deletes a market segment.
+ * @param {deleteMarketSegment} action The action containing payload for deleting a market segment.
  */
-function* deleteBusiness(action) {
+function* deleteMarketSegment(action) {
     const { payload } = action;
     try {
-        const response = yield call(postRequest, 'delete_bus_sou', payload);
+        const response = yield call(postRequest, 'del_mkrt_sgmt', payload);
         if (response) {
             yield put({
-                type: actions.BUSINESS_DELETE_SUCCESS,
+                type: actions.MARKETSEGMENT_DELETE_SUCCESS,
                 payload: response.data,
             });
             if (response.data === 'fail') {
@@ -121,7 +125,7 @@ function* deleteBusiness(action) {
             }
         }
     } catch (error) {
-        yield put({ type: actions.BUSINESS_DELETE_FAILURE });
+        yield put({ type: actions.MARKETSEGMENT_DELETE_FAILURE });
         // Handle different error statuses
         if (error.response?.status === 422) {
             const errors = error.response.data.errors;
@@ -140,11 +144,16 @@ function* deleteBusiness(action) {
 
 export default function* rootSaga() {
     yield all([
-        takeLatest(actions.BUSINESS_LIST, businessList),
-        takeLatest(actions.BUSINESS_ADD, createBusiness),
-        takeLatest(actions.BUSINESS_UPDATE, updateBusiness),
-        takeLatest(actions.BUSINESS_DELETE, deleteBusiness),
+        takeLatest(actions.MARKETSEGMENT_LIST, marketSegmentList),
+        takeLatest(actions.MARKETSEGMENT_ADD, createMarketSegment),
+        takeLatest(actions.MARKETSEGMENT_UPDATE, updateMarketSegment),
+        takeLatest(actions.MARKETSEGMENT_DELETE, deleteMarketSegment),
     ]);
 }
 
-export { businessList, createBusiness, updateBusiness, deleteBusiness };
+export {
+    marketSegmentList,
+    createMarketSegment,
+    updateMarketSegment,
+    deleteMarketSegment,
+};

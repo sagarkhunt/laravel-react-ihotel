@@ -421,7 +421,7 @@ function Navbar() {
                                                                 className="nav-item"
                                                                 data-bs-dismiss="offcanvas"
                                                             >
-                                                                Terms & Conition
+                                                                Terms & Condition
                                                             </span>
                                                         </Link>
                                                     </li>
@@ -631,6 +631,44 @@ function Navbar() {
                                                                 data-bs-dismiss="offcanvas"
                                                             >
                                                                 Inquiry
+                                                            </span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="col-12 grid_padding">
+                                                        <Link
+                                                            className={`nav-sub-box cp ${activeLink === '/sales_person' ? 'active' : ''}`}
+                                                            to="/sales_person"
+                                                            onClick={() =>
+                                                                handleLinkClick(
+                                                                    '/sales_person',
+                                                                )
+                                                            }
+                                                        >
+                                                            <span
+                                                                type="button"
+                                                                className="nav-item"
+                                                                data-bs-dismiss="offcanvas"
+                                                            >
+                                                                Sales Person
+                                                            </span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="col-12 grid_padding">
+                                                        <Link
+                                                            className={`nav-sub-box cp ${activeLink === '/market_segment' ? 'active' : ''}`}
+                                                            to="/market_segment"
+                                                            onClick={() =>
+                                                                handleLinkClick(
+                                                                    '/market_segment',
+                                                                )
+                                                            }
+                                                        >
+                                                            <span
+                                                                type="button"
+                                                                className="nav-item"
+                                                                data-bs-dismiss="offcanvas"
+                                                            >
+                                                                Market Segment
                                                             </span>
                                                         </Link>
                                                     </li>
