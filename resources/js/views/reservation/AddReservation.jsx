@@ -749,7 +749,7 @@ function AddReservation() {
                                         </div>
                                         <div className="col-4">
                                             {formData.paymentDetails
-                                                ?.paymentType ? (
+                                                ?.paymentType && formData.paymentDetails?.rate ? (
                                                 <p className="subtitle-2m m-0">
                                                     (
                                                     {
@@ -776,7 +776,7 @@ function AddReservation() {
                                             </p>
                                         </div>
                                         <div className="col-4">
-                                            {formData.paymentDetails ? (
+                                            {formData.paymentDetails?.rate ? (
                                                 <p className="subtitle-2m red m-0">
                                                     ₹
                                                     {parseFloat(totalAmount) -
