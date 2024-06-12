@@ -321,7 +321,7 @@ function AddReservation() {
                                     <div
                                         className="y_scrolling p-2"
                                         style={{
-                                            height: 'calc(100vh - 520px)',
+                                            height: 'calc(100vh - 470px)',
                                         }}
                                     >
                                         {formData.roomDetails?.map(
@@ -466,7 +466,7 @@ function AddReservation() {
                             <div
                                 className="card-body y_scrolling"
                                 style={{
-                                    maxHeight: 'calc(100vh - 194px)',
+                                    height: 'calc(100vh - 145px)',
                                 }}
                             >
                                 {/* <div className="row mt-3">

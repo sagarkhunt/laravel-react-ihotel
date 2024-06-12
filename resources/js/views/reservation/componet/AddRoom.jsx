@@ -82,7 +82,7 @@ const AddRoom = ({ formData, showAddRoom, setShowAddRoom, setFormData }) => {
                                     <div className="col-9 p-0">
                                         <div className="row mx-0">
                                             <div className="col-3">
-                                                Rate Plan
+                                                Room Plan
                                             </div>
                                             <div className="col-2">Room</div>
                                             <div className="col-2">Adult</div>
@@ -267,8 +267,8 @@ const AddRoom = ({ formData, showAddRoom, setShowAddRoom, setFormData }) => {
                                     </div>
                                 </div>
                             ))}
-                            <div className="custom-row">
-                                <div className="td-custom td-custom-p pt-0">
+                            <div className="row mx-0 my-2">
+                                <div className="col-12 pt-0">
                                     <div className="button-container">
                                         <button
                                             className="btn btn-sm btn-secondary"
