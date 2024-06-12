@@ -18,7 +18,9 @@ function ReservationList() {
     const toggleDropdown = (index) => {
         setDropdownIndex(dropdownIndex === index ? null : index);
     };
-
+    const assignRooms = () => {
+        setOpen(true);
+    };
     const [open1, setOpen1] = useState(false);
     function handleshowFilteredData() {
         setOpen1(true);
