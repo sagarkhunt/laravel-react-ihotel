@@ -23,12 +23,22 @@ function AddReservation() {
         // setMode('Add Inquiry Type');
         setOpen(true);
     }
+    // Function to get today's date in YYYY-MM-DD format
+    const getTodayDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-indexed
+        const day = today.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    // Set today's date as the minimum date
+    const todayDate = getTodayDate();
+
     const [showAddRoom, setShowAddRoom] = useState(false);
     const [showCustomerDetails, setShowCustomerDetails] = useState(false);
     const [showEditCustomerDetails, setShowEditCustomerDetails] =
         useState(false);
-    const [isEarlyCheckIn, setIsEarlyCheckIn] = useState(false);
-    const [isEarlyCheckOut, setIsEarlyCheckOut] = useState(false);
 
     const [nightCount, setNightCount] = useState(0);
 
@@ -58,17 +68,21 @@ function AddReservation() {
         specialRequest: '',
         specialRemark: '',
         roomDetails: [],
-        paymentDetails: null
+        paymentDetails: {
+            paymentType: '',
+            rate: 0.0,
+            cardHolderName: '',
+        },
+        isComplimentary: false,
     });
 
-    const [totalAmount, setTotalAmount] = useState('0.00');
+    const [totalAmount, setTotalAmount] = useState(0.0);
+    const [taxAmount, setTaxAmount] = useState(800.0);
 
     useEffect(() => {
-        const newTotalRate = formData.roomDetails
-            .reduce((total, room) => {
-                return total + parseFloat(room.rate);
-            }, 0.0)
-            .toFixed(2);
+        const newTotalRate = formData.roomDetails.reduce((total, room) => {
+            return total + parseFloat(room.rate);
+        }, 0.0);
 
         setTotalAmount(newTotalRate);
     }, [formData.roomDetails]);
@@ -91,10 +105,10 @@ function AddReservation() {
     function handleSubmit(e) {
         e.preventDefault();
         console.log(formData, '=========');
-        dispatch({
-            type: actions.RESER_ADD,
-            payload: formData,
-        });
+        // dispatch({
+        //     type: actions.RESER_ADD,
+        //     payload: formData,
+        // });
     }
 
     return (
@@ -139,6 +153,7 @@ function AddReservation() {
                                                             onChange={
                                                                 handleInputChange
                                                             }
+                                                            min={todayDate}
                                                         />
                                                     </div>
                                                 </div>
@@ -170,6 +185,9 @@ function AddReservation() {
                                                             }
                                                             onChange={
                                                                 handleInputChange
+                                                            }
+                                                            min={
+                                                                formData.checkInDate
                                                             }
                                                         />
                                                     </div>
@@ -338,7 +356,7 @@ function AddReservation() {
                                             ),
                                         )}
                                         <div className="custom-row">
-                                            <div className="td-custom td-custom-p pt-0">
+                                            <div className="pt-0 d-flex align-items-center gap-4">
                                                 <div className="button-container">
                                                     <button
                                                         className="btn btn-sm btn-secondary"
@@ -351,6 +369,26 @@ function AddReservation() {
                                                         </span>
                                                         Room
                                                     </button>
+                                                </div>
+                                                <div className="pt-0 form-group d-flex gap-2 align-items-center">
+                                                    <input
+                                                        type="checkbox"
+                                                        name="isComplimentary"
+                                                        id="complimentary"
+                                                        className="custom-input"
+                                                        value={
+                                                            formData.isComplimentary
+                                                        }
+                                                        onChange={
+                                                            handleInputChange
+                                                        }
+                                                    />
+                                                    <label
+                                                        htmlFor="isComplimentary"
+                                                        className=" m-0 body-2"
+                                                    >
+                                                        Complimentary Room
+                                                    </label>
                                                 </div>
                                             </div>
                                         </div>
@@ -420,16 +458,16 @@ function AddReservation() {
             <div className="col-4">
                 <>
                     <div className="card m-0">
-                        <div
-                            className="card-body y_scrolling"
-                            style={{
-                                maxHeight: 'calc(100vh - 194px)',
-                            }}
+                        <form
+                            method="post"
+                            encType="multipart/form-data"
+                            onSubmit={handleSubmit}
                         >
-                            <form
-                                method="post"
-                                encType="multipart/form-data"
-                                onSubmit={handleSubmit}
+                            <div
+                                className="card-body y_scrolling"
+                                style={{
+                                    maxHeight: 'calc(100vh - 194px)',
+                                }}
                             >
                                 {/* <div className="row mt-3">
                                     <div className="col-12">
@@ -658,89 +696,143 @@ function AddReservation() {
                                         </div>
                                     </div>
                                 </div>
-                            </form>
-                            <div className="row mx-0 my-1 border rounded p-2 text-end">
-                                <div className="col-12">
-                                    <div className="row my-2">
-                                        <div className="col-8">
-                                            <p className="body-2 m-0">
-                                                Room Charges
-                                            </p>
+
+                                <div className="row mx-0 my-1 border rounded p-2 text-end">
+                                    <div className="col-12">
+                                        <div className="row my-2">
+                                            <div className="col-8">
+                                                <p className="body-2 m-0">
+                                                    Room Charges
+                                                </p>
+                                            </div>
+                                            <div className="col-4">
+                                                <p className="subtitle-2m m-0">
+                                                    ₹{parseFloat(totalAmount)}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div className="col-4">
-                                            <p className="subtitle-2m m-0">
-                                                ₹{totalAmount}
-                                            </p>
+                                        <div className="row my-2">
+                                            <div className="col-8">
+                                                <p className="body-2 m-0">
+                                                    Taxes
+                                                </p>
+                                            </div>
+                                            <div className="col-4">
+                                                <p className="body-2 subtitle-2m m-0">
+                                                    ₹{parseFloat(taxAmount)}
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="row my-2">
-                                        <div className="col-8">
-                                            <p className="body-2 m-0">Taxes</p>
+                                        <div className="row my-2">
+                                            <div className="col-8">
+                                                <p className="body-2 primary-colori m-0">
+                                                    Total Amount
+                                                </p>
+                                            </div>
+                                            <div className="col-4">
+                                                <p className="subtitle-2m primary-colori m-0">
+                                                    ₹
+                                                    {parseFloat(totalAmount) +
+                                                        parseFloat(taxAmount)}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div className="col-4">
-                                            <p className="body-2 subtitle-2m m-0">
-                                                ₹800.00
-                                            </p>
+                                        <div className="row my-2 align-items-center">
+                                            <div className="col-8 d-flex justify-content-end gap-2 align-items-center">
+                                                <button
+                                                    className="btn payment-button btn-primary"
+                                                    onClick={() =>
+                                                        setOpen(true)
+                                                    }
+                                                >
+                                                    Add Payment
+                                                </button>
+                                                <p className="body-2 m-0">
+                                                    Advance Recieved
+                                                </p>
+                                            </div>
+                                            <div className="col-4">
+                                                {formData.paymentDetails
+                                                    ?.paymentType &&
+                                                formData.paymentDetails
+                                                    ?.rate ? (
+                                                    <p className="subtitle-2m m-0">
+                                                        (
+                                                        {
+                                                            formData
+                                                                .paymentDetails
+                                                                ?.paymentType
+                                                        }
+                                                        )-₹
+                                                        {
+                                                            formData
+                                                                .paymentDetails
+                                                                ?.rate
+                                                        }
+                                                    </p>
+                                                ) : (
+                                                    <p className="subtitle-2m m-0">
+                                                        ₹0
+                                                    </p>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="row my-2">
-                                        <div className="col-8">
-                                            <p className="body-2 primary-colori m-0">
-                                                Total Amount
-                                            </p>
-                                        </div>
-                                        <div className="col-4">
-                                            <p className="subtitle-2m primary-colori m-0">
-                                                ₹{totalAmount}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="row my-2 align-items-center">
-                                        <div className="col-8 d-flex justify-content-end gap-2 align-items-center">
-                                            <button
-                                                className="btn payment-button btn-primary"
-                                                onClick={() => setOpen(true)}
-                                            >
-                                                Add Payment
-                                            </button>
-                                            <p className="body-2 m-0">
-                                                Advance Recieved
-                                            </p>
-                                        </div>
-                                        <div className="col-4">
-                                            <p className="subtitle-2m m-0">
-                                                ₹1000.00
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="row my-2">
-                                        <div className="col-8">
-                                            <p className="body-2 pay-color m-0">
-                                                Due Amount
-                                            </p>
-                                        </div>
-                                        <div className="col-4">
-                                            <p className="subtitle-2m red m-0">
-                                                ₹{totalAmount}
-                                            </p>
+                                        <div className="row my-2">
+                                            <div className="col-8">
+                                                <p className="body-2 pay-color m-0">
+                                                    Due Amount
+                                                </p>
+                                            </div>
+                                            <div className="col-4">
+                                                {formData.paymentDetails
+                                                    ?.rate ? (
+                                                    <p className="subtitle-2m red m-0">
+                                                        ₹
+                                                        {parseFloat(
+                                                            totalAmount,
+                                                        ) -
+                                                            parseFloat(
+                                                                formData
+                                                                    .paymentDetails
+                                                                    .rate,
+                                                            ) +
+                                                            parseFloat(
+                                                                taxAmount,
+                                                            )}
+                                                    </p>
+                                                ) : (
+                                                    <p className="subtitle-2m red m-0">
+                                                        ₹
+                                                        {parseFloat(
+                                                            totalAmount,
+                                                        ) +
+                                                            parseFloat(
+                                                                taxAmount,
+                                                            )}
+                                                    </p>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="card-footer">
-                            <button
-                                type="button"
-                                className="btn btn-outline"
-                                data-bs-dismiss="modal"
-                            >
-                                Cancel
-                            </button>
-                            <button type="submit" className="btn btn-primary">
-                                Save
-                            </button>
-                        </div>
+                            <div className="card-footer">
+                                <button
+                                    type="button"
+                                    className="btn btn-outline"
+                                    data-bs-dismiss="modal"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary"
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        </form>
                     </div>
                     {showCustomerDetails && (
                         <AddCustomerDetails
@@ -768,7 +860,14 @@ function AddReservation() {
                     )}
                 </>
             </div>
-            {open && <PaymentMdl open={open} setOpen={setOpen} />}
+            {open && (
+                <PaymentMdl
+                    open={open}
+                    setOpen={setOpen}
+                    formData={formData}
+                    setFormData={setFormData}
+                />
+            )}
         </div>
     );
 }

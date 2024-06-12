@@ -11,29 +11,29 @@ class RoomBookingMaster extends BaseModel
     public $timestamps = true;
     protected $connection = 'ihotel';
 
-    protected $fillable = [
-        'hotel_id',
-        'fy_id',
-        'group_id',
-        'guest_id',
-        'frm_dt',
-        'to_dt',
-        'block_type',
-        'block_status',
-        'nor',
-        'non',
-        'bsns_src_id',
-        'booking_src_id',
-        'guest_name',
-        'guest_mobile',
-        'guest_json',
-        'room_json',
-        'pax_json',
-        'sp_req_json',
-        'sp_remarks',
-        'created_by',
-        'updated_by',
-    ];
+    // protected $fillable = [
+    //     'hotel_id',
+    //     'fy_id',
+    //     'group_id',
+    //     'guest_id',
+    //     'frm_dt',
+    //     'to_dt',
+    //     'block_type',
+    //     'block_status',
+    //     'nor',
+    //     'non',
+    //     'bsns_src_id',
+    //     'booking_src_id',
+    //     'guest_name',
+    //     'guest_mobile',
+    //     'guest_json',
+    //     'room_json',
+    //     'pax_json',
+    //     'sp_req_json',
+    //     'sp_remarks',
+    //     'created_by',
+    //     'updated_by',
+    // ];
 
     protected $casts = [
         'frm_dt' => 'date',

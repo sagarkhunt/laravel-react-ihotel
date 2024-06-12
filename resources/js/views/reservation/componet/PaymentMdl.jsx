@@ -1,7 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from '../../../components/common/Modal';
 
-function PaymentMdl({ open, setOpen }) {
+function PaymentMdl({ open, setOpen, setFormData, formData }) {
+    const paymentDetails = structuredClone(formData.paymentDetails);
+    const [pmtDtls, setPmtDtls] = useState(paymentDetails);
+
+    const handleChange = (e) => {
+        setPmtDtls({
+            ...pmtDtls,
+            [e.target.name]: e.target.value,
+        });
+    };
+
     return (
         <Modal open={open} handleModal={() => setOpen(!open)}>
             <div
@@ -32,7 +42,10 @@ function PaymentMdl({ open, setOpen }) {
                                     className="btn-close"
                                     data-bs-dismiss="modal"
                                     aria-label="Close"
-                                    onClick={() => setOpen(false)}
+                                    onClick={() => {
+                                        setPmtDtls(null);
+                                        setOpen(false);
+                                    }}
                                 ></button>
                             </div>
                         </div>
@@ -46,13 +59,19 @@ function PaymentMdl({ open, setOpen }) {
                                         >
                                             Payment Type
                                         </label>
-                                        <select className="form-select custom-input-lg">
-                                            <option selected>
+                                        <select
+                                            className="form-select custom-input-lg"
+                                            name="paymentType"
+                                            value={pmtDtls?.paymentType}
+                                            onChange={handleChange}
+                                            required
+                                        >
+                                            <option selected value="">
                                                 Select Payment Type
                                             </option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            <option value="Cash">Cash</option>
+                                            <option value="UPI">UPI</option>
+                                            <option value="Card">Card</option>
                                         </select>
                                     </div>
                                 </div>
@@ -69,6 +88,10 @@ function PaymentMdl({ open, setOpen }) {
                                             className="form-control custom-input-lg"
                                             id="customInput"
                                             placeholder="Card Holder Name"
+                                            name="cardHolderName"
+                                            value={pmtDtls?.cardHolderName}
+                                            onChange={handleChange}
+                                            required
                                         />
                                     </div>
                                 </div>
@@ -85,6 +108,10 @@ function PaymentMdl({ open, setOpen }) {
                                             className="form-control custom-input-lg"
                                             id="customInput"
                                             placeholder="12000"
+                                            name="rate"
+                                            value={pmtDtls?.rate}
+                                            onChange={handleChange}
+                                            required
                                         />
                                     </div>
                                 </div>
@@ -94,11 +121,24 @@ function PaymentMdl({ open, setOpen }) {
                             <button
                                 type="button"
                                 className="btn btn-outline"
-                                onClick={() => setOpen(false)}
+                                onClick={() => {
+                                    setPmtDtls(null);
+                                    setOpen(false);
+                                }}
                             >
                                 Close
                             </button>
-                            <button type="button" className="btn btn-primary">
+                            <button
+                                type="submit"
+                                className="btn btn-primary"
+                                onClick={() => {
+                                    setFormData({
+                                        ...formData,
+                                        paymentDetails: pmtDtls,
+                                    });
+                                    setOpen(false);
+                                }}
+                            >
                                 Save
                             </button>
                         </div>
