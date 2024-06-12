@@ -105,10 +105,10 @@ function AddReservation() {
     function handleSubmit(e) {
         e.preventDefault();
         console.log(formData, '=========');
-        dispatch({
-            type: actions.RESER_ADD,
-            payload: formData,
-        });
+        // dispatch({
+        //     type: actions.RESER_ADD,
+        //     payload: formData,
+        // });
     }
 
     return (
@@ -458,16 +458,16 @@ function AddReservation() {
             <div className="col-4">
                 <>
                     <div className="card m-0">
-                        <div
-                            className="card-body y_scrolling"
-                            style={{
-                                maxHeight: 'calc(100vh - 194px)',
-                            }}
+                        <form
+                            method="post"
+                            encType="multipart/form-data"
+                            onSubmit={handleSubmit}
                         >
-                            <form
-                                method="post"
-                                encType="multipart/form-data"
-                                onSubmit={handleSubmit}
+                            <div
+                                className="card-body y_scrolling"
+                                style={{
+                                    maxHeight: 'calc(100vh - 194px)',
+                                }}
                             >
                                 {/* <div className="row mt-3">
                                     <div className="col-12">
@@ -696,122 +696,143 @@ function AddReservation() {
                                         </div>
                                     </div>
                                 </div>
-                            </form>
-                            <div className="row mx-0 my-1 border rounded p-2 text-end">
-                                <div className="col-12">
-                                    <div className="row my-2">
-                                        <div className="col-8">
-                                            <p className="body-2 m-0">
-                                                Room Charges
-                                            </p>
-                                        </div>
-                                        <div className="col-4">
-                                            <p className="subtitle-2m m-0">
-                                                ₹{parseFloat(totalAmount)}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="row my-2">
-                                        <div className="col-8">
-                                            <p className="body-2 m-0">Taxes</p>
-                                        </div>
-                                        <div className="col-4">
-                                            <p className="body-2 subtitle-2m m-0">
-                                                ₹{parseFloat(taxAmount)}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="row my-2">
-                                        <div className="col-8">
-                                            <p className="body-2 primary-colori m-0">
-                                                Total Amount
-                                            </p>
-                                        </div>
-                                        <div className="col-4">
-                                            <p className="subtitle-2m primary-colori m-0">
-                                                ₹
-                                                {parseFloat(totalAmount) +
-                                                    parseFloat(taxAmount)}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="row my-2 align-items-center">
-                                        <div className="col-8 d-flex justify-content-end gap-2 align-items-center">
-                                            <button
-                                                className="btn payment-button btn-primary"
-                                                onClick={() => setOpen(true)}
-                                            >
-                                                Add Payment
-                                            </button>
-                                            <p className="body-2 m-0">
-                                                Advance Recieved
-                                            </p>
-                                        </div>
-                                        <div className="col-4">
-                                            {formData.paymentDetails
-                                                ?.paymentType && formData.paymentDetails?.rate ? (
+
+                                <div className="row mx-0 my-1 border rounded p-2 text-end">
+                                    <div className="col-12">
+                                        <div className="row my-2">
+                                            <div className="col-8">
+                                                <p className="body-2 m-0">
+                                                    Room Charges
+                                                </p>
+                                            </div>
+                                            <div className="col-4">
                                                 <p className="subtitle-2m m-0">
-                                                    (
-                                                    {
-                                                        formData.paymentDetails
-                                                            ?.paymentType
-                                                    }
-                                                    )-₹
-                                                    {
-                                                        formData.paymentDetails
-                                                            ?.rate
-                                                    }
+                                                    ₹{parseFloat(totalAmount)}
                                                 </p>
-                                            ) : (
-                                                <p className="subtitle-2m m-0">
-                                                    ₹0
-                                                </p>
-                                            )}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="row my-2">
-                                        <div className="col-8">
-                                            <p className="body-2 pay-color m-0">
-                                                Due Amount
-                                            </p>
-                                        </div>
-                                        <div className="col-4">
-                                            {formData.paymentDetails?.rate ? (
-                                                <p className="subtitle-2m red m-0">
-                                                    ₹
-                                                    {parseFloat(totalAmount) -
-                                                        parseFloat(
-                                                            formData
-                                                                .paymentDetails
-                                                                .rate,
-                                                        ) +
-                                                        parseFloat(taxAmount)}
+                                        <div className="row my-2">
+                                            <div className="col-8">
+                                                <p className="body-2 m-0">
+                                                    Taxes
                                                 </p>
-                                            ) : (
-                                                <p className="subtitle-2m red m-0">
+                                            </div>
+                                            <div className="col-4">
+                                                <p className="body-2 subtitle-2m m-0">
+                                                    ₹{parseFloat(taxAmount)}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="row my-2">
+                                            <div className="col-8">
+                                                <p className="body-2 primary-colori m-0">
+                                                    Total Amount
+                                                </p>
+                                            </div>
+                                            <div className="col-4">
+                                                <p className="subtitle-2m primary-colori m-0">
                                                     ₹
                                                     {parseFloat(totalAmount) +
                                                         parseFloat(taxAmount)}
                                                 </p>
-                                            )}
+                                            </div>
+                                        </div>
+                                        <div className="row my-2 align-items-center">
+                                            <div className="col-8 d-flex justify-content-end gap-2 align-items-center">
+                                                <button
+                                                    className="btn payment-button btn-primary"
+                                                    onClick={() =>
+                                                        setOpen(true)
+                                                    }
+                                                >
+                                                    Add Payment
+                                                </button>
+                                                <p className="body-2 m-0">
+                                                    Advance Recieved
+                                                </p>
+                                            </div>
+                                            <div className="col-4">
+                                                {formData.paymentDetails
+                                                    ?.paymentType &&
+                                                formData.paymentDetails
+                                                    ?.rate ? (
+                                                    <p className="subtitle-2m m-0">
+                                                        (
+                                                        {
+                                                            formData
+                                                                .paymentDetails
+                                                                ?.paymentType
+                                                        }
+                                                        )-₹
+                                                        {
+                                                            formData
+                                                                .paymentDetails
+                                                                ?.rate
+                                                        }
+                                                    </p>
+                                                ) : (
+                                                    <p className="subtitle-2m m-0">
+                                                        ₹0
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div className="row my-2">
+                                            <div className="col-8">
+                                                <p className="body-2 pay-color m-0">
+                                                    Due Amount
+                                                </p>
+                                            </div>
+                                            <div className="col-4">
+                                                {formData.paymentDetails
+                                                    ?.rate ? (
+                                                    <p className="subtitle-2m red m-0">
+                                                        ₹
+                                                        {parseFloat(
+                                                            totalAmount,
+                                                        ) -
+                                                            parseFloat(
+                                                                formData
+                                                                    .paymentDetails
+                                                                    .rate,
+                                                            ) +
+                                                            parseFloat(
+                                                                taxAmount,
+                                                            )}
+                                                    </p>
+                                                ) : (
+                                                    <p className="subtitle-2m red m-0">
+                                                        ₹
+                                                        {parseFloat(
+                                                            totalAmount,
+                                                        ) +
+                                                            parseFloat(
+                                                                taxAmount,
+                                                            )}
+                                                    </p>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="card-footer">
-                            <button
-                                type="button"
-                                className="btn btn-outline"
-                                data-bs-dismiss="modal"
-                            >
-                                Cancel
-                            </button>
-                            <button type="submit" className="btn btn-primary">
-                                Save
-                            </button>
-                        </div>
+                            <div className="card-footer">
+                                <button
+                                    type="button"
+                                    className="btn btn-outline"
+                                    data-bs-dismiss="modal"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary"
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        </form>
                     </div>
                     {showCustomerDetails && (
                         <AddCustomerDetails

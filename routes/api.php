@@ -147,4 +147,10 @@ Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' =
     Route::POST('cr_mkrt_sgmt', 'HotelMrktSegmentController@createMarketSegment');
     Route::POST('upd_mkrt_sgmt', 'HotelMrktSegmentController@updateMarketSegment');
     Route::POST('del_mkrt_sgmt', 'HotelMrktSegmentController@deleteMarketSegment');
+
+    #ID Type Master
+    Route::POST('get_idtype', 'HotelIdTypeController@getIdType');
+    Route::POST('cr_idtype', 'HotelIdTypeController@createIdType');
+    Route::POST('upd_idtype', 'HotelIdTypeController@updateIdType');
+    Route::POST('del_idtype', 'HotelIdTypeController@deleteIdType');
 });
