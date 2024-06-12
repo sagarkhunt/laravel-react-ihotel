@@ -421,7 +421,8 @@ function Navbar() {
                                                                 className="nav-item"
                                                                 data-bs-dismiss="offcanvas"
                                                             >
-                                                                Terms & Condition
+                                                                Terms &
+                                                                Condition
                                                             </span>
                                                         </Link>
                                                     </li>
@@ -669,6 +670,25 @@ function Navbar() {
                                                                 data-bs-dismiss="offcanvas"
                                                             >
                                                                 Market Segment
+                                                            </span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="col-12 grid_padding">
+                                                        <Link
+                                                            className={`nav-sub-box cp ${activeLink === '/id_type' ? 'active' : ''}`}
+                                                            to="/id_type"
+                                                            onClick={() =>
+                                                                handleLinkClick(
+                                                                    '/id_type',
+                                                                )
+                                                            }
+                                                        >
+                                                            <span
+                                                                type="button"
+                                                                className="nav-item"
+                                                                data-bs-dismiss="offcanvas"
+                                                            >
+                                                                ID Type
                                                             </span>
                                                         </Link>
                                                     </li>
