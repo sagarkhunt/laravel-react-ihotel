@@ -23,7 +23,7 @@ function CreateEditIDTypeMdl({
     // Effect to update form data when idTypeData prop changes
     useEffect(() => {
         if (mode === 'Edit ID Type') {
-            setStatusValue(idTypeData.status);
+            setStatusValue(idTypeData?.status);
 
             // Create a new object with idTypeData,
             const updatedFormData = {
@@ -71,14 +71,11 @@ function CreateEditIDTypeMdl({
                                 value="0"
                             />
                             <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5
-                                        className="modal-title"
-                                        id="modalTitle"
-                                    >
+                                <div className="modal-header d-flex justify-content-between align-items-center">
+                                    <h5 className="modal-title" id="modalTitle">
                                         {mode}
                                     </h5>
-                                    <div className="d-flex gap-4 align-items-right">
+                                    <div className="d-flex gap-4 align-items-center">
                                         {mode === 'Edit ID Type' ? (
                                             <div className="d-flex gap-4 align-items-center">
                                                 <div

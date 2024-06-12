@@ -231,7 +231,7 @@ function IDType() {
                         setOpen={setOpen}
                         mode={mode}
                         onSubmit={handleSubmit}
-                        userData={idTypeData}
+                        idTypeData={idTypeData}
                         statusValue={statusValue}
                         setStatusValue={setStatusValue}
                     />
