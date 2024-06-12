@@ -640,6 +640,22 @@ body {
     min-height: 32px;
 }
 
+/* for dropdown menu in reservastion list */
+.dropdown-reservation_list {
+    display: flex !important;
+    /* width: 32px; */
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    font-family: var(--main-font) !important;
+    background-color: #fff !important;
+    font-weight: 400 !important;
+}
+.dropdown-reservation_list:hover {
+    background-color: var(--primary-color100) !important;
+    color: var(--primary-color600) !important;
+}
+
 /* Custom styles for input label */
 .custom-label {
     /* overflow: hidden; */
