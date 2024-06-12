@@ -164,7 +164,6 @@ class HotelReservationController extends BaseApiController
     // }
     public function createReservation(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'frm_dt' => 'required|date',
             'to_dt' => 'required|date',
@@ -184,6 +183,7 @@ class HotelReservationController extends BaseApiController
         try {
             $user = Auth::user();
             $user_id = $user->id;
+
             $hotel_id = $user->hotel_id;
             Helper::change_database_using_hotel_id($hotel_id);
 
@@ -304,6 +304,7 @@ class HotelReservationController extends BaseApiController
 
         $rbm_id = $request->input('rbm_id');
         $booking = RoomBookingMaster::find($rbm_id);
+
 
         if (!$booking) {
             return $this->sendError("Reservation not found.");
