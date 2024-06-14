@@ -168,7 +168,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Spatie\LaravelIgnition\IgnitionServiceProvider::class,
+        // Spatie\LaravelIgnition\IgnitionServiceProvider::class,
     ])->toArray(),
 
     /*
