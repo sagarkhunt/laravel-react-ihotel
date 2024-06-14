@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
 import AssignRoomMdl from './AssignRoomMdl';
+import { Link } from 'react-router-dom';
 
-function BookingCard({ booking }) {
+function BookingCard({
+    booking,
+    index,
+    openDropdownIndex,
+    setOpenDropdownIndex,
+}) {
     const [open, setOpen] = useState(false);
     const openAssignRoom = () => {
         setOpen(true);
+    };
+
+    const toggleDropdown = () => {
+        setOpenDropdownIndex(openDropdownIndex === index ? null : index);
     };
     return (
         <div className="col-3">
@@ -18,9 +28,51 @@ function BookingCard({ booking }) {
                         </div>
                     </div>
                     <div className="col-2 align-items-center">
-                        <span className="material-icons-outlined">
-                            more_vert
-                        </span>
+                        <div className="dropdown">
+                            <span
+                                className="material-icons-outlined"
+                                onClick={toggleDropdown} // Passing index here
+                                style={{ cursor: 'pointer' }}
+                            >
+                                more_vert
+                            </span>
+                            {openDropdownIndex === index && (
+                                <div className="dropdown-menu-re show">
+                                    <div className="px-3 py-4 dropdown-reservation_list">
+                                        <Link
+                                            className="dropdown-item subtitle-2m"
+                                            href="#"
+                                        >
+                                            <span
+                                                className="material-icons-outlined me-2"
+                                                style={{
+                                                    cursor: 'pointer',
+                                                }}
+                                            >
+                                                print
+                                            </span>
+                                            Print GRC
+                                        </Link>
+                                    </div>
+                                    <div className="px-3 py-4 dropdown-reservation_list">
+                                        <Link
+                                            className="dropdown-item subtitle-2m"
+                                            href="#"
+                                        >
+                                            <span
+                                                className="material-icons-outlined me-2"
+                                                style={{
+                                                    cursor: 'pointer',
+                                                }}
+                                            >
+                                                exit_to_app
+                                            </span>
+                                            Check In
+                                        </Link>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 

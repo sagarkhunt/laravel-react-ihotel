@@ -153,4 +153,7 @@ Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' =
     Route::POST('cr_idtype', 'HotelIdTypeController@createIdType');
     Route::POST('upd_idtype', 'HotelIdTypeController@updateIdType');
     Route::POST('del_idtype', 'HotelIdTypeController@deleteIdType');
+
+    #House Keeping
+    Route::get('get_cate_room', 'HouseKeepingController@getCateRoom');
 });
