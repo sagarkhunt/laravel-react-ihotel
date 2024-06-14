@@ -4,10 +4,17 @@ import '../../../css/AddReservation.css';
 import { useNavigate } from 'react-router-dom';
 
 import actions from '../../redux/Reservation/actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AddCustomerDetails from './componet/AddCustomerDetails';
 import AddRoom from './componet/AddRoom';
 import EditCustomerDetails from './componet/EditCustomerDetails';
+
+import businessActions from '../../redux/BusinessSource/actions';
+import marketSegmentActions from '../../redux/MarketSegment/actions';
+import bookingSourceActions from '../../redux/BookingSource/actions';
+import salesPersonActions from '../../redux/SalesPerson/actions';
+import cancellationPolicyActions from '../../redux/CancellPolicy/actions';
+import termsAndConditionsActions from '../../redux/TermConition/actions';
 
 function AddReservation() {
     const navigate = useNavigate();
@@ -57,14 +64,13 @@ function AddReservation() {
         checkOutDate: '',
         checkInTime: '12:00:00',
         checkOutTime: '10:00:00',
-        reservationType: '1',
-        bookingSource: '1',
-        marketSegment: '1',
-        salesPerson: '1',
-        businessSource: '1',
+        bookingSource: '',
+        marketSegment: '',
+        salesPerson: '',
+        businessSource: '',
         customerDetails: null,
-        cancellationPolicy: '1',
-        termsAndConditions: '1',
+        cancellationPolicy: '',
+        termsAndConditions: '',
         specialRequest: '',
         specialRemark: '',
         roomDetails: [],
@@ -110,6 +116,12 @@ function AddReservation() {
         //     payload: formData,
         // });
     }
+
+    useEffect(() => {
+        dispatch({
+            type: businessActions.BUSINESS_LIST,
+        });
+    }, []);
 
     return (
         <div className="row row mt-3 mx-2">
@@ -202,21 +214,16 @@ function AddReservation() {
                                                 Booking Source
                                             </label>
                                         </div>
-                                        <div className="">
-                                            <select
-                                                className="form-select custom-input-lg"
-                                                id="bookingSourceDropdown"
-                                                name="bookingSource"
-                                                value={formData.bookingSource}
-                                                onChange={handleInputChange}
-                                            >
-                                                <option value="1">
-                                                    Direct
-                                                </option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                            </select>
-                                        </div>
+
+                                        <select
+                                            className="form-select custom-input-lg"
+                                            id="bookingSourceDropdown"
+                                            name="bookingSource"
+                                            value={formData.bookingSource}
+                                            onChange={handleInputChange}
+                                        >
+                                            <option value="">Select</option>
+                                        </select>
                                     </div>
                                 </div>
 
@@ -235,11 +242,7 @@ function AddReservation() {
                                                 value={formData.businessSource}
                                                 onChange={handleInputChange}
                                             >
-                                                <option value="1">
-                                                    Select
-                                                </option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
+                                                <option value="">Select</option>
                                             </select>
                                         </div>
                                     </div>
@@ -257,11 +260,7 @@ function AddReservation() {
                                                 value={formData.salesPerson}
                                                 onChange={handleInputChange}
                                             >
-                                                <option value="1">
-                                                    Select
-                                                </option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
+                                                <option value="">Select</option>
                                             </select>
                                         </div>
                                     </div>
@@ -279,11 +278,7 @@ function AddReservation() {
                                                 value={formData.marketSegment}
                                                 onChange={handleInputChange}
                                             >
-                                                <option value="1">
-                                                    Select
-                                                </option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
+                                                <option value="">Select</option>
                                             </select>
                                         </div>
                                     </div>
@@ -412,9 +407,7 @@ function AddReservation() {
                                             value={formData.cancellationPolicy}
                                             onChange={handleInputChange}
                                         >
-                                            <option value="1">Policy 1</option>
-                                            <option value="2">Policy 2</option>
-                                            <option value="3">Policy 3</option>
+                                            <option value="">Select</option>
                                         </select>
                                     </div>
                                 </div>
@@ -432,11 +425,7 @@ function AddReservation() {
                                             value={formData.termsAndConditions}
                                             onChange={handleInputChange}
                                         >
-                                            <option value="1">
-                                                Terms & Conditions
-                                            </option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
+                                            <option value="">Select</option>
                                         </select>
                                     </div>
                                 </div>
