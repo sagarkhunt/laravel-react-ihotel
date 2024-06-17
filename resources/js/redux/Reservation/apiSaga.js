@@ -150,6 +150,37 @@ function* deleteReservation(action) {
         }
     }
 }
+/**
+ *
+ * @param {dropownList} action
+ */
+function* dropownList(action) {
+    try {
+        const response = yield call(
+            postRequest,
+            'get_login_sync',
+            action.payload,
+        );
+        if (response) {
+            yield put({
+                type: actions.RESER_DROPDOWN_LIST_SUCCESS,
+                payload: response.data,
+            });
+        }
+    } catch (error) {
+        yield put({ type: actions.RESER_DROPDOWN_LIST_FAILURE });
+        if (error.response.status === 401) {
+            message.error(error.response.data.message);
+        } else if (
+            error.response &&
+            error.response.data &&
+            error.response.data.message
+        ) {
+            toast.error(error.response.data.message);
+            message.error(error.response.data.message);
+        }
+    }
+}
 
 export default function* rootSaga() {
     yield all([
@@ -157,5 +188,6 @@ export default function* rootSaga() {
         takeLatest(actions.RESER_ADD, createReservation),
         takeLatest(actions.RESER_UPDATE, updateReservation),
         takeLatest(actions.RESER_DELETE, deleteReservation),
+        takeLatest(actions.RESER_DROPDOWN_LIST, dropownList)
     ]);
 }

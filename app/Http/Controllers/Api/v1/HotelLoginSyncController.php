@@ -13,7 +13,10 @@ use App\Models\RoomMaster;
 use App\Models\RoomPlanMaster;
 use App\Models\RoomViewMaster;
 use App\Models\SalesPersonMaster;
+use App\Models\MarketSegmentMaster;
 use App\Models\SectionMaster;
+use App\Models\TNCMaster;
+use App\Models\CPMaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -109,11 +112,26 @@ class HotelLoginSyncController extends BaseApiController
                 }
                 if (in_array("mrkt_sgmnt", $sync_req)) {
 
-                    $get_mrkt_sgmnt = SalesPersonMaster::where('hotel_id', $hotel_id)
-                        ->select('id', 'name')
+                    $get_mrkt_sgmnt = MarketSegmentMaster::where('hotel_id', $hotel_id)
                         ->get();
 
                     $data['mrkt_sgmnt'] = $get_mrkt_sgmnt;
+                }
+                if (in_array("tnc", $sync_req)) {
+
+                    $get_tnc = TNCMaster::where('hotel_id', $hotel_id)
+                        ->select('id', 'tnc_name')
+                        ->get();
+
+                    $data['tnc'] = $get_tnc;
+                }
+                if (in_array("cp", $sync_req)) {
+
+                    $get_cp = CPMaster::where('hotel_id', $hotel_id)
+                        ->select('id', 'cp_name')
+                        ->get();
+
+                    $data['cp'] = $get_cp;
                 }
                 return $this->sendResponse($data, "");
             } else {

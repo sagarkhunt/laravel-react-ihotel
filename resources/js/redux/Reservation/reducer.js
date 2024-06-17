@@ -8,6 +8,7 @@ const initialStates = {
     resCreated: {},
     reserUpdate: {},
     reserDelete: {},
+    dropDownList: {},
 };
 
 function Reducer(state = initialStates, action) {
@@ -54,6 +55,17 @@ function Reducer(state = initialStates, action) {
             };
         case actions.RESER_DELETE_FAILURE:
             return { ...state, reserDelete: {}, loader: false };
+        /**Dropdown List */
+        case actions.RESER_DROPDOWN_LIST:
+            return { ...state, loader: true };
+        case actions.RESER_DROPDOWN_LIST_SUCCESS:
+            return {
+                ...state,
+                dropDownList: action.payload,
+                loader: false,
+            };
+        case actions.RESER_DROPDOWN_LIST_FAILURE:
+            return { ...state, dropDownList: {}, loader: false };
         default:
             return state;
     }

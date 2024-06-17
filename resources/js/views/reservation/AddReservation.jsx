@@ -4,17 +4,11 @@ import '../../../css/AddReservation.css';
 import { useNavigate } from 'react-router-dom';
 
 import actions from '../../redux/Reservation/actions';
+
 import { useDispatch, useSelector } from 'react-redux';
 import AddCustomerDetails from './componet/AddCustomerDetails';
 import AddRoom from './componet/AddRoom';
 import EditCustomerDetails from './componet/EditCustomerDetails';
-
-import businessActions from '../../redux/BusinessSource/actions';
-import marketSegmentActions from '../../redux/MarketSegment/actions';
-import bookingSourceActions from '../../redux/BookingSource/actions';
-import salesPersonActions from '../../redux/SalesPerson/actions';
-import cancellationPolicyActions from '../../redux/CancellPolicy/actions';
-import termsAndConditionsActions from '../../redux/TermConition/actions';
 
 function AddReservation() {
     const navigate = useNavigate();
@@ -54,54 +48,54 @@ function AddReservation() {
         guestClass: '',
         mobileNo: '',
         email: '',
-        county: '',
+        country: '',
         state: '',
         city: '',
         zipCode: '',
     });
     const [formData, setFormData] = useState({
-        checkInDate: '',
-        checkOutDate: '',
+        frm_dt: '',
+        to_dt: '',
         checkInTime: '12:00:00',
         checkOutTime: '10:00:00',
-        bookingSource: '',
-        marketSegment: '',
-        salesPerson: '',
-        businessSource: '',
+        booking_src_id: '',
+        mrkt_sgmnt_id: '',
+        sls_prsn_id: '',
+        bsns_src_id: '',
         customerDetails: null,
-        cancellationPolicy: '',
-        termsAndConditions: '',
-        specialRequest: '',
-        specialRemark: '',
-        roomDetails: [],
-        paymentDetails: {
-            paymentType: '',
-            rate: 0.0,
-            cardHolderName: '',
+        cncl_policy_id: '',
+        terms_con_id: '',
+        sp_req_json: '',
+        sp_remarks: '',
+        room_json: [],
+        payment_json: {
+            pay_type: '',
+            pay_amnt: 0.0,
+            ref_name: '',
         },
-        isComplimentary: false,
+        com_rm_status: false,
     });
 
     const [totalAmount, setTotalAmount] = useState(0.0);
     const [taxAmount, setTaxAmount] = useState(800.0);
 
     useEffect(() => {
-        const newTotalRate = formData.roomDetails.reduce((total, room) => {
-            return total + parseFloat(room.rate);
+        const newTotalRate = formData.room_json.reduce((total, room) => {
+            return total + parseFloat(room.pay_amnt);
         }, 0.0);
 
         setTotalAmount(newTotalRate);
-    }, [formData.roomDetails]);
+    }, [formData.room_json]);
 
     useEffect(() => {
-        if (formData.checkInDate && formData.checkOutDate) {
-            const checkInDate = new Date(formData.checkInDate);
-            const checkOutDate = new Date(formData.checkOutDate);
-            const diffTime = Math.abs(checkOutDate - checkInDate);
+        if (formData.frm_dt && formData.to_dt) {
+            const frm_dt = new Date(formData.frm_dt);
+            const to_dt = new Date(formData.to_dt);
+            const diffTime = Math.abs(to_dt - frm_dt);
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
             setNightCount(diffDays);
         }
-    }, [formData.checkInDate, formData.checkOutDate]);
+    }, [formData.frm_dt, formData.to_dt]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -111,15 +105,39 @@ function AddReservation() {
     function handleSubmit(e) {
         e.preventDefault();
         console.log(formData, '=========');
+        setFormData({
+            ...formData,
+            taxes: taxAmount,
+            total_amnt: totalAmount,
+        });
         // dispatch({
         //     type: actions.RESER_ADD,
         //     payload: formData,
         // });
     }
 
+    const [dropDownData, setDropDownData] = useState({});
+
+    const { dropDownList } = useSelector((state) => state?.reserReducer);
+
     useEffect(() => {
+        setDropDownData(dropDownList);
+    }, [dropDownList]);
+
+    useEffect(() => {
+        const sync_req = [
+            'booking_src',
+            'sls_prsn',
+            'bsns_src',
+            'mrkt_sgmnt',
+            'tnc',
+            'cp',
+        ];
         dispatch({
-            type: businessActions.BUSINESS_LIST,
+            type: actions.RESER_DROPDOWN_LIST,
+            payload: {
+                sync_req: sync_req.join(','),
+            },
         });
     }, []);
 
@@ -158,9 +176,9 @@ function AddReservation() {
                                                             type="date"
                                                             className="w-100 h-100 custom-input-lg rounded-right-none"
                                                             id="checkin-date"
-                                                            name="checkInDate"
+                                                            name="frm_dt"
                                                             value={
-                                                                formData.checkInDate
+                                                                formData.frm_dt
                                                             }
                                                             onChange={
                                                                 handleInputChange
@@ -191,15 +209,15 @@ function AddReservation() {
                                                             type="date"
                                                             className="custom-input-lg w-100 h-100"
                                                             id="checkout-date"
-                                                            name="checkOutDate"
+                                                            name="to_dt"
                                                             value={
-                                                                formData.checkOutDate
+                                                                formData.to_dt
                                                             }
                                                             onChange={
                                                                 handleInputChange
                                                             }
                                                             min={
-                                                                formData.checkInDate
+                                                                formData.frm_dt
                                                             }
                                                         />
                                                     </div>
@@ -218,11 +236,23 @@ function AddReservation() {
                                         <select
                                             className="form-select custom-input-lg"
                                             id="bookingSourceDropdown"
-                                            name="bookingSource"
-                                            value={formData.bookingSource}
+                                            name="booking_src_id"
+                                            value={formData.booking_src_id}
                                             onChange={handleInputChange}
                                         >
                                             <option value="">Select</option>
+                                            {dropDownData['booking_src']?.map(
+                                                (item, index) => {
+                                                    return (
+                                                        <option
+                                                            key={index}
+                                                            value={item.id}
+                                                        >
+                                                            {item.name}
+                                                        </option>
+                                                    );
+                                                },
+                                            )}
                                         </select>
                                     </div>
                                 </div>
@@ -243,6 +273,18 @@ function AddReservation() {
                                                 onChange={handleInputChange}
                                             >
                                                 <option value="">Select</option>
+                                                {dropDownData['bsns_src']?.map(
+                                                    (item, index) => {
+                                                        return (
+                                                            <option
+                                                                key={index}
+                                                                value={item.id}
+                                                            >
+                                                                {item.name}
+                                                            </option>
+                                                        );
+                                                    },
+                                                )}
                                             </select>
                                         </div>
                                     </div>
@@ -261,6 +303,18 @@ function AddReservation() {
                                                 onChange={handleInputChange}
                                             >
                                                 <option value="">Select</option>
+                                                {dropDownData['sls_prsn']?.map(
+                                                    (item, index) => {
+                                                        return (
+                                                            <option
+                                                                key={index}
+                                                                value={item.id}
+                                                            >
+                                                                {item.name}
+                                                            </option>
+                                                        );
+                                                    },
+                                                )}
                                             </select>
                                         </div>
                                     </div>
@@ -279,6 +333,18 @@ function AddReservation() {
                                                 onChange={handleInputChange}
                                             >
                                                 <option value="">Select</option>
+                                                {dropDownData[
+                                                    'mrkt_sgmnt'
+                                                ]?.map((item, index) => {
+                                                    return (
+                                                        <option
+                                                            key={index}
+                                                            value={item.id}
+                                                        >
+                                                            {item.name}
+                                                        </option>
+                                                    );
+                                                })}
                                             </select>
                                         </div>
                                     </div>
@@ -295,7 +361,7 @@ function AddReservation() {
                                             <div className="col-8">
                                                 <div className="row">
                                                     <div className="col-3">
-                                                        Rate Plan
+                                                        Room Plan
                                                     </div>
                                                     <div className="col-2">
                                                         Room
@@ -319,7 +385,7 @@ function AddReservation() {
                                             height: 'calc(100vh - 470px)',
                                         }}
                                     >
-                                        {formData.roomDetails?.map(
+                                        {formData.room_json?.map(
                                             (room, index) => (
                                                 <div
                                                     className="row mx-0 my-3"
@@ -403,11 +469,23 @@ function AddReservation() {
                                         <select
                                             className="form-select custom-input-lg text-truncate"
                                             id="cancellationPolicyDropdown"
-                                            name="cancellationPolicy"
-                                            value={formData.cancellationPolicy}
+                                            name="cncl_policy_id"
+                                            value={formData.cncl_policy_id}
                                             onChange={handleInputChange}
                                         >
                                             <option value="">Select</option>
+                                            {dropDownData['cp']?.map(
+                                                (item, index) => {
+                                                    return (
+                                                        <option
+                                                            key={index}
+                                                            value={item.id}
+                                                        >
+                                                            {item.cp_name}
+                                                        </option>
+                                                    );
+                                                },
+                                            )}
                                         </select>
                                     </div>
                                 </div>
@@ -421,11 +499,23 @@ function AddReservation() {
                                         <select
                                             className="form-select custom-input-lg text-truncate"
                                             id="termsAndConditionsDropdown"
-                                            name="termsAndConditions"
-                                            value={formData.termsAndConditions}
+                                            name="terms_con_id"
+                                            value={formData.terms_con_id}
                                             onChange={handleInputChange}
                                         >
                                             <option value="">Select</option>
+                                            {dropDownData['tnc']?.map(
+                                                (item, index) => {
+                                                    return (
+                                                        <option
+                                                            key={index}
+                                                            value={item.id}
+                                                        >
+                                                            {item.tnc_name}
+                                                        </option>
+                                                    );
+                                                },
+                                            )}
                                         </select>
                                     </div>
                                 </div>
@@ -483,7 +573,7 @@ function AddReservation() {
                                                 />
                                                 <label
                                                     htmlFor="isEarlyCheckIn"
-                                                    className="custom-lable body-2"
+                                                    className="custom-label body-2"
                                                 >
                                                     Early Check In
                                                 </label>
@@ -507,7 +597,7 @@ function AddReservation() {
                                                 />
                                                 <label
                                                     htmlFor="isEarlyCheckOut"
-                                                    className="custom-lable body-2"
+                                                    className="custom-label body-2"
                                                 >
                                                     Early Check Out
                                                 </label>
@@ -589,9 +679,9 @@ function AddReservation() {
                                         <>
                                             <div className="row mx-0">
                                                 <div className="col-6 p-0">
-                                                    <lable className="custom-label caption-1">
+                                                    <label className="custom-label caption-1">
                                                         Name
-                                                    </lable>
+                                                    </label>
                                                     <p className="subtitle-2m">
                                                         {
                                                             formData
@@ -601,9 +691,9 @@ function AddReservation() {
                                                     </p>
                                                 </div>
                                                 <div className="col-6 p-0">
-                                                    <lable className="custom-label caption-1">
+                                                    <label className="custom-label caption-1">
                                                         Guest class
-                                                    </lable>
+                                                    </label>
                                                     <p className="subtitle-2m">
                                                         {
                                                             formData
@@ -613,9 +703,9 @@ function AddReservation() {
                                                     </p>
                                                 </div>
                                                 <div className="col-6 p-0">
-                                                    <lable className="custom-label caption-1">
+                                                    <label className="custom-label caption-1">
                                                         Mobile No
-                                                    </lable>
+                                                    </label>
                                                     <p className="subtitle-2m">
                                                         {
                                                             formData
@@ -658,8 +748,8 @@ function AddReservation() {
                                             </label>
                                             <input
                                                 className="form-control custom-input"
-                                                id="specialRequest"
-                                                name="specialRequest"
+                                                id="sp_req_json"
+                                                name="sp_req_json"
                                                 placeholder="Special Terms"
                                                 value={formData.specialTerms}
                                                 onChange={handleInputChange}
@@ -676,10 +766,10 @@ function AddReservation() {
                                             </label>
                                             <input
                                                 className="form-control custom-input"
-                                                id="specialRemark"
-                                                name="specialRemark"
+                                                id="sp_remarks"
+                                                name="sp_remarks"
                                                 placeholder="Special Remark"
-                                                value={formData.specialRemark}
+                                                value={formData.sp_remarks}
                                                 onChange={handleInputChange}
                                             />
                                         </div>
@@ -741,22 +831,22 @@ function AddReservation() {
                                                 </p>
                                             </div>
                                             <div className="col-4">
-                                                {formData.paymentDetails
-                                                    ?.paymentType &&
-                                                formData.paymentDetails
-                                                    ?.rate ? (
+                                                {formData.payment_json
+                                                    ?.pay_type &&
+                                                formData.payment_json
+                                                    ?.pay_amnt ? (
                                                     <p className="subtitle-2m m-0">
                                                         (
                                                         {
                                                             formData
-                                                                .paymentDetails
-                                                                ?.paymentType
+                                                                .payment_json
+                                                                ?.pay_type
                                                         }
                                                         )-₹
                                                         {
                                                             formData
-                                                                .paymentDetails
-                                                                ?.rate
+                                                                .payment_json
+                                                                ?.pay_amnt
                                                         }
                                                     </p>
                                                 ) : (
@@ -773,8 +863,8 @@ function AddReservation() {
                                                 </p>
                                             </div>
                                             <div className="col-4">
-                                                {formData.paymentDetails
-                                                    ?.rate ? (
+                                                {formData.payment_json
+                                                    ?.pay_amnt ? (
                                                     <p className="subtitle-2m red m-0">
                                                         ₹
                                                         {parseFloat(
@@ -782,8 +872,8 @@ function AddReservation() {
                                                         ) -
                                                             parseFloat(
                                                                 formData
-                                                                    .paymentDetails
-                                                                    .rate,
+                                                                    .payment_json
+                                                                    .pay_amnt,
                                                             ) +
                                                             parseFloat(
                                                                 taxAmount,

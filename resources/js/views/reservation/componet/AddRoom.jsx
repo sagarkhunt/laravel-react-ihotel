@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from '../../../components/common/Modal';
 
+import actions from '../../../redux/Reservation/actions';
+import { useDispatch, useSelector } from 'react-redux';
+
 const AddRoom = ({ formData, showAddRoom, setShowAddRoom, setFormData }) => {
+    const dispatch = useDispatch();
+
     const addRoom = () => {
         setRDetails([
             ...rDetails,
             {
-                roomType: '1',
-                ratePlan: '1',
-                room: '1',
+                roomType: '',
+                ratePlan: '',
+                room: '',
                 adult: '2',
                 child: '1',
                 rate: 4000.0,
@@ -16,7 +21,22 @@ const AddRoom = ({ formData, showAddRoom, setShowAddRoom, setFormData }) => {
         ]);
     };
     const rooms = structuredClone(formData.roomDetails);
-    const [rDetails, setRDetails] = useState(rooms);
+    const [rDetails, setRDetails] = useState(() => {
+        if (rooms.length > 0) {
+            return rooms;
+        } else {
+            return [
+                {
+                    roomType: '',
+                    ratePlan: '',
+                    room: '',
+                    adult: '2',
+                    child: '1',
+                    rate: 4000.0,
+                },
+            ];
+        }
+    });
 
     const [isEditPrice, setIsEditPrice] = useState({});
 
@@ -33,6 +53,24 @@ const AddRoom = ({ formData, showAddRoom, setShowAddRoom, setFormData }) => {
             [index]: !prev[index],
         }));
     };
+
+    const [dropDownData, setDropDownData] = useState({});
+
+    const { dropDownList } = useSelector((state) => state?.reserReducer);
+
+    useEffect(() => {
+        setDropDownData(dropDownList);
+    }, [dropDownList]);
+
+    useEffect(() => {
+        const sync_req = ['room_cate', 'rooms', 'rooms_plan'];
+        dispatch({
+            type: actions.RESER_DROPDOWN_LIST,
+            payload: {
+                sync_req: sync_req.join(','),
+            },
+        });
+    }, []);
 
     return (
         <Modal
@@ -110,11 +148,19 @@ const AddRoom = ({ formData, showAddRoom, setShowAddRoom, setFormData }) => {
                                                     )
                                                 }
                                             >
-                                                <option value="1">
-                                                    Select
-                                                </option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
+                                                <option value="">Select</option>
+                                                {dropDownData['room_cate']?.map(
+                                                    (item, index) => {
+                                                        return (
+                                                            <option
+                                                                key={index}
+                                                                value={item.id}
+                                                            >
+                                                                {item.cat_name}
+                                                            </option>
+                                                        );
+                                                    },
+                                                )}
                                             </select>
                                         </div>
                                     </div>
@@ -134,15 +180,29 @@ const AddRoom = ({ formData, showAddRoom, setShowAddRoom, setFormData }) => {
                                                             )
                                                         }
                                                     >
-                                                        <option value="1">
+                                                        <option value="">
                                                             Select
                                                         </option>
-                                                        <option value="2">
-                                                            2
-                                                        </option>
-                                                        <option value="3">
-                                                            3
-                                                        </option>
+                                                        {dropDownData[
+                                                            'rooms_plan'
+                                                        ]?.map(
+                                                            (item, index) => {
+                                                                return (
+                                                                    <option
+                                                                        key={
+                                                                            index
+                                                                        }
+                                                                        value={
+                                                                            item.id
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            item.plan_name
+                                                                        }
+                                                                    </option>
+                                                                );
+                                                            },
+                                                        )}
                                                     </select>
                                                 </div>
                                             </div>
@@ -160,15 +220,29 @@ const AddRoom = ({ formData, showAddRoom, setShowAddRoom, setFormData }) => {
                                                             )
                                                         }
                                                     >
-                                                        <option value="1">
-                                                            1
+                                                        <option value="">
+                                                            Select
                                                         </option>
-                                                        <option value="2">
-                                                            2
-                                                        </option>
-                                                        <option value="3">
-                                                            3
-                                                        </option>
+                                                        {dropDownData[
+                                                            'rooms'
+                                                        ]?.map(
+                                                            (item, index) => {
+                                                                return (
+                                                                    <option
+                                                                        key={
+                                                                            index
+                                                                        }
+                                                                        value={
+                                                                            item.id
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            item.room_no
+                                                                        }
+                                                                    </option>
+                                                                );
+                                                            },
+                                                        )}
                                                     </select>
                                                 </div>
                                             </div>

@@ -55,11 +55,11 @@ const AddCustomerDetails = ({
                                             guestClass: '',
                                             mobileNo: '',
                                             email: '',
-                                            county: '',
+                                            country: '',
                                             state: '',
                                             city: '',
                                             zipCode: '',
-                                            address: ''
+                                            address: '',
                                         });
                                         setShowCustomerDetails(false);
                                     }}
@@ -136,14 +136,17 @@ const AddCustomerDetails = ({
                                             id="guestClass"
                                         >
                                             <option value="">Select</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
+                                            <option value="VIP">VIP</option>
+                                            <option value="REGULAR">
+                                                Regular
+                                            </option>
+                                            <option value="PRESIDENT">
+                                                President
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
-                                <div className="col-6"></div>
-                                <div className="col-4">
+                                <div className="col-6">
                                     <div className="form-group mb-3">
                                         <label
                                             htmlFor="mobileNo"
@@ -152,7 +155,7 @@ const AddCustomerDetails = ({
                                             Mobile No
                                         </label>
                                         <input
-                                            type="text"
+                                            type="tel"
                                             className="form-control custom-input-lg"
                                             id="mobileNo"
                                             name="mobileNo"
@@ -165,7 +168,7 @@ const AddCustomerDetails = ({
                                         />
                                     </div>
                                 </div>
-                                <div className="col-8">
+                                <div className="col-12">
                                     <div className="form-group mb-3">
                                         <label
                                             htmlFor="email"
@@ -208,20 +211,25 @@ const AddCustomerDetails = ({
                                 <div className="col-3">
                                     <div className="form-group mb-3">
                                         <label
-                                            htmlFor="county"
+                                            htmlFor="country"
                                             className="custom-label"
                                         >
-                                            County
+                                            Country
                                         </label>
-                                        <input
-                                            type="text"
-                                            className="form-control custom-input-lg"
-                                            id="county"
-                                            name="county"
-                                            placeholder="County"
-                                            value={customerDetails.county}
+                                        <select
+                                            className="form-select custom-input-lg"
+                                            id="country"
+                                            name="country"
+                                            placeholder="Country"
+                                            value={customerDetails.country}
                                             onChange={handleInputChange}
-                                        />
+                                        >
+                                            <option value="">Select</option>
+                                            <option value="Nepal">Nepal</option>
+                                            <option value="India">India</option>
+                                            <option value="China">China</option>
+                                            <option value="USA">USA</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div className="col-3">
@@ -232,15 +240,28 @@ const AddCustomerDetails = ({
                                         >
                                             State
                                         </label>
-                                        <input
-                                            type="text"
-                                            className="form-control custom-input-lg"
+                                        <select
+                                            className="form-select custom-input-lg"
                                             id="state"
                                             name="state"
                                             placeholder="State"
                                             value={customerDetails.state}
                                             onChange={handleInputChange}
-                                        />
+                                        >
+                                            <option value="">Select</option>
+                                            <option value="Bagmati">
+                                                Bagmati
+                                            </option>
+                                            <option value="Gandaki">
+                                                Gandaki
+                                            </option>
+                                            <option value="Karnali">
+                                                Karnali
+                                            </option>
+                                            <option value="Lumbini">
+                                                Lumbini
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div className="col-3">
@@ -251,15 +272,28 @@ const AddCustomerDetails = ({
                                         >
                                             City
                                         </label>
-                                        <input
-                                            type="text"
-                                            className="form-control custom-input-lg"
+                                        <select
+                                            className="form-select custom-input-lg"
                                             id="city"
                                             name="city"
                                             placeholder="City"
                                             value={customerDetails.city}
                                             onChange={handleInputChange}
-                                        />
+                                        >
+                                            <option value="">Select</option>
+                                            <option value="Kathmandu">
+                                                Kathmandu
+                                            </option>
+                                            <option value="Pokhara">
+                                                Pokhara
+                                            </option>
+                                            <option value="Biratnagar">
+                                                Biratnagar
+                                            </option>
+                                            <option value="Birgunj">
+                                                Birgunj
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div className="col-3">
@@ -293,7 +327,7 @@ const AddCustomerDetails = ({
                                         guestName: '',
                                         mobileNo: '',
                                         email: '',
-                                        county: '',
+                                        country: '',
                                         state: '',
                                         city: '',
                                         zipCode: '',
@@ -311,6 +345,7 @@ const AddCustomerDetails = ({
                                         ...formData,
                                         customerDetails: customerDetails,
                                     });
+                                    console.log(customerDetails);
                                     setShowCustomerDetails(false);
                                 }}
                             >
