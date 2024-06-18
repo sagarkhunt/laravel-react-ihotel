@@ -253,7 +253,7 @@ class HotelReservationController extends BaseApiController
             $roomBooking->booking_src_id = $request->input('booking_src_id');
             $roomBooking->sls_prsn_id = $request->input('sls_prsn_id');
             $roomBooking->mrkt_sgmnt_id = $request->input('mrkt_sgmnt_id');
-            $roomBooking->com_rm_status = $request->input('com_rm_status');
+            // $roomBooking->com_rm_status = $request->input('com_rm_status');
             $roomBooking->room_json = json_encode($rooms); //$request->input('room_json');
             $roomBooking->guest_json = json_encode($guest); //$request['guest_json'];
             $roomBooking->cncl_policy_id = $request->input('cncl_policy_id');
@@ -301,6 +301,7 @@ class HotelReservationController extends BaseApiController
                         $room_inv['created_at'] = Carbon::now();
                         // RoomInventoryMaster::create($room);
                         $roomInv = RoomInventoryMaster::create($room_inv);
+
                         $prevId = $roomInv->id;
                     }
                 }
@@ -482,8 +483,7 @@ class HotelReservationController extends BaseApiController
 
             // Collect all existing room inventory dates to be removed
             foreach ($roomBooking->roomInventory as $roomInv) {
-                $roomDate = new DateTime($roomInv->dt);
-                if ($roomDate >= $fromDate && $roomDate < $toDate) {
+                if ($roomInv['ref_id'] == $roomBooking->id) {
                     $datesToRemove[] = $roomInv->id;
                 }
             }
@@ -493,6 +493,7 @@ class HotelReservationController extends BaseApiController
 
             // Update or create room inventory details for the updated booking period
             foreach ($room_inventory as $room) {
+
                 $prevId = 0;
                 for ($i = 0; $i < $room['nor']; $i++) {
                     foreach ($datePeriod as $date) {
@@ -519,12 +520,12 @@ class HotelReservationController extends BaseApiController
                             ->first();
 
                         if ($roomInventory) {
+                            $prevId = $roomInventory->prev_id;
                             $roomInventory->update($room_inv);
                         } else {
-                            RoomInventoryMaster::create($room_inv);
+                            $roomInv = RoomInventoryMaster::create($room_inv);
+                            $prevId = $roomInv['id']; // Update previous ID for next iteration
                         }
-
-                        $prevId = $room_inv['id']; // Update previous ID for next iteration
                     }
                 }
             }
@@ -541,89 +542,101 @@ class HotelReservationController extends BaseApiController
                     throw new \Exception("Invalid data format. Array expected.");
                 }
 
-                $payData = [
-                    'hotel_id' => $roomBooking->hotel_id,
-                    'rbm_id' => $roomBooking->id,
-                    'pay_date' => $payDetails['pay_date'],
-                    'pay_type' => $payDetails['pay_type'],
-                    'ref_name' => $payDetails['ref_name'],
-                    'pay_amnt' => $payDetails['pay_amnt'],
-                    'created_by' => $user_id
-                ];
+                // Find an existing payment record or create a new one if it doesn't exist
+                $payData = BookingPayment::firstOrNew(
+                    ['rbm_id' => $roomBooking->id],
+                    ['hotel_id' => $roomBooking->hotel_id]
+                );
 
-                BookingPayment::create($payData);
+                // Populate the fields
+                $payData->pay_date = $payDetails['pay_date'];
+                $payData->pay_type = $payDetails['pay_type'];
+                $payData->ref_name = $payDetails['ref_name'];
+                $payData->pay_amnt = $payDetails['pay_amnt'];
+                $payData->created_by = $user_id;
+
+                // Save the record (either update or create)
+                $payData->save();
             }
 
             return $this->sendResponse($roomBooking, 'Booking updated successfully.');
         } catch (\Exception $e) {
-            dd($e);
             Log::error($e->getMessage());
             return $this->sendError('Server Error', $e->getMessage());
         }
     }
-    // public function updateReservation(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'rbm_id' => 'required',
-    //         'group_id' => 'sometimes|required',
-    //         'guest_id' => 'sometimes|required',
-    //         'frm_dt' => 'sometimes|required|date',
-    //         'to_dt' => 'sometimes|required|date',
-    //         'block_type' => 'sometimes|required|in:1,2,3',
-    //         'block_status' => 'sometimes|required|in:0,1',
-    //         'booking_type_id' => 'sometimes|required',
-    //         'nor' => 'sometimes|required|numeric',
-    //         'non' => 'sometimes|required|numeric',
-    //         'bsns_src_id' => 'sometimes|required',
-    //         'booking_src_id' => 'sometimes|required',
-    //         'guest_name' => 'sometimes|required',
-    //         'guest_mobile' => 'sometimes|required|numeric',
-    //         'guest_json' => 'sometimes|required',
-    //         'room_json' => 'sometimes|required',
-    //         'pax_json' => 'sometimes|required',
-    //         'sp_req_json' => 'sometimes|required',
-    //         'sp_remarks' => 'sometimes|required',
-    //     ]);
+    /**
+     * Reservation status update cancle and active
+     */
+    public function updateReserStatus(Request $request)
+    {
 
-    //     if ($validator->fails()) {
-    //         return $this->sendError("Required Parameter are Missing.", ['errors' => $validator->errors()]);
-    //     }
+        $validator = Validator::make($request->all(), [
+            'res_status' => 'required',
+            'rbm_id' => 'required'
+        ]);
 
-    //     $rbm_id = $request->input('rbm_id');
-    //     $booking = RoomBookingMaster::find($rbm_id);
+        if ($validator->fails()) {
+            return $this->sendError("Required parameters are missing.", ['errors' => $validator->errors()]);
+        }
+
+        try {
+            // Find the RoomBookingMaster record by rbm_id
+            $reservation = RoomBookingMaster::findOrFail($request->rbm_id);
+
+            // Update the reservation status
+            $reservation->block_status = $request->res_status;
+            $reservation->save();
 
 
-    //     if (!$booking) {
-    //         return $this->sendError("Reservation not found.");
-    //     }
+            // Check if there are related roomInventory entries
+            $roomInventories = $reservation->roomInventory;
 
-    //     $booking->update($request->all());
+            if ($roomInventories->isNotEmpty()) {
+                // Delete all related roomInventory entries
+                $roomInventories->each(function ($roomInventory) {
+                    $roomInventory->delete();
+                });
+            }
+            // Resrvation payment delete
+            $roomAdvPaymebnt = $reservation->roomAdvPayment;
+            if ($roomAdvPaymebnt) {
+                $roomAdvPaymebnt->delete();
+            }
 
-    //     // Update room inventory if provided
-    //     if ($request->has('room_inventory')) {
-    //         foreach ($request->room_inventory as $room) {
-    //             $roomInventory = RoomInventoryMaster::where('rbm_id', $booking->rbm_id)
-    //                 ->where('hotel_id', $booking->hotel_id)
-    //                 ->where('fy_id', $booking->fy_id)
-    //                 ->where('dt', $room['dt'])
-    //                 ->where('room_id', $room['room_id'])
-    //                 ->first();
+            return $this->sendResponse([], 'Reservation status updated successfully.');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return $this->sendError('Server Error', $e->getMessage());
+        }
+    }
 
-    //             if ($roomInventory) {
-    //                 $roomInventory->update($room);
-    //             } else {
-    //                 // Create new room inventory entry if not found
-    //                 $room['guest_id'] = $booking->guest_id;
-    //                 $room['hotel_id'] = $booking->hotel_id;
-    //                 $room['fy_id'] = $booking->fy_id;
-    //                 $room['created_by'] = $booking->updated_by;
-    //                 $room['updated_by'] = $booking->updated_by;
+    #Reservation Delete
+    public function deleteReservation(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'rbm_id' => 'required'
+        ]);
 
-    //                 RoomInventoryMaster::create($room);
-    //             }
-    //         }
-    //     }
+        if ($validator->fails()) {
+            return $this->sendError("Required parameters are missing.", ['errors' => $validator->errors()]);
+        }
 
-    //     return $this->sendResponse(['booking' => $booking], 'Booking updated successfully.');
-    // }
+        try {
+            // Find the RoomBookingMaster record by rbm_id
+            $reservation = RoomBookingMaster::findOrFail($request->rbm_id);
+
+            // Delete related roomInventory entries if cascading delete is not set up
+            // Assuming roomInventory() is a hasMany relationship in RoomBookingMaster model
+            $reservation->roomInventory()->delete();
+            $reservation->roomAdvPayment()->delete();
+            // Delete the reservation itself
+            $reservation->delete();
+
+            return $this->sendResponse(Null, 'Reservation deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return $this->sendError('Server Error', $e->getMessage());
+        }
+    }
 }
