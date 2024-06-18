@@ -185,6 +185,7 @@ class HotelReservationController extends BaseApiController
             return $this->sendError("Required Parameter are Missing.", ['errors' => $validator->errors()]);
         }
         try {
+
             $user = Auth::user();
             $user_id = $user->id;
 
@@ -193,8 +194,9 @@ class HotelReservationController extends BaseApiController
 
             $toDate = new DateTime($request->input('to_dt'));
             $fromDate = new DateTime($request->input('frm_dt'));
+            // $room_inventory = json_decode($request->room_json, true);
+            $room_inventory = $request->room_json;
 
-            $room_inventory = json_decode($request->room_json, true);
             //{"rt":"1","rp":"1","nor":"5","pax":"10/2","rate":"1000"}
 
             $totalRate = array_sum(array_column($room_inventory, "rate"));
@@ -218,6 +220,7 @@ class HotelReservationController extends BaseApiController
                 "city_id" => $guestArr->city_id,
                 "email_id" => $guestArr->email
             );
+
             $rooms = [];
             foreach ($room_inventory as $room) {
 
@@ -324,7 +327,7 @@ class HotelReservationController extends BaseApiController
                 $payData = [
                     'hotel_id' => $roomBooking->hotel_id,
                     'rbm_id' => $roomBooking->id,
-                    'pay_date' => $payDetails['pay_date'],
+                    // 'pay_date' => $payDetails['pay_date'],
                     'pay_type' => $payDetails['pay_type'],
                     'ref_name' => $payDetails['ref_name'],
                     'pay_amnt' => $payDetails['pay_amnt'],

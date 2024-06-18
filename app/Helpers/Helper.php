@@ -155,7 +155,7 @@ class Helper
 
         // Map the incoming data to match the database fields
         $mappedData = [
-            'full_name' => $data['name'],
+            'full_name' => $data['full_name'],
             // 'guest_cls_id' => $data['guest_cls_id'],
             'email' => $data['email'],
             'mobile' => $data['mobile'],
@@ -163,7 +163,7 @@ class Helper
             // 'country_id' => $data['country_id'],
             // 'state_id' => $data['state_id'],
             'city_id' => $data['city_id'],
-            'pincode' => $data['zip_code'],
+            'pincode' => $data['pincode'],
         ];
 
         if ($guestId == 0) {

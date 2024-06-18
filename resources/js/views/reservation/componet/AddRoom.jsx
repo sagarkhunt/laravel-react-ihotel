@@ -4,34 +4,39 @@ import Modal from '../../../components/common/Modal';
 import actions from '../../../redux/Reservation/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
-const AddRoom = ({ formData, showAddRoom, setShowAddRoom, setFormData }) => {
-    const dispatch = useDispatch();
-
+const AddRoom = ({
+    formData,
+    showAddRoom,
+    setShowAddRoom,
+    setFormData,
+    dropDownData,
+}) => {
     const addRoom = () => {
         setRDetails([
             ...rDetails,
             {
-                roomType: '',
-                ratePlan: '',
-                room: '',
-                adult: '2',
-                child: '1',
+                rcid: '',
+                pid: '',
+                nor: '',
+                adlt: '1',
+                chld: '1',
                 rate: 4000.0,
             },
         ]);
     };
-    const rooms = structuredClone(formData.roomDetails);
+    const rooms = structuredClone(formData.room_json);
+
     const [rDetails, setRDetails] = useState(() => {
-        if (rooms.length > 0) {
+        if (rooms && rooms.length > 0) {
             return rooms;
         } else {
             return [
                 {
-                    roomType: '',
-                    ratePlan: '',
-                    room: '',
-                    adult: '2',
-                    child: '1',
+                    rcid: '',
+                    pid: '',
+                    nor: '',
+                    adlt: '1',
+                    chld: '1',
                     rate: 4000.0,
                 },
             ];
@@ -54,23 +59,23 @@ const AddRoom = ({ formData, showAddRoom, setShowAddRoom, setFormData }) => {
         }));
     };
 
-    const [dropDownData, setDropDownData] = useState({});
+    // const [dropDownData, setDropDownData] = useState({});
 
-    const { dropDownList } = useSelector((state) => state?.reserReducer);
+    // const { dropDownList } = useSelector((state) => state?.reserReducer);
 
-    useEffect(() => {
-        setDropDownData(dropDownList);
-    }, [dropDownList]);
+    // useEffect(() => {
+    //     setDropDownData(dropDownList);
+    // }, [dropDownList]);
 
-    useEffect(() => {
-        const sync_req = ['room_cate', 'rooms', 'rooms_plan'];
-        dispatch({
-            type: actions.RESER_DROPDOWN_LIST,
-            payload: {
-                sync_req: sync_req.join(','),
-            },
-        });
-    }, []);
+    // useEffect(() => {
+    //     const sync_req = ['room_cate', 'rooms', 'rooms_plan'];
+    //     dispatch({
+    //         type: actions.RESER_DROPDOWN_LIST,
+    //         payload: {
+    //             sync_req: sync_req.join(','),
+    //         },
+    //     });
+    // }, []);
 
     return (
         <Modal
@@ -132,19 +137,20 @@ const AddRoom = ({ formData, showAddRoom, setShowAddRoom, setFormData }) => {
                                     </div>
                                 </div>
                             </div>
+
                             {rDetails.map((room, index) => (
                                 <div className="row my-3 mx-0" key={index}>
                                     <div className="col-3">
                                         <div className="d-flex">
                                             <select
                                                 className="form-select custom-input-sm"
-                                                name="roomType"
-                                                value={room.roomType}
+                                                name="rcid"
+                                                value={room.rcid}
                                                 onChange={(e) =>
                                                     handleInputChange(
                                                         e,
                                                         index,
-                                                        'roomType',
+                                                        'rcid',
                                                     )
                                                 }
                                             >
@@ -170,13 +176,13 @@ const AddRoom = ({ formData, showAddRoom, setShowAddRoom, setFormData }) => {
                                                 <div className="d-flex">
                                                     <select
                                                         className="form-select custom-input-sm"
-                                                        name="ratePlan"
-                                                        value={room.ratePlan}
+                                                        name="pid"
+                                                        value={room.pid}
                                                         onChange={(e) =>
                                                             handleInputChange(
                                                                 e,
                                                                 index,
-                                                                'ratePlan',
+                                                                'pid',
                                                             )
                                                         }
                                                     >
@@ -208,15 +214,47 @@ const AddRoom = ({ formData, showAddRoom, setShowAddRoom, setFormData }) => {
                                             </div>
                                             <div className="col-2">
                                                 <div className="d-flex">
-                                                    <select
-                                                        className="form-select custom-input-sm"
-                                                        name="room"
-                                                        value={room.room}
+                                                    <input
+                                                        list="nor-list"
+                                                        name="nor"
+                                                        value={room.nor}
                                                         onChange={(e) =>
                                                             handleInputChange(
                                                                 e,
                                                                 index,
-                                                                'room',
+                                                                'nor',
+                                                            )
+                                                        }
+                                                        className="form-control custom-input"
+                                                    />
+                                                    <datalist
+                                                        id="nor-list"
+                                                        className="custom-input"
+                                                    >
+                                                        <option value="1">
+                                                            1
+                                                        </option>
+                                                        <option value="2">
+                                                            2
+                                                        </option>
+                                                        <option value="3">
+                                                            3
+                                                        </option>
+                                                        <option value="4">
+                                                            4
+                                                        </option>
+                                                    </datalist>
+                                                </div>
+                                                {/* <div className="d-flex">
+                                                    <select
+                                                        className="form-select custom-input-sm"
+                                                        name="nor"
+                                                        value={room.nor}
+                                                        onChange={(e) =>
+                                                            handleInputChange(
+                                                                e,
+                                                                index,
+                                                                'nor',
                                                             )
                                                         }
                                                     >
@@ -244,25 +282,25 @@ const AddRoom = ({ formData, showAddRoom, setShowAddRoom, setFormData }) => {
                                                             },
                                                         )}
                                                     </select>
-                                                </div>
+                                                </div> */}
                                             </div>
                                             <div className="col-2">
                                                 <div className="d-flex">
                                                     <input
-                                                        list="adult-list"
-                                                        name="adult"
-                                                        value={room.adult}
+                                                        list="adlt-list"
+                                                        name="adlt"
+                                                        value={room.adlt}
                                                         onChange={(e) =>
                                                             handleInputChange(
                                                                 e,
                                                                 index,
-                                                                'adult',
+                                                                'adlt',
                                                             )
                                                         }
                                                         className="form-control custom-input"
                                                     />
                                                     <datalist
-                                                        id="adult-list"
+                                                        id="adlt-list"
                                                         className="custom-input"
                                                     >
                                                         <option value="1">
@@ -283,20 +321,20 @@ const AddRoom = ({ formData, showAddRoom, setShowAddRoom, setFormData }) => {
                                             <div className="col-2">
                                                 <div className="d-flex">
                                                     <input
-                                                        list="child-list"
-                                                        name="child"
-                                                        value={room.child}
+                                                        list="chld-list"
+                                                        name="chld"
+                                                        value={room.chld}
                                                         onChange={(e) =>
                                                             handleInputChange(
                                                                 e,
                                                                 index,
-                                                                'child',
+                                                                'chld',
                                                             )
                                                         }
                                                         className="form-control custom-input"
                                                     />
                                                     <datalist
-                                                        id="child-list"
+                                                        id="chld-list"
                                                         className="custom-input"
                                                     >
                                                         <option value="1">
@@ -391,7 +429,7 @@ const AddRoom = ({ formData, showAddRoom, setShowAddRoom, setFormData }) => {
                                 onClick={() => {
                                     setFormData({
                                         ...formData,
-                                        roomDetails: rDetails,
+                                        room_json: rDetails,
                                     });
                                     setShowAddRoom(false);
                                 }}

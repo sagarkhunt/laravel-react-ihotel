@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\BaseApiController;
 use App\Http\Controllers\Controller;
 use App\Models\BookingSource;
 use App\Models\BusinessSource;
+use App\Models\CountryMaster;
 use App\Models\FloorMaster;
 use App\Models\RoomCatMaster;
 use App\Models\RoomMaster;
@@ -17,6 +18,7 @@ use App\Models\MarketSegmentMaster;
 use App\Models\SectionMaster;
 use App\Models\TNCMaster;
 use App\Models\CPMaster;
+use App\Models\GuestClassMaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -132,6 +134,22 @@ class HotelLoginSyncController extends BaseApiController
                         ->get();
 
                     $data['cp'] = $get_cp;
+                }
+                if (in_array("guest_classes", $sync_req)) {
+
+                    $get_guest_classes = GuestClassMaster::where('hotel_id', $hotel_id)
+                        ->select('id', 'name')
+                        ->get();
+
+                    $data['guest_classes'] = $get_guest_classes;
+                }
+                if (in_array("country", $sync_req)) {
+
+                    $get_country = CountryMaster::where('hotel_id', $hotel_id)
+                        ->select('id', 'name')
+                        ->get();
+
+                    $data['country'] = $get_country;
                 }
                 return $this->sendResponse($data, "");
             } else {

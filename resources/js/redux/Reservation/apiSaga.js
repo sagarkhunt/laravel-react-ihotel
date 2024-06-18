@@ -45,8 +45,7 @@ function* reservationList(action) {
 function* createReservation(action) {
     const { payload } = action;
     try {
-        console.log(payload, '==========');
-        const response = yield call(postRequest, 'create_reservation', payload);
+        const response = yield call(postRequest, 'cr_reservation', payload);
         if (response) {
             yield put({
                 type: actions.RESER_ADD_SUCCESS,
@@ -188,6 +187,6 @@ export default function* rootSaga() {
         takeLatest(actions.RESER_ADD, createReservation),
         takeLatest(actions.RESER_UPDATE, updateReservation),
         takeLatest(actions.RESER_DELETE, deleteReservation),
-        takeLatest(actions.RESER_DROPDOWN_LIST, dropownList)
+        takeLatest(actions.RESER_DROPDOWN_LIST, dropownList),
     ]);
 }

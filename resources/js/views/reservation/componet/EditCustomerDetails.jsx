@@ -8,6 +8,7 @@ const EditCustomerDetails = ({
     setCustomerDetails,
     showEditCustomerDetails,
     setShowEditCustomerDetails,
+    dropDownData,
 }) => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -66,7 +67,7 @@ const EditCustomerDetails = ({
                                 <div className="col-12">
                                     <div className="form-group mb-3">
                                         <label
-                                            htmlFor="guestName"
+                                            htmlFor="full_name"
                                             className="custom-label"
                                         >
                                             Name
@@ -76,10 +77,10 @@ const EditCustomerDetails = ({
                                                 <input
                                                     type="text"
                                                     className="form-control custom-input-lg"
-                                                    id="guestName"
-                                                    name="guestName"
+                                                    id="full_name"
+                                                    name="full_name"
                                                     value={
-                                                        customerDetails.guestName
+                                                        customerDetails.full_name
                                                     }
                                                     onChange={handleInputChange}
                                                     placeholder="Name"
@@ -131,21 +132,33 @@ const EditCustomerDetails = ({
                                             className="form-select custom-input-lg"
                                             id="guestClass"
                                         >
-                                            <option value="">Select</option>
-                                            <option value="VIP">VIP</option>
+                                            <option value="0">Select</option>
+                                            {dropDownData['guest_classes']?.map(
+                                                (item, index) => {
+                                                    return (
+                                                        <option
+                                                            key={index}
+                                                            value={item.id}
+                                                        >
+                                                            {item.name}
+                                                        </option>
+                                                    );
+                                                },
+                                            )}
+                                            {/* <option value="VIP">VIP</option>
                                             <option value="REGULAR">
                                                 Regular
                                             </option>
                                             <option value="PRESIDENT">
                                                 President
-                                            </option>
+                                            </option> */}
                                         </select>
                                     </div>
                                 </div>
                                 <div className="col-6">
                                     <div className="form-group mb-3">
                                         <label
-                                            htmlFor="mobileNo"
+                                            htmlFor="mobile"
                                             className="custom-label"
                                         >
                                             Mobile No
@@ -153,10 +166,10 @@ const EditCustomerDetails = ({
                                         <input
                                             type="text"
                                             className="form-control custom-input-lg"
-                                            id="mobileNo"
-                                            name="mobileNo"
+                                            id="mobile"
+                                            name="mobile"
                                             placeholder="Mobile No"
-                                            value={customerDetails.mobileNo}
+                                            value={customerDetails.mobile}
                                             onChange={handleInputChange}
                                             minLength={10} // Set minimum length for validation
                                             pattern="[0-9]+" // Optional pattern for numeric input
@@ -198,7 +211,7 @@ const EditCustomerDetails = ({
                                             id="address"
                                             name="address"
                                             placeholder="Address"
-                                            value={customerDetails.address}
+                                            value={customerDetails.add}
                                             onChange={handleInputChange}
                                         />
                                     </div>
@@ -214,34 +227,42 @@ const EditCustomerDetails = ({
                                         </label>
                                         <select
                                             className="form-select custom-input-lg"
-                                            id="country"
-                                            name="country"
+                                            id="country_id"
+                                            name="country_id"
                                             placeholder="Country"
-                                            value={customerDetails.country}
+                                            value={customerDetails.country_id}
                                             onChange={handleInputChange}
                                         >
-                                            <option value="">Select</option>
-                                            <option value="Nepal">Nepal</option>
-                                            <option value="India">India</option>
-                                            <option value="China">China</option>
-                                            <option value="USA">USA</option>
+                                            <option value="0">Select</option>
+                                            {dropDownData['country']?.map(
+                                                (item, index) => {
+                                                    return (
+                                                        <option
+                                                            key={index}
+                                                            value={item.id}
+                                                        >
+                                                            {item.name}
+                                                        </option>
+                                                    );
+                                                },
+                                            )}
                                         </select>
                                     </div>
                                 </div>
                                 <div className="col-3">
                                     <div className="form-group mb-3">
                                         <label
-                                            htmlFor="state"
+                                            htmlFor="state_id"
                                             className="custom-label"
                                         >
                                             State
                                         </label>
                                         <select
                                             className="form-select custom-input-lg"
-                                            id="state"
-                                            name="state"
+                                            id="state_id"
+                                            name="state_id"
                                             placeholder="State"
-                                            value={customerDetails.state}
+                                            value={customerDetails.state_id}
                                             onChange={handleInputChange}
                                         >
                                             <option value="">Select</option>
@@ -263,17 +284,17 @@ const EditCustomerDetails = ({
                                 <div className="col-3">
                                     <div className="form-group mb-3">
                                         <label
-                                            htmlFor="city"
+                                            htmlFor="city_id"
                                             className="custom-label"
                                         >
                                             City
                                         </label>
                                         <select
                                             className="form-select custom-input-lg"
-                                            id="city"
-                                            name="city"
+                                            id="city_id"
+                                            name="city_id"
                                             placeholder="City"
-                                            value={customerDetails.city}
+                                            value={customerDetails.city_id}
                                             onChange={handleInputChange}
                                         >
                                             <option value="">Select</option>
@@ -295,7 +316,7 @@ const EditCustomerDetails = ({
                                 <div className="col-3">
                                     <div className="form-group mb-3">
                                         <label
-                                            htmlFor="zipCode"
+                                            htmlFor="pincode"
                                             className="custom-label"
                                         >
                                             Zip Code
@@ -303,10 +324,10 @@ const EditCustomerDetails = ({
                                         <input
                                             type="text"
                                             className="form-control custom-input-lg"
-                                            id="zipCode"
-                                            name="zipCode"
+                                            id="pincode"
+                                            name="pincode"
                                             placeholder="Zip Code"
-                                            value={customerDetails.zipCode}
+                                            value={customerDetails.pincode}
                                             onChange={handleInputChange}
                                         />
                                     </div>
@@ -333,7 +354,7 @@ const EditCustomerDetails = ({
                                 onClick={() => {
                                     setFormData({
                                         ...formData,
-                                        customerDetails: customerDetails,
+                                        guest_json: customerDetails,
                                     });
                                     setShowEditCustomerDetails(false);
                                 }}

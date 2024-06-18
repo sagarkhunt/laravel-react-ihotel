@@ -66,7 +66,7 @@ function PaymentMdl({ open, setOpen, setFormData, formData }) {
                                             onChange={handleChange}
                                             required
                                         >
-                                            <option selected value="">
+                                            <option value="">
                                                 Select Payment Type
                                             </option>
                                             <option value="Cash">Cash</option>
@@ -101,13 +101,13 @@ function PaymentMdl({ open, setOpen, setFormData, formData }) {
                                             htmlFor="customInput"
                                             className="custom-label"
                                         >
-                                            Rate
+                                            Amount
                                         </label>
                                         <input
                                             type="text"
                                             className="form-control custom-input-lg"
                                             id="customInput"
-                                            placeholder="12000"
+                                            placeholder="Enter amount"
                                             name="pay_amnt"
                                             value={pmtDtls?.pay_amnt}
                                             onChange={handleChange}
