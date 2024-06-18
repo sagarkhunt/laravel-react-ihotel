@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Base\BaseModel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class RoomBookingMaster extends BaseModel
 {
@@ -42,6 +43,10 @@ class RoomBookingMaster extends BaseModel
 
     public function roomInventory(): HasMany
     {
-        return $this->hasMany(RoomInventoryMaster::class, 'rbm_id', 'id');
+        return $this->hasMany(RoomInventoryMaster::class, 'ref_id', 'id');
+    }
+    public function roomAdvPayment(): HasOne
+    {
+        return $this->hasOne(BookingPayment::class, 'rbm_id', 'id');
     }
 }

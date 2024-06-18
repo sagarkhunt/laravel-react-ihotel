@@ -113,6 +113,7 @@ Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' =
     Route::any('cr_reservation', 'HotelReservationController@createReservation');
     Route::any('get_res_detail', 'HotelReservationController@getReservationDetails');
     Route::any('upd_reservation', 'HotelReservationController@updateReservation');
+    Route::any('upd_reser_status', 'HotelReservationController@updateReserStatus');
     Route::any('del_reservation', 'HotelReservationController@deleteReservation');
     #Terms & Condition
     Route::POST('get_tnc', 'HotelTncCnpController@getTnc');
@@ -155,5 +156,25 @@ Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' =
     Route::POST('del_idtype', 'HotelIdTypeController@deleteIdType');
 
     #House Keeping
-    Route::get('get_cate_room', 'HouseKeepingController@getCateRoom');
+    // Route::get('get_cate_room', 'HouseKeepingController@getCateRoom');
+
+
+    #Location Api
+    #Country
+    Route::POST('get_country', 'HotelLocationController@getCountry');
+    Route::POST('cr_country', 'HotelLocationController@createCountry');
+    Route::POST('upd_country', 'HotelLocationController@updateCountry');
+    Route::POST('del_country', 'HotelLocationController@deleteCountry');
+
+    #State
+    Route::POST('get_state', 'HotelLocationController@getState');
+    Route::POST('cr_state', 'HotelLocationController@createState');
+    Route::POST('upd_state', 'HotelLocationController@updateState');
+    Route::POST('del_state', 'HotelLocationController@deleteState');
+
+    #City
+    Route::POST('get_city', 'HotelLocationController@getCity');
+    Route::POST('cr_city', 'HotelLocationController@createCity');
+    Route::POST('upd_city', 'HotelLocationController@updateCity');
+    Route::POST('del_city', 'HotelLocationController@deleteCity');
 });
