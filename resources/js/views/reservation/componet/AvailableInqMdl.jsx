@@ -48,14 +48,10 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
                                 </div>
 
                                 {/* <!-- Nights --> */}
-                                <div className="col-auto">
-                                    <div className="night-count">
-                                        <p className="caption-2 font-white text-center mb-0">
-                                            Nights
-                                        </p>
-                                        <p className="caption-1b font-white mt-1 text-center mb-0">
-                                            1
-                                        </p>
+                                <div class="col-auto d-flex align-items-end justify-content-center">
+                                    <div class="border night-count rounded text-center py-2">
+                                        <p class="mb-1">Nights</p>
+                                        <span>0</span>
                                     </div>
                                 </div>
                                 {/* <div

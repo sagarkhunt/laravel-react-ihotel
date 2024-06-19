@@ -161,7 +161,7 @@ function EditReservtionInfo() {
                         </a>
                     </li>
                 </ul>
-                <div className="modal-body pt-0">
+                <div className="modal-body pt-0 px-4">
                     <div className="tab-content">
                         {activeTab === 'folioOperation' && (
                             <div
@@ -229,7 +229,7 @@ function EditReservtionInfo() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="card-footer">
+                                        <div className="mt-auto">
                                             <div className="row">
                                                 <div className="col-8">
                                                     <div className="body-2 p-2 col-12 text-center">
@@ -533,7 +533,7 @@ function EditReservtionInfo() {
                             <div id="guestDetails" className="tab-pane active">
                                 <div className="row">
                                     <div className="col-3 p-0 d-flex flex-column border-right">
-                                        <div className="button-container mt-2">
+                                        <div className="button-container mt-2 me-2">
                                             <div
                                                 className="btn subtitle-2m ms-2 col-12 d-flex align-items-center text-left pt-2"
                                                 type="button"
@@ -588,7 +588,7 @@ function EditReservtionInfo() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="card-footer">
+                                        <div className="mt-auto">
                                             <div className="row">
                                                 <div className="col-8">
                                                     <div className="body-2 p-2 col-12 text-center">
@@ -615,49 +615,47 @@ function EditReservtionInfo() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-9 p-0">
-                                        <div className="ms-3 scrollable-div p-2">
+                                    <div className="col-9 ">
+                                        <div className="ms-1 scrollable-div p-2">
                                             <div className="row">
                                                 <div className="col-6">
                                                     <div className="row mb-3">
-                                                        <div className="col-2 pe-0">
-                                                            <div className="input-group">
-                                                                <label className="custom-label mb-1">
-                                                                    Name
-                                                                </label>
-                                                            </div>
-                                                            <div className="input-group">
-                                                                <select
-                                                                    className="form-select custom-input"
-                                                                    id="reservationTypeDropdown"
-                                                                    aria-label="Reservation Type Dropdown"
-                                                                >
-                                                                    <option
-                                                                        selected
-                                                                        value="1"
-                                                                    >
-                                                                        Mr.
-                                                                    </option>
-                                                                    <option value="2">
-                                                                        Mrs.
-                                                                    </option>
-                                                                    <option value="3"></option>
-                                                                    <option value="4"></option>
-                                                                </select>
-                                                            </div>
+                                                        <div className="input-group">
+                                                            <label className="body-2 mb-1">
+                                                                Name
+                                                            </label>
                                                         </div>
-                                                        <div className="col-10 ps-0">
-                                                            <div className="form-group">
-                                                                <label
-                                                                    htmlFor="customInput"
-                                                                    className="custom-label"
-                                                                ></label>
-                                                                <input
-                                                                    type="text"
-                                                                    className="form-control custom-input"
-                                                                    id="customInput"
-                                                                    placeholder="Alex Polo"
-                                                                />
+                                                        <div className="row">
+                                                            <div className="col-2 pe-0">
+                                                                <div className="input-group">
+                                                                    <select
+                                                                        className="form-select custom-input"
+                                                                        id="reservationTypeDropdown"
+                                                                        aria-label="Reservation Type Dropdown"
+                                                                    >
+                                                                        <option
+                                                                            selected
+                                                                            value="1"
+                                                                        >
+                                                                            Mr.
+                                                                        </option>
+                                                                        <option value="2">
+                                                                            Mrs.
+                                                                        </option>
+                                                                        <option value="3"></option>
+                                                                        <option value="4"></option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-10 ps-0">
+                                                                <div className="input-group">
+                                                                    <input
+                                                                        type="text"
+                                                                        className="form-control custom-input"
+                                                                        id="customInput"
+                                                                        placeholder="Alex Polo"
+                                                                    />
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -666,12 +664,11 @@ function EditReservtionInfo() {
                                                     <div className="row">
                                                         <div className="col-6">
                                                             <div className="form-group">
-                                                                <label
-                                                                    htmlFor="customInput"
-                                                                    className="custom-label"
-                                                                >
-                                                                    Mobile
-                                                                </label>
+                                                                <div className="input-group">
+                                                                    <label className="body-2 mb-1">
+                                                                        Mobile
+                                                                    </label>
+                                                                </div>
                                                                 <input
                                                                     type="number"
                                                                     className="form-control custom-input"
@@ -682,12 +679,11 @@ function EditReservtionInfo() {
                                                         </div>
                                                         <div className="col-6">
                                                             <div className="form-group">
-                                                                <label
-                                                                    htmlFor="customInput"
-                                                                    className="custom-label"
-                                                                >
-                                                                    Phone
-                                                                </label>
+                                                                <div className="input-group">
+                                                                    <label className="body-2 mb-1">
+                                                                        Phone
+                                                                    </label>
+                                                                </div>
                                                                 <input
                                                                     type="number"
                                                                     className="form-control custom-input"
@@ -702,12 +698,11 @@ function EditReservtionInfo() {
                                             <div className="row mb-3">
                                                 <div className="col">
                                                     <div className="form-group">
-                                                        <label
-                                                            htmlFor="customInput"
-                                                            className="custom-label"
-                                                        >
-                                                            Email
-                                                        </label>
+                                                        <div className="input-group">
+                                                            <label className="body-2 mb-1">
+                                                                Email
+                                                            </label>
+                                                        </div>
                                                         <input
                                                             type="text"
                                                             className="form-control custom-input"
@@ -718,7 +713,7 @@ function EditReservtionInfo() {
                                                 </div>
                                                 <div className="col">
                                                     <div className="input-group">
-                                                        <label className="custom-label mb-1">
+                                                        <label className="body-2 mb-1">
                                                             Gender
                                                         </label>
                                                     </div>
@@ -742,7 +737,7 @@ function EditReservtionInfo() {
                                                 </div>
                                                 <div className="col">
                                                     <div className="input-group">
-                                                        <label className="custom-label mb-1">
+                                                        <label className="body-2 mb-1">
                                                             Guest Type
                                                         </label>
                                                     </div>
@@ -766,7 +761,7 @@ function EditReservtionInfo() {
                                                 </div>
                                                 <div className="col">
                                                     <div className="input-group">
-                                                        <label className="custom-label mb-1">
+                                                        <label className="body-2 mb-1">
                                                             VIP Status
                                                         </label>
                                                     </div>
@@ -792,12 +787,11 @@ function EditReservtionInfo() {
                                             <div className="row">
                                                 <div className="col-12">
                                                     <div className="form-group mb-3">
-                                                        <label
-                                                            htmlFor="customInput"
-                                                            className="custom-label"
-                                                        >
-                                                            Address
-                                                        </label>
+                                                        <div className="input-group">
+                                                            <label className="body-2 mb-1">
+                                                                Address
+                                                            </label>
+                                                        </div>
                                                         <input
                                                             type="text"
                                                             className="form-control custom-input"
@@ -810,12 +804,11 @@ function EditReservtionInfo() {
                                             <div className="row">
                                                 <div className="col">
                                                     <div className="form-group mb-3">
-                                                        <label
-                                                            htmlFor="customInput"
-                                                            className="custom-label"
-                                                        >
-                                                            City
-                                                        </label>
+                                                        <div className="input-group">
+                                                            <label className="body-2 mb-1">
+                                                                City
+                                                            </label>
+                                                        </div>
                                                         <input
                                                             type="text"
                                                             className="form-control custom-input"
@@ -826,12 +819,11 @@ function EditReservtionInfo() {
                                                 </div>
                                                 <div className="col">
                                                     <div className="form-group mb-3">
-                                                        <label
-                                                            htmlFor="customInput"
-                                                            className="custom-label"
-                                                        >
-                                                            State
-                                                        </label>
+                                                        <div className="input-group">
+                                                            <label className="body-2 mb-1">
+                                                                State
+                                                            </label>
+                                                        </div>
                                                         <input
                                                             type="text"
                                                             className="form-control custom-input"
@@ -842,12 +834,11 @@ function EditReservtionInfo() {
                                                 </div>
                                                 <div className="col">
                                                     <div className="form-group mb-3">
-                                                        <label
-                                                            htmlFor="customInput"
-                                                            className="custom-label"
-                                                        >
-                                                            Country
-                                                        </label>
+                                                        <div className="input-group">
+                                                            <label className="body-2 mb-1">
+                                                                Country
+                                                            </label>
+                                                        </div>
                                                         <input
                                                             type="text"
                                                             className="form-control custom-input"
@@ -858,12 +849,11 @@ function EditReservtionInfo() {
                                                 </div>
                                                 <div className="col">
                                                     <div className="form-group mb-3">
-                                                        <label
-                                                            htmlFor="customInput"
-                                                            className="custom-label"
-                                                        >
-                                                            Zip
-                                                        </label>
+                                                        <div className="input-group">
+                                                            <label className="body-2 mb-1">
+                                                                Zip
+                                                            </label>
+                                                        </div>
                                                         <input
                                                             type="number"
                                                             className="form-control custom-input"
@@ -876,12 +866,11 @@ function EditReservtionInfo() {
                                             <div className="row">
                                                 <div className="col">
                                                     <div className="form-group mb-3">
-                                                        <label
-                                                            htmlFor="customInput"
-                                                            className="custom-label"
-                                                        >
-                                                            Nationality
-                                                        </label>
+                                                        <div className="input-group">
+                                                            <label className="body-2 mb-1">
+                                                                Nationality
+                                                            </label>
+                                                        </div>
                                                         <input
                                                             type="text"
                                                             className="form-control custom-input"
@@ -892,12 +881,11 @@ function EditReservtionInfo() {
                                                 </div>
                                                 <div className="col">
                                                     <div className="form-group mb-3">
-                                                        <label
-                                                            htmlFor="customInput"
-                                                            className="custom-label"
-                                                        >
-                                                            Company
-                                                        </label>
+                                                        <div className="input-group">
+                                                            <label className="body-2 mb-1">
+                                                                Company
+                                                            </label>
+                                                        </div>
                                                         <input
                                                             type="text"
                                                             className="form-control custom-input"
@@ -908,12 +896,11 @@ function EditReservtionInfo() {
                                                 </div>
                                                 <div className="col">
                                                     <div className="form-group mb-3">
-                                                        <label
-                                                            htmlFor="customInput"
-                                                            className="custom-label"
-                                                        >
-                                                            Fax
-                                                        </label>
+                                                        <div className="input-group">
+                                                            <label className="body-2 mb-1">
+                                                                Fax
+                                                            </label>
+                                                        </div>
                                                         <input
                                                             type="text"
                                                             className="form-control custom-input"
@@ -924,12 +911,12 @@ function EditReservtionInfo() {
                                                 </div>
                                                 <div className="col">
                                                     <div className="form-group mb-3">
-                                                        <label
-                                                            htmlFor="customInput"
-                                                            className="custom-label"
-                                                        >
-                                                            Registration No
-                                                        </label>
+                                                        <div className="input-group">
+                                                            <label className="body-2 mb-1">
+                                                                Registration
+                                                                Number
+                                                            </label>
+                                                        </div>
                                                         <input
                                                             type="number"
                                                             className="form-control custom-input"
@@ -993,13 +980,12 @@ function EditReservtionInfo() {
                                                                         <div className="row">
                                                                             <div className="col-4">
                                                                                 <div className="form-group mb-3">
-                                                                                    <label
-                                                                                        htmlFor="customInput"
-                                                                                        className="custom-label"
-                                                                                    >
-                                                                                        ID
-                                                                                        Number
-                                                                                    </label>
+                                                                                    <div className="input-group">
+                                                                                        <label className="body-2 mb-1">
+                                                                                            ID
+                                                                                            Number
+                                                                                        </label>
+                                                                                    </div>
                                                                                     <input
                                                                                         type="text"
                                                                                         className="form-control custom-input"
@@ -1010,7 +996,7 @@ function EditReservtionInfo() {
                                                                             </div>
                                                                             <div className="col-4">
                                                                                 <div className="input-group">
-                                                                                    <label className="custom-label mb-1">
+                                                                                    <label className="body-2 mb-1">
                                                                                         ID
                                                                                         Type
                                                                                     </label>
@@ -1041,13 +1027,12 @@ function EditReservtionInfo() {
                                                                         <div className="row">
                                                                             <div className="col-4">
                                                                                 <div className="form-group mb-3">
-                                                                                    <label
-                                                                                        htmlFor="customInput"
-                                                                                        className="custom-label"
-                                                                                    >
-                                                                                        Issuing
-                                                                                        County
-                                                                                    </label>
+                                                                                    <div className="input-group">
+                                                                                        <label className="body-2 mb-1">
+                                                                                            Issuing
+                                                                                            Country
+                                                                                        </label>
+                                                                                    </div>
                                                                                     <input
                                                                                         type="text"
                                                                                         className="form-control custom-input"
@@ -1058,13 +1043,12 @@ function EditReservtionInfo() {
                                                                             </div>
                                                                             <div className="col-4">
                                                                                 <div className="form-group mb-3">
-                                                                                    <label
-                                                                                        htmlFor="customInput"
-                                                                                        className="custom-label"
-                                                                                    >
-                                                                                        Issuing
-                                                                                        City
-                                                                                    </label>
+                                                                                    <div className="input-group">
+                                                                                        <label className="body-2 mb-1">
+                                                                                            Issuing
+                                                                                            City
+                                                                                        </label>
+                                                                                    </div>
                                                                                     <input
                                                                                         type="text"
                                                                                         className="form-control custom-input"
@@ -1075,13 +1059,12 @@ function EditReservtionInfo() {
                                                                             </div>
                                                                             <div className="col-4 pe-1">
                                                                                 <div className="form-group mb-3">
-                                                                                    <label
-                                                                                        htmlFor="customInput"
-                                                                                        className="custom-label"
-                                                                                    >
-                                                                                        Expiry
-                                                                                        Date
-                                                                                    </label>
+                                                                                    <div className="input-group">
+                                                                                        <label className="body-2 mb-1">
+                                                                                            Expiry
+                                                                                            Date
+                                                                                        </label>
+                                                                                    </div>
                                                                                     <input
                                                                                         type="date"
                                                                                         className="form-control custom-input"
@@ -1103,7 +1086,7 @@ function EditReservtionInfo() {
                                                 >
                                                     <div className="accordion-item accordion_btn">
                                                         <button
-                                                            className="d-flex align-items-center accordion_btn mt-3 ps-0"
+                                                            className="d-flex align-items-center accordion_btn mt-3 mb-3 ps-0"
                                                             type="button"
                                                             data-bs-toggle="collapse"
                                                             data-bs-target="#OtherCollapse"
@@ -1125,13 +1108,12 @@ function EditReservtionInfo() {
                                                                 <div className="row">
                                                                     <div className="col ps-0">
                                                                         <div className="form-group mb-3">
-                                                                            <label
-                                                                                htmlFor="customInput"
-                                                                                className="custom-label"
-                                                                            >
-                                                                                Birth
-                                                                                Date
-                                                                            </label>
+                                                                            <div className="input-group">
+                                                                                <label className="body-2 mb-1">
+                                                                                    Birth
+                                                                                    Date
+                                                                                </label>
+                                                                            </div>
                                                                             <input
                                                                                 type="date"
                                                                                 className="form-control custom-input"
@@ -1142,13 +1124,12 @@ function EditReservtionInfo() {
                                                                     </div>
                                                                     <div className="col">
                                                                         <div className="form-group mb-3">
-                                                                            <label
-                                                                                htmlFor="customInput"
-                                                                                className="custom-label"
-                                                                            >
-                                                                                Wedding
-                                                                                Date
-                                                                            </label>
+                                                                            <div className="input-group">
+                                                                                <label className="body-2 mb-1">
+                                                                                    Wedding
+                                                                                    Date
+                                                                                </label>
+                                                                            </div>
                                                                             <input
                                                                                 type="date"
                                                                                 className="form-control custom-input"
@@ -1159,13 +1140,12 @@ function EditReservtionInfo() {
                                                                     </div>
                                                                     <div className="col">
                                                                         <div className="form-group mb-3">
-                                                                            <label
-                                                                                htmlFor="customInput"
-                                                                                className="custom-label"
-                                                                            >
-                                                                                Birth
-                                                                                City
-                                                                            </label>
+                                                                            <div className="input-group">
+                                                                                <label className="body-2 mb-1">
+                                                                                    Birth
+                                                                                    City
+                                                                                </label>
+                                                                            </div>
                                                                             <input
                                                                                 type="text"
                                                                                 className="form-control custom-input"
@@ -1176,13 +1156,12 @@ function EditReservtionInfo() {
                                                                     </div>
                                                                     <div className="col pe-1">
                                                                         <div className="form-group mb-3">
-                                                                            <label
-                                                                                htmlFor="customInput"
-                                                                                className="custom-label"
-                                                                            >
-                                                                                Birth
-                                                                                Country
-                                                                            </label>
+                                                                            <div className="input-group">
+                                                                                <label className="body-2 mb-1">
+                                                                                    Birth
+                                                                                    Country
+                                                                                </label>
+                                                                            </div>
                                                                             <input
                                                                                 type="text"
                                                                                 className="form-control custom-input"
@@ -1195,13 +1174,12 @@ function EditReservtionInfo() {
                                                                 <div className="row">
                                                                     <div className="col-3 ps-0">
                                                                         <div className="form-group mb-3">
-                                                                            <label
-                                                                                htmlFor="customInput"
-                                                                                className="custom-label"
-                                                                            >
-                                                                                Spouse
-                                                                                Birthdate
-                                                                            </label>
+                                                                            <div className="input-group">
+                                                                                <label className="body-2 mb-1">
+                                                                                    Spouse
+                                                                                    Birthdate
+                                                                                </label>
+                                                                            </div>
                                                                             <input
                                                                                 type="date"
                                                                                 className="form-control custom-input"

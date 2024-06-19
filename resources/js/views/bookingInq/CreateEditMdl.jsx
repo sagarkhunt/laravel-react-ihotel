@@ -494,18 +494,26 @@ function CreateEditMdl({
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="col-auto">
-                                                <div className="night-count">
-                                                    <p className="caption-2 font-white text-center mb-0">
+
+                                            {/* <div class="col-2 d-flex align-items-end justify-content-center">
+                                                <div class="border night-count rounded text-center py-2">
+                                                    <p class="mb-1">Nights</p>
+                                                    <span>0</span>
+                                                </div>
+                                            </div> */}
+
+                                            <div className="col-auto d-flex mb-3 align-items-end justify-content-center">
+                                                <div className="border night-count rounded text-center py-2">
+                                                    <p className="mb-1">
                                                         Nights
                                                     </p>
-                                                    <p className="caption-1b font-white mt-1 text-center mb-0">
+                                                    <span>
                                                         {isNaN(
                                                             formData.total_day,
                                                         )
                                                             ? 0
                                                             : formData.total_day}
-                                                    </p>
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="col">

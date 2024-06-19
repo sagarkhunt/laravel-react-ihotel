@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import AssignRoomMdl from './AssignRoomMdl';
 import { Link } from 'react-router-dom';
+import AssignRoommdlNew from './AssignRoommdlNew';
+import GroupReservationMdl from './GroupReservationMdl';
 
 function BookingCard({
     booking,
@@ -13,9 +15,20 @@ function BookingCard({
         setOpen(true);
     };
 
+    const [open2, setOpen2] = useState(false);
+    const openGroupReservationMdl = () => {
+        setOpen2(true);
+    };
+
     const toggleDropdown = () => {
         setOpenDropdownIndex(openDropdownIndex === index ? null : index);
     };
+
+    const [openn, setOpenn] = useState(false);
+    const openAssignRoommdlNew = () => {
+        setOpenn(true);
+    };
+
     return (
         <div className="col-3">
             {/* <!-- reservation card  --> */}
@@ -38,10 +51,16 @@ function BookingCard({
                             </span>
                             {openDropdownIndex === index && (
                                 <div className="dropdown-menu-re show">
-                                    <div className="px-3 py-4 dropdown-reservation_list">
+                                    <div
+                                        className="px-3 py-4 dropdown-reservation_list"
+                                        onClick={openAssignRoommdlNew}
+                                    >
                                         <Link
                                             className="dropdown-item subtitle-2m"
                                             href="#"
+                                            onClick={() =>
+                                                setOpenDropdownIndex(false)
+                                            }
                                         >
                                             <span
                                                 className="material-icons-outlined me-2"
@@ -54,10 +73,16 @@ function BookingCard({
                                             Print GRC
                                         </Link>
                                     </div>
-                                    <div className="px-3 py-4 dropdown-reservation_list">
+                                    <div
+                                        className="px-3 py-4 dropdown-reservation_list"
+                                        onClick={openGroupReservationMdl}
+                                    >
                                         <Link
                                             className="dropdown-item subtitle-2m"
                                             href="#"
+                                            onClick={() =>
+                                                setOpenDropdownIndex(false)
+                                            }
                                         >
                                             <span
                                                 className="material-icons-outlined me-2"
@@ -234,6 +259,8 @@ function BookingCard({
                 </div>
             </div>
             {open && <AssignRoomMdl open={open} setOpen={setOpen} />}
+            {openn && <AssignRoommdlNew openn={openn} setOpenn={setOpenn} />}
+            {open2 && <GroupReservationMdl open2={open2} setOpen2={setOpen2} />}
         </div>
     );
 }

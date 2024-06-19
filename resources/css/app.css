@@ -639,7 +639,9 @@ body {
     transition: border-color 0.3s ease;
     min-height: 32px;
 }
-
+.noBullet {
+    list-style: none;
+}
 /* for dropdown menu in reservastion list */
 .dropdown-reservation_list {
     display: flex !important;
@@ -2056,4 +2058,33 @@ select,
 
 .dropdown .material-icons-outlined:hover {
     color: #007bff;
+}
+
+.double-modal {
+    width: 1200px !important;
+}
+
+.no-border {
+    border-bottom: none !important;
+}
+.list-container-GRM {
+    background: #fff;
+    box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e1e7eb;
+    border-radius: 5px;
+}
+.grey-border {
+    color: #899eb0 !important;
+}
+
+.ul-list {
+    list-style: none;
+}
+
+.no-block {
+    background-color: white !important;
+    border: none !important;
+}
+.font-ternary .material-icons-outlined {
+    color: rgb(174, 173, 173); /* Color for the icon */
 }
