@@ -1392,10 +1392,17 @@ body {
 .night-count {
     text-align: center;
     background-color: var(--secondary-color900);
-    width: 4rem;
+    width: 3rem;
     font-size: smaller;
     color: white;
-    height: 56px;
+    height: 40px;
+}
+.res-night-count {
+    background-color: var(--secondary-color900);
+    width: 3rem !important;
+    font-size: smaller;
+    color: white;
+    height: 48px;
 }
 .rounded-top-left-0 {
     border-top-left-radius: 0px;
@@ -1732,10 +1739,10 @@ select,
 #tag-select:focus {
     outline: none;
 }
-.surface-d {
+/* .surface-d {
     color: white;
     background-color: var(--secondary-color900) !important;
-}
+} */
 
 .w-5 {
     width: 5%;

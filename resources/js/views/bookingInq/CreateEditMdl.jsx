@@ -495,7 +495,12 @@ function CreateEditMdl({
                                                 </div>
                                             </div>
                                             <div className="col-auto">
-                                                <div className="night-count">
+                                                <div
+                                                    className="night-count rounded"
+                                                    style={{
+                                                        marginTop: '27px',
+                                                    }}
+                                                >
                                                     <p className="caption-2 font-white text-center mb-0">
                                                         Nights
                                                     </p>

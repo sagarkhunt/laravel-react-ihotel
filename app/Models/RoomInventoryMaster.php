@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Base\BaseModel;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class RoomInventoryMaster extends BaseModel
 {
@@ -22,7 +23,7 @@ class RoomInventoryMaster extends BaseModel
         'room_id',
         'nor',
         'pax',
-        'rate_plan_id',
+        'rate_type_id',
         'room_rate',
         'status',
         'created_by',
@@ -34,4 +35,13 @@ class RoomInventoryMaster extends BaseModel
         'check_in' => 'date',
         'check_out' => 'date',
     ];
+    public function roomCat(): HasOne
+    {
+        return $this->hasOne(RoomCatMaster::class, 'id', 'room_cat_id')->select('id', 'cat_name');
+    }
+
+    public function roomPlan(): HasOne
+    {
+        return $this->hasOne(RoomPlanMaster::class, 'id', 'rate_type_id')->select('id', 'plan_name');
+    }
 }

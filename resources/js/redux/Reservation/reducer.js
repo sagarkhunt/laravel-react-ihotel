@@ -9,6 +9,7 @@ const initialStates = {
     reserUpdate: {},
     reserDelete: {},
     dropDownList: {},
+    roomCateList: {},
 };
 
 function Reducer(state = initialStates, action) {
@@ -66,6 +67,17 @@ function Reducer(state = initialStates, action) {
             };
         case actions.RESER_DROPDOWN_LIST_FAILURE:
             return { ...state, dropDownList: {}, loader: false };
+        // room cate list
+        case actions.AVLBL_ROOM_CATE_LIST:
+            return { ...state, loader: true };
+        case actions.AVLBL_ROOM_CAT_SUCCESS:
+            return {
+                ...state,
+                roomCateList: action.payload,
+                loader: false,
+            };
+        case actions.AVLBL_ROOM_CAT_FAILURE:
+            return { ...state, roomCateList: [], loader: false };
         default:
             return state;
     }

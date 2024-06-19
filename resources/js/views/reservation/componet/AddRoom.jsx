@@ -17,9 +17,9 @@ const AddRoom = ({
             {
                 rcid: '',
                 pid: '',
-                nor: '',
+                nor: '1',
                 adlt: '1',
-                chld: '1',
+                chld: '0',
                 rate: 4000.0,
             },
         ]);
@@ -34,9 +34,9 @@ const AddRoom = ({
                 {
                     rcid: '',
                     pid: '',
-                    nor: '',
+                    nor: '1',
                     adlt: '1',
-                    chld: '1',
+                    chld: '0',
                     rate: 4000.0,
                 },
             ];
@@ -216,8 +216,10 @@ const AddRoom = ({
                                                 <div className="d-flex">
                                                     <input
                                                         list="nor-list"
+                                                        type="number"
                                                         name="nor"
                                                         value={room.nor}
+                                                        min={1}
                                                         onChange={(e) =>
                                                             handleInputChange(
                                                                 e,
@@ -245,44 +247,6 @@ const AddRoom = ({
                                                         </option>
                                                     </datalist>
                                                 </div>
-                                                {/* <div className="d-flex">
-                                                    <select
-                                                        className="form-select custom-input-sm"
-                                                        name="nor"
-                                                        value={room.nor}
-                                                        onChange={(e) =>
-                                                            handleInputChange(
-                                                                e,
-                                                                index,
-                                                                'nor',
-                                                            )
-                                                        }
-                                                    >
-                                                        <option value="">
-                                                            Select
-                                                        </option>
-                                                        {dropDownData[
-                                                            'rooms'
-                                                        ]?.map(
-                                                            (item, index) => {
-                                                                return (
-                                                                    <option
-                                                                        key={
-                                                                            index
-                                                                        }
-                                                                        value={
-                                                                            item.id
-                                                                        }
-                                                                    >
-                                                                        {
-                                                                            item.room_no
-                                                                        }
-                                                                    </option>
-                                                                );
-                                                            },
-                                                        )}
-                                                    </select>
-                                                </div> */}
                                             </div>
                                             <div className="col-2">
                                                 <div className="d-flex">
@@ -321,8 +285,10 @@ const AddRoom = ({
                                             <div className="col-2">
                                                 <div className="d-flex">
                                                     <input
+                                                        type="number"
                                                         list="chld-list"
                                                         name="chld"
+                                                        min={0}
                                                         value={room.chld}
                                                         onChange={(e) =>
                                                             handleInputChange(

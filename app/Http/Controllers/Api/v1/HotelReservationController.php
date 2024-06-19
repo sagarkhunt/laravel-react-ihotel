@@ -7,9 +7,11 @@ use App\Http\Controllers\Api\BaseApiController;
 use App\Models\BookingPayment;
 use App\Models\GuestMaster;
 use App\Models\RoomBookingMaster;
+use App\Models\RoomCatMaster;
 use App\Models\RoomInventoryMaster;
 use Carbon\Carbon;
 use DateTime;
+use Exception;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +27,7 @@ class HotelReservationController extends BaseApiController
      */
     public function getReservation()
     {
-        $bookings = RoomBookingMaster::all();
+        $bookings = RoomBookingMaster::with(['roomInventory.roomCat', 'roomInventory.roomPlan', 'roomAdvPayment'])->get();
 
         if (count($bookings) > 0) {
 
@@ -174,11 +176,11 @@ class HotelReservationController extends BaseApiController
             'bsns_src_id' => 'required',
             'booking_src_id' => 'required',
             'sls_prsn_id' => 'required',
-            'mrkt_sgmnt_id' => 'required',
+            // 'mrkt_sgmnt_id' => 'required',
             'guest_json' => 'required',
             'room_json' => 'required',
-            'sp_req_json' => 'required',
-            'sp_remarks' => 'required',
+            // 'sp_req_json' => 'required',
+            // 'sp_remarks' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -188,7 +190,6 @@ class HotelReservationController extends BaseApiController
 
             $user = Auth::user();
             $user_id = $user->id;
-
             $hotel_id = $user->hotel_id;
             Helper::change_database_using_hotel_id($hotel_id);
 
@@ -199,7 +200,7 @@ class HotelReservationController extends BaseApiController
 
             //{"rt":"1","rp":"1","nor":"5","pax":"10/2","rate":"1000"}
 
-            $totalRate = array_sum(array_column($room_inventory, "rate"));
+            $totalAmount = array_sum(array_column($room_inventory, "rate"));
 
             $bookingPost['nor'] = count($room_inventory);
             $interval = $toDate->diff($fromDate);
@@ -214,7 +215,8 @@ class HotelReservationController extends BaseApiController
             // $guestArr = GuestMaster::find($guest_id);
 
             $guest = array(
-                "add" => $guestArr->full_name,
+                "full_name" => $guestArr->full_name,
+                "add" => $guestArr->address,
                 "nlt" => $guestArr->nationality,
                 "city" => $guestArr->city,
                 "city_id" => $guestArr->city_id,
@@ -265,7 +267,8 @@ class HotelReservationController extends BaseApiController
             $roomBooking->pax_json = $request->input('pax_json');
             $roomBooking->sp_remarks = $request->input('sp_remarks');
             $roomBooking->taxes = $request->input('taxes');
-            $roomBooking->total_amt = $request->input('total_amnt');
+            // $roomBooking->total_amt = $request['total_amnt'];
+            $roomBooking->total_amt = $totalAmount;
             $roomBooking->created_by = $user_id;
             $roomBooking->created_at = now();
             $roomBooking->save();
@@ -280,6 +283,7 @@ class HotelReservationController extends BaseApiController
 
             // Store room inventory details
             foreach ($room_inventory as $room) {
+
                 $prevId = 0;
                 for ($i = 0; $i < $room['nor']; $i++) {
                     # code...
@@ -294,8 +298,9 @@ class HotelReservationController extends BaseApiController
                         $room_inv['fy_id'] = 1;
                         $room_inv['dt'] = $roomDate;
                         $room_inv['room_cat_id'] = $room['rcid'];
+                        $room_inv['rate_type_id'] = $room['pid'];
                         $room_inv['room_id'] = 0;
-                        $room_inv['nor'] = 1; //$room['nor'];
+                        $room_inv['nor'] = $room['nor']; //$room['nor'];
                         $room_inv['pax'] = Null;
                         $room_inv['room_rate'] = $room['rate'];
                         $room_inv['status'] = 1;
@@ -304,6 +309,7 @@ class HotelReservationController extends BaseApiController
                         $room_inv['created_at'] = Carbon::now();
                         // RoomInventoryMaster::create($room);
                         $roomInv = RoomInventoryMaster::create($room_inv);
+
 
                         $prevId = $roomInv->id;
                     }
@@ -638,6 +644,278 @@ class HotelReservationController extends BaseApiController
 
             return $this->sendResponse(Null, 'Reservation deleted successfully.');
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return $this->sendError('Server Error', $e->getMessage());
+        }
+    }
+
+
+    public function getRoomAvailabilityDateWise(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'checkin_dt' => 'required|date',
+            'checkout_dt' => 'required|date',
+            'rm_cat_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError("Required Parameter are Missing.", ['errors' => $validator->errors()]);
+        }
+
+        try {
+            $user = Auth::user();
+            $user_id = $user->id;
+
+            $hotel_id = $user->hotel_id;
+            Helper::change_database_using_hotel_id($hotel_id);
+
+            $rm_cat_id = $request->input('rm_cat_id');
+            $checkInDate = Carbon::parse($request->input('checkin_dt'));
+            $checkOutDate = Carbon::parse($request->input('checkout_dt'));
+            $nights = $checkInDate->diffInDays($checkOutDate);
+
+            if ($nights > 14) {
+                return $this->sendError("Max days can be 14 are Allowed!");
+            }
+
+            // Fetch room categories
+            $roomCategories = RoomCatMaster::where("hotel_id", $hotel_id)
+                ->where("status", 1)
+                ->where(function ($q) use ($rm_cat_id) {
+                    if ($rm_cat_id != 0) {
+                        $q->where('id', $rm_cat_id);
+                    }
+                })
+                ->select('id', 'cat_name', 'qty')
+                ->get();
+
+            // Process the data
+            $availability = [];
+            foreach ($roomCategories as $category) {
+                $categoryId = $category->id;
+                $categoryName = $category->cat_name;
+
+                $catAvailability = [];
+                for ($i = 0; $i <= $nights; $i++) {
+                    $date = $checkInDate->copy()->addDays($i)->toDateString();
+                    $totalRooms = $category->qty;
+                    $reservedRooms = RoomInventoryMaster::where("hotel_id", $hotel_id)->whereDate('dt', $date)->where('room_cat_id', $category->id)->where('status', 1)->count();
+                    $blockedRooms = RoomInventoryMaster::where("hotel_id", $hotel_id)->whereDate('dt', $date)->where('room_cat_id', $category->id)->where('status', 2)->count();
+                    $outOfOrderRooms = RoomInventoryMaster::where("hotel_id", $hotel_id)->whereDate('dt', $date)->where('room_cat_id', $category->id)->where('status', 3)->count();
+                    $availableRooms = $totalRooms - ($reservedRooms + $blockedRooms + $outOfOrderRooms);
+
+                    $catAvailability[] = [
+                        "dt" => $date,
+                        "summary" => [
+                            'total' => (int)$totalRooms,
+                            'reserved' => $reservedRooms,
+                            'blocked' => $blockedRooms,
+                            'out_of_order' => $outOfOrderRooms,
+                            'available' => $availableRooms,
+                        ]
+                    ];
+                }
+                $availability[] = array(
+                    "cat_id" => $categoryId,
+                    "cat" => $categoryName,
+                    "datewise" => $catAvailability
+                );
+            }
+
+            $summary = [];
+            for ($i = 0; $i <= $nights; $i++) {
+                $date = $checkInDate->copy()->addDays($i)->toDateString();
+                $totalRooms = RoomCatMaster::where("hotel_id", $hotel_id)
+                    ->where("status", 1)
+                    ->where(function ($q) use ($rm_cat_id) {
+                        if ($rm_cat_id != 0) {
+                            $q->where('id', $rm_cat_id);
+                        }
+                    })
+                    ->sum('qty');
+                $reservedRooms = RoomInventoryMaster::where("hotel_id", $hotel_id)
+                    ->whereDate('dt', $date)
+                    ->where(function ($q) use ($rm_cat_id) {
+                        if ($rm_cat_id != 0) {
+                            $q->where('room_cat_id', $rm_cat_id);
+                        }
+                    })
+                    ->where('status', 1)->count();
+                $blockedRooms = RoomInventoryMaster::where(
+                    "hotel_id",
+                    $hotel_id
+                )->whereDate('dt', $date)
+                    ->where(function ($q) use ($rm_cat_id) {
+                        if ($rm_cat_id != 0) {
+                            $q->where('room_cat_id', $rm_cat_id);
+                        }
+                    })
+                    ->where('status', 2)->count();
+                $outOfOrderRooms = RoomInventoryMaster::where("hotel_id", $hotel_id)
+                    ->whereDate('dt', $date)
+                    ->where(function ($q) use ($rm_cat_id) {
+                        if ($rm_cat_id != 0) {
+                            $q->where('room_cat_id', $rm_cat_id);
+                        }
+                    })
+                    ->where('status', 3)->count();
+
+                $availableRooms = $totalRooms - ($reservedRooms + $blockedRooms + $outOfOrderRooms);
+
+                $summary['datewise'][] = [
+                    "dt" => $date,
+                    "summary" => [
+                        'total' => (int) $totalRooms,
+                        'reserved' => $reservedRooms,
+                        'blocked' => $blockedRooms,
+                        'out_of_order' => $outOfOrderRooms,
+                        'available' => $availableRooms,
+                    ]
+                ];
+            }
+
+            $data['room_summary']['all'] = $summary;
+            $data['room_summary']['catwise'] = $availability;
+            return $this->sendResponse($data, 'Available Rooms Fetch Successfully.');
+        } catch (Exception $e) {
+            dd($e);
+            Log::error($e->getMessage());
+            return $this->sendError('Server Error', $e->getMessage());
+        }
+    }
+
+    public function getRoomAvailabilitySummary(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'checkin_dt' => 'required|date',
+            'checkout_dt' => 'required|date',
+            'rm_cat_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError("Required Parameter are Missing.", ['errors' => $validator->errors()]);
+        }
+
+        try {
+            $user = Auth::user();
+            $user_id = $user->id;
+
+            $hotel_id = $user->hotel_id;
+            Helper::change_database_using_hotel_id($hotel_id);
+
+            $rm_cat_id = $request->input('rm_cat_id');
+            $checkInDate = Carbon::parse($request->input('checkin_dt'));
+            $checkOutDate = Carbon::parse($request->input('checkout_dt'));
+            $nights = $checkInDate->diffInDays($checkOutDate);
+
+            if ($nights > 14) {
+                return $this->sendError("Max days can be 14 are Allowed!");
+            }
+
+            // Fetch room categories
+            $roomCategories = RoomCatMaster::where("hotel_id", $hotel_id)
+                ->where("status", 1)
+                ->where(function ($q) use ($rm_cat_id) {
+                    if ($rm_cat_id != 0) {
+                        $q->where('id', $rm_cat_id);
+                    }
+                })
+                ->select('id', 'cat_name', 'qty')
+                ->get();
+
+            // Process the data
+            $availability = [];
+            foreach ($roomCategories as $category) {
+                $categoryId = $category->id;
+                $categoryName = $category->cat_name;
+
+
+                $totalRooms = $category->qty;
+                $reservedRooms = RoomInventoryMaster::where("hotel_id", $hotel_id)
+                    ->whereBetween('dt', [$checkInDate, $checkOutDate])
+                    ->where('room_cat_id', $category->id)
+                    ->where('status', 1)->count();
+
+                $blockedRooms = RoomInventoryMaster::where("hotel_id", $hotel_id)
+                    ->whereBetween('dt', [$checkInDate, $checkOutDate])
+                    ->where('room_cat_id', $category->id)
+                    ->where('status', 2)->count();
+
+                $outOfOrderRooms = RoomInventoryMaster::where("hotel_id", $hotel_id)
+                    ->whereBetween('dt', [$checkInDate, $checkOutDate])
+                    ->where('room_cat_id', $category->id)
+                    ->where('status', 3)->count();
+
+                $availableRooms = $totalRooms - ($reservedRooms + $blockedRooms + $outOfOrderRooms);
+
+                $availabilitySummary = [
+                    'total' => (int) $totalRooms,
+                    'reserved' => $reservedRooms,
+                    'blocked' => $blockedRooms,
+                    'out_of_order' => $outOfOrderRooms,
+                    'available' => $availableRooms,
+                ];
+                $availability[] = array(
+                    "cat_id" => $categoryId,
+                    "cat" => $categoryName,
+                    "summary" => $availabilitySummary
+                );
+            }
+
+            $allAvailability = [];
+
+            $totalRooms = RoomCatMaster::where("hotel_id", $hotel_id)
+                ->where(function ($q) use ($rm_cat_id) {
+                    if ($rm_cat_id != 0) {
+                        $q->where('id', $rm_cat_id);
+                    }
+                })
+                ->where("status", 1)
+                ->sum('qty');
+
+            $reservedRooms = RoomInventoryMaster::where("hotel_id", $hotel_id)
+                ->whereBetween('dt', [$checkInDate, $checkOutDate])
+                ->where(function ($q) use ($rm_cat_id) {
+                    if ($rm_cat_id != 0) {
+                        $q->where('room_cat_id', $rm_cat_id);
+                    }
+                })
+                ->where('status', 1)->count();
+
+            $blockedRooms = RoomInventoryMaster::where("hotel_id", $hotel_id)
+                ->whereBetween('dt', [$checkInDate, $checkOutDate])
+                ->where(function ($q) use ($rm_cat_id) {
+                    if ($rm_cat_id != 0) {
+                        $q->where('room_cat_id', $rm_cat_id);
+                    }
+                })
+                ->where('status', 2)->count();
+
+            $outOfOrderRooms = RoomInventoryMaster::where("hotel_id", $hotel_id)
+                ->whereBetween('dt', [$checkInDate, $checkOutDate])
+                ->where(function ($q) use ($rm_cat_id) {
+                    if ($rm_cat_id != 0) {
+                        $q->where('room_cat_id', $rm_cat_id);
+                    }
+                })
+                ->where('status', 3)->count();
+
+            $availableRooms = $totalRooms - ($reservedRooms + $blockedRooms + $outOfOrderRooms);
+
+            $allAvailability['summary'] = [
+                'total' => (int) $totalRooms,
+                'reserved' => $reservedRooms,
+                'blocked' => $blockedRooms,
+                'out_of_order' => $outOfOrderRooms,
+                'available' => $availableRooms,
+            ];
+
+            $data['room_summary']['all'] = $allAvailability;
+            $data['room_summary']['catwise'] = $availability;
+            return $this->sendResponse($data, 'Available Rooms Fetch Successfully.');
+        } catch (Exception $e) {
+            dd($e);
             Log::error($e->getMessage());
             return $this->sendError('Server Error', $e->getMessage());
         }
