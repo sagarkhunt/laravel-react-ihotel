@@ -15,9 +15,26 @@ function BookingCard({
         setOpen(true);
     };
 
-    const [open2, setOpen2] = useState(false);
-    const openGroupReservationMdl = () => {
-        setOpen2(true);
+    function getGuestName(data) {
+        let guest = {};
+        try {
+            guest = JSON.parse(data);
+            console.log('🚀 ~ getGuestName ~ guest:', guest);
+        } catch (error) {
+            console.error(`Error parsing guest JSON at index ${index}:`, error);
+        }
+
+        const fullName = guest.full_name || 'No name available';
+        return fullName;
+    }
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const year = date.getFullYear();
+
+        return `${day}/${month}/${year}`;
     };
 
     const toggleDropdown = () => {
@@ -36,8 +53,10 @@ function BookingCard({
                 <div className="row">
                     <div className="col-10">
                         <div className="d-flex flex-column">
-                            <h5 className="subtitle-1m mb-0">{booking.name}</h5>
-                            <p className="caption-1 mb-0">{booking.id}</p>
+                            <h5 className="subtitle-1m mb-0">
+                                {getGuestName(booking?.guest_json)}
+                            </h5>
+                            <p className="caption-1 mb-0">RS{booking.id}</p>
                         </div>
                     </div>
                     <div className="col-2 align-items-center">
@@ -107,17 +126,18 @@ function BookingCard({
                     <div className="col-4 p-0">
                         <div className="d-flex flex-column gap-1 justify-content-center surface-l p-2">
                             <p className="subtitle-2m text-center mb-0">
-                                {booking.checkInDate}
+                                {formatDate(booking.frm_dt)}
                             </p>
                             <p className="caption-1 text-center mb-0">
-                                {booking.checkInTime}
+                                {/* {booking.checkInTime} */}
+                                10:00 PM
                             </p>
                         </div>
                     </div>
                     <div className="col-4 p-0">
                         <div className="d-flex flex-column gap-1 justify-content-center p-2 surface-d">
                             <p className="subtitle-2m text-center mb-0">
-                                {booking.nights}
+                                {booking.non}
                             </p>
                             <p className="caption-1 text-center  mb-0">
                                 Nights
@@ -128,10 +148,10 @@ function BookingCard({
                     <div className="col-4 p-0">
                         <div className="d-flex flex-column gap-1 justify-content-center surface-l p-2">
                             <p className="subtitle-2m text-center mb-0">
-                                {booking.checkInDate}
+                                {formatDate(booking.to_dt)}
                             </p>
                             <p className="caption-1 text-center  mb-0">
-                                {booking.checkInTime}
+                                10:00 PM
                             </p>
                         </div>
                     </div>
@@ -141,7 +161,9 @@ function BookingCard({
                     <div className="col-8 p-0">
                         <div className="w-100">
                             <p className="subtitle-2m mb-1">Booking Date</p>
-                            <p className="body-2 m-0">{booking.bookingDate}</p>
+                            <p className="body-2 m-0">
+                                {formatDate(booking.created_at)}
+                            </p>
                         </div>
                     </div>
                     <div className="col-4 p-0">
@@ -151,7 +173,7 @@ function BookingCard({
                                     man
                                 </span>
                                 <span className="align-items-center">
-                                    {booking.adults}
+                                    {/* {booking.adults} */}2
                                 </span>
                             </div>
                             <div className="d-flex align-items-center">
@@ -159,7 +181,7 @@ function BookingCard({
                                     boy
                                 </span>
                                 <span className="align-items-center">
-                                    {booking.children}
+                                    {/* {booking.children} */}1
                                 </span>
                             </div>
                         </div>
@@ -177,14 +199,15 @@ function BookingCard({
                     </div>
 
                     <div className="y_scrolling p-0" style={{ height: '60px' }}>
-                        {booking.roomTypes.map((room, index) => (
+                        {booking?.room_inventory?.map((room, index) => (
                             <div
                                 className="row mx-0 mb-1 align-items-center"
                                 key={index}
                             >
                                 <div className="col-8 p-0">
                                     <p className="body-2 m-0 overflow-hidden text-nowrap">
-                                        {room.type}
+                                        {room?.room_cat?.cat_name}/
+                                        {room?.room_plan?.plan_name}
                                     </p>
                                 </div>
                                 <div className="col-4 p-0 d-flex justify-content-end">
@@ -193,35 +216,11 @@ function BookingCard({
                                         className="btn assign cp"
                                         onClick={openAssignRoom}
                                     >
-                                        {room.action}
+                                        Assign Room
                                     </button>
                                 </div>
                             </div>
                         ))}
-                        {/* <div className="row mx-0 mb-1 align-items-center">
-                            <div className="col-8 p-0">
-                                <p className="body-2 m-0">
-                                    Duplex Room/American Plan
-                                </p>
-                            </div>
-                            <div className="col-4 p-0 d-flex justify-content-end">
-                                <button type="button" className="btn assign">
-                                    Assign Room
-                                </button>
-                            </div>
-                        </div>
-                        <div className="row mx-0 mb-1 align-items-center">
-                            <div className="col-8 p-0">
-                                <p className="body-2 m-0">
-                                    Duplex Room/American Plan
-                                </p>
-                            </div>
-                            <div className="col-4 p-0 d-flex justify-content-end">
-                                <button type="button" className="btn assign">
-                                    Assign Room
-                                </button>
-                            </div>
-                        </div> */}
                     </div>
 
                     <div className="mt-3 p-0">
@@ -231,7 +230,7 @@ function BookingCard({
                             </div>
                             <div className="col-6 p-0 d-flex justify-content-end">
                                 <p className="subtitle-2m m-0">
-                                    ₹ {booking.total}
+                                    ₹ {booking.total_amt}
                                 </p>
                             </div>
                         </div>
@@ -241,7 +240,7 @@ function BookingCard({
                             </div>
                             <div className="col-6 p-0 d-flex justify-content-end">
                                 <p className="subtitle-2m m-0">
-                                    ₹ {booking.paid}
+                                    ₹ {booking?.room_adv_payment?.pay_amnt}
                                 </p>
                             </div>
                         </div>
@@ -251,7 +250,11 @@ function BookingCard({
                             </div>
                             <div className="col-6 p-0 d-flex justify-content-end">
                                 <p className="subtitle-2m m-0 darkred">
-                                    ₹ {booking.balance}
+                                    ₹{' '}
+                                    {(
+                                        booking.total_amt -
+                                        booking?.room_adv_payment?.pay_amnt
+                                    ).toFixed(2)}
                                 </p>
                             </div>
                         </div>

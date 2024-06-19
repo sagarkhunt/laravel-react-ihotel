@@ -6,6 +6,28 @@ function HouseKeeoing() {
     function showAddStaff() {
         setOpen(true);
     }
+    const roomCategories = [
+        {
+            name: 'Executive',
+            selectedRoom: 5,
+            roomNumbers: Array(8).fill('R1'),
+        },
+        {
+            name: 'Elegance',
+            selectedRoom: -1,
+            roomNumbers: Array(8).fill('R1'),
+        },
+        {
+            name: 'Family Room',
+            selectedRoom: 5,
+            roomNumbers: Array(8).fill('R1'),
+        },
+        {
+            name: 'King Suit Room',
+            selectedRoom: -1,
+            roomNumbers: Array(8).fill('R1'),
+        },
+    ];
     return (
         <main className="container-fluid px-4 d-flex justify-content-between main-container pb-3">
             <section className="container-page width-60p">
@@ -85,7 +107,68 @@ function HouseKeeoing() {
                         aria-labelledby="dirty-tab"
                         tabIndex="0"
                     >
-                        <div className="px-4">
+                        <div>
+                            {roomCategories.map((category, catIdx) => (
+                                <div key={catIdx}>
+                                    <div className="px-4">
+                                        <div className="d-flex align-items-center gap-3">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="20"
+                                                height="20"
+                                                fill="#899EB0"
+                                                className="bi bi-check-circle"
+                                                viewBox="0 0 16 16"
+                                            >
+                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                                <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05" />
+                                            </svg>
+                                            <h6 className="headline-h6m mb-0">
+                                                {category.name}
+                                            </h6>
+                                            <p className="caption-1 mb-0">
+                                                Select room to complete
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div className="w-100 px-4 d-flex flex-wrap pb-5 mt-neg-1">
+                                        {category.roomNumbers.map(
+                                            (room, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className={`rounded px-2 py-1 text-center room-number-tab ${
+                                                        idx ===
+                                                        category.selectedRoom
+                                                            ? 'select-room-number-tab'
+                                                            : ''
+                                                    }`}
+                                                >
+                                                    {idx ===
+                                                    category.selectedRoom ? (
+                                                        <span>
+                                                            <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                width="16"
+                                                                height="16"
+                                                                fill="currentColor"
+                                                                className="bi bi-check-circle-fill"
+                                                                viewBox="0 0 16 16"
+                                                            >
+                                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                                            </svg>
+                                                        </span>
+                                                    ) : null}
+                                                    {room}
+                                                </div>
+                                            ),
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* <div className="px-4">
                             <div className="d-flex align-items-center gap-3">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -287,7 +370,7 @@ function HouseKeeoing() {
                             <div className="rounded px-2 py-1 text-center room-number-tab">
                                 R1
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                     <div
                         className="tab-pane fade"

@@ -494,17 +494,14 @@ function CreateEditMdl({
                                                     />
                                                 </div>
                                             </div>
-
-                                            {/* <div class="col-2 d-flex align-items-end justify-content-center">
-                                                <div class="border night-count rounded text-center py-2">
-                                                    <p class="mb-1">Nights</p>
-                                                    <span>0</span>
-                                                </div>
-                                            </div> */}
-
-                                            <div className="col-auto d-flex mb-3 align-items-end justify-content-center">
-                                                <div className="border night-count rounded text-center py-2">
-                                                    <p className="mb-1">
+                                            <div className="col-auto">
+                                                <div
+                                                    className="night-count rounded"
+                                                    style={{
+                                                        marginTop: '27px',
+                                                    }}
+                                                >
+                                                    <p className="caption-2 font-white text-center mb-0">
                                                         Nights
                                                     </p>
                                                     <span>

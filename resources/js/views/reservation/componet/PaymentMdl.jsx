@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Modal from '../../../components/common/Modal';
 
 function PaymentMdl({ open, setOpen, setFormData, formData }) {
-    const paymentDetails = structuredClone(formData.paymentDetails);
+    const paymentDetails = structuredClone(formData.payment_json);
     const [pmtDtls, setPmtDtls] = useState(paymentDetails);
 
     const handleChange = (e) => {
@@ -61,12 +61,12 @@ function PaymentMdl({ open, setOpen, setFormData, formData }) {
                                         </label>
                                         <select
                                             className="form-select custom-input-lg"
-                                            name="paymentType"
-                                            value={pmtDtls?.paymentType}
+                                            name="pay_type"
+                                            value={pmtDtls?.pay_type}
                                             onChange={handleChange}
                                             required
                                         >
-                                            <option selected value="">
+                                            <option value="">
                                                 Select Payment Type
                                             </option>
                                             <option value="Cash">Cash</option>
@@ -88,8 +88,8 @@ function PaymentMdl({ open, setOpen, setFormData, formData }) {
                                             className="form-control custom-input-lg"
                                             id="customInput"
                                             placeholder="Card Holder Name"
-                                            name="cardHolderName"
-                                            value={pmtDtls?.cardHolderName}
+                                            name="ref_name"
+                                            value={pmtDtls?.ref_name}
                                             onChange={handleChange}
                                             required
                                         />
@@ -101,15 +101,15 @@ function PaymentMdl({ open, setOpen, setFormData, formData }) {
                                             htmlFor="customInput"
                                             className="custom-label"
                                         >
-                                            Rate
+                                            Amount
                                         </label>
                                         <input
                                             type="text"
                                             className="form-control custom-input-lg"
                                             id="customInput"
-                                            placeholder="12000"
-                                            name="rate"
-                                            value={pmtDtls?.rate}
+                                            placeholder="Enter amount"
+                                            name="pay_amnt"
+                                            value={pmtDtls?.pay_amnt}
                                             onChange={handleChange}
                                             required
                                         />
@@ -134,7 +134,7 @@ function PaymentMdl({ open, setOpen, setFormData, formData }) {
                                 onClick={() => {
                                     setFormData({
                                         ...formData,
-                                        paymentDetails: pmtDtls,
+                                        payment_json: pmtDtls,
                                     });
                                     setOpen(false);
                                 }}

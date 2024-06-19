@@ -8,6 +8,7 @@ const EditCustomerDetails = ({
     setCustomerDetails,
     showEditCustomerDetails,
     setShowEditCustomerDetails,
+    dropDownData,
 }) => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -66,7 +67,7 @@ const EditCustomerDetails = ({
                                 <div className="col-12">
                                     <div className="form-group mb-3">
                                         <label
-                                            htmlFor="guestName"
+                                            htmlFor="full_name"
                                             className="custom-label"
                                         >
                                             Name
@@ -76,10 +77,10 @@ const EditCustomerDetails = ({
                                                 <input
                                                     type="text"
                                                     className="form-control custom-input-lg"
-                                                    id="guestName"
-                                                    name="guestName"
+                                                    id="full_name"
+                                                    name="full_name"
                                                     value={
-                                                        customerDetails.guestName
+                                                        customerDetails.full_name
                                                     }
                                                     onChange={handleInputChange}
                                                     placeholder="Name"
@@ -131,18 +132,33 @@ const EditCustomerDetails = ({
                                             className="form-select custom-input-lg"
                                             id="guestClass"
                                         >
-                                            <option value="">Select</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
+                                            <option value="0">Select</option>
+                                            {dropDownData['guest_classes']?.map(
+                                                (item, index) => {
+                                                    return (
+                                                        <option
+                                                            key={index}
+                                                            value={item.id}
+                                                        >
+                                                            {item.name}
+                                                        </option>
+                                                    );
+                                                },
+                                            )}
+                                            {/* <option value="VIP">VIP</option>
+                                            <option value="REGULAR">
+                                                Regular
+                                            </option>
+                                            <option value="PRESIDENT">
+                                                President
+                                            </option> */}
                                         </select>
                                     </div>
                                 </div>
-                                <div className="col-6"></div>
                                 <div className="col-6">
                                     <div className="form-group mb-3">
                                         <label
-                                            htmlFor="mobileNo"
+                                            htmlFor="mobile"
                                             className="custom-label"
                                         >
                                             Mobile No
@@ -150,10 +166,10 @@ const EditCustomerDetails = ({
                                         <input
                                             type="text"
                                             className="form-control custom-input-lg"
-                                            id="mobileNo"
-                                            name="mobileNo"
+                                            id="mobile"
+                                            name="mobile"
                                             placeholder="Mobile No"
-                                            value={customerDetails.mobileNo}
+                                            value={customerDetails.mobile}
                                             onChange={handleInputChange}
                                             minLength={10} // Set minimum length for validation
                                             pattern="[0-9]+" // Optional pattern for numeric input
@@ -161,7 +177,7 @@ const EditCustomerDetails = ({
                                         />
                                     </div>
                                 </div>
-                                <div className="col-6">
+                                <div className="col-12">
                                     <div className="form-group mb-3">
                                         <label
                                             htmlFor="email"
@@ -195,7 +211,7 @@ const EditCustomerDetails = ({
                                             id="address"
                                             name="address"
                                             placeholder="Address"
-                                            value={customerDetails.address}
+                                            value={customerDetails.add}
                                             onChange={handleInputChange}
                                         />
                                     </div>
@@ -204,64 +220,103 @@ const EditCustomerDetails = ({
                                 <div className="col-3">
                                     <div className="form-group mb-3">
                                         <label
-                                            htmlFor="county"
+                                            htmlFor="country"
                                             className="custom-label"
                                         >
-                                            County
+                                            Country
                                         </label>
-                                        <input
-                                            type="text"
-                                            className="form-control custom-input-lg"
-                                            id="county"
-                                            name="county"
-                                            placeholder="County"
-                                            value={customerDetails.county}
+                                        <select
+                                            className="form-select custom-input-lg"
+                                            id="country_id"
+                                            name="country_id"
+                                            placeholder="Country"
+                                            value={customerDetails.country_id}
                                             onChange={handleInputChange}
-                                        />
+                                        >
+                                            <option value="0">Select</option>
+                                            {dropDownData['country']?.map(
+                                                (item, index) => {
+                                                    return (
+                                                        <option
+                                                            key={index}
+                                                            value={item.id}
+                                                        >
+                                                            {item.name}
+                                                        </option>
+                                                    );
+                                                },
+                                            )}
+                                        </select>
                                     </div>
                                 </div>
                                 <div className="col-3">
                                     <div className="form-group mb-3">
                                         <label
-                                            htmlFor="state"
+                                            htmlFor="state_id"
                                             className="custom-label"
                                         >
                                             State
                                         </label>
-                                        <input
-                                            type="text"
-                                            className="form-control custom-input-lg"
-                                            id="state"
-                                            name="state"
+                                        <select
+                                            className="form-select custom-input-lg"
+                                            id="state_id"
+                                            name="state_id"
                                             placeholder="State"
-                                            value={customerDetails.state}
+                                            value={customerDetails.state_id}
                                             onChange={handleInputChange}
-                                        />
+                                        >
+                                            <option value="">Select</option>
+                                            <option value="Bagmati">
+                                                Bagmati
+                                            </option>
+                                            <option value="Gandaki">
+                                                Gandaki
+                                            </option>
+                                            <option value="Karnali">
+                                                Karnali
+                                            </option>
+                                            <option value="Lumbini">
+                                                Lumbini
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div className="col-3">
                                     <div className="form-group mb-3">
                                         <label
-                                            htmlFor="city"
+                                            htmlFor="city_id"
                                             className="custom-label"
                                         >
                                             City
                                         </label>
-                                        <input
-                                            type="text"
-                                            className="form-control custom-input-lg"
-                                            id="city"
-                                            name="city"
+                                        <select
+                                            className="form-select custom-input-lg"
+                                            id="city_id"
+                                            name="city_id"
                                             placeholder="City"
-                                            value={customerDetails.city}
+                                            value={customerDetails.city_id}
                                             onChange={handleInputChange}
-                                        />
+                                        >
+                                            <option value="">Select</option>
+                                            <option value="Kathmandu">
+                                                Kathmandu
+                                            </option>
+                                            <option value="Pokhara">
+                                                Pokhara
+                                            </option>
+                                            <option value="Biratnagar">
+                                                Biratnagar
+                                            </option>
+                                            <option value="Birgunj">
+                                                Birgunj
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div className="col-3">
                                     <div className="form-group mb-3">
                                         <label
-                                            htmlFor="zipCode"
+                                            htmlFor="pincode"
                                             className="custom-label"
                                         >
                                             Zip Code
@@ -269,10 +324,10 @@ const EditCustomerDetails = ({
                                         <input
                                             type="text"
                                             className="form-control custom-input-lg"
-                                            id="zipCode"
-                                            name="zipCode"
+                                            id="pincode"
+                                            name="pincode"
                                             placeholder="Zip Code"
-                                            value={customerDetails.zipCode}
+                                            value={customerDetails.pincode}
                                             onChange={handleInputChange}
                                         />
                                     </div>
@@ -299,7 +354,7 @@ const EditCustomerDetails = ({
                                 onClick={() => {
                                     setFormData({
                                         ...formData,
-                                        customerDetails: customerDetails,
+                                        guest_json: customerDetails,
                                     });
                                     setShowEditCustomerDetails(false);
                                 }}

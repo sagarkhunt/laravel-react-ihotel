@@ -22,7 +22,7 @@ function* reservationList(action) {
         if (response) {
             yield put({
                 type: actions.RESER_LIST_SUCCESS,
-                payload: response.data,
+                payload: response?.data,
             });
         }
     } catch (error) {
@@ -45,8 +45,7 @@ function* reservationList(action) {
 function* createReservation(action) {
     const { payload } = action;
     try {
-        console.log(payload, '==========');
-        const response = yield call(postRequest, 'create_reservation', payload);
+        const response = yield call(postRequest, 'cr_reservation', payload);
         if (response) {
             yield put({
                 type: actions.RESER_ADD_SUCCESS,
@@ -150,6 +149,64 @@ function* deleteReservation(action) {
         }
     }
 }
+/**
+ *
+ * @param {dropownList} action
+ */
+function* dropownList(action) {
+    try {
+        const response = yield call(
+            postRequest,
+            'get_login_sync',
+            action.payload,
+        );
+        if (response) {
+            yield put({
+                type: actions.RESER_DROPDOWN_LIST_SUCCESS,
+                payload: response.data,
+            });
+        }
+    } catch (error) {
+        yield put({ type: actions.RESER_DROPDOWN_LIST_FAILURE });
+        if (error.response.status === 401) {
+            message.error(error.response.data.message);
+        } else if (
+            error.response &&
+            error.response.data &&
+            error.response.data.message
+        ) {
+            toast.error(error.response.data.message);
+            message.error(error.response.data.message);
+        }
+    }
+}
+
+function* roomAvlblList(action) {
+    try {
+        const response = yield call(
+            postRequest,
+            'get_room_avlbl_dtwise',
+            action.payload,
+        );
+        if (response) {
+            yield put({
+                type: actions.AVLBL_ROOM_CAT_SUCCESS,
+                payload: response?.data,
+            });
+        }
+    } catch (error) {
+        yield put({ type: actions.AVLBL_ROOM_CAT_FAILURE });
+        if (error.response.status === 401) {
+            toast.error(error.response.data.message);
+        } else if (
+            error.response &&
+            error.response.data &&
+            error.response.data.message
+        ) {
+            toast.error(error.response.data.message);
+        }
+    }
+}
 
 export default function* rootSaga() {
     yield all([
@@ -157,5 +214,7 @@ export default function* rootSaga() {
         takeLatest(actions.RESER_ADD, createReservation),
         takeLatest(actions.RESER_UPDATE, updateReservation),
         takeLatest(actions.RESER_DELETE, deleteReservation),
+        takeLatest(actions.RESER_DROPDOWN_LIST, dropownList),
+        takeLatest(actions.AVLBL_ROOM_CATE_LIST, roomAvlblList),
     ]);
 }

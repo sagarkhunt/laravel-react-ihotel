@@ -2,7 +2,9 @@
 
 namespace App\Helpers;
 
+use App\Models\GuestMaster;
 use App\Models\HotelConn;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -136,29 +138,53 @@ class Helper
         }
     }
 
-    public static function insert_login_log($user_id, $result, $frm, $product_id, $failed_login = null)
+    /**
+     * Guest iformation add upate
+     */
+    public static function guestInfoAddUpdate($guestId, $data)
     {
-
-        ## $frm = 1 Mobile $frm = 2 Browser
-        ## $result = 0-auth failed, 1-out of geofencing, 2-device id mismatch, 3-validity expired, 9-success
-
-        if ($result != 1) {
-            $get_user = User::where('id', $user_id)->first();
+        // Decode JSON if $data is a JSON string
+        if (is_string($data)) {
+            $data = json_decode($data, true);
         }
 
-        $insertLog = new LoginLog();
-        $insertLog->store_id = $user_id == 0 ? 0 : $get_user->store_id;
-        $insertLog->user_id = $user_id;
-        $insertLog->role_id = $user_id == 0 ? 0 : $get_user->role_id;
-        $insertLog->result = $result;
-        $insertLog->product_id = $product_id;
-        $insertLog->frm = $frm;
-        $insertLog->failed_login = $failed_login;
-        $insertLog->created_at = date('Y-m-d H:i:s');
+        // Ensure $data is an array
+        if (!is_array($data)) {
+            throw new \Exception("Invalid data format. Array expected.");
+        }
 
-        $insertLog->save();
+        // Map the incoming data to match the database fields
+        $mappedData = [
+            'full_name' => $data['full_name'],
+            // 'guest_cls_id' => $data['guest_cls_id'],
+            'email' => $data['email'],
+            'mobile' => $data['mobile'],
+            'address' => $data['add'],
+            // 'country_id' => $data['country_id'],
+            // 'state_id' => $data['state_id'],
+            'city_id' => $data['city_id'],
+            'pincode' => $data['pincode'],
+        ];
 
+        if ($guestId == 0) {
+            // Add created_by field for new guests
+            $mappedData['created_by'] = Auth::id();
+            // Create new guest
+            $guest = GuestMaster::create($mappedData);
+        } else {
+            // Add updated_by field for existing guests
+            $mappedData['updated_by'] = Auth::id(); // Assuming you're using Laravel's auth system
 
-        return 0;
+            // Update existing guest
+            $guest = GuestMaster::find($guestId);
+            if ($guest) {
+                $guest->update($mappedData);
+            } else {
+                // Handle the case where the guestId does not exist in the database
+                throw new \Exception("Guest with ID {$guestId} not found.");
+            }
+        }
+
+        return $guest;
     }
 }
