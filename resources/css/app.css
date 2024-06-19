@@ -2057,3 +2057,7 @@ select,
 .dropdown .material-icons-outlined:hover {
     color: #007bff;
 }
+
+.btn-h48 {
+    height: 48px;
+}

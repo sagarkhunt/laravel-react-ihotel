@@ -54,6 +54,17 @@ function countryReducer(state = initialCountryStates, action) {
             };
         case actions.COUNTRY_DELETE_FAILURE:
             return { ...state, countryDelete: {}, loader: false };
+        /**DROP DOWN SECTION */
+        case actions.COUNTRY_DROPDOWN_LIST:
+            return { ...state, loader: true };
+        case actions.COUNTRY_DROPDOWN_LIST_SUCCESS:
+            return {
+                ...state,
+                dropDownList: action.payload,
+                loader: false,
+            };
+        case actions.COUNTRY_DROPDOWN_LIST_FAILURE:
+            return { ...state, dropDownList: {}, loader: false };
         default:
             return state;
     }

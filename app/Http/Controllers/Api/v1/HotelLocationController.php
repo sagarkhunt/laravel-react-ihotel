@@ -232,7 +232,7 @@ class HotelLocationController extends BaseApiController
     public function updateState(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'city_id' => 'required',
+            'state_id' => 'required',
             'country_id' => 'required',
             'name' => 'string|max:200',
         ]);

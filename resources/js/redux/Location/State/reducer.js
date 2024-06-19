@@ -54,6 +54,17 @@ function stateReducer(state = initialStateStates, action) {
             };
         case actions.STATE_DELETE_FAILURE:
             return { ...state, stateDelete: {}, loader: false };
+        /**Dropdown list section */
+        case actions.STATE_DROPDOWN_LIST:
+            return { ...state, loader: true };
+        case actions.STATE_DROPDOWN_LIST_SUCCESS:
+            return {
+                ...state,
+                stateDropDownList: action.payload,
+                loader: false,
+            };
+        case actions.STATE_DROPDOWN_LIST_FAILURE:
+            return { ...state, stateDropDownList: {}, loader: false };
         default:
             return state;
     }

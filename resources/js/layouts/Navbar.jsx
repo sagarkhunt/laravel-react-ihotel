@@ -155,7 +155,7 @@ function Navbar() {
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         height="24px"
-                                                        className='icon_svg'
+                                                        className="icon_svg"
                                                         viewBox="0 -960 960 960"
                                                         width="24px"
                                                         fill={
@@ -812,6 +812,30 @@ function Navbar() {
                                                                     className="nav-item"
                                                                 >
                                                                     ID Type
+                                                                </span>
+                                                            </div>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="col-12 grid_padding">
+                                                        <Link
+                                                            className={`nav-sub-box cp ${activeLink === '/location' ? 'active' : ''}`}
+                                                            to="/location"
+                                                            onClick={() =>
+                                                                handleLinkClick(
+                                                                    '/location',
+                                                                )
+                                                            }
+                                                        >
+                                                            <div
+                                                                data-bs-dismiss="offcanvas"
+                                                                className="dismissable"
+                                                            >
+                                                                <span
+                                                                    type="button"
+                                                                    className="nav-item"
+                                                                >
+                                                                    Location
+                                                                    Master
                                                                 </span>
                                                             </div>
                                                         </Link>

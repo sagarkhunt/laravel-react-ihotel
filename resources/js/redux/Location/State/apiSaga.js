@@ -1,6 +1,6 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 import actions from './actions';
-import { postRequest } from '../../config/axiosClient';
+import { postRequest } from '../../../config/axiosClient';
 import toast from 'react-hot-toast';
 
 /**
@@ -137,6 +137,37 @@ function* deleteState(action) {
         }
     }
 }
+/**
+ *
+ * @param {dropownList} action
+ */
+function* dropownList(action) {
+    try {
+        const response = yield call(
+            postRequest,
+            'get_login_sync',
+            action.payload,
+        );
+        if (response) {
+            yield put({
+                type: actions.STATE_DROPDOWN_LIST_SUCCESS,
+                payload: response.data,
+            });
+        }
+    } catch (error) {
+        yield put({ type: actions.STATE_DROPDOWN_LIST_FAILURE });
+        if (error.response.status === 401) {
+            message.error(error.response.data.message);
+        } else if (
+            error.response &&
+            error.response.data &&
+            error.response.data.message
+        ) {
+            toast.error(error.response.data.message);
+            message.error(error.response.data.message);
+        }
+    }
+}
 
 export default function* stateSaga() {
     yield all([
@@ -144,6 +175,7 @@ export default function* stateSaga() {
         takeLatest(actions.STATE_ADD, createState),
         takeLatest(actions.STATE_UPDATE, updateState),
         takeLatest(actions.STATE_DELETE, deleteState),
+        takeLatest(actions.STATE_DROPDOWN_LIST, dropownList),
     ]);
 }
 
