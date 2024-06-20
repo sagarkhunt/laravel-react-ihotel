@@ -25,7 +25,7 @@ class HotelLocationController extends BaseApiController
             Helper::change_database_using_hotel_id($hotel_id);
             $data = array();
 
-            $getFloor = CountryMaster::where('hotel_id', $hotel_id)->get();
+            $getFloor = CountryMaster::withCount('getCity', 'getState')->where('hotel_id', $hotel_id)->get();
             if (count($getFloor) > 0) {
                 return $this->sendResponse($getFloor, 'Get Country Data Successfully');
             } else {
@@ -170,7 +170,8 @@ class HotelLocationController extends BaseApiController
             Helper::change_database_using_hotel_id($hotel_id);
             $data = array();
 
-            $getFloor = StateMaster::with(['country'])->where('hotel_id', $hotel_id)->get();
+            $getFloor = StateMaster::with(['country'])->withCount('getCity')->where('hotel_id', $hotel_id)->get();
+            // dd($getFloor);
             if (count($getFloor) > 0) {
                 return $this->sendResponse($getFloor, 'Get State Data Successfully');
             } else {
@@ -213,14 +214,35 @@ class HotelLocationController extends BaseApiController
             if ($duplicate != 0) {
                 return $this->sendResponse('fail', "The" . $msg4 . " Already Exists");
             } else {
-                $createState = StateMaster::create([
-                    'hotel_id' => $hotel_id,
-                    'name' => $request["name"],
-                    'country_id' => $request["country_id"],
-                    'created_by' => $auth_user_id,
-                    'created_at' => date('Y-m-d H:i:s')
-                ]);
-                return $this->sendResponse($createState, 'Country created successfully.');
+                $crMultiState = $request["name"];
+                $crMultiStateArray = explode(',', $crMultiState);
+                $existingState = [];
+                $addedState = [];
+                foreach ($crMultiStateArray as $state) {
+                    $stateName = $state;
+
+                    $existingStateCount = StateMaster::where('hotel_id', $hotel_id)
+                        ->where('name', $stateName)
+                        ->count();
+
+                    if ($existingStateCount === 0) {
+                        $createState = StateMaster::create([
+                            'hotel_id' => $hotel_id,
+                            'name' => $stateName,
+                            'country_id' => $request["country_id"],
+                            'created_by' => $auth_user_id,
+                            'created_at' => date('Y-m-d H:i:s')
+                        ]);
+
+                        $addedState[] = $stateName;
+                    } else {
+                        $existingState[] = $stateName;
+                    }
+                }
+                $addedStateMessage = count($addedState) > 0 ? implode(', ', $addedState) . ' State added successfully. ' : '';
+                $existingStateMessage = count($existingState) > 0 ? implode(', ', $existingState) . ' Already exist and were not added.' : '';
+                $responseMessage = $addedStateMessage . $existingStateMessage;
+                return $this->sendResponse(Null, $responseMessage);
             }
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
@@ -232,7 +254,7 @@ class HotelLocationController extends BaseApiController
     public function updateState(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'city_id' => 'required',
+            'state_id' => 'required',
             'country_id' => 'required',
             'name' => 'string|max:200',
         ]);
@@ -319,7 +341,7 @@ class HotelLocationController extends BaseApiController
             Helper::change_database_using_hotel_id($hotel_id);
             $data = array();
 
-            $getFloor = CityMaster::where('hotel_id', $hotel_id)->get();
+            $getFloor = CityMaster::with(['country', 'state'])->where('hotel_id', $hotel_id)->get();
             if (count($getFloor) > 0) {
                 return $this->sendResponse($getFloor, 'Get State Data Successfully');
             } else {
@@ -363,15 +385,45 @@ class HotelLocationController extends BaseApiController
             if ($duplicate != 0) {
                 return $this->sendResponse('fail', "The" . $msg4 . " Already Exists");
             } else {
-                $createState = CityMaster::insertGetId([
-                    'hotel_id' => $hotel_id,
-                    'name' => $request["name"],
-                    'state_id' => $request["state_id"],
-                    'country_id' => $request["country_id"],
-                    'created_by' => $auth_user_id,
-                    'created_at' => date('Y-m-d H:i:s')
-                ]);
-                return $this->sendResponse($createState, 'City created successfully.');
+                $crMultiCity = $request["name"];
+                $crMultiCityArray = explode(',', $crMultiCity);
+                $existingCity = [];
+                $addedCity = [];
+                foreach ($crMultiCityArray as $city) {
+                    $cityName = $city;
+
+                    $existingStateCount = CityMaster::where('hotel_id', $hotel_id)
+                        ->where('name', $cityName)
+                        ->count();
+
+                    if ($existingStateCount === 0) {
+                        $createState = CityMaster::create([
+                            'hotel_id' => $hotel_id,
+                            'name' => $cityName,
+                            'state_id' => $request["state_id"],
+                            'country_id' => $request["country_id"],
+                            'created_by' => $auth_user_id,
+                            'created_at' => date('Y-m-d H:i:s')
+                        ]);
+
+                        $addedCity[] = $cityName;
+                    } else {
+                        $existingCity[] = $cityName;
+                    }
+                }
+                $addedCityMessage = count($addedCity) > 0 ? implode(', ', $addedCity) . ' City added successfully. ' : '';
+                $existingCityMessage = count($existingCity) > 0 ? implode(', ', $existingCity) . ' Already exist and were not added.' : '';
+                $responseMessage = $addedCityMessage . $existingCityMessage;
+                return $this->sendResponse(Null, $responseMessage);
+                // $createState = CityMaster::insertGetId([
+                //     'hotel_id' => $hotel_id,
+                //     'name' => $request["name"],
+                //     'state_id' => $request["state_id"],
+                //     'country_id' => $request["country_id"],
+                //     'created_by' => $auth_user_id,
+                //     'created_at' => date('Y-m-d H:i:s')
+                // ]);
+                // return $this->sendResponse($createState, 'City created successfully.');
             }
         } catch (\Exception $e) {
             Log::debug($e->getMessage());

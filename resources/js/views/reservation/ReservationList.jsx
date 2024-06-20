@@ -71,6 +71,22 @@ function ReservationList() {
             type: actions.RESER_LIST,
         });
     }, [resCreated]);
+
+    const getAdltTotal = (data) => {
+        let adltTotal = 0;
+        JSON.parse(data)?.map((item, index) => {
+            adltTotal += parseInt(item.adlt);
+        });
+        return adltTotal;
+    };
+    const getChldTotal = (data) => {
+        let chldTotal = 0;
+        JSON.parse(data)?.map((item, index) => {
+            chldTotal += parseInt(item.chld);
+        });
+        return chldTotal;
+    };
+
     return (
         <div className="m-4">
             <div className="col-12 mt-3 pannel action-header px-3">
@@ -264,7 +280,9 @@ function ReservationList() {
                                                         man
                                                     </span>
                                                     <span className="align-items-center">
-                                                        2
+                                                        {getAdltTotal(
+                                                            row?.room_json,
+                                                        )}
                                                     </span>
                                                 </div>
                                                 <div className="icon-item d-flex align-items-center">
@@ -272,7 +290,9 @@ function ReservationList() {
                                                         boy
                                                     </span>
                                                     <span className="align-items-center">
-                                                        1
+                                                        {getChldTotal(
+                                                            row?.room_json,
+                                                        )}
                                                     </span>
                                                 </div>
                                             </div>
@@ -415,7 +435,7 @@ function ReservationList() {
             {open1 && (
                 <FilterReservationList open1={open1} setOpen1={setOpen1} />
             )}
-            {openn && <AssignRoommdlNew openn={openn} setOpenn={setOpenn} />}
+            {/* {openn && <AssignRoommdlNew openn={openn} setOpenn={setOpenn} />} */}
             {open2 && <GroupReservationMdl open2={open2} setOpen2={setOpen2} />}
         </div>
     );

@@ -35,6 +35,7 @@ class HotelReservationController extends BaseApiController
             return $this->sendResponse($bookings, "Get Reservation list successfully!.");
         }
         return $this->sendResponse([], "No Data found!.");
+
     }
 
     public function createReservation(Request $request)
@@ -66,8 +67,7 @@ class HotelReservationController extends BaseApiController
 
             $toDate = new DateTime($request->input('to_dt'));
             $fromDate = new DateTime($request->input('frm_dt'));
-            // $room_inventory = json_decode($request->room_json, true);
-            $room_inventory = json_decode(json_encode($request->room_json), true);
+            $room_inventory = json_decode($request->room_json, true);
             //$room_inventory = $request->room_json;
 
             $totalAmount = array_sum(array_column($room_inventory, "rate"));
@@ -77,15 +77,15 @@ class HotelReservationController extends BaseApiController
 
             $roomError = false;
             $roomErrorDetails = [];
-            foreach ($room_inventory as $roomInv) {
+            foreach($room_inventory as $roomInv){
                 $roomsAvlbl = BookingHelper::checkRoomBookingAvailability($hotel_id, $toDate, $fromDate, $roomInv['rcid'], $roomInv['nor'], 0);
-                if ($roomsAvlbl !== true) {
+                if($roomsAvlbl !== true){
                     $roomError = true;
                     $roomErrorDetails[] = $roomsAvlbl['data'];
                 }
             }
 
-            if ($roomError) {
+            if($roomError){
                 return $this->sendError("Room Not Available.", ['errors' => $roomErrorDetails]);
             }
 
@@ -305,15 +305,15 @@ class HotelReservationController extends BaseApiController
 
             $roomError = false;
             $roomErrorDetails = [];
-            foreach ($room_inventory as $roomInv) {
+            foreach($room_inventory as $roomInv){
                 $roomsAvlbl = BookingHelper::checkRoomBookingAvailability($hotel_id, $toDate, $fromDate, $roomInv['rcid'], $roomInv['nor'], $bookingId);
-                if ($roomsAvlbl !== true) {
+                if($roomsAvlbl !== true){
                     $roomError = true;
                     $roomErrorDetails[] = $roomsAvlbl['data'];
                 }
             }
 
-            if ($roomError) {
+            if($roomError){
                 return $this->sendError("Room Not Available.", ['errors' => $roomErrorDetails]);
             }
 

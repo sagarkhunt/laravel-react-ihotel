@@ -10,7 +10,7 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
     const { dropDownList } = useSelector((state) => state?.reserReducer);
     const currentDate = new Date();
     const currentDateString = currentDate.toISOString().split('T')[0];
-    const [selectedCategoryId, setSelectedCategoryId] = useState('0');
+    const [selectedCategoryId, setSelectedCategoryId] = useState('');
     const { loader, roomCateList } = useSelector((state) => state.reserReducer);
     // Get the next day's date
     const nextDate = new Date(currentDate);
@@ -67,6 +67,20 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
             setSelectedCategoryId(dropDownData['room_cate'][0].id);
         }
     }, [dropDownData]);
+
+    useEffect(() => {
+        if (selectedCategoryId) {
+            const params = {
+                checkin_dt: checkInDate,
+                checkout_dt: checkOutDate,
+                rm_cat_id: selectedCategoryId,
+            };
+            dispatch({
+                type: actions.AVLBL_ROOM_CATE_LIST,
+                payload: params,
+            });
+        }
+    }, [selectedCategoryId, dispatch]);
     useEffect(() => {
         const sync_req = ['room_cate'];
         dispatch({
@@ -74,17 +88,6 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
             payload: {
                 sync_req: sync_req.join(','),
             },
-        });
-    }, []);
-    useEffect(() => {
-        const params = {
-            checkin_dt: checkInDate,
-            checkout_dt: checkOutDate,
-            rm_cat_id: selectedCategoryId,
-        };
-        dispatch({
-            type: actions.AVLBL_ROOM_CATE_LIST,
-            payload: params,
         });
     }, []);
     return (
@@ -207,196 +210,411 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
                                     </button>
                                 </div>
                             </div>
-
-                            <div
-                                className="row mt-4 mx-0"
-                                style={{
-                                    minWidth: '1000px',
-                                    overflowX: 'scroll',
-                                }}
+                            <ul
+                                className="nav tab-nav nav-pills mt-2"
+                                role="tablist"
                             >
-                                <table className="table table-bordered custom-table availableinquirytable">
-                                    <thead>
-                                        <tr
-                                            style={{
-                                                height: '56px',
-                                                backgroundColor: '#e1e7eb',
-                                            }}
-                                        >
-                                            <th
-                                                scope="col"
-                                                className="th-custom align-middle px-3"
-                                                width="15%"
+                                <li className="nav-item">
+                                    <a
+                                        className="nav-link nav-link-custom active"
+                                        data-bs-toggle="pill"
+                                        href="#summary"
+                                    >
+                                        Summary
+                                    </a>
+                                </li>
+                                <li className="nav-item">
+                                    <a
+                                        className="nav-link nav-link-custom"
+                                        data-bs-toggle="pill"
+                                        href="#room_categories_wise"
+                                    >
+                                        Room Categories Wise
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <div className="tab-content">
+                                <div
+                                    id="summary"
+                                    className="row mt-0 mx-0 container px-0 tab-pane active"
+                                    style={{
+                                        minWidth: '1000px',
+                                        overflowX: 'scroll',
+                                    }}
+                                >
+                                    {/* Summary Content */}
+                                    <table className="table table-bordered custom-table availableinquirytable">
+                                        <thead>
+                                            <tr
+                                                style={{
+                                                    height: '56px',
+                                                    backgroundColor: '#f0f3f5',
+                                                }}
                                             >
-                                                Room Category
-                                            </th>
-                                            {roomCateListData?.room_summary?.catwise?.flatMap(
-                                                (item) =>
-                                                    item.datewise.map(
-                                                        (date) => (
-                                                            <th
-                                                                key={date.dt}
-                                                                scope="col"
-                                                                className="th-custom align-middle text-center"
-                                                            >
-                                                                {new Date(
-                                                                    date.dt,
-                                                                ).toLocaleDateString(
-                                                                    'en-US',
-                                                                    {
-                                                                        day: 'numeric',
-                                                                        month: 'short',
-                                                                    },
-                                                                )}
-                                                            </th>
-                                                        ),
-                                                    ),
-                                            )}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {roomCateListData?.room_summary?.catwise?.map(
-                                            (item) => (
-                                                <tr
-                                                    key={item.cat_id}
-                                                    style={{
-                                                        height: '48px',
-                                                        backgroundColor:
-                                                            '#e6eff8',
-                                                    }}
+                                                <th
+                                                    scope="col"
+                                                    className="th-custom align-middle px-3"
+                                                    width="15%"
                                                 >
-                                                    <td
-                                                        className="subtitle-2b align-middle px-3"
+                                                    Room Availibilities
+                                                </th>
+                                                {roomCateListData?.room_summary?.all?.datewise.map(
+                                                    (date) => (
+                                                        <th
+                                                            key={`header-${date.dt}`}
+                                                            scope="col"
+                                                            className="th-custom align-middle text-center"
+                                                        >
+                                                            {new Date(
+                                                                date.dt,
+                                                            ).toLocaleDateString(
+                                                                'en-US',
+                                                                {
+                                                                    day: 'numeric',
+                                                                    month: 'short',
+                                                                },
+                                                            )}
+                                                        </th>
+                                                    ),
+                                                )}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {/* {roomCateListData?.room_summary?.all?.map(
+                                                (item) => (
+                                                    <tr
+                                                        key={`cat-${item.cat_id}`}
                                                         style={{
-                                                            fontFamily:
-                                                                "'Nunito', sans-serif",
+                                                            height: '48px',
+                                                            backgroundColor:
+                                                                '#e6eff8',
                                                         }}
                                                     >
-                                                        {item.cat}
-                                                    </td>
-                                                    {item.datewise.map(
-                                                        (date) => (
-                                                            <td
-                                                                key={date.dt}
-                                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                                style={{
-                                                                    fontFamily:
-                                                                        "'Nunito', sans-serif",
-                                                                }}
-                                                            >
+                                                        <td
+                                                            className="subtitle-2b align-middle px-3"
+                                                            style={{
+                                                                fontFamily:
+                                                                    "'Nunito', sans-serif",
+                                                            }}
+                                                        >
+                                                            {item.cat}
+                                                        </td>
+                                                        {item.datewise.map(
+                                                            (date) => (
+                                                                <td
+                                                                    key={`total-${item.cat_id}-${date.dt}`}
+                                                                    className="subtitle-2b primary-colori text-center align-middle"
+                                                                    style={{
+                                                                        fontFamily:
+                                                                            "'Nunito', sans-serif",
+                                                                    }}
+                                                                >
+                                                                    {
+                                                                        date
+                                                                            .summary
+                                                                            .total
+                                                                    }
+                                                                </td>
+                                                            ),
+                                                        )}
+                                                    </tr>
+                                                ),
+                                            )} */}
+                                            <tr style={{ height: '48px' }}>
+                                                <td className="subtitle-2m align-middle px-3">
+                                                    Phisical Rooms
+                                                </td>
+                                                {roomCateListData?.room_summary?.all?.datewise.map(
+                                                    (date) => (
+                                                        <td
+                                                            key={`reserved-${date.dt}`}
+                                                            className="subtitle-2m text-center align-middle"
+                                                            style={
                                                                 {
-                                                                    date.summary
-                                                                        .total
+                                                                    // color: 'green',
                                                                 }
-                                                            </td>
-                                                        ),
-                                                    )}
-                                                </tr>
-                                            ),
-                                        )}
-                                        <tr style={{ height: '48px' }}>
-                                            <td className="subtitle-2m align-middle px-3">
-                                                Reserved Rooms
-                                            </td>
-                                            {/* Adjust this section based on how you fetch reserved room data */}
-                                            {roomCateListData?.room_summary?.catwise?.flatMap(
-                                                (item) =>
-                                                    item.datewise.map(
-                                                        (date) => (
-                                                            <td
-                                                                key={`${date.dt}-reserved`}
-                                                                className="subtitle-2m text-center align-middle"
-                                                                style={{
-                                                                    color: '#0b641f',
-                                                                }}
-                                                            >
-                                                                {
-                                                                    date.summary
-                                                                        .reserved
-                                                                }{' '}
-                                                                {/* Replace with your actual reserved room data */}
-                                                            </td>
-                                                        ),
+                                                            }
+                                                        >
+                                                            {
+                                                                date.summary
+                                                                    ?.total
+                                                            }
+                                                        </td>
                                                     ),
-                                            )}
-                                        </tr>
-                                        <tr style={{ height: '48px' }}>
-                                            <td className="ubtitle-2m align-middle px-3">
-                                                Blocked Rooms
-                                            </td>
-                                            {/* Adjust this section based on how you fetch reserved room data */}
-                                            {roomCateListData?.room_summary?.catwise?.flatMap(
-                                                (item) =>
-                                                    item.datewise.map(
-                                                        (date) => (
-                                                            <td
-                                                                key={`${date.dt}-reserved`}
-                                                                className="subtitle-2m text-center align-middle"
-                                                            >
+                                                )}
+                                            </tr>
+                                            <tr style={{ height: '48px' }}>
+                                                <td className="subtitle-2m align-middle px-3">
+                                                    Reserved Rooms
+                                                </td>
+                                                {roomCateListData?.room_summary?.all?.datewise.map(
+                                                    (date) => (
+                                                        <td
+                                                            key={`reserved-${date.dt}`}
+                                                            className="subtitle-2m text-center align-middle"
+                                                            style={
                                                                 {
-                                                                    date.summary
-                                                                        .blocked
-                                                                }{' '}
-                                                                {/* Replace with your actual reserved room data */}
-                                                            </td>
-                                                        ),
+                                                                    // color: 'green',
+                                                                }
+                                                            }
+                                                        >
+                                                            {
+                                                                date.summary
+                                                                    ?.reserved
+                                                            }
+                                                        </td>
                                                     ),
-                                            )}
-                                        </tr>
-                                        <tr style={{ height: '48px' }}>
-                                            <td className="subtitle-2m align-middle px-3">
-                                                Out Of Order Rooms
-                                            </td>
-                                            {/* Adjust this section based on how you fetch reserved room data */}
-                                            {roomCateListData?.room_summary?.catwise?.flatMap(
-                                                (item) =>
-                                                    item.datewise.map(
-                                                        (date) => (
-                                                            <td
-                                                                key={`${date.dt}-reserved`}
-                                                                className="subtitle-2m text-center align-middle"
-                                                                style={{
-                                                                    color: '#e3001f',
-                                                                }}
-                                                            >
+                                                )}
+                                            </tr>
+                                            <tr style={{ height: '48px' }}>
+                                                <td className="subtitle-2m align-middle px-3">
+                                                    Booked Rooms
+                                                </td>
+                                                {roomCateListData?.room_summary?.all?.datewise.map(
+                                                    (date) => (
+                                                        <td
+                                                            key={`reserved-${date.dt}`}
+                                                            className="subtitle-2m text-center align-middle"
+                                                            // style={{
+                                                            //     color: '#0b641f',
+                                                            // }}
+                                                        >
+                                                            {
+                                                                date.summary
+                                                                    ?.blocked
+                                                            }{' '}
+                                                            {/* Adjust this based on your actual reserved data */}
+                                                        </td>
+                                                    ),
+                                                )}
+                                            </tr>
+                                            <tr style={{ height: '48px' }}>
+                                                <td className="subtitle-2m align-middle px-3">
+                                                    Out Of Order Rooms
+                                                </td>
+                                                {roomCateListData?.room_summary?.all?.datewise.map(
+                                                    (date) => (
+                                                        <td
+                                                            key={`reserved-${date.dt}`}
+                                                            className="subtitle-2m text-center align-middle"
+                                                            style={
                                                                 {
-                                                                    date.summary
-                                                                        .out_of_order
-                                                                }{' '}
-                                                                {/* Replace with your actual reserved room data */}
-                                                            </td>
-                                                        ),
+                                                                    // color: 'red',
+                                                                }
+                                                            }
+                                                        >
+                                                            {
+                                                                date.summary
+                                                                    ?.out_of_order
+                                                            }{' '}
+                                                        </td>
                                                     ),
-                                            )}
-                                        </tr>
-                                        <tr style={{ height: '48px' }}>
-                                            <td className="subtitle-2m align-middle px-3">
-                                                Available Rooms
-                                            </td>
-                                            {/* Adjust this section based on how you fetch reserved room data */}
-                                            {roomCateListData?.room_summary?.catwise?.flatMap(
-                                                (item) =>
-                                                    item.datewise.map(
-                                                        (date) => (
-                                                            <td
-                                                                key={`${date.dt}-reserved`}
-                                                                className="subtitle-2m text-center align-middle"
-                                                                style={{
-                                                                    color: '#0b641f',
-                                                                }}
-                                                            >
+                                                )}
+                                            </tr>
+                                            <tr style={{ height: '48px' }}>
+                                                <td className="subtitle-2m align-middle px-3">
+                                                    Available Rooms
+                                                </td>
+                                                {roomCateListData?.room_summary?.all?.datewise.map(
+                                                    (date) => (
+                                                        <td
+                                                            key={`reserved-${date.dt}`}
+                                                            className="subtitle-2m text-center align-middle"
+                                                            style={
                                                                 {
-                                                                    date.summary
-                                                                        .available
-                                                                }{' '}
-                                                                {/* Replace with your actual reserved room data */}
-                                                            </td>
-                                                        ),
+                                                                    // color: 'green',
+                                                                }
+                                                            }
+                                                        >
+                                                            {
+                                                                date.summary
+                                                                    ?.available
+                                                            }{' '}
+                                                        </td>
                                                     ),
+                                                )}
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div
+                                    id="room_categories_wise"
+                                    className="row mt-0 mx-0 tab-pane fade"
+                                    style={{
+                                        minWidth: '1000px',
+                                        overflowX: 'scroll',
+                                    }}
+                                >
+                                    <table className="table table-bordered custom-table availableinquirytable">
+                                        <thead>
+                                            <tr
+                                                style={{
+                                                    height: '56px',
+                                                    backgroundColor: '#f0f3f5',
+                                                }}
+                                            >
+                                                <th
+                                                    scope="col"
+                                                    className="th-custom align-middle px-3"
+                                                    width="15%"
+                                                >
+                                                    Room Category
+                                                </th>
+                                                {roomCateListData?.room_summary?.catwise?.[0]?.datewise.map(
+                                                    (date) => (
+                                                        <th
+                                                            key={`header-${date.dt}`}
+                                                            scope="col"
+                                                            className="th-custom align-middle text-center"
+                                                        >
+                                                            {new Date(
+                                                                date.dt,
+                                                            ).toLocaleDateString(
+                                                                'en-US',
+                                                                {
+                                                                    day: 'numeric',
+                                                                    month: 'short',
+                                                                },
+                                                            )}
+                                                        </th>
+                                                    ),
+                                                )}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {roomCateListData?.room_summary?.catwise?.map(
+                                                (item) => (
+                                                    <tr
+                                                        key={`cat-${item.cat_id}`}
+                                                        style={{
+                                                            height: '48px',
+                                                            backgroundColor:
+                                                                '#e6eff8',
+                                                        }}
+                                                    >
+                                                        <td
+                                                            className="subtitle-2b align-middle px-3"
+                                                            style={{
+                                                                fontFamily:
+                                                                    "'Nunito', sans-serif",
+                                                            }}
+                                                        >
+                                                            {item.cat}
+                                                        </td>
+                                                        {item.datewise.map(
+                                                            (date) => (
+                                                                <td
+                                                                    key={`total-${item.cat_id}-${date.dt}`}
+                                                                    className="subtitle-2b primary-colori text-center align-middle"
+                                                                    style={{
+                                                                        fontFamily:
+                                                                            "'Nunito', sans-serif",
+                                                                        color: '2B363E',
+                                                                    }}
+                                                                >
+                                                                    {
+                                                                        date
+                                                                            .summary
+                                                                            .total
+                                                                    }
+                                                                </td>
+                                                            ),
+                                                        )}
+                                                    </tr>
+                                                ),
                                             )}
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                            <tr style={{ height: '48px' }}>
+                                                <td className="subtitle-2m align-middle px-3">
+                                                    Reserved Rooms
+                                                </td>
+                                                {roomCateListData?.room_summary?.catwise?.[0]?.datewise.map(
+                                                    (date) => (
+                                                        <td
+                                                            key={`reserved-${date.dt}`}
+                                                            className="subtitle-2m text-center align-middle"
+                                                            style={{
+                                                                color: '#0B641F',
+                                                            }}
+                                                        >
+                                                            {
+                                                                date.summary
+                                                                    ?.reserved
+                                                            }{' '}
+                                                            {/* Adjust this based on your actual reserved data */}
+                                                        </td>
+                                                    ),
+                                                )}
+                                            </tr>
+                                            <tr style={{ height: '48px' }}>
+                                                <td className="subtitle-2m align-middle px-3">
+                                                    Booked Rooms
+                                                </td>
+                                                {roomCateListData?.room_summary?.catwise?.[0]?.datewise.map(
+                                                    (date) => (
+                                                        <td
+                                                            key={`reserved-${date.dt}`}
+                                                            className="subtitle-2m text-center align-middle"
+                                                            // style={{
+                                                            //     color: '#0b641f',
+                                                            // }}
+                                                        >
+                                                            {
+                                                                date.summary
+                                                                    ?.blocked
+                                                            }{' '}
+                                                            {/* Adjust this based on your actual reserved data */}
+                                                        </td>
+                                                    ),
+                                                )}
+                                            </tr>
+                                            <tr style={{ height: '48px' }}>
+                                                <td className="subtitle-2m align-middle px-3">
+                                                    Out Of Order Rooms
+                                                </td>
+                                                {roomCateListData?.room_summary?.catwise?.[0]?.datewise.map(
+                                                    (date) => (
+                                                        <td
+                                                            key={`reserved-${date.dt}`}
+                                                            className="subtitle-2m text-center align-middle"
+                                                            style={{
+                                                                color: '#E3001F',
+                                                            }}
+                                                        >
+                                                            {
+                                                                date.summary
+                                                                    ?.out_of_order
+                                                            }{' '}
+                                                            {/* Adjust this based on your actual reserved data */}
+                                                        </td>
+                                                    ),
+                                                )}
+                                            </tr>
+                                            <tr style={{ height: '48px' }}>
+                                                <td className="subtitle-2m align-middle px-3">
+                                                    Available Rooms
+                                                </td>
+                                                {roomCateListData?.room_summary?.catwise?.[0]?.datewise.map(
+                                                    (date) => (
+                                                        <td
+                                                            key={`reserved-${date.dt}`}
+                                                            className="subtitle-2m text-center align-middle"
+                                                            style={{
+                                                                color: 'green',
+                                                            }}
+                                                        >
+                                                            {
+                                                                date.summary
+                                                                    ?.available
+                                                            }{' '}
+                                                            {/* Adjust this based on your actual reserved data */}
+                                                        </td>
+                                                    ),
+                                                )}
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
 
