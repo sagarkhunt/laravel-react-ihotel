@@ -8,6 +8,8 @@ import FilterReservationList from './componet/FilterReservationList';
 import { Link, useNavigate } from 'react-router-dom';
 import actions from '../../redux/Reservation/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import Pagination from '../../components/common/Pagination';
+import Spinner from '../../components/Spinner';
 
 function ReservationList() {
     const [isGridView, setIsGridView] = useState(true);
@@ -21,6 +23,47 @@ function ReservationList() {
     const { loader, reserListData, resCreated } = useSelector(
         (state) => state.reserReducer,
     );
+    const [currentPage, setCurrentPage] = useState(1);
+    const [entriesPerPage, setEntriesPerPage] = useState(10);
+    const itemsPerPage = 10;
+    // const totalPages = Math.ceil(reserListingData.length / rowsPerPage);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const [searchQuery, setSearchQuery] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [bsnsSrcId, setBsnsSrcId] = useState('');
+    const [status, setStatus] = useState('');
+    let currentItems = [];
+    if (reserListingData !== null && reserListingData !== undefined) {
+        if (Array.isArray(reserListingData)) {
+            const filteredData = reserListingData.filter((item) =>
+                [
+                    'frm_dt',
+                    'to_dt',
+                    'guest_json',
+                    'room_json',
+                    'id',
+                    'total_amt',
+                    'created_at',
+                ].some((key) =>
+                    item[key]
+                        .toString()
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase()),
+                ),
+            );
+            currentItems = filteredData.slice(
+                indexOfFirstItem,
+                indexOfLastItem,
+            );
+        }
+    }
+
+    // Change page
+    const onPageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
     const dispatch = useDispatch();
 
     const toggleDropdown = (index) => {
@@ -29,9 +72,9 @@ function ReservationList() {
     const assignRooms = () => {
         setOpen(true);
     };
-    const [open1, setOpen1] = useState(false);
+    const [filterMdl, setFilter] = useState(false);
     function handleshowFilteredData() {
-        setOpen1(true);
+        setFilter(true);
     }
 
     const [open2, setOpen2] = useState(false);
@@ -67,10 +110,67 @@ function ReservationList() {
         setReserListingData(Array.isArray(reserListData) ? reserListData : []);
     }, [reserListData]);
     useEffect(() => {
+        const filters = {
+            start_date: startDate,
+            end_date: endDate,
+            bsns_src_id: bsnsSrcId,
+            status: status,
+        };
         dispatch({
             type: actions.RESER_LIST,
+            payload: filters,
         });
-    }, [resCreated]);
+    }, [resCreated, startDate, endDate, bsnsSrcId, status]);
+
+    // useEffect(() => {
+    //     if (setStartDate && setEndDate && setBsnsSrcId && setStatus) {
+    //         const filters = {
+    //             start_date: startDate,
+    //             end_date: endDate,
+    //             bsns_src_id: bsnsSrcId,
+    //             status: status,
+    //         };
+    //         dispatch({
+    //             type: actions.RESER_LIST,
+    //             payload: filters,
+    //         });
+    //     }
+    // }, [
+    //     startDate,
+    //     endDate,
+    //     bsnsSrcId,
+    //     status,
+    //     setStartDate,
+    //     setEndDate,
+    //     setBsnsSrcId,
+    //     setStatus,
+    // ]);
+
+    const countArrivals = (data) => {
+        const today = new Date();
+        const tomorrow = new Date();
+        tomorrow.setDate(today.getDate() + 1);
+
+        const formatDate = (date) => {
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, '0'); // Months start at 0!
+            const dd = String(date.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        };
+
+        const todayStr = formatDate(today);
+        const tomorrowStr = formatDate(tomorrow);
+
+        const arrivalCounts = data.reduce((acc, item) => {
+            const date = item.frm_dt.split(' ')[0]; // Extract only the date part
+            if (date === todayStr || date === tomorrowStr) {
+                acc[date] = (acc[date] || 0) + 1;
+            }
+            return acc;
+        }, {});
+
+        return arrivalCounts;
+    };
 
     const getAdltTotal = (data) => {
         let adltTotal = 0;
@@ -86,6 +186,7 @@ function ReservationList() {
         });
         return chldTotal;
     };
+    const arrivalCounts = countArrivals(reserListingData);
 
     return (
         <div className="m-4">
@@ -106,10 +207,10 @@ function ReservationList() {
                                     className={`subtitle-2m ${
                                         activeButton === 'reservations'
                                             ? 'btn-primary rounded-circle'
-                                            : ''
+                                            : 'rounded-circle2'
                                     }`}
                                 >
-                                    12
+                                    {currentItems.length}
                                 </span>
                             </h6>
 
@@ -122,15 +223,20 @@ function ReservationList() {
                                 onClick={() => setActiveButton('arrivals')}
                             >
                                 Arrivals
-                                <span
-                                    className={`subtitle-2m ${
-                                        activeButton === 'arrivals'
-                                            ? 'btn-primary rounded-circle'
-                                            : 'rounded-circle2'
-                                    }`}
-                                >
-                                    21
-                                </span>
+                                {Object.entries(arrivalCounts).map(
+                                    ([date, count]) => (
+                                        <span
+                                            key={date}
+                                            className={`subtitle-2m ${
+                                                activeButton === 'arrivals'
+                                                    ? 'btn-primary rounded-circle'
+                                                    : 'rounded-circle2'
+                                            }`}
+                                        >
+                                            {count}
+                                        </span>
+                                    ),
+                                )}
                             </h6>
                         </div>
                     </div>
@@ -141,10 +247,20 @@ function ReservationList() {
                             </span>
                             <input
                                 type="text"
-                                className="form-control search-input"
                                 id="dt-serach-cstm"
+                                className="form-control search-input"
                                 placeholder="Search"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
                             />
+                            {searchQuery && (
+                                <span
+                                    className="material-icons-outlined close-icon"
+                                    onClick={() => setSearchQuery('')}
+                                >
+                                    close
+                                </span>
+                            )}
                         </div>
 
                         <div
@@ -216,7 +332,7 @@ function ReservationList() {
             </div>
 
             {isGridView ? (
-                <div className="col-12 pt-3">
+                <div className="col-12 pt-3 container-page">
                     <table className="table custom-table">
                         <thead>
                             <tr>
@@ -267,154 +383,210 @@ function ReservationList() {
                             </tr>
                         </thead>
                         <tbody>
-                            {reserListingData &&
-                                reserListingData?.map((row, index) => (
-                                    <tr key={index}>
-                                        <td className="td-custom subtitle-1m">
-                                            <div className="mt-1">
-                                                {getGuestName(row?.guest_json)}
-                                            </div>
-                                            <div className="icons-container d-flex align-items-center mt-1">
-                                                <div className="icon-item d-flex align-items-center">
-                                                    <span className="material-icons-outlined align-items-center icon">
-                                                        man
-                                                    </span>
-                                                    <span className="align-items-center">
-                                                        {getAdltTotal(
-                                                            row?.room_json,
+                            {loader ? (
+                                <tr>
+                                    <td colSpan="11">
+                                        <Spinner />
+                                    </td>
+                                </tr>
+                            ) : (
+                                <>
+                                    {currentItems && currentItems.length > 0 ? (
+                                        currentItems?.map((row, index) => (
+                                            <tr key={index}>
+                                                <td className="td-custom subtitle-1m">
+                                                    <div className="mt-1">
+                                                        {getGuestName(
+                                                            row?.guest_json,
                                                         )}
-                                                    </span>
-                                                </div>
-                                                <div className="icon-item d-flex align-items-center">
-                                                    <span className="material-icons-outlined align-items-center icon">
-                                                        boy
-                                                    </span>
-                                                    <span className="align-items-center">
-                                                        {getChldTotal(
-                                                            row?.room_json,
-                                                        )}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="td-custom body-2">
-                                            RS{row.id}
-                                        </td>
-                                        <td className="td-custom body-2">
-                                            {formatDate(row.created_at)}
-                                        </td>
-                                        <td className="td-custom body-2">
-                                            <div className="mt-1">
-                                                {row.arrivalDate}
-                                                {formatDate(row.frm_dt)}
-                                            </div>
-                                            {/* <div className="mt-1">
+                                                    </div>
+                                                    <div className="icons-container d-flex align-items-center mt-1">
+                                                        <div className="icon-item d-flex align-items-center">
+                                                            <span className="material-icons-outlined align-items-center icon">
+                                                                man
+                                                            </span>
+                                                            <span className="align-items-center">
+                                                                {getAdltTotal(
+                                                                    row?.room_json,
+                                                                )}
+                                                            </span>
+                                                        </div>
+                                                        <div className="icon-item d-flex align-items-center">
+                                                            <span className="material-icons-outlined align-items-center icon">
+                                                                boy
+                                                            </span>
+                                                            <span className="align-items-center">
+                                                                {getChldTotal(
+                                                                    row?.room_json,
+                                                                )}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="td-custom body-2">
+                                                    RS{row.id}
+                                                </td>
+                                                <td className="td-custom body-2">
+                                                    {formatDate(row.created_at)}
+                                                </td>
+                                                <td className="td-custom body-2">
+                                                    <div className="mt-1">
+                                                        {row.arrivalDate}
+                                                        {formatDate(row.frm_dt)}
+                                                    </div>
+                                                    {/* <div className="mt-1">
                                                 {row.departureTime}
                                             
                                             </div> */}
-                                        </td>
-                                        <td className="td-custom body-2">
-                                            <div className="mt-1">
-                                                {formatDate(row.to_dt)}
-                                            </div>
-                                            {/* <div className="mt-1">
+                                                </td>
+                                                <td className="td-custom body-2">
+                                                    <div className="mt-1">
+                                                        {formatDate(row.to_dt)}
+                                                    </div>
+                                                    {/* <div className="mt-1">
                                                 {row.departureTime}
                                             </div> */}
-                                        </td>
-                                        <td className="td-custom body-2">
-                                            <div className="mt-1">
-                                                {
-                                                    row?.room_inventory[0]
-                                                        ?.room_cat?.cat_name
-                                                }
-                                                {'/'}
-                                                {
-                                                    row?.room_inventory[0]
-                                                        ?.room_plan?.plan_name
-                                                }
-                                                {/* Duplex Room/American Plan (CP) */}
-                                            </div>
-                                            <div
-                                                className="mt-1 cp"
-                                                onClick={() => assignRooms()}
-                                            >
-                                                <p className="assign mt-1 mb-0 cp">
-                                                    Assign Room
-                                                </p>
-                                            </div>
-                                        </td>
-                                        <td className="td-custom body-2">
-                                            {row.block_status == 1
-                                                ? 'Confirm Booking'
-                                                : 'Canceled'}
-                                        </td>
-                                        <td
-                                            className="td-custom body-2"
-                                            style={{ textAlign: 'right' }}
-                                        >
-                                            {row.total_amt}
-                                        </td>
-                                        <td
-                                            className="td-custom body-2"
-                                            style={{ textAlign: 'right' }}
-                                        >
-                                            {row?.room_adv_payment?.pay_amnt}
-                                        </td>
-                                        <td className="td-custom body-2 text-center">
-                                            <div className="dropdown">
-                                                <span
-                                                    className="material-icons-outlined"
-                                                    onClick={() =>
-                                                        toggleDropdown(index)
-                                                    }
+                                                </td>
+                                                <td className="td-custom body-2">
+                                                    <div className="mt-1">
+                                                        {
+                                                            row
+                                                                ?.room_inventory[0]
+                                                                ?.room_cat
+                                                                ?.cat_name
+                                                        }
+                                                        {'/'}
+                                                        {
+                                                            row
+                                                                ?.room_inventory[0]
+                                                                ?.room_plan
+                                                                ?.plan_name
+                                                        }
+                                                        {/* Duplex Room/American Plan (CP) */}
+                                                    </div>
+                                                    <div
+                                                        className="mt-1 cp"
+                                                        onClick={() =>
+                                                            assignRooms()
+                                                        }
+                                                    >
+                                                        <p className="assign mt-1 mb-0 cp">
+                                                            Assign Room
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                                <td className="td-custom body-2">
+                                                    {row.block_status == 1
+                                                        ? 'Confirm Booking'
+                                                        : 'Canceled'}
+                                                </td>
+                                                <td
+                                                    className="td-custom body-2"
                                                     style={{
-                                                        cursor: 'pointer',
+                                                        textAlign: 'right',
                                                     }}
                                                 >
-                                                    more_vert
-                                                </span>
-                                                {dropdownIndex === index && (
-                                                    <div className="dropdown-menu-re show">
-                                                        <div className="px-3 py-4 dropdown-reservation_list">
-                                                            <Link
-                                                                className="dropdown-item subtitle-2m"
-                                                                href="#"
-                                                            >
-                                                                <span
-                                                                    className="material-icons-outlined me-2"
-                                                                    style={{
-                                                                        cursor: 'pointer',
-                                                                    }}
-                                                                >
-                                                                    print
-                                                                </span>
-                                                                Print GRC
-                                                            </Link>
-                                                        </div>
-                                                        <div className="px-3 py-4 dropdown-reservation_list">
-                                                            <Link
-                                                                className="dropdown-item subtitle-2m"
-                                                                href="#"
-                                                            >
-                                                                <span
-                                                                    className="material-icons-outlined me-2"
-                                                                    style={{
-                                                                        cursor: 'pointer',
-                                                                    }}
-                                                                >
-                                                                    exit_to_app
-                                                                </span>
-                                                                Check In
-                                                            </Link>
-                                                        </div>
+                                                    {row.total_amt}
+                                                </td>
+                                                <td
+                                                    className="td-custom body-2"
+                                                    style={{
+                                                        textAlign: 'right',
+                                                    }}
+                                                >
+                                                    {
+                                                        row?.room_adv_payment
+                                                            ?.pay_amnt
+                                                    }
+                                                </td>
+                                                <td className="td-custom body-2 text-center">
+                                                    <div className="dropdown">
+                                                        <span
+                                                            className="material-icons-outlined"
+                                                            onClick={() =>
+                                                                toggleDropdown(
+                                                                    index,
+                                                                )
+                                                            }
+                                                            style={{
+                                                                cursor: 'pointer',
+                                                            }}
+                                                        >
+                                                            more_vert
+                                                        </span>
+                                                        {dropdownIndex ===
+                                                            index && (
+                                                            <div className="dropdown-menu-re show">
+                                                                <div className="px-3 py-4 dropdown-reservation_list">
+                                                                    <Link
+                                                                        className="dropdown-item subtitle-2m"
+                                                                        href="#"
+                                                                    >
+                                                                        <span
+                                                                            className="material-icons-outlined me-2"
+                                                                            style={{
+                                                                                cursor: 'pointer',
+                                                                            }}
+                                                                        >
+                                                                            print
+                                                                        </span>
+                                                                        Print
+                                                                        GRC
+                                                                    </Link>
+                                                                </div>
+                                                                <div className="px-3 py-4 dropdown-reservation_list">
+                                                                    <Link
+                                                                        className="dropdown-item subtitle-2m"
+                                                                        href="#"
+                                                                    >
+                                                                        <span
+                                                                            className="material-icons-outlined me-2"
+                                                                            style={{
+                                                                                cursor: 'pointer',
+                                                                            }}
+                                                                        >
+                                                                            exit_to_app
+                                                                        </span>
+                                                                        Check In
+                                                                    </Link>
+                                                                </div>
+                                                            </div>
+                                                        )}
                                                     </div>
-                                                )}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td
+                                                className="text-center"
+                                                colSpan="11"
+                                            >
+                                                No data available
+                                            </td>
+                                        </tr>
+                                    )}
+                                </>
+                            )}
                         </tbody>
                     </table>
+                    {/* Add pagination component */}
+                    {currentItems && currentItems.length > 0 ? (
+                        <div className="row mt-10 right">
+                            <div className="col-12">
+                                <Pagination
+                                    currentPage={currentPage}
+                                    totalPages={Math.ceil(
+                                        reserListData.length / itemsPerPage,
+                                    )}
+                                    onPageChange={onPageChange}
+                                    entriesPerPage={entriesPerPage}
+                                />
+                            </div>
+                        </div>
+                    ) : (
+                        ''
+                    )}
                 </div>
             ) : (
                 <div className="col-12">
@@ -432,8 +604,19 @@ function ReservationList() {
                 </div>
             )}
             {open && <AssignRoomMdl open={open} setOpen={setOpen} />}
-            {open1 && (
-                <FilterReservationList open1={open1} setOpen1={setOpen1} />
+            {filterMdl && (
+                <FilterReservationList
+                    open={filterMdl}
+                    setOpen={setFilter}
+                    startDate={startDate}
+                    setStartDate={setStartDate}
+                    endDate={endDate}
+                    setEndDate={setEndDate}
+                    bsnsSrcId={bsnsSrcId}
+                    setBsnsSrcId={setBsnsSrcId}
+                    status={status}
+                    setStatus={setStatus}
+                />
             )}
             {/* {openn && <AssignRoommdlNew openn={openn} setOpenn={setOpenn} />} */}
             {open2 && <GroupReservationMdl open2={open2} setOpen2={setOpen2} />}

@@ -28,10 +28,6 @@ const Location = () => {
         cityDelete,
     } = useSelector((state) => state?.locationReducer);
 
-    console.log(countryListData);
-
-    console.log(actions);
-
     const [countryList, setCountryList] = useState([]);
     const [stateList, setStateList] = useState([]);
     const [cityList, setCityList] = useState([]);

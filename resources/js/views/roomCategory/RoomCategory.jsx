@@ -334,7 +334,7 @@ function RoomCategory() {
                             ) : (
                                 <>
                                     {currentItems.length > 0 ? (
-                                        currentItems.map((item, index) => (
+                                        currentItems?.map((item, index) => (
                                             <tr key={index}>
                                                 <td className="td-custom table-left">
                                                     {item.id}
