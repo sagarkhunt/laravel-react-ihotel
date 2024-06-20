@@ -81,28 +81,30 @@ function CreateEditMdl({ open, setOpen, mode, onSubmit, data }) {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="row">
-                                    <div className="col-12">
-                                        <div className="form-group d-flex gap-2 align-items-center mb-3">
-                                            <input
-                                                type="checkbox"
-                                                className="custom-input-checkbox"
-                                                id="is_default"
-                                                name="is_default"
-                                                value={isDefault}
-                                                onChange={() =>
-                                                    setIsDefault(!isDefault)
-                                                }
-                                            />
-                                            <label
-                                                htmlFor="defaultCountry"
-                                                className="custom-label m-0"
-                                            >
-                                                Set Default Country
-                                            </label>
+                                {mode === 'Edit Country' && (
+                                    <div className="row">
+                                        <div className="col-12">
+                                            <div className="form-group d-flex gap-2 align-items-center mb-3">
+                                                <input
+                                                    type="checkbox"
+                                                    className="custom-input-checkbox"
+                                                    id="is_default"
+                                                    name="is_default"
+                                                    value={isDefault}
+                                                    onChange={() =>
+                                                        setIsDefault(!isDefault)
+                                                    }
+                                                />
+                                                <label
+                                                    htmlFor="defaultCountry"
+                                                    className="custom-label m-0"
+                                                >
+                                                    Set Default Country
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                )}
                             </div>
                             <div className="modal-footer">
                                 <button

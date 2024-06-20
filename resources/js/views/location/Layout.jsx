@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Layout = ({ children, activeButton, setActiveButton }) => {
+const Layout = ({ children, activeButton, setActiveButton, counts }) => {
     return (
         <div className="container-fluid py-3 px-4">
             <div className="row m-0">
@@ -63,7 +63,7 @@ const Layout = ({ children, activeButton, setActiveButton }) => {
                                                 : 'rounded-circle2'
                                         }`}
                                     >
-                                        12
+                                        {counts?.countryCount}
                                     </span>
                                 </h6>
 
@@ -83,7 +83,7 @@ const Layout = ({ children, activeButton, setActiveButton }) => {
                                                 : 'rounded-circle2'
                                         }`}
                                     >
-                                        21
+                                        {counts?.stateCount}
                                     </span>
                                 </h6>
 
@@ -103,7 +103,7 @@ const Layout = ({ children, activeButton, setActiveButton }) => {
                                                 : 'rounded-circle2'
                                         }`}
                                     >
-                                        21
+                                        {counts?.cityCount}
                                     </span>
                                 </h6>
                             </div>

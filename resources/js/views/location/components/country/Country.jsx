@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-import actions from '../../../../redux/Location/Country/actions';
+import actions from '../../../../redux/Location/actions';
 import DeleteMdl from '../../../../components/common/DeleteMdl';
 import DataTableComponent from '../../../../components/common/DataTableComponent';
 import Spinner from '../../../../components/Spinner';
 import CreateEditMdl from './CreateEditMdl';
 
-const Country = () => {
+const Country = ({ listingData, loader }) => {
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left', width: '10%' },
         { data: 'name', label: 'Country Name', width: '50%' },
@@ -42,15 +42,7 @@ const Country = () => {
     ];
 
     const dispatch = useDispatch();
-    const {
-        loader,
-        countryListData,
-        countryCreated,
-        countryUpdate,
-        countryDelete,
-    } = useSelector((state) => state?.countryReducer);
 
-    const [listingData, setListingData] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState('Add Country');
@@ -121,16 +113,6 @@ const Country = () => {
         });
         setShowDel(false);
     };
-
-    useEffect(() => {
-        setListingData(countryListData);
-    }, [countryListData]);
-
-    useEffect(() => {
-        dispatch({
-            type: actions.COUNTRY_LIST,
-        });
-    }, [countryCreated, countryDelete, countryUpdate]);
 
     return (
         <>

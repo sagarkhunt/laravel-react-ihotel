@@ -19,9 +19,7 @@ import guestManage from './GuestClass/apiSaga';
 import salesPersonManage from './SalesPerson/apiSaga';
 import marketSegmentManage from './MarketSegment/apiSaga';
 import idTypeManage from './IDType/apiSaga';
-import cityManage from './Location/City/apiSaga';
-import stateManage from './Location/State/apiSaga';
-import countryManage from './Location/Country/apiSaga';
+import locationManage from './Location/apiSaga';
 
 // Here you can include all the saga which you write for components
 export default function* rootSaga() {
@@ -46,8 +44,6 @@ export default function* rootSaga() {
         salesPersonManage(),
         marketSegmentManage(),
         idTypeManage(),
-        cityManage(),
-        stateManage(),
-        countryManage(),
+        locationManage(),
     ]);
 }

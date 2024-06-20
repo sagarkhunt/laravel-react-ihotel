@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import actions from '../../../../redux/Location/State/actions';
+import actions from '../../../../redux/Location/actions';
 import DeleteMdl from '../../../../components/common/DeleteMdl';
 import DataTableComponent from '../../../../components/common/DataTableComponent';
 import Spinner from '../../../../components/Spinner';
 import CreateEditMdl from './CreateEditMdl';
 
-const State = () => {
+const State = ({ listingData, loader }) => {
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left', width: '10%' },
         { data: 'name', label: 'State Name', width: '50%' },
@@ -41,10 +41,7 @@ const State = () => {
     ];
 
     const dispatch = useDispatch();
-    const { loader, stateListData, stateCreated, stateUpdate, stateDelete } =
-        useSelector((state) => state?.stateReducer);
 
-    const [listingData, setListingData] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState('Add State');
@@ -116,16 +113,6 @@ const State = () => {
         });
         setShowDel(false);
     };
-
-    useEffect(() => {
-        setListingData(stateListData);
-    }, [stateListData]);
-
-    useEffect(() => {
-        dispatch({
-            type: actions.STATE_LIST,
-        });
-    }, [stateCreated, stateDelete, stateUpdate]);
 
     return (
         <>

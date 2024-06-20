@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Modal from '../../../../components/common/Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import actions from '../../../../redux/Location/Country/actions';
+import actions from '../../../../redux/Location/actions';
 
 function CreateEditMdl({ open, setOpen, mode, onSubmit, data }) {
     const [formData, setFormData] = useState({});
@@ -30,8 +30,9 @@ function CreateEditMdl({ open, setOpen, mode, onSubmit, data }) {
     }
 
     const dispatch = useDispatch();
-    const { dropDownList } = useSelector((state) => state?.countryReducer);
-
+    const { dropDownList } = useSelector((state) => state?.locationReducer);
+    console.log(dropDownList);
+    
     const [dropDownData, setDropDownData] = useState([]);
 
     useEffect(() => {
@@ -41,14 +42,12 @@ function CreateEditMdl({ open, setOpen, mode, onSubmit, data }) {
     useEffect(() => {
         const sync_req = ['country'];
         dispatch({
-            type: actions.COUNTRY_DROPDOWN_LIST,
+            type: actions.DROPDOWN_LIST,
             payload: {
                 sync_req: sync_req.join(','),
             },
         });
     }, []);
-
-    
 
     return (
         <Modal open={open} handleModal={() => setOpen(!open)}>
@@ -143,7 +142,7 @@ function CreateEditMdl({ open, setOpen, mode, onSubmit, data }) {
                                         <div className="button-container">
                                             <button
                                                 className="btn btn-sm btn-secondary"
-                                                onClick={addState}
+                                                // onClick={addState}
                                             >
                                                 <span className="material-icons-outlined">
                                                     add

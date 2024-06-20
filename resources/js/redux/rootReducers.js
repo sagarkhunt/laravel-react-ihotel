@@ -18,9 +18,7 @@ import guestReducer from './GuestClass/reducer';
 import salesPersonReducer from './SalesPerson/reducer';
 import marketSegmentReducer from './MarketSegment/reducer';
 import idTypeReducer from './IDType/reducer';
-import countryReducer from './Location/Country/reducer';
-import stateReducer from './Location/State/reducer';
-import cityReducer from './Location/City/reducer';
+import locationReducer from './Location/reducer';
 
 //Include all the reducer to combine and provide to configure store.
 export default {
@@ -44,7 +42,5 @@ export default {
     salesPersonReducer,
     marketSegmentReducer,
     idTypeReducer,
-    countryReducer,
-    stateReducer,
-    cityReducer,
+    locationReducer,
 };
