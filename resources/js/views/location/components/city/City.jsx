@@ -5,18 +5,43 @@ import actions from '../../../../redux/Location/actions';
 import DeleteMdl from '../../../../components/common/DeleteMdl';
 import DataTableComponent from '../../../../components/common/DataTableComponent';
 import Spinner from '../../../../components/Spinner';
+import CreateEditMdl from './CreateEditMdl';
 
 const City = ({ listingData, loader }) => {
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left', width: '10%' },
-        { data: 'name', label: 'City Name', width: '50%' },
         {
-            data: 'country_id',
+            data: 'name',
+            label: 'City Name',
+            width: '50%',
+            render: function (data, type, row) {
+                if (row.is_default) {
+                    return `
+                <span class="d-flex align-items-center gap-2">
+                ${data} <svg
+                width="21"
+                height="20"
+                viewBox="0 0 21 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path
+                    d="M19.113 8.11536L13.1213 7.5987L10.7796 2.08203L8.43796 7.60703L2.44629 8.11536L6.99629 12.057L5.62962 17.9154L10.7796 14.807L15.9296 17.9154L14.5713 12.057L19.113 8.11536ZM10.7796 13.2487L7.64629 15.1404L8.47962 11.5737L5.71296 9.1737L9.36296 8.85703L10.7796 5.4987L12.2046 8.86536L15.8546 9.18203L13.088 11.582L13.9213 15.1487L10.7796 13.2487Z"
+                    fill="#0863B5"
+                />{' '}
+            </svg> </span>`;
+                } else {
+                    return data;
+                }
+            },
+        },
+        {
+            data: 'country.name',
             label: 'Country',
             width: '15%',
         },
         {
-            data: 'state_id',
+            data: 'state.name',
             label: 'State',
             width: '15%',
         },
@@ -42,7 +67,6 @@ const City = ({ listingData, loader }) => {
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState('Add City');
     const [cityData, setCityData] = useState([]);
-    const [isDefault, setIsDefault] = useState(false);
     const [selectedIds, setSelectedIds] = useState([]);
     const [showDel, setShowDel] = useState(false);
     const [delId, setDelId] = useState('');
@@ -62,7 +86,8 @@ const City = ({ listingData, loader }) => {
                 ...formData,
                 name: formData.name,
                 city_id: formData.id,
-                is_default: isDefault,
+                state_id: formData.state_id,
+                country_id: formData.country_id,
             };
             dispatch({
                 type: actions.CITY_UPDATE,
@@ -70,6 +95,23 @@ const City = ({ listingData, loader }) => {
             });
         }
         setOpen(false);
+    }
+
+    /***
+     * @param {handleAddResource}
+     */
+    function handleAddResource() {
+        setMode('Add City');
+        setOpen(true);
+    }
+    /**
+     *
+     * @param {handleEditResource} resource
+     */
+    function handleEditResource(resource) {
+        setMode('Edit City');
+        setCityData(resource);
+        setOpen(true);
     }
 
     /**
@@ -129,7 +171,7 @@ const City = ({ listingData, loader }) => {
                             </div>
                             <button
                                 className="btn btn-primary d-flex "
-                                // onClick={handleAddBusinessResource}
+                                onClick={handleAddResource}
                             >
                                 <span className="material-icons-outlined">
                                     add
@@ -145,7 +187,7 @@ const City = ({ listingData, loader }) => {
                     <div className="col-12 p-3 container-page">
                         <DataTableComponent
                             data={listingData}
-                            // onEdit={handleEditBusinessResource}
+                            onEdit={handleEditResource}
                             columnsConfig={columnsConfig}
                             onDelete={handleDelete}
                             selectedIds={selectedIds}
@@ -156,6 +198,16 @@ const City = ({ listingData, loader }) => {
                     </div>
                 )}
             </div>
+
+            {open && (
+                <CreateEditMdl
+                    open={open}
+                    setOpen={setOpen}
+                    mode={mode}
+                    onSubmit={handleSubmit}
+                    data={cityData}
+                />
+            )}
 
             {showDel && (
                 <DeleteMdl

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Modal from '../../../../components/common/Modal';
 
 function CreateEditMdl({ open, setOpen, mode, onSubmit, data }) {
-    const [isDefault, setIsDefault] = useState(data?.is_default || false);
     const [formData, setFormData] = useState({});
 
     function handleChange(event) {
@@ -22,10 +21,6 @@ function CreateEditMdl({ open, setOpen, mode, onSubmit, data }) {
 
     function handleSubmit(event) {
         event.preventDefault();
-        setFormData({
-            ...formData,
-            is_default: isDefault,
-        });
         onSubmit(formData);
     }
 
@@ -90,10 +85,16 @@ function CreateEditMdl({ open, setOpen, mode, onSubmit, data }) {
                                                     className="custom-input-checkbox"
                                                     id="is_default"
                                                     name="is_default"
-                                                    value={isDefault}
-                                                    onChange={() =>
-                                                        setIsDefault(!isDefault)
+                                                    checked={
+                                                        formData?.is_default
                                                     }
+                                                    onChange={() => {
+                                                        setFormData({
+                                                            ...formData,
+                                                            is_default:
+                                                                !formData.is_default,
+                                                        });
+                                                    }}
                                                 />
                                                 <label
                                                     htmlFor="defaultCountry"

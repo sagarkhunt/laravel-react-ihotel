@@ -11,18 +11,40 @@ import CreateEditMdl from './CreateEditMdl';
 const State = ({ listingData, loader }) => {
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left', width: '10%' },
-        { data: 'name', label: 'State Name', width: '50%' },
         {
-            data: 'country_id',
+            data: 'name',
+            label: 'State Name',
+            width: '50%',
+            render: function (data, type, row) {
+                if (row.is_default) {
+                    return `
+                    <span class="d-flex align-items-center gap-2">
+                    ${data} <svg
+                    width="21"
+                    height="20"
+                    viewBox="0 0 21 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M19.113 8.11536L13.1213 7.5987L10.7796 2.08203L8.43796 7.60703L2.44629 8.11536L6.99629 12.057L5.62962 17.9154L10.7796 14.807L15.9296 17.9154L14.5713 12.057L19.113 8.11536ZM10.7796 13.2487L7.64629 15.1404L8.47962 11.5737L5.71296 9.1737L9.36296 8.85703L10.7796 5.4987L12.2046 8.86536L15.8546 9.18203L13.088 11.582L13.9213 15.1487L10.7796 13.2487Z"
+                        fill="#0863B5"
+                    />{' '}
+                </svg> </span>`;
+                } else {
+                    return data;
+                }
+            },
+        },
+        {
+            data: 'country.name',
             label: 'Country',
             width: '15%',
         },
         {
-            data: null,
+            data: 'get_city_count',
             label: 'City',
             width: '15%',
-            render: () => `
-        <span>50</span>`,
         },
         {
             data: null,
@@ -55,6 +77,8 @@ const State = ({ listingData, loader }) => {
      */
     function handleSubmit(formData) {
         if (mode === 'Add State') {
+            console.log(formData);
+            console.log({ ...formData, name: formData.name });
             dispatch({
                 type: actions.STATE_ADD,
                 payload: formData,
