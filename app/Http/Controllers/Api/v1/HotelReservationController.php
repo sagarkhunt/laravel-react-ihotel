@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Helpers\BookingHelper;
 use App\Helpers\Helper;
 use App\Http\Controllers\Api\BaseApiController;
 use App\Models\BookingPayment;
@@ -25,147 +26,47 @@ class HotelReservationController extends BaseApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function getReservation()
+    public function getReservation(Request $request)
     {
-        $bookings = RoomBookingMaster::with(['roomInventory.roomCat', 'roomInventory.roomPlan', 'roomAdvPayment'])->get();
+        // Capture the request parameters
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $bsnsSrcId = $request->input('bsns_src_id');
+        $status = $request->input('status');
 
-        if (count($bookings) > 0) {
+        // Start the Eloquent query
+        $query = RoomBookingMaster::with(['roomInventory.roomCat', 'roomInventory.roomPlan', 'roomAdvPayment']);
 
-            return $this->sendResponse($bookings, "Get Reservation list successfully!.");
+        // Apply the filters
+        if ($startDate) {
+            $query->where('frm_dt', '>=', $startDate);
         }
-        return $this->sendResponse([], "No Data found!.");
+        if ($endDate) {
+            $query->where('to_dt', '<=', $endDate);
+        }
+        if ($bsnsSrcId) {
+            $query->where('bsns_src_id', $bsnsSrcId);
+        }
+        if ($status) {
+            // Assuming 'active' means block_status is 1
+            if ($status == 'active') {
+                $query->where('block_status', 1);
+            } else if ($status == 'inactive') {
+                $query->where('block_status', 0);
+            }
+        }
 
-        // return $this->sendResponse(['bookings', $bookings], "");
+        // Get the filtered bookings
+        $bookings = $query->get();
+
+        // Check if there are any bookings
+        if (count($bookings) > 0) {
+            return $this->sendResponse($bookings, "Get Reservation list successfully!");
+        }
+
+        return $this->sendResponse([], "No Data found!");
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    // public function createReservation(Request $request)
-    // {
-    //     dd($request->all());
-    //     $validator = Validator::make($request->all(), [
-    //         // 'hotel_id' => 'required',
-    //         //'fy_id' => 'required',
-    //         //'group_id' => 'required',
-    //         // 'guest_id' => 'required',
-    //         'frm_dt' => 'required|date',
-    //         'to_dt' => 'required|date',
-    //         // 'block_type' => 'required|in:1,2,3',
-    //         // 'block_status' => 'required|in:0,1',
-    //         'bsns_src_id' => 'required',
-    //         'booking_src_id' => 'required',
-    //         'sls_prsn_id' => 'required',
-    //         'mrkt_sgmnt_id' => 'required',
-    //         // 'guest_name' => 'required',
-    //         // 'guest_mobile' => 'required|numeric',
-    //         'guest_json' => 'required',
-    //         'room_json' => 'required',
-    //         // 'pax_json' => 'required',
-    //         'sp_req' => 'required',
-    //         'sp_remarks' => 'required',
-    //         // 'room_inv' => 'required|string',
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return $this->sendError("Required Parameter are Missing.", ['errors' => $validator->errors()]);
-    //     }
-
-    //     $frmDate = $request->input('frm_dt');
-    //     $toDate = $request->input('to_dt');
-
-    //     $room_inventory = json_decode($request->room_inv, true);
-    //     //{"rt":"1","rp":"1","nor":"5","pax":"10/2","rate":"1000"}
-
-
-    //     $totalRoom = array_sum($room_inventory, "room");
-    //     $bookingPost['nor'] = $totalRoom;
-    //     $totalNight = date('to_date') - date('frm_date');
-    //     $bookingPost['non'] = $totalNight;
-
-    //     $guest_id = $request->input('guest_id');
-    //     $guestArr = GuestMaster::leftjoin("", "city_id")->find($guest_id);
-    //     $guest = array(
-    //         "add" => $guestArr->full_name,
-    //         "nlt" => $guestArr->nationality,
-    //         "city" => $guestArr->city,
-    //         "city_id" => $guestArr->city_id,
-    //         "email_id" => $guestArr->email
-    //     );
-
-    //     $rooms = [];
-    //     foreach ($room_inventory as $room) {
-    //         $rooms[] = array(
-    //             "rcid" => $room_inventory['rcid'],
-    //             "pid" => $room_inventory['pid'],
-    //             "rid" => $room_inventory['rid'],
-    //             "non" => $totalNight,
-    //             "nor" => $room_inventory['nor'],
-    //             "rate" => $room_inventory['rate'],
-    //         );
-    //     }
-
-    //     $bookingPost = array();
-    //     $bookingPost['hotel_id'] = $request->input('hotel_id');
-    //     $bookingPost['fy_id'] = 1;
-    //     $bookingPost['group_id'] = 0;
-    //     $bookingPost['guest_id'] = $request->input('guest_id');
-    //     $bookingPost['frm_dt'] = $request->input('frm_dt');
-    //     $bookingPost['to_dt'] = $request->input('to_dt');
-    //     $bookingPost['block_type'] = $request->input('block_type');
-    //     $bookingPost['block_status'] = $request->input('block_status');
-    //     $bookingPost['bsns_src_id'] = $request->input('bsns_src_id');
-    //     $bookingPost['booking_src_id'] = $request->input('booking_src_id');
-    //     $bookingPost['guest_name'] = $request->input('guest_name');
-    //     $bookingPost['guest_mobile'] = $request->input('guest_mobile');
-    //     $bookingPost['guest_json'] = json_encode($guest);
-    //     $bookingPost['pax_json'] = $request->input('pax_json');
-    //     $bookingPost['sp_req_json'] = $request->input('sp_req_json');
-    //     $bookingPost['sp_remarks'] = $request->input('sp_remarks');
-    //     $bookingPost['room_json'] = json_encode($rooms);
-
-    //     $bookingPost['created_by'] = Auth()->user()->id;
-    //     $bookingPost['created_at'] = Carbon::date();
-    //     $booking = RoomBookingMaster::create($bookingPost);
-
-    //     // Ensure dates are in the correct format
-    //     $startDate = new \DateTime($frmDate);
-    //     $endDate = new \DateTime($toDate);
-    //     $endDate->modify('+1 day'); // Include the end date in the loop
-
-    //     $interval = new \DateInterval('P1D'); // 1 day interval
-    //     $datePeriod = new \DatePeriod($startDate, $interval, $endDate);
-
-
-    //     // Store room inventory details
-    //     foreach ($room_inventory as $room) {
-
-    //         foreach ($datePeriod as $date) {
-    //             $roomDate = $date->format('Y-m-d');
-    //             $room_inv = array();
-    //             $room_inv['dt'] = $roomDate;
-    //             $room_inv['rbm_id'] = $booking->id;
-    //             $room_inv['guest_id'] = $booking->guest_id;
-    //             $room_inv['hotel_id'] = $booking->hotel_id;
-    //             $room_inv['fy_id'] = 1;
-    //             $room_inv['dt'] = $roomDate;
-    //             $room_inv['room_cat_id'] = $room[''];
-    //             $room_inv['room_id'] = $room[''];
-    //             $room_inv['nor'] = $room[''];
-    //             $room_inv['pax'] = $room[''];
-    //             $room_inv['hotel_id'] = $room[''];
-
-    //             $room_inv['created_by'] = $booking->created_by;
-    //             $room_inv['created_at'] = Carbon::date();
-    //             RoomInventoryMaster::create($room);
-    //         }
-    //     }
-
-    //     return $this->sendResponse(['booking' => $booking], 'Booking created successfully.');
-    // }
     public function createReservation(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -196,14 +97,27 @@ class HotelReservationController extends BaseApiController
             $toDate = new DateTime($request->input('to_dt'));
             $fromDate = new DateTime($request->input('frm_dt'));
             // $room_inventory = json_decode($request->room_json, true);
-            $room_inventory = $request->room_json;
-
-            //{"rt":"1","rp":"1","nor":"5","pax":"10/2","rate":"1000"}
+            $room_inventory = json_decode(json_encode($request->room_json), true);
+            //$room_inventory = $request->room_json;
 
             $totalAmount = array_sum(array_column($room_inventory, "rate"));
 
             $bookingPost['nor'] = count($room_inventory);
             $interval = $toDate->diff($fromDate);
+
+            $roomError = false;
+            $roomErrorDetails = [];
+            foreach ($room_inventory as $roomInv) {
+                $roomsAvlbl = BookingHelper::checkRoomBookingAvailability($hotel_id, $toDate, $fromDate, $roomInv['rcid'], $roomInv['nor'], 0);
+                if ($roomsAvlbl !== true) {
+                    $roomError = true;
+                    $roomErrorDetails[] = $roomsAvlbl['data'];
+                }
+            }
+
+            if ($roomError) {
+                return $this->sendError("Room Not Available.", ['errors' => $roomErrorDetails]);
+            }
 
             // Get the difference in days
             $totalNight = $interval->days;
@@ -227,13 +141,6 @@ class HotelReservationController extends BaseApiController
             foreach ($room_inventory as $room) {
 
                 $rooms[] = array(
-                    // "rcid" => $room_inventory['rcid'],
-                    // "pid" => $room_inventory['pid'],
-                    // "rid" => $room_inventory['rid'],
-                    // // "non" => $totalNight,
-                    // "non" => $room_inventory['non'],
-                    // "nor" => $room_inventory['nor'],
-                    // "rate" => $room_inventory['rate'],
                     "rcid" => $room['rcid'],
                     "pid" => $room['pid'],
                     "nor" => $room['nor'],
@@ -258,7 +165,6 @@ class HotelReservationController extends BaseApiController
             $roomBooking->booking_src_id = $request->input('booking_src_id');
             $roomBooking->sls_prsn_id = $request->input('sls_prsn_id');
             $roomBooking->mrkt_sgmnt_id = $request->input('mrkt_sgmnt_id');
-            // $roomBooking->com_rm_status = $request->input('com_rm_status');
             $roomBooking->room_json = json_encode($rooms); //$request->input('room_json');
             $roomBooking->guest_json = json_encode($guest); //$request['guest_json'];
             $roomBooking->cncl_policy_id = $request->input('cncl_policy_id');
@@ -267,7 +173,6 @@ class HotelReservationController extends BaseApiController
             $roomBooking->pax_json = $request->input('pax_json');
             $roomBooking->sp_remarks = $request->input('sp_remarks');
             $roomBooking->taxes = $request->input('taxes');
-            // $roomBooking->total_amt = $request['total_amnt'];
             $roomBooking->total_amt = $totalAmount;
             $roomBooking->created_by = $user_id;
             $roomBooking->created_at = now();
@@ -333,7 +238,6 @@ class HotelReservationController extends BaseApiController
                 $payData = [
                     'hotel_id' => $roomBooking->hotel_id,
                     'rbm_id' => $roomBooking->id,
-                    // 'pay_date' => $payDetails['pay_date'],
                     'pay_type' => $payDetails['pay_type'],
                     'ref_name' => $payDetails['ref_name'],
                     'pay_amnt' => $payDetails['pay_amnt'],
@@ -416,8 +320,9 @@ class HotelReservationController extends BaseApiController
             $hotel_id = $user->hotel_id;
             Helper::change_database_using_hotel_id($hotel_id);
 
+            $bookingId = $request['rbm_id'];
             // Retrieve the existing booking
-            $roomBooking = RoomBookingMaster::find($request['rbm_id']);
+            $roomBooking = RoomBookingMaster::find($bookingId);
 
             if (!$roomBooking) {
                 return $this->sendError("Booking not found.");
@@ -427,6 +332,21 @@ class HotelReservationController extends BaseApiController
             $fromDate = new DateTime($request->input('frm_dt'));
 
             $room_inventory = json_decode($request->room_json, true);
+
+            $roomError = false;
+            $roomErrorDetails = [];
+            foreach ($room_inventory as $roomInv) {
+                $roomsAvlbl = BookingHelper::checkRoomBookingAvailability($hotel_id, $toDate, $fromDate, $roomInv['rcid'], $roomInv['nor'], $bookingId);
+                if ($roomsAvlbl !== true) {
+                    $roomError = true;
+                    $roomErrorDetails[] = $roomsAvlbl['data'];
+                }
+            }
+
+            if ($roomError) {
+                return $this->sendError("Room Not Available.", ['errors' => $roomErrorDetails]);
+            }
+
             $totalRate = array_sum(array_column($room_inventory, "rate"));
 
             $bookingPost['nor'] = count($room_inventory);

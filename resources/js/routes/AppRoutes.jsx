@@ -30,6 +30,7 @@ import GuestClass from '../views/guestClass/GuestClass.jsx';
 import SalesPerson from '../views/salesPerson/SalesPerson.jsx';
 import MarketSegment from '../views/marketSegment/MarketSegment.jsx';
 import IDType from '../views/idType/IDType.jsx';
+import Location from '../views/location/Location.jsx';
 
 // Define a function to check if the user is authenticated
 const isAuthenticated = () => {
@@ -165,6 +166,10 @@ const router = createBrowserRouter([
             {
                 path: '/id_type',
                 element: <ProtectedRouteWrapper element={<IDType />} />,
+            },
+            {
+                path: '/location',
+                element: <ProtectedRouteWrapper element={<Location />} />,
             },
         ],
     },

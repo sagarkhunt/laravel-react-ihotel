@@ -2076,6 +2076,9 @@ select,
     color: #007bff;
 }
 
+.btn-h48 {
+    height: 48px;
+}
 .double-modal {
     width: 1200px !important;
 }

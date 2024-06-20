@@ -11,6 +11,10 @@ function BookingCard({
     setOpenDropdownIndex,
 }) {
     const [open, setOpen] = useState(false);
+    const [open2, setOpen2] = useState(false);
+    const openGroupReservationMdl = () => {
+        setOpen2(true);
+    };
     const openAssignRoom = () => {
         setOpen(true);
     };

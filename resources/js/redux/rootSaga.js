@@ -19,6 +19,8 @@ import guestManage from './GuestClass/apiSaga';
 import salesPersonManage from './SalesPerson/apiSaga';
 import marketSegmentManage from './MarketSegment/apiSaga';
 import idTypeManage from './IDType/apiSaga';
+import locationManage from './Location/apiSaga';
+
 // Here you can include all the saga which you write for components
 export default function* rootSaga() {
     yield all([
@@ -42,5 +44,6 @@ export default function* rootSaga() {
         salesPersonManage(),
         marketSegmentManage(),
         idTypeManage(),
+        locationManage(),
     ]);
 }
