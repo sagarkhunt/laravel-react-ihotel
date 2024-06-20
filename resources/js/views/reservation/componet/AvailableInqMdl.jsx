@@ -1,7 +1,95 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from '../../../components/common/Modal';
+import { useDispatch, useSelector } from 'react-redux';
+import actions from '../../../redux/Reservation/actions';
 
 function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
+    const dispatch = useDispatch();
+    const [roomCateListData, setRoomCateListData] = useState({});
+    const [dropDownData, setDropDownData] = useState({});
+    const { dropDownList } = useSelector((state) => state?.reserReducer);
+    const currentDate = new Date();
+    const currentDateString = currentDate.toISOString().split('T')[0];
+    const [selectedCategoryId, setSelectedCategoryId] = useState('');
+    const { loader, roomCateList } = useSelector((state) => state.reserReducer);
+    // Get the next day's date
+    const nextDate = new Date(currentDate);
+    nextDate.setDate(nextDate.getDate() + 1);
+    const nextDateString = nextDate.toISOString().split('T')[0];
+
+    // Initialize state with dynamic dates
+    const [checkInDate, setCheckInDate] = useState(currentDateString);
+    const [checkOutDate, setCheckOutDate] = useState(nextDateString);
+    const [nights, setNights] = useState(1);
+
+    useEffect(() => {
+        calculateNights(checkInDate, checkOutDate);
+    }, [checkInDate, checkOutDate]);
+
+    useEffect(() => {
+        setRoomCateListData(roomCateList);
+    }, [roomCateList]);
+
+    const handleCheckInChange = (e) => {
+        setCheckInDate(e.target.value);
+    };
+
+    const handleCheckOutChange = (e) => {
+        setCheckOutDate(e.target.value);
+    };
+
+    const calculateNights = (checkIn, checkOut) => {
+        const checkInDate = new Date(checkIn);
+        const checkOutDate = new Date(checkOut);
+        const diffTime = Math.abs(checkOutDate - checkInDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        setNights(diffDays);
+    };
+    const handleCategoryChange = (e) => {
+        setSelectedCategoryId(e.target.value);
+    };
+    const handleSearch = () => {
+        const params = {
+            checkin_dt: checkInDate,
+            checkout_dt: checkOutDate,
+            rm_cat_id: selectedCategoryId,
+        };
+        dispatch({
+            type: actions.AVLBL_ROOM_CATE_LIST,
+            payload: params,
+        });
+    };
+    useEffect(() => {
+        setDropDownData(dropDownList);
+    }, [dropDownList]);
+    useEffect(() => {
+        if (dropDownData['room_cate'] && dropDownData['room_cate'].length > 0) {
+            setSelectedCategoryId(dropDownData['room_cate'][0].id);
+        }
+    }, [dropDownData]);
+
+    useEffect(() => {
+        if (selectedCategoryId) {
+            const params = {
+                checkin_dt: checkInDate,
+                checkout_dt: checkOutDate,
+                rm_cat_id: selectedCategoryId,
+            };
+            dispatch({
+                type: actions.AVLBL_ROOM_CATE_LIST,
+                payload: params,
+            });
+        }
+    }, [selectedCategoryId, dispatch]);
+    useEffect(() => {
+        const sync_req = ['room_cate'];
+        dispatch({
+            type: actions.RESER_DROPDOWN_LIST,
+            payload: {
+                sync_req: sync_req.join(','),
+            },
+        });
+    }, []);
     return (
         <Modal open={showAvaInq} handleModal={() => setShowAvaInq(!showAvaInq)}>
             <div
@@ -37,42 +125,37 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
 
                         <div className="modal-body modal-lf-body">
                             <div className="d-flex card-1 align-items-end justify-content-between border p-3 container-page">
-                                {/* <!-- Check In --> */}
-                                <div className="" style={{ width: '20%' }}>
+                                {/* Check In */}
+                                <div style={{ width: '20%' }}>
                                     <p className="mb-1">Check In</p>
                                     <input
                                         type="date"
                                         className="custom-input w-100"
-                                        value="2024-09-16"
+                                        value={checkInDate}
+                                        onChange={handleCheckInChange}
                                     />
                                 </div>
 
-                                {/* <!-- Nights --> */}
+                                {/* Nights */}
                                 <div className="col-auto">
-                                    <div className="night-count">
+                                    <div className="night-count rounded">
                                         <p className="caption-2 font-white text-center mb-0">
                                             Nights
                                         </p>
                                         <p className="caption-1b font-white mt-1 text-center mb-0">
-                                            1
+                                            {nights}
                                         </p>
                                     </div>
                                 </div>
-                                {/* <div
-                                    className="border rounded surface-d text-center py-2"
-                                    style={{ width: '5%' }}
-                                >
-                                    <p className="mb-1">Nights</p>
-                                    <span>4</span>
-                                </div> */}
 
-                                {/* <!-- Check Out --> */}
-                                <div className="" style={{ width: '20%' }}>
+                                {/* Check Out */}
+                                <div style={{ width: '20%' }}>
                                     <p className="mb-1">Check Out</p>
                                     <input
                                         type="date"
                                         className="custom-input w-100"
-                                        value="2024-09-21"
+                                        value={checkOutDate}
+                                        onChange={handleCheckOutChange}
                                     />
                                 </div>
 
@@ -88,42 +171,29 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
                                         className=""
                                     >
                                         <select
-                                            className="form-select custom-input "
+                                            className="form-select custom-input"
                                             aria-label=".form-select-sm example"
                                             id="cust_cat_id"
                                             name="cust_cat_id"
                                             style={{ minHeight: '43px' }}
+                                            value={selectedCategoryId}
+                                            onChange={handleCategoryChange}
                                         >
-                                            <option value="">
+                                            <option value="0">
                                                 Select Room Category
                                             </option>{' '}
-                                            <option value="room1">
-                                                Room 1
-                                            </option>
-                                            <option value="room2">
-                                                Room 2
-                                            </option>
-                                            <option value="room3">
-                                                Room 3
-                                            </option>
-                                            <option value="room4">
-                                                Room 4
-                                            </option>
-                                            <option value="room5">
-                                                Room 5
-                                            </option>
-                                            <option value="room6">
-                                                Room 6
-                                            </option>
-                                            <option value="room7">
-                                                Room 7
-                                            </option>
-                                            <option value="room8">
-                                                Room 8
-                                            </option>
-                                            <option value="room9">
-                                                Room 9
-                                            </option>
+                                            {dropDownData['room_cate']?.map(
+                                                (item, index) => {
+                                                    return (
+                                                        <option
+                                                            key={index}
+                                                            value={item.id}
+                                                        >
+                                                            {item.cat_name}
+                                                        </option>
+                                                    );
+                                                },
+                                            )}
                                         </select>
                                     </div>
                                 </div>
@@ -134,1316 +204,417 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
                                         type="button"
                                         className="btn btn-primary w-100"
                                         style={{ height: '50px' }}
+                                        onClick={handleSearch}
                                     >
                                         Search
                                     </button>
                                 </div>
                             </div>
-
-                            <div
-                                className="row mt-4 mx-0"
-                                style={{
-                                    minWidth: '1000px',
-                                    overflowX: 'scroll',
-                                }}
+                            <ul
+                                className="nav tab-nav nav-pills mt-2"
+                                role="tablist"
                             >
-                                <table className="table table-bordered custom-table availableinquirytable">
-                                    <thead>
-                                        <tr
-                                            style={{
-                                                height: '56px',
-                                                backgroundColor: '#000',
-                                            }}
-                                        >
-                                            <th
-                                                scope="col"
-                                                className="th-custom align-middle px-3"
-                                                width="15%"
-                                            >
-                                                Room Category
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="th-custom align-middle text-center"
-                                            >
-                                                16 May
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="th-custom align-middle text-center"
-                                            >
-                                                17 May
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="th-custom align-middle text-center"
-                                            >
-                                                18 May
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="th-custom align-middle text-center"
-                                            >
-                                                19 May
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="th-custom align-middle text-center"
-                                            >
-                                                20 May
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="th-custom align-middle text-center"
-                                            >
-                                                21 May
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="th-custom align-middle text-center"
-                                            >
-                                                22 May
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="th-custom align-middle text-center"
-                                            >
-                                                23 May
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="th-custom align-middle text-center"
-                                            >
-                                                24 May
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="th-custom align-middle text-center"
-                                            >
-                                                25 May
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="th-custom align-middle text-center"
-                                            >
-                                                26 May
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="th-custom align-middle text-center"
-                                            >
-                                                27 May
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr
-                                            style={{
-                                                height: '48px',
-                                                backgroundColor: '#e6eff8',
-                                            }}
-                                        >
-                                            <td
-                                                className="subtitle-2b align-middle px-3"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                Executive
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                        </tr>
-                                        <tr style={{ height: '48px' }}>
-                                            <td className="subtitle-2m align-middle px-3">
-                                                Reserved Rooms
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                        </tr>
-                                        <tr style={{ height: '48px' }}>
-                                            <td className="subtitle-2m align-middle px-3">
-                                                Blocked Rooms
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                        </tr>
-                                        <tr style={{ height: '48px' }}>
-                                            <td className="subtitle-2m align-middle px-3">
-                                                Out of Order Rooms
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                        </tr>
-                                        <tr
-                                            style={{
-                                                height: '48px',
-                                                backgroundColor: '#e7f6eb',
-                                            }}
-                                        >
-                                            <td className="subtitle-2m align-middle px-3">
-                                                Available Rooms
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                        </tr>
+                                <li className="nav-item">
+                                    <a
+                                        className="nav-link nav-link-custom active"
+                                        data-bs-toggle="pill"
+                                        href="#summary"
+                                    >
+                                        Summary
+                                    </a>
+                                </li>
+                                <li className="nav-item">
+                                    <a
+                                        className="nav-link nav-link-custom"
+                                        data-bs-toggle="pill"
+                                        href="#room_categories_wise"
+                                    >
+                                        Room Categories Wise
+                                    </a>
+                                </li>
+                            </ul>
 
-                                        <tr
-                                            style={{
-                                                height: '48px',
-                                                backgroundColor: '#e6eff8',
-                                            }}
-                                        >
-                                            <td
-                                                className="subtitle-2b align-middle px-3"
+                            <div className="tab-content">
+                                <div
+                                    id="summary"
+                                    className="row mt-0 mx-0 container px-0 tab-pane active"
+                                    style={{
+                                        minWidth: '1000px',
+                                        overflowX: 'scroll',
+                                    }}
+                                >
+                                    {/* Summary Content */}
+                                    <table className="table table-bordered custom-table availableinquirytable">
+                                        <thead>
+                                            <tr
                                                 style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
+                                                    height: '56px',
+                                                    backgroundColor: '#f0f3f5',
                                                 }}
                                             >
-                                                Executive
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
+                                                <th
+                                                    scope="col"
+                                                    className="th-custom align-middle px-3"
+                                                    width="15%"
+                                                >
+                                                    Room Availibilities
+                                                </th>
+                                                {roomCateListData?.room_summary?.all?.datewise.map(
+                                                    (date) => (
+                                                        <th
+                                                            key={`header-${date.dt}`}
+                                                            scope="col"
+                                                            className="th-custom align-middle text-center"
+                                                        >
+                                                            {new Date(
+                                                                date.dt,
+                                                            ).toLocaleDateString(
+                                                                'en-US',
+                                                                {
+                                                                    day: 'numeric',
+                                                                    month: 'short',
+                                                                },
+                                                            )}
+                                                        </th>
+                                                    ),
+                                                )}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {/* {roomCateListData?.room_summary?.all?.map(
+                                                (item) => (
+                                                    <tr
+                                                        key={`cat-${item.cat_id}`}
+                                                        style={{
+                                                            height: '48px',
+                                                            backgroundColor:
+                                                                '#e6eff8',
+                                                        }}
+                                                    >
+                                                        <td
+                                                            className="subtitle-2b align-middle px-3"
+                                                            style={{
+                                                                fontFamily:
+                                                                    "'Nunito', sans-serif",
+                                                            }}
+                                                        >
+                                                            {item.cat}
+                                                        </td>
+                                                        {item.datewise.map(
+                                                            (date) => (
+                                                                <td
+                                                                    key={`total-${item.cat_id}-${date.dt}`}
+                                                                    className="subtitle-2b primary-colori text-center align-middle"
+                                                                    style={{
+                                                                        fontFamily:
+                                                                            "'Nunito', sans-serif",
+                                                                    }}
+                                                                >
+                                                                    {
+                                                                        date
+                                                                            .summary
+                                                                            .total
+                                                                    }
+                                                                </td>
+                                                            ),
+                                                        )}
+                                                    </tr>
+                                                ),
+                                            )} */}
+                                            <tr style={{ height: '48px' }}>
+                                                <td className="subtitle-2m align-middle px-3">
+                                                    Phisical Rooms
+                                                </td>
+                                                {roomCateListData?.room_summary?.all?.datewise.map(
+                                                    (date) => (
+                                                        <td
+                                                            key={`reserved-${date.dt}`}
+                                                            className="subtitle-2m text-center align-middle"
+                                                            style={
+                                                                {
+                                                                    // color: 'green',
+                                                                }
+                                                            }
+                                                        >
+                                                            {
+                                                                date.summary
+                                                                    ?.total
+                                                            }
+                                                        </td>
+                                                    ),
+                                                )}
+                                            </tr>
+                                            <tr style={{ height: '48px' }}>
+                                                <td className="subtitle-2m align-middle px-3">
+                                                    Reserved Rooms
+                                                </td>
+                                                {roomCateListData?.room_summary?.all?.datewise.map(
+                                                    (date) => (
+                                                        <td
+                                                            key={`reserved-${date.dt}`}
+                                                            className="subtitle-2m text-center align-middle"
+                                                            style={
+                                                                {
+                                                                    // color: 'green',
+                                                                }
+                                                            }
+                                                        >
+                                                            {
+                                                                date.summary
+                                                                    ?.reserved
+                                                            }
+                                                        </td>
+                                                    ),
+                                                )}
+                                            </tr>
+                                            <tr style={{ height: '48px' }}>
+                                                <td className="subtitle-2m align-middle px-3">
+                                                    Booked Rooms
+                                                </td>
+                                                {roomCateListData?.room_summary?.all?.datewise.map(
+                                                    (date) => (
+                                                        <td
+                                                            key={`reserved-${date.dt}`}
+                                                            className="subtitle-2m text-center align-middle"
+                                                            // style={{
+                                                            //     color: '#0b641f',
+                                                            // }}
+                                                        >
+                                                            {
+                                                                date.summary
+                                                                    ?.blocked
+                                                            }{' '}
+                                                            {/* Adjust this based on your actual reserved data */}
+                                                        </td>
+                                                    ),
+                                                )}
+                                            </tr>
+                                            <tr style={{ height: '48px' }}>
+                                                <td className="subtitle-2m align-middle px-3">
+                                                    Out Of Order Rooms
+                                                </td>
+                                                {roomCateListData?.room_summary?.all?.datewise.map(
+                                                    (date) => (
+                                                        <td
+                                                            key={`reserved-${date.dt}`}
+                                                            className="subtitle-2m text-center align-middle"
+                                                            style={
+                                                                {
+                                                                    // color: 'red',
+                                                                }
+                                                            }
+                                                        >
+                                                            {
+                                                                date.summary
+                                                                    ?.out_of_order
+                                                            }{' '}
+                                                        </td>
+                                                    ),
+                                                )}
+                                            </tr>
+                                            <tr style={{ height: '48px' }}>
+                                                <td className="subtitle-2m align-middle px-3">
+                                                    Available Rooms
+                                                </td>
+                                                {roomCateListData?.room_summary?.all?.datewise.map(
+                                                    (date) => (
+                                                        <td
+                                                            key={`reserved-${date.dt}`}
+                                                            className="subtitle-2m text-center align-middle"
+                                                            style={
+                                                                {
+                                                                    // color: 'green',
+                                                                }
+                                                            }
+                                                        >
+                                                            {
+                                                                date.summary
+                                                                    ?.available
+                                                            }{' '}
+                                                        </td>
+                                                    ),
+                                                )}
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div
+                                    id="room_categories_wise"
+                                    className="row mt-0 mx-0 tab-pane fade"
+                                    style={{
+                                        minWidth: '1000px',
+                                        overflowX: 'scroll',
+                                    }}
+                                >
+                                    <table className="table table-bordered custom-table availableinquirytable">
+                                        <thead>
+                                            <tr
                                                 style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
+                                                    height: '56px',
+                                                    backgroundColor: '#f0f3f5',
                                                 }}
                                             >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                        </tr>
-                                        <tr style={{ height: '48px' }}>
-                                            <td className="subtitle-2m align-middle px-3">
-                                                Reserved Rooms
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                        </tr>
-                                        <tr style={{ height: '48px' }}>
-                                            <td className="subtitle-2m align-middle px-3">
-                                                Blocked Rooms
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                        </tr>
-                                        <tr style={{ height: '48px' }}>
-                                            <td className="subtitle-2m align-middle px-3">
-                                                Out of Order Rooms
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                        </tr>
-                                        <tr
-                                            style={{
-                                                height: '48px',
-                                                backgroundColor: '#e7f6eb',
-                                            }}
-                                        >
-                                            <td className="subtitle-2m align-middle px-3">
-                                                Available Rooms
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                        </tr>
-
-                                        <tr
-                                            style={{
-                                                height: '48px',
-                                                backgroundColor: '#e6eff8',
-                                            }}
-                                        >
-                                            <td
-                                                className="subtitle-2b align-middle px-3"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                Executive
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                            <td
-                                                className="subtitle-2b primary-colori text-center align-middle"
-                                                style={{
-                                                    fontFamily:
-                                                        "'Nunito', sans-serif",
-                                                }}
-                                            >
-                                                20
-                                            </td>
-                                        </tr>
-                                        <tr style={{ height: '48px' }}>
-                                            <td className="subtitle-2m align-middle px-3">
-                                                Reserved Rooms
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                        </tr>
-                                        <tr style={{ height: '48px' }}>
-                                            <td className="subtitle-2m align-middle px-3">
-                                                Blocked Rooms
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                            <td className="subtitle-2m text-center align-middle">
-                                                6
-                                            </td>
-                                        </tr>
-                                        <tr style={{ height: '48px' }}>
-                                            <td className="subtitle-2m align-middle px-3">
-                                                Out of Order Rooms
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#e3001f' }}
-                                            >
-                                                6
-                                            </td>
-                                        </tr>
-                                        <tr
-                                            style={{
-                                                height: '48px',
-                                                backgroundColor: '#e7f6eb',
-                                            }}
-                                        >
-                                            <td className="subtitle-2m align-middle px-3">
-                                                Available Rooms
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                            <td
-                                                className="subtitle-2m text-center align-middle"
-                                                style={{ color: '#0b641f' }}
-                                            >
-                                                6
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                                <th
+                                                    scope="col"
+                                                    className="th-custom align-middle px-3"
+                                                    width="15%"
+                                                >
+                                                    Room Category
+                                                </th>
+                                                {roomCateListData?.room_summary?.catwise?.[0]?.datewise.map(
+                                                    (date) => (
+                                                        <th
+                                                            key={`header-${date.dt}`}
+                                                            scope="col"
+                                                            className="th-custom align-middle text-center"
+                                                        >
+                                                            {new Date(
+                                                                date.dt,
+                                                            ).toLocaleDateString(
+                                                                'en-US',
+                                                                {
+                                                                    day: 'numeric',
+                                                                    month: 'short',
+                                                                },
+                                                            )}
+                                                        </th>
+                                                    ),
+                                                )}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {roomCateListData?.room_summary?.catwise?.map(
+                                                (item) => (
+                                                    <tr
+                                                        key={`cat-${item.cat_id}`}
+                                                        style={{
+                                                            height: '48px',
+                                                            backgroundColor:
+                                                                '#e6eff8',
+                                                        }}
+                                                    >
+                                                        <td
+                                                            className="subtitle-2b align-middle px-3"
+                                                            style={{
+                                                                fontFamily:
+                                                                    "'Nunito', sans-serif",
+                                                            }}
+                                                        >
+                                                            {item.cat}
+                                                        </td>
+                                                        {item.datewise.map(
+                                                            (date) => (
+                                                                <td
+                                                                    key={`total-${item.cat_id}-${date.dt}`}
+                                                                    className="subtitle-2b primary-colori text-center align-middle"
+                                                                    style={{
+                                                                        fontFamily:
+                                                                            "'Nunito', sans-serif",
+                                                                        color: '2B363E',
+                                                                    }}
+                                                                >
+                                                                    {
+                                                                        date
+                                                                            .summary
+                                                                            .total
+                                                                    }
+                                                                </td>
+                                                            ),
+                                                        )}
+                                                    </tr>
+                                                ),
+                                            )}
+                                            <tr style={{ height: '48px' }}>
+                                                <td className="subtitle-2m align-middle px-3">
+                                                    Reserved Rooms
+                                                </td>
+                                                {roomCateListData?.room_summary?.catwise?.[0]?.datewise.map(
+                                                    (date) => (
+                                                        <td
+                                                            key={`reserved-${date.dt}`}
+                                                            className="subtitle-2m text-center align-middle"
+                                                            style={{
+                                                                color: '#0B641F',
+                                                            }}
+                                                        >
+                                                            {
+                                                                date.summary
+                                                                    ?.reserved
+                                                            }{' '}
+                                                            {/* Adjust this based on your actual reserved data */}
+                                                        </td>
+                                                    ),
+                                                )}
+                                            </tr>
+                                            <tr style={{ height: '48px' }}>
+                                                <td className="subtitle-2m align-middle px-3">
+                                                    Booked Rooms
+                                                </td>
+                                                {roomCateListData?.room_summary?.catwise?.[0]?.datewise.map(
+                                                    (date) => (
+                                                        <td
+                                                            key={`reserved-${date.dt}`}
+                                                            className="subtitle-2m text-center align-middle"
+                                                            // style={{
+                                                            //     color: '#0b641f',
+                                                            // }}
+                                                        >
+                                                            {
+                                                                date.summary
+                                                                    ?.blocked
+                                                            }{' '}
+                                                            {/* Adjust this based on your actual reserved data */}
+                                                        </td>
+                                                    ),
+                                                )}
+                                            </tr>
+                                            <tr style={{ height: '48px' }}>
+                                                <td className="subtitle-2m align-middle px-3">
+                                                    Out Of Order Rooms
+                                                </td>
+                                                {roomCateListData?.room_summary?.catwise?.[0]?.datewise.map(
+                                                    (date) => (
+                                                        <td
+                                                            key={`reserved-${date.dt}`}
+                                                            className="subtitle-2m text-center align-middle"
+                                                            style={{
+                                                                color: '#E3001F',
+                                                            }}
+                                                        >
+                                                            {
+                                                                date.summary
+                                                                    ?.out_of_order
+                                                            }{' '}
+                                                            {/* Adjust this based on your actual reserved data */}
+                                                        </td>
+                                                    ),
+                                                )}
+                                            </tr>
+                                            <tr style={{ height: '48px' }}>
+                                                <td className="subtitle-2m align-middle px-3">
+                                                    Available Rooms
+                                                </td>
+                                                {roomCateListData?.room_summary?.catwise?.[0]?.datewise.map(
+                                                    (date) => (
+                                                        <td
+                                                            key={`reserved-${date.dt}`}
+                                                            className="subtitle-2m text-center align-middle"
+                                                            style={{
+                                                                color: 'green',
+                                                            }}
+                                                        >
+                                                            {
+                                                                date.summary
+                                                                    ?.available
+                                                            }{' '}
+                                                            {/* Adjust this based on your actual reserved data */}
+                                                        </td>
+                                                    ),
+                                                )}
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
 
@@ -1454,7 +625,7 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
                                 data-bs-dismiss="modal"
                                 onClick={() => setShowAvaInq(false)}
                             >
-                                Cancle
+                                Cancel
                             </button>
                             <button
                                 type="button"

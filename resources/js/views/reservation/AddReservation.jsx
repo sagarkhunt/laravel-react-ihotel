@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PaymentMdl from './componet/PaymentMdl';
 import '../../../css/AddReservation.css';
 import { useNavigate } from 'react-router-dom';
@@ -67,7 +67,7 @@ function AddReservation() {
         bsns_src_id: '',
         booking_src_id: '',
         sls_prsn_id: '',
-        mrkt_sgmnt_id: '',
+        mrkt_sgmnt_id: 0,
         room_json: [],
         cncl_policy_id: '',
         terms_con_id: '',
@@ -101,6 +101,22 @@ function AddReservation() {
             setNightCount(diffDays);
         }
     }, [formData.frm_dt, formData.to_dt]);
+    const inputRefFrom = useRef(null);
+    const inputRefTo = useRef(null);
+    // const todayDate = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+
+    const handleContainerClickFrom = () => {
+        if (inputRefFrom.current) {
+            inputRefFrom.current.focus();
+            inputRefFrom.current.showPicker(); // Programmatically show the date picker if supported
+        }
+    };
+    const handleContainerClickTo = () => {
+        if (inputRefTo.current) {
+            inputRefTo.current.focus();
+            inputRefTo.current.showPicker(); // Programmatically show the date picker if supported
+        }
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -119,12 +135,12 @@ function AddReservation() {
 
     function handleSubmit(e) {
         e.preventDefault();
-        setFormData({
-            ...formData,
-            taxes: taxAmount,
-            non: nightCount,
-            total_amnt: totalAmount,
-        });
+        // setFormData({
+        //     ...formData,
+        //     taxes: taxAmount,
+        //     non: nightCount,
+        //     total_amnt: totalAmount,
+        // });
         const paramsToValidate = [
             'frm_dt',
             'to_dt',
@@ -139,10 +155,18 @@ function AddReservation() {
             return;
         }
 
+        setFormData({
+            ...formData,
+            taxes: taxAmount,
+            non: nightCount,
+            total_amnt: totalAmount,
+        });
+
         dispatch({
             type: actions.RESER_ADD,
             payload: formData,
         });
+
         navigate('/reservation-list');
     }
 
@@ -198,7 +222,7 @@ function AddReservation() {
                                             >
                                                 Check In
                                             </label>
-                                            <div className="row m-0">
+                                            {/* <div className="row m-0">
                                                 <div className="col-12 p-0">
                                                     <input
                                                         type="date"
@@ -213,10 +237,32 @@ function AddReservation() {
                                                         required
                                                     />
                                                 </div>
+                                            </div> */}
+                                            <div
+                                                className="row m-0 cp"
+                                                onClick={
+                                                    handleContainerClickFrom
+                                                }
+                                            >
+                                                <div className="col-12 p-0">
+                                                    <input
+                                                        type="date"
+                                                        className="w-100 h-100 custom-input-lg rounded-right-none"
+                                                        id="checkin-date"
+                                                        name="frm_dt"
+                                                        value={formData.frm_dt}
+                                                        onChange={
+                                                            handleInputChange
+                                                        }
+                                                        min={todayDate}
+                                                        ref={inputRefFrom}
+                                                        required
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="col-2 d-flex align-items-end justify-content-center">
-                                            <div className="border night-count rounded text-center py-2">
+                                            <div className="border res-night-count rounded text-center py-1">
                                                 <p className="mb-1">Nights</p>
                                                 <span>{nightCount}</span>
                                             </div>
@@ -228,7 +274,10 @@ function AddReservation() {
                                             >
                                                 Check Out
                                             </label>
-                                            <div className="row m-0">
+                                            <div
+                                                className="row m-0"
+                                                onClick={handleContainerClickTo}
+                                            >
                                                 <div className="col-12 p-0">
                                                     <input
                                                         type="date"
@@ -239,6 +288,7 @@ function AddReservation() {
                                                         onChange={
                                                             handleInputChange
                                                         }
+                                                        ref={inputRefTo}
                                                         min={formData.frm_dt}
                                                         required
                                                     />

@@ -12,4 +12,13 @@ class CountryMaster extends BaseModel
     protected $table = 'country_master';
     public $timestamps = true;
     protected $connection = 'ihotel';
+
+    public function getCity()
+    {
+        return $this->hasMany(CityMaster::class, 'state_id', 'id');
+    }
+    public function getState()
+    {
+        return $this->hasMany(StateMaster::class, 'country_id', 'id');
+    }
 }

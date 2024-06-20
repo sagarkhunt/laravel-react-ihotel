@@ -495,17 +495,22 @@ function CreateEditMdl({
                                                 </div>
                                             </div>
                                             <div className="col-auto">
-                                                <div className="night-count">
+                                                <div
+                                                    className="night-count rounded"
+                                                    style={{
+                                                        marginTop: '27px',
+                                                    }}
+                                                >
                                                     <p className="caption-2 font-white text-center mb-0">
                                                         Nights
                                                     </p>
-                                                    <p className="caption-1b font-white mt-1 text-center mb-0">
+                                                    <span>
                                                         {isNaN(
                                                             formData.total_day,
                                                         )
                                                             ? 0
                                                             : formData.total_day}
-                                                    </p>
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="col">

@@ -115,6 +115,8 @@ Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' =
     Route::any('upd_reservation', 'HotelReservationController@updateReservation');
     Route::any('upd_reser_status', 'HotelReservationController@updateReserStatus');
     Route::any('del_reservation', 'HotelReservationController@deleteReservation');
+    Route::POST('get_room_avlbl_dtwise', 'HotelReservationController@getRoomAvailabilityDateWise');
+    Route::POST('get_room_avlbl_summary', 'HotelReservationController@getRoomAvailabilitySummary');
     #Terms & Condition
     Route::POST('get_tnc', 'HotelTncCnpController@getTnc');
     Route::POST('cr_tnc', 'HotelTncCnpController@createTnc');
