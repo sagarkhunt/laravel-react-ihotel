@@ -30,12 +30,16 @@ function PaymentMdl({ open, setOpen, setFormData, formData }) {
                 >
                     <div className="modal-content w-100">
                         <div className="modal-header d-flex justify-content-between">
-                            <h5
-                                className="modal-title headline-h6m"
-                                id="exampleModalLabel"
-                            >
-                                Add Payment
-                            </h5>
+                            <div className="row">
+                                <h5
+                                    className="modal-title headline-h6m"
+                                    id="exampleModalLabel"
+                                >
+                                    Receipt Collection
+                                </h5>
+                                <div>Reservation Number: RS1234</div>
+                            </div>
+
                             <div className="d-flex gap-4 align-items-center">
                                 <button
                                     type="button"
@@ -50,7 +54,7 @@ function PaymentMdl({ open, setOpen, setFormData, formData }) {
                             </div>
                         </div>
                         <div className="modal-body">
-                            <div className="row mx-0">
+                            {/* <div className="row mx-0">
                                 <div className="col-12 px-0">
                                     <div className="form-group mb-3">
                                         <label
@@ -115,7 +119,7 @@ function PaymentMdl({ open, setOpen, setFormData, formData }) {
                                         />
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="modal-footer">
                             <button

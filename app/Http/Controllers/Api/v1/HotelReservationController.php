@@ -26,15 +26,45 @@ class HotelReservationController extends BaseApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function getReservation()
+    public function getReservation(Request $request)
     {
-        $bookings = RoomBookingMaster::with(['roomInventory.roomCat', 'roomInventory.roomPlan', 'roomAdvPayment'])->get();
+        // Capture the request parameters
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $bsnsSrcId = $request->input('bsns_src_id');
+        $status = $request->input('status');
 
-        if (count($bookings) > 0) {
+        // Start the Eloquent query
+        $query = RoomBookingMaster::with(['roomInventory.roomCat', 'roomInventory.roomPlan', 'roomAdvPayment']);
 
-            return $this->sendResponse($bookings, "Get Reservation list successfully!.");
+        // Apply the filters
+        if ($startDate) {
+            $query->where('frm_dt', '>=', $startDate);
         }
-        return $this->sendResponse([], "No Data found!.");
+        if ($endDate) {
+            $query->where('to_dt', '<=', $endDate);
+        }
+        if ($bsnsSrcId) {
+            $query->where('bsns_src_id', $bsnsSrcId);
+        }
+        if ($status) {
+            // Assuming 'active' means block_status is 1
+            if ($status == 'active') {
+                $query->where('block_status', 1);
+            } else if ($status == 'inactive') {
+                $query->where('block_status', 0);
+            }
+        }
+
+        // Get the filtered bookings
+        $bookings = $query->get();
+
+        // Check if there are any bookings
+        if (count($bookings) > 0) {
+            return $this->sendResponse($bookings, "Get Reservation list successfully!");
+        }
+
+        return $this->sendResponse([], "No Data found!");
     }
 
     public function createReservation(Request $request)

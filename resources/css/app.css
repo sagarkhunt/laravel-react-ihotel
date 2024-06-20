@@ -1406,6 +1406,15 @@ body {
     color: white;
     height: 48px;
 }
+
+.magnify-icon {
+    background-color: var(--primary-color200);
+    width: 3rem !important;
+    font-size: smaller;
+    color: var(--primary-color600);
+    height: 46px;
+}
+
 .rounded-top-left-0 {
     border-top-left-radius: 0px;
 }
@@ -2097,4 +2106,34 @@ select,
 }
 .font-ternary .material-icons-outlined {
     color: rgb(174, 173, 173); /* Color for the icon */
+}
+
+.number {
+    display: flex;
+    align-items: center;
+}
+
+.number .minus,
+.number .plus {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    background-color: #eeeef0;
+    cursor: pointer;
+    user-select: none;
+    font-size: 20px;
+}
+
+.number .minus:hover,
+.number .plus:hover {
+    background-color: #dadada;
+}
+
+.number .input-number {
+    width: 50px;
+    height: 30px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 16px;
 }

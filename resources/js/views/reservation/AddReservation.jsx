@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import AddCustomerDetails from './componet/AddCustomerDetails';
 import AddRoom from './componet/AddRoom';
 import EditCustomerDetails from './componet/EditCustomerDetails';
+import AvailableInqMdl from './componet/AvailableInqMdl';
 import toast from 'react-hot-toast';
 
 function AddReservation() {
@@ -25,6 +26,12 @@ function AddReservation() {
     const [nightCount, setNightCount] = useState(0);
     const [open, setOpen] = useState(false);
     const [dropDownData, setDropDownData] = useState({});
+
+    const [showAvaInq, setShowAvaInq] = useState(false);
+
+    const showAvailableModal = () => {
+        setShowAvaInq(true);
+    };
 
     const { dropDownList } = useSelector((state) => state?.reserReducer);
     /***
@@ -133,6 +140,12 @@ function AddReservation() {
         return true; // All parameters passed validation
     }
 
+    const handleDeleteRow = (index) => {
+        const updatedRooms = [...formData.room_json];
+        updatedRooms.splice(index, 1);
+        setFormData({ ...formData, room_json: updatedRooms });
+    };
+
     function handleSubmit(e) {
         e.preventDefault();
         // setFormData({
@@ -215,29 +228,13 @@ function AddReservation() {
                             <div className="row m-0">
                                 <div className="col-8">
                                     <div className="row mx-0">
-                                        <div className="col-5 p-0">
+                                        <div className="col-4 p-0">
                                             <label
                                                 htmlFor="checkin-date"
                                                 className="custom-label mb-1"
                                             >
                                                 Check In
                                             </label>
-                                            {/* <div className="row m-0">
-                                                <div className="col-12 p-0">
-                                                    <input
-                                                        type="date"
-                                                        className="w-100 h-100 custom-input-lg rounded-right-none"
-                                                        id="checkin-date"
-                                                        name="frm_dt"
-                                                        value={formData.frm_dt}
-                                                        onChange={
-                                                            handleInputChange
-                                                        }
-                                                        min={todayDate}
-                                                        required
-                                                    />
-                                                </div>
-                                            </div> */}
                                             <div
                                                 className="row m-0 cp"
                                                 onClick={
@@ -261,13 +258,22 @@ function AddReservation() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-2 d-flex align-items-end justify-content-center">
-                                            <div className="border res-night-count rounded text-center py-1">
-                                                <p className="mb-1">Nights</p>
-                                                <span>{nightCount}</span>
+                                        <div className="col-2  ps-4">
+                                            <label
+                                                htmlFor="checkin-date"
+                                                className="custom-label mb-1"
+                                            >
+                                                Nights
+                                            </label>
+                                            <div className="row m-0  cp border res-night-count rounded text-center py-1">
+                                                <div className="col-12 p-0 d-flex align-items-center justify-content-center mt-1">
+                                                    <span className="h5">
+                                                        {nightCount}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="col-5  p-0">
+                                        <div className="col-4  p-0">
                                             <label
                                                 htmlFor="checkout-date"
                                                 className="custom-label mb-1"
@@ -295,12 +301,22 @@ function AddReservation() {
                                                 </div>
                                             </div>
                                         </div>
+                                        <div className="col-2 pe-0 d-flex align-items-end justify-content-center">
+                                            <div
+                                                className="border magnify-icon rounded text-center py-1 "
+                                                onClick={showAvailableModal}
+                                            >
+                                                <span className="material-icons-outlined mt-1">
+                                                    manage_search
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="col-4">
+                                <div className="col-4 ps-0">
                                     <div className="">
-                                        <label className="custom-label mb-1">
+                                        <label className="custom-label mb-2">
                                             Booking Source
                                         </label>
                                     </div>
@@ -431,10 +447,13 @@ function AddReservation() {
                             <div className="p-0 flex-column d-flex">
                                 <div className="light-blue-box py-2 px-1 d-flex">
                                     <div className="row m-0 w-100">
-                                        <div className="col-4">Room Type</div>
-                                        <div className="col-8">
+                                        <div className="col-1 ps-4">#</div>
+                                        <div className="col-2 ps-0">
+                                            Room Type
+                                        </div>
+                                        <div className="col-9">
                                             <div className="row">
-                                                <div className="col-3">
+                                                <div className="col-2">
                                                     Room Plan
                                                 </div>
                                                 <div className="col-2">
@@ -446,7 +465,10 @@ function AddReservation() {
                                                 <div className="col-2">
                                                     Child
                                                 </div>
-                                                <div className="col-3 text-end">
+                                                <div className="col-2">
+                                                    Amount
+                                                </div>
+                                                <div className="col-2 text-end">
                                                     Rate (₹)
                                                 </div>
                                             </div>
@@ -465,7 +487,19 @@ function AddReservation() {
                                                 className="row mx-0 my-3"
                                                 key={index}
                                             >
-                                                <div className="col-4">
+                                                <div className="col-1 ps-0 text-center">
+                                                    <span
+                                                        className="material-icons-outlined delete-table me-3"
+                                                        onClick={() =>
+                                                            handleDeleteRow(
+                                                                index,
+                                                            )
+                                                        }
+                                                    >
+                                                        delete
+                                                    </span>
+                                                </div>
+                                                <div className="col-2">
                                                     {
                                                         dropDownData[
                                                             'room_cate'
@@ -476,9 +510,9 @@ function AddReservation() {
                                                         )?.cat_name
                                                     }
                                                 </div>
-                                                <div className="col-8">
+                                                <div className="col-9">
                                                     <div className="row">
-                                                        <div className="col-3">
+                                                        <div className="col-2">
                                                             {
                                                                 dropDownData[
                                                                     'rooms_plan'
@@ -498,8 +532,11 @@ function AddReservation() {
                                                         <div className="col-2">
                                                             {room.chld}
                                                         </div>
-                                                        <div className="col-3 text-end">
-                                                            ₹{room.rate}
+                                                        <div className="col-2 ">
+                                                            ₹ {room.amount}
+                                                        </div>
+                                                        <div className="col-2 text-end">
+                                                            ₹ {room.rate}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -933,6 +970,12 @@ function AddReservation() {
                     setOpen={setOpen}
                     formData={formData}
                     setFormData={setFormData}
+                />
+            )}
+            {showAvaInq && (
+                <AvailableInqMdl
+                    showAvaInq={showAvaInq}
+                    setShowAvaInq={setShowAvaInq}
                 />
             )}
         </div>

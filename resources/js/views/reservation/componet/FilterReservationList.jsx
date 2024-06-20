@@ -1,9 +1,64 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from '../../../components/common/Modal';
+import actions from '../../../redux/Reservation/actions';
+import { useDispatch, useSelector } from 'react-redux';
 
-export default function FilterReservationList({ open1, setOpen1 }) {
+export default function FilterReservationList({
+    open,
+    setOpen,
+    startDate,
+    setStartDate,
+    endDate,
+    setEndDate,
+    bsnsSrcId,
+    setBsnsSrcId,
+    status,
+    setStatus,
+}) {
+    const [dropDownData, setDropDownData] = useState({});
+    const [selectedStartDate, setSelectedStartDate] = useState(startDate);
+    const [selectedEndDate, setSelectedEndDate] = useState(endDate);
+    const [selectedBsnsSrcId, setSelectedBsnsSrcId] = useState(bsnsSrcId);
+    const [selectedStatus, setSelectedStatus] = useState(status);
+
+    const { dropDownList } = useSelector((state) => state?.reserReducer);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        setDropDownData(dropDownList);
+    }, [dropDownList]);
+
+    useEffect(() => {
+        const sync_req = ['bsns_src'];
+        dispatch({
+            type: actions.RESER_DROPDOWN_LIST,
+            payload: {
+                sync_req: sync_req.join(','),
+            },
+        });
+    }, []);
+
+    const handleApply = () => {
+        // Dispatch an action or make an API call with the selected filters
+        const filters = {
+            startDate: selectedStartDate,
+            endDate: selectedEndDate,
+            bsnsSrcId: selectedBsnsSrcId,
+            status: selectedStatus,
+        };
+        console.log('🚀 ~ handleApply ~ filters:', filters);
+
+        // Replace with your API call or Redux action
+        // dispatch({
+        //     type: actions.FILTER_RESERVATIONS,
+        //     payload: filters,
+        // });
+
+        // setOpen(false);
+    };
+
     return (
-        <Modal open={open1} handleModal={() => setOpen1(!open)}>
+        <Modal open={open} handleModal={() => setOpen(!open)}>
             <div
                 className="modal show"
                 tabIndex="-1"
@@ -30,6 +85,7 @@ export default function FilterReservationList({ open1, setOpen1 }) {
                                     className="btn-close"
                                     data-bs-dismiss="modal"
                                     aria-label="Close"
+                                    onClick={() => setOpen(false)}
                                 ></button>
                             </div>
                         </div>
@@ -46,7 +102,10 @@ export default function FilterReservationList({ open1, setOpen1 }) {
                                         type="date"
                                         className="form-control custom-input"
                                         id="checkin-date"
-                                        placeholder=""
+                                        value={selectedStartDate}
+                                        onChange={(e) =>
+                                            setSelectedStartDate(e.target.value)
+                                        }
                                     />
                                 </div>
                                 <div className="col">
@@ -60,7 +119,10 @@ export default function FilterReservationList({ open1, setOpen1 }) {
                                         type="date"
                                         className="form-control custom-input"
                                         id="checkout-date"
-                                        placeholder=""
+                                        value={selectedEndDate}
+                                        onChange={(e) =>
+                                            setSelectedEndDate(e.target.value)
+                                        }
                                     />
                                 </div>
                             </div>
@@ -75,11 +137,24 @@ export default function FilterReservationList({ open1, setOpen1 }) {
                                         className="form-select custom-input"
                                         id="reservationTypeDropdown"
                                         aria-label="Reservation Type Dropdown"
+                                        value={selectedBsnsSrcId}
+                                        onChange={(e) =>
+                                            setSelectedBsnsSrcId(e.target.value)
+                                        }
                                     >
-                                        <option selected value="1">
-                                            All
-                                        </option>
-                                        <option value="2"></option>
+                                        <option value="0">All</option>
+                                        {dropDownData['bsns_src']?.map(
+                                            (item, index) => {
+                                                return (
+                                                    <option
+                                                        key={index}
+                                                        value={item.id}
+                                                    >
+                                                        {item.name}
+                                                    </option>
+                                                );
+                                            },
+                                        )}
                                     </select>
                                 </div>
                             </div>
@@ -92,12 +167,16 @@ export default function FilterReservationList({ open1, setOpen1 }) {
                                         className="form-check-input me-2"
                                         type="radio"
                                         name="inquiryStatus"
-                                        id="exampleRadios1"
-                                        value="option1"
+                                        id="statusAll"
+                                        value="all"
+                                        checked={selectedStatus === 'all'}
+                                        onChange={(e) =>
+                                            setSelectedStatus(e.target.value)
+                                        }
                                     />
                                     <label
                                         className="form-check-label me-3"
-                                        htmlFor="exampleRadios1"
+                                        htmlFor="statusAll"
                                     >
                                         All
                                     </label>
@@ -106,12 +185,16 @@ export default function FilterReservationList({ open1, setOpen1 }) {
                                         className="form-check-input me-2"
                                         type="radio"
                                         name="inquiryStatus"
-                                        id="exampleRadios2"
-                                        value="option2"
+                                        id="statusActive"
+                                        value="active"
+                                        checked={selectedStatus === 'active'}
+                                        onChange={(e) =>
+                                            setSelectedStatus(e.target.value)
+                                        }
                                     />
                                     <label
                                         className="form-check-label me-3"
-                                        htmlFor="exampleRadios2"
+                                        htmlFor="statusActive"
                                     >
                                         Active
                                     </label>
@@ -120,12 +203,16 @@ export default function FilterReservationList({ open1, setOpen1 }) {
                                         className="form-check-input me-2"
                                         type="radio"
                                         name="inquiryStatus"
-                                        id="exampleRadios3"
-                                        value="option3"
+                                        id="statusInactive"
+                                        value="inactive"
+                                        checked={selectedStatus === 'inactive'}
+                                        onChange={(e) =>
+                                            setSelectedStatus(e.target.value)
+                                        }
                                     />
                                     <label
                                         className="form-check-label"
-                                        htmlFor="exampleRadios3"
+                                        htmlFor="statusInactive"
                                     >
                                         Inactive
                                     </label>
@@ -138,6 +225,12 @@ export default function FilterReservationList({ open1, setOpen1 }) {
                                     type="button"
                                     className="btn-sm btn-outline"
                                     data-bs-dismiss="modal"
+                                    onClick={() => {
+                                        setSelectedStartDate('');
+                                        setSelectedEndDate('');
+                                        setSelectedBsnsSrcId('0');
+                                        setSelectedStatus('all');
+                                    }}
                                 >
                                     Clear All
                                 </button>
@@ -147,6 +240,13 @@ export default function FilterReservationList({ open1, setOpen1 }) {
                                     type="button"
                                     className="btn-sm btn-primary"
                                     data-bs-dismiss="modal"
+                                    onClick={() => {
+                                        setStartDate(selectedStartDate);
+                                        setEndDate(selectedEndDate);
+                                        setBsnsSrcId(selectedBsnsSrcId);
+                                        setStatus(selectedStatus);
+                                        setOpen(false);
+                                    }}
                                 >
                                     Apply
                                 </button>
