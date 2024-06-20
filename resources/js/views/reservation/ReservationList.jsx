@@ -39,6 +39,11 @@ function ReservationList() {
         setOpen2(true);
     };
 
+    const [open3, setOpen3] = useState(false);
+    const openAssignRoommdlNew = () => {
+        setOpen3(true);
+    };
+
     const toggleView = () => {
         setIsGridView(!isGridView);
     };
@@ -355,10 +360,20 @@ function ReservationList() {
                                                 </span>
                                                 {dropdownIndex === index && (
                                                     <div className="dropdown-menu-re show">
-                                                        <div className="px-3 py-4 dropdown-reservation_list">
+                                                        <div
+                                                            className="px-3 py-4 dropdown-reservation_list"
+                                                            onClick={() =>
+                                                                setDropdownIndex(
+                                                                    false,
+                                                                )
+                                                            }
+                                                        >
                                                             <Link
                                                                 className="dropdown-item subtitle-2m"
                                                                 href="#"
+                                                                onClick={
+                                                                    openAssignRoommdlNew
+                                                                }
                                                             >
                                                                 <span
                                                                     className="material-icons-outlined me-2"
@@ -371,10 +386,20 @@ function ReservationList() {
                                                                 Print GRC
                                                             </Link>
                                                         </div>
-                                                        <div className="px-3 py-4 dropdown-reservation_list">
+                                                        <div
+                                                            className="px-3 py-4 dropdown-reservation_list"
+                                                            onClick={() =>
+                                                                setDropdownIndex(
+                                                                    false,
+                                                                )
+                                                            }
+                                                        >
                                                             <Link
                                                                 className="dropdown-item subtitle-2m"
                                                                 href="#"
+                                                                onClick={
+                                                                    openGroupReservationMdl
+                                                                }
                                                             >
                                                                 <span
                                                                     className="material-icons-outlined me-2"
@@ -415,8 +440,8 @@ function ReservationList() {
             {open1 && (
                 <FilterReservationList open1={open1} setOpen1={setOpen1} />
             )}
-            {openn && <AssignRoommdlNew openn={openn} setOpenn={setOpenn} />}
             {open2 && <GroupReservationMdl open2={open2} setOpen2={setOpen2} />}
+            {open3 && <AssignRoommdlNew openn={open3} setOpenn={setOpen3} />}
         </div>
     );
 }

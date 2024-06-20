@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from '../../../components/common/Modal';
-
-import actions from '../../../redux/Reservation/actions';
-import { useDispatch, useSelector } from 'react-redux';
+import $ from 'jquery';
 
 const AddRoom = ({
     formData,
@@ -20,10 +18,12 @@ const AddRoom = ({
                 nor: '1',
                 adlt: '1',
                 chld: '0',
+                amount: '',
                 rate: 4000.0,
             },
         ]);
     };
+
     const rooms = structuredClone(formData.room_json);
 
     const [rDetails, setRDetails] = useState(() => {
@@ -37,6 +37,7 @@ const AddRoom = ({
                     nor: '1',
                     adlt: '1',
                     chld: '0',
+                    amount: '',
                     rate: 4000.0,
                 },
             ];
@@ -59,23 +60,36 @@ const AddRoom = ({
         }));
     };
 
-    // const [dropDownData, setDropDownData] = useState({});
+    const deleteRoom = (index) => {
+        const newRoomDetails = rDetails.filter((_, i) => i !== index);
+        setRDetails(newRoomDetails);
+    };
 
-    // const { dropDownList } = useSelector((state) => state?.reserReducer);
-
-    // useEffect(() => {
-    //     setDropDownData(dropDownList);
-    // }, [dropDownList]);
-
-    // useEffect(() => {
-    //     const sync_req = ['room_cate', 'rooms', 'rooms_plan'];
-    //     dispatch({
-    //         type: actions.RESER_DROPDOWN_LIST,
-    //         payload: {
-    //             sync_req: sync_req.join(','),
-    //         },
-    //     });
-    // }, []);
+    useEffect(() => {
+        $(document).ready(function () {
+            $('.minus').click(function () {
+                var $input = $(this).parent().find('input');
+                var type = $input.attr('value');
+                var count = parseInt($input.val()) - 1;
+                if (type === '0') {
+                    // if it's a child input
+                    count = count < 0 ? 0 : count;
+                } else {
+                    // if it's nor or adlt input
+                    count = count < 1 ? 1 : count;
+                }
+                $input.val(count);
+                $input.change();
+                return false;
+            });
+            $('.plus').click(function () {
+                var $input = $(this).parent().find('input');
+                $input.val(parseInt($input.val()) + 1);
+                $input.change();
+                return false;
+            });
+        });
+    }, []);
 
     return (
         <Modal
@@ -93,7 +107,7 @@ const AddRoom = ({
                 <div
                     className="modal-dialog  modal-center"
                     style={{
-                        minWidth: '70%',
+                        minWidth: '80%',
                     }}
                 >
                     <div className="modal-content h-75">
@@ -118,19 +132,23 @@ const AddRoom = ({
                             </div>
                         </div>
 
-                        <div className="modal-body y_scrolling">
+                        <div className="modal-body y_scrolling ps-0">
                             <div className="light-blue-box py-2 px-1 d-flex">
                                 <div className="row m-0 w-100">
-                                    <div className="col-3">Room Type</div>
+                                    <div className="col-1 ps-5">#</div>
+                                    <div className="col-2 ps-0">Room Type</div>
                                     <div className="col-9 p-0">
                                         <div className="row mx-0">
-                                            <div className="col-3">
+                                            <div className="col-2">
                                                 Room Plan
                                             </div>
                                             <div className="col-2">Room</div>
                                             <div className="col-2">Adult</div>
                                             <div className="col-2">Child</div>
-                                            <div className="col-3 text-end">
+                                            <div className="col-2 text-end">
+                                                Amount (₹)
+                                            </div>
+                                            <div className="col-2 text-end">
                                                 Rate (₹)
                                             </div>
                                         </div>
@@ -140,7 +158,15 @@ const AddRoom = ({
 
                             {rDetails.map((room, index) => (
                                 <div className="row my-3 mx-0" key={index}>
-                                    <div className="col-3">
+                                    <div className="col-1 ps-0 text-center">
+                                        <span
+                                            className="material-icons-outlined delete-table ms-4"
+                                            onClick={() => deleteRoom(index)}
+                                        >
+                                            delete
+                                        </span>
+                                    </div>
+                                    <div className="col-2 ps-0">
                                         <div className="d-flex">
                                             <select
                                                 className="form-select custom-input-sm"
@@ -172,7 +198,7 @@ const AddRoom = ({
                                     </div>
                                     <div className="col-9 p-0">
                                         <div className="row mx-0">
-                                            <div className="col-3">
+                                            <div className="col-2">
                                                 <div className="d-flex">
                                                     <select
                                                         className="form-select custom-input-sm"
@@ -212,14 +238,15 @@ const AddRoom = ({
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div className="col-2">
-                                                <div className="d-flex">
+                                            <div className="col-2 mt-1">
+                                                <div className="number">
+                                                    <span className="minus">
+                                                        -
+                                                    </span>
                                                     <input
-                                                        list="nor-list"
-                                                        type="number"
-                                                        name="nor"
+                                                        className="input-number"
+                                                        type="text"
                                                         value={room.nor}
-                                                        min={1}
                                                         onChange={(e) =>
                                                             handleInputChange(
                                                                 e,
@@ -227,32 +254,20 @@ const AddRoom = ({
                                                                 'nor',
                                                             )
                                                         }
-                                                        className="form-control custom-input"
                                                     />
-                                                    <datalist
-                                                        id="nor-list"
-                                                        className="custom-input"
-                                                    >
-                                                        <option value="1">
-                                                            1
-                                                        </option>
-                                                        <option value="2">
-                                                            2
-                                                        </option>
-                                                        <option value="3">
-                                                            3
-                                                        </option>
-                                                        <option value="4">
-                                                            4
-                                                        </option>
-                                                    </datalist>
+                                                    <span className="plus">
+                                                        +
+                                                    </span>
                                                 </div>
                                             </div>
-                                            <div className="col-2">
-                                                <div className="d-flex">
+                                            <div className="col-2 mt-1">
+                                                <div className="number">
+                                                    <span className="minus">
+                                                        -
+                                                    </span>
                                                     <input
-                                                        list="adlt-list"
-                                                        name="adlt"
+                                                        className="input-number"
+                                                        type="text"
                                                         value={room.adlt}
                                                         onChange={(e) =>
                                                             handleInputChange(
@@ -261,34 +276,20 @@ const AddRoom = ({
                                                                 'adlt',
                                                             )
                                                         }
-                                                        className="form-control custom-input"
                                                     />
-                                                    <datalist
-                                                        id="adlt-list"
-                                                        className="custom-input"
-                                                    >
-                                                        <option value="1">
-                                                            1
-                                                        </option>
-                                                        <option value="2">
-                                                            2
-                                                        </option>
-                                                        <option value="3">
-                                                            3
-                                                        </option>
-                                                        <option value="4">
-                                                            4
-                                                        </option>
-                                                    </datalist>
+                                                    <span className="plus">
+                                                        +
+                                                    </span>
                                                 </div>
                                             </div>
-                                            <div className="col-2">
-                                                <div className="d-flex">
+                                            <div className="col-2 mt-1">
+                                                <div className="number">
+                                                    <span className="minus">
+                                                        -
+                                                    </span>
                                                     <input
-                                                        type="number"
-                                                        list="chld-list"
-                                                        name="chld"
-                                                        min={0}
+                                                        className="input-number"
+                                                        type="text"
                                                         value={room.chld}
                                                         onChange={(e) =>
                                                             handleInputChange(
@@ -297,47 +298,41 @@ const AddRoom = ({
                                                                 'chld',
                                                             )
                                                         }
-                                                        className="form-control custom-input"
                                                     />
-                                                    <datalist
-                                                        id="chld-list"
-                                                        className="custom-input"
-                                                    >
-                                                        <option value="1">
-                                                            1
-                                                        </option>
-                                                        <option value="2">
-                                                            2
-                                                        </option>
-                                                        <option value="3">
-                                                            3
-                                                        </option>
-                                                        <option value="4">
-                                                            4
-                                                        </option>
-                                                    </datalist>
+                                                    <span className="plus">
+                                                        +
+                                                    </span>
                                                 </div>
                                             </div>
-                                            <div className="col-3 position-relative">
+                                            <div className="col-2 position-relative">
                                                 <button
                                                     className="btn position-absolute start-1"
                                                     onClick={() =>
                                                         toggleEditPrice(index)
                                                     }
-                                                >
-                                                    <svg
-                                                        width="17"
-                                                        height="17"
-                                                        viewBox="0 0 17 17"
-                                                        fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                    >
-                                                        <path
-                                                            d="M8.33854 1.49561C4.65854 1.49561 1.67188 4.48227 1.67188 8.16227C1.67188 11.8423 4.65854 14.8289 8.33854 14.8289C12.0185 14.8289 15.0052 11.8423 15.0052 8.16227C15.0052 4.48227 12.0185 1.49561 8.33854 1.49561ZM8.33854 13.4956C5.39854 13.4956 3.00521 11.1023 3.00521 8.16227C3.00521 5.22227 5.39854 2.82894 8.33854 2.82894C11.2785 2.82894 13.6719 5.22227 13.6719 8.16227C13.6719 11.1023 11.2785 13.4956 8.33854 13.4956ZM11.1185 10.0023L10.3852 9.26894C10.8585 8.38227 10.7385 7.26227 9.99187 6.51561C9.53188 6.05561 8.93854 5.82894 8.33854 5.82894C8.31854 5.82894 8.29854 5.83561 8.27854 5.83561L9.00521 6.56227L8.29854 7.26894L6.41187 5.38227L8.29854 3.49561L9.00521 4.20227L8.36521 4.84227C9.21187 4.84894 10.0519 5.16227 10.6985 5.80227C11.8319 6.94227 11.9719 8.70894 11.1185 10.0023ZM10.2652 10.9423L8.37854 12.8289L7.67188 12.1223L8.30521 11.4889C7.46521 11.4823 6.62521 11.1556 5.98521 10.5156C4.84521 9.37561 4.70521 7.61561 5.55854 6.32227L6.29188 7.05561C5.81854 7.94227 5.93854 9.06227 6.68521 9.80894C7.15188 10.2756 7.77187 10.5023 8.39188 10.4823L7.67188 9.76227L8.37854 9.05561L10.2652 10.9423Z"
-                                                            fill="#899EB0"
-                                                        />
-                                                    </svg>
-                                                </button>
+                                                ></button>
+                                                <input
+                                                    type=""
+                                                    className="form-control custom-input-sm text-end"
+                                                    name="amount"
+                                                    value={room.amount}
+                                                    onChange={(e) =>
+                                                        handleInputChange(
+                                                            e,
+                                                            index,
+                                                            'amount',
+                                                        )
+                                                    }
+                                                    placeholder="0000.00"
+                                                />
+                                            </div>
+                                            <div className="col-2 position-relative">
+                                                <button
+                                                    className="btn position-absolute start-1"
+                                                    onClick={() =>
+                                                        toggleEditPrice(index)
+                                                    }
+                                                ></button>
                                                 <input
                                                     type="number"
                                                     className="form-control custom-input-sm text-end"
@@ -361,7 +356,7 @@ const AddRoom = ({
                                 </div>
                             ))}
                             <div className="row mx-0 my-2">
-                                <div className="col-12 pt-0">
+                                <div className="col-12 pt-0 ps-4">
                                     <div className="button-container">
                                         <button
                                             className="btn btn-sm btn-secondary"
@@ -387,7 +382,7 @@ const AddRoom = ({
                                     setShowAddRoom(false);
                                 }}
                             >
-                                Cancle
+                                Cancel
                             </button>
                             <button
                                 type="button"

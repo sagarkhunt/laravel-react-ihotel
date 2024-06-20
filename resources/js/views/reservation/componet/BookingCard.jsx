@@ -15,6 +15,11 @@ function BookingCard({
         setOpen(true);
     };
 
+    const [open2, setOpen2] = useState(false);
+    const openGroupReservationMdl = () => {
+        setOpen2(true);
+    };
+
     function getGuestName(data) {
         let guest = {};
         try {
