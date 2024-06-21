@@ -38,25 +38,6 @@ export default function FilterReservationList({
         });
     }, []);
 
-    const handleApply = () => {
-        // Dispatch an action or make an API call with the selected filters
-        const filters = {
-            startDate: selectedStartDate,
-            endDate: selectedEndDate,
-            bsnsSrcId: selectedBsnsSrcId,
-            status: selectedStatus,
-        };
-        console.log('🚀 ~ handleApply ~ filters:', filters);
-
-        // Replace with your API call or Redux action
-        // dispatch({
-        //     type: actions.FILTER_RESERVATIONS,
-        //     payload: filters,
-        // });
-
-        // setOpen(false);
-    };
-
     return (
         <Modal open={open} handleModal={() => setOpen(!open)}>
             <div
@@ -68,7 +49,7 @@ export default function FilterReservationList({
                 role="dialog"
             >
                 <div
-                    className="modal-dialog  modal-md"
+                    className="modal-dialog  modal-xs modal-dialog-centered"
                     style={{ height: 'calc(100vh - 100px)' }}
                 >
                     <div className="modal-content">

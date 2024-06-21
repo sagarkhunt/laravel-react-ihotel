@@ -34,31 +34,67 @@ function ReservationList() {
     const [endDate, setEndDate] = useState('');
     const [bsnsSrcId, setBsnsSrcId] = useState('');
     const [status, setStatus] = useState('');
-    let currentItems = [];
-    if (reserListingData !== null && reserListingData !== undefined) {
-        if (Array.isArray(reserListingData)) {
-            const filteredData = reserListingData.filter((item) =>
-                [
-                    'frm_dt',
-                    'to_dt',
-                    'guest_json',
-                    'room_json',
-                    'id',
-                    'total_amt',
-                    'created_at',
-                ].some((key) =>
-                    item[key]
-                        .toString()
-                        .toLowerCase()
-                        .includes(searchQuery.toLowerCase()),
-                ),
-            );
-            currentItems = filteredData.slice(
-                indexOfFirstItem,
-                indexOfLastItem,
-            );
+    const filterAndPaginateData = (
+        data,
+        searchQuery,
+        indexOfFirstItem,
+        indexOfLastItem,
+        isArrivals = false,
+    ) => {
+        if (data === null || data === undefined || !Array.isArray(data)) {
+            return [];
         }
-    }
+
+        const filteredData = data.filter((item) => {
+            const matchesSearchQuery = [
+                'frm_dt',
+                'to_dt',
+                'guest_json',
+                'room_json',
+                'id',
+                'total_amt',
+                'created_at',
+            ].some((key) =>
+                item[key]
+                    ?.toString()
+                    .toLowerCase()
+                    .includes(searchQuery.toLowerCase()),
+            );
+
+            if (!matchesSearchQuery) {
+                return false;
+            }
+
+            if (isArrivals) {
+                const currentDate = new Date();
+                const nextDate = new Date(currentDate);
+                nextDate.setDate(nextDate.getDate() + 1);
+
+                const arrivalDate = new Date(item.frm_dt);
+                return arrivalDate >= currentDate && arrivalDate <= nextDate;
+            }
+
+            return true;
+        });
+
+        return filteredData.slice(indexOfFirstItem, indexOfLastItem);
+    };
+
+    const currentItems =
+        activeButton === 'reservations'
+            ? filterAndPaginateData(
+                  reserListingData,
+                  searchQuery,
+                  indexOfFirstItem,
+                  indexOfLastItem,
+              )
+            : filterAndPaginateData(
+                  reserListingData,
+                  searchQuery,
+                  indexOfFirstItem,
+                  indexOfLastItem,
+                  true,
+              );
 
     // Change page
     const onPageChange = (pageNumber) => {
@@ -127,30 +163,6 @@ function ReservationList() {
         });
     }, [resCreated, startDate, endDate, bsnsSrcId, status]);
 
-    // useEffect(() => {
-    //     if (setStartDate && setEndDate && setBsnsSrcId && setStatus) {
-    //         const filters = {
-    //             start_date: startDate,
-    //             end_date: endDate,
-    //             bsns_src_id: bsnsSrcId,
-    //             status: status,
-    //         };
-    //         dispatch({
-    //             type: actions.RESER_LIST,
-    //             payload: filters,
-    //         });
-    //     }
-    // }, [
-    //     startDate,
-    //     endDate,
-    //     bsnsSrcId,
-    //     status,
-    //     setStartDate,
-    //     setEndDate,
-    //     setBsnsSrcId,
-    //     setStatus,
-    // ]);
-
     const countArrivals = (data) => {
         const today = new Date();
         const tomorrow = new Date();
@@ -192,7 +204,13 @@ function ReservationList() {
         return chldTotal;
     };
     const arrivalCounts = countArrivals(reserListingData);
-
+    const showActiveTab = (val) => {
+        if (val === 'reservations') {
+            setActiveButton('reservations');
+        } else {
+            setActiveButton('arrivals');
+        }
+    };
     return (
         <div className="m-4">
             <div className="col-12 mt-3 pannel action-header px-3">
@@ -205,7 +223,7 @@ function ReservationList() {
                                         ? 'btn-primary reservations'
                                         : ''
                                 }`}
-                                onClick={() => setActiveButton('reservations')}
+                                onClick={() => showActiveTab('reservations')}
                             >
                                 Reservations
                                 <span
@@ -225,22 +243,34 @@ function ReservationList() {
                                         ? 'btn-primary'
                                         : ''
                                 }`}
-                                onClick={() => setActiveButton('arrivals')}
+                                onClick={() => showActiveTab('arrivals')}
                             >
-                                Arrivals
-                                {Object.entries(arrivalCounts).map(
-                                    ([date, count]) => (
-                                        <span
-                                            key={date}
-                                            className={`subtitle-2m ${
-                                                activeButton === 'arrivals'
-                                                    ? 'btn-primary rounded-circle'
-                                                    : 'rounded-circle2'
-                                            }`}
-                                        >
-                                            {count}
-                                        </span>
-                                    ),
+                                Arrivals{' '}
+                                {Object.keys(arrivalCounts || {}).length > 0 ? (
+                                    Object.entries(arrivalCounts).map(
+                                        ([date, count]) => (
+                                            <span
+                                                key={date}
+                                                className={`subtitle-2m ${
+                                                    activeButton === 'arrivals'
+                                                        ? 'btn-primary rounded-circle'
+                                                        : 'rounded-circle2'
+                                                }`}
+                                            >
+                                                {count ?? 0}
+                                            </span>
+                                        ),
+                                    )
+                                ) : (
+                                    <span
+                                        className={`subtitle-2m ${
+                                            activeButton === 'arrivals'
+                                                ? 'btn-primary rounded-circle'
+                                                : 'rounded-circle2'
+                                        }`}
+                                    >
+                                        0
+                                    </span>
                                 )}
                             </h6>
                         </div>
@@ -596,15 +626,38 @@ function ReservationList() {
             ) : (
                 <div className="col-12">
                     <div className="row">
-                        {reserListingData.map((booking, index) => (
-                            <BookingCard
-                                key={index}
-                                booking={booking}
-                                index={index}
-                                openDropdownIndex={openDropdownIndex}
-                                setOpenDropdownIndex={setOpenDropdownIndex}
-                            />
-                        ))}
+                        {currentItems && currentItems.length > 0 ? (
+                            currentItems?.map((booking, index) => (
+                                <BookingCard
+                                    key={index}
+                                    booking={booking}
+                                    index={index}
+                                    openDropdownIndex={openDropdownIndex}
+                                    setOpenDropdownIndex={setOpenDropdownIndex}
+                                />
+                            ))
+                        ) : (
+                            <div className="text-center py-4">
+                                No data available
+                            </div>
+                        )}
+                        {/* Pagination Controls */}
+                        {currentItems && currentItems.length > 0 ? (
+                            <div className="row right custom-container">
+                                <div className="col-12">
+                                    <Pagination
+                                        currentPage={currentPage}
+                                        totalPages={Math.ceil(
+                                            reserListData.length / itemsPerPage,
+                                        )}
+                                        onPageChange={onPageChange}
+                                        entriesPerPage={entriesPerPage}
+                                    />
+                                </div>
+                            </div>
+                        ) : (
+                            ''
+                        )}
                     </div>
                 </div>
             )}

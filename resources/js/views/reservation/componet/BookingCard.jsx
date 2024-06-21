@@ -24,7 +24,6 @@ function BookingCard({
         let guest = {};
         try {
             guest = JSON.parse(data);
-            console.log('🚀 ~ getGuestName ~ guest:', guest);
         } catch (error) {
             console.error(`Error parsing guest JSON at index ${index}:`, error);
         }

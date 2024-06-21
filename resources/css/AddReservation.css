@@ -548,11 +548,111 @@ label.upload-button:before {
 .accordion-body {
     padding: 0rem 1.55rem;
 }
+.custom-container {
+    margin-top: 131px !important;
+}
 
-/* input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin: 0; 
-} */
+/* Add pay model css */
+
+.receipt-collection-container {
+    display: flex;
+    /* width: 600px; */
+    background-color: #fff;
+    border-radius: 8px;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+    padding: 5px;
+}
+
+.payment-methods-sidebar {
+    /* width: 300px; Adjust width as needed */
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.method-item {
+    width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 5px;
+    transition:
+        background-color 0.3s,
+        border-left 0.3s;
+}
+
+.method-item:hover {
+    background-color: #e9ecef;
+    border-left: 4px solid #007bff;
+}
+
+.payment-details {
+    flex: 1;
+    padding-left: 20px;
+}
+
+.selected-method {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    /* border: 1px solid #e9ecef; */
+}
+
+.method-name {
+    font-size: 1rem;
+}
+
+input[type='number'] {
+    width: 100px;
+    padding: 4px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    text-align: right;
+    font-size: 1rem;
+}
+
+.amount-summary {
+    margin-top: 150px;
+}
+
+.total-amount,
+.due-amount {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    font-size: 1rem;
+}
+
+.due-amount {
+    color: red;
+}
+.title-1m {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.method-name {
+    margin-left: 10px;
+    flex: 1;
+}
+
+.form-input {
+    width: 80px; /* Adjust width as needed */
+    padding: 5px;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    text-align: right;
+}

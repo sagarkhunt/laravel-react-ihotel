@@ -116,7 +116,9 @@ class HotelLocationController extends BaseApiController
                 } else {
 
                     $country_Edit = CountryMaster::where('id', $country_id)->where('hotel_id', $hotel_id)->first();
+
                     if ($country_Edit) {
+                        CountryMaster::where('hotel_id', $hotel_id)->update(['is_default' => 0]);
                         $country_Edit->name = (isset($request['name']) ? (empty($request['name']) ? "" : $request['name']) : $country_Edit->name);
                         $country_Edit->is_default = (isset($request['is_default']) ? ($request['is_default'] == 0 ? 0 : 1) : $country_Edit->is_default);
                         $country_Edit->updated_by = $user_id;;
@@ -284,7 +286,7 @@ class HotelLocationController extends BaseApiController
                 if ($duplicate != 0) {
                     return $this->sendResponse('fail', "The " . $msg4 . " Already Exists");
                 } else {
-
+                    StateMaster::where('hotel_id', $hotel_id)->update(['is_default' => 0]);
                     $state_Edit = StateMaster::where('id', $state_id)->where('hotel_id', $hotel_id)->first();
                     if ($state_Edit) {
                         $state_Edit->name = (isset($request['name']) ? (empty($request['name']) ? "" : $request['name']) : $state_Edit->name);
@@ -415,15 +417,6 @@ class HotelLocationController extends BaseApiController
                 $existingCityMessage = count($existingCity) > 0 ? implode(', ', $existingCity) . ' Already exist and were not added.' : '';
                 $responseMessage = $addedCityMessage . $existingCityMessage;
                 return $this->sendResponse(Null, $responseMessage);
-                // $createState = CityMaster::insertGetId([
-                //     'hotel_id' => $hotel_id,
-                //     'name' => $request["name"],
-                //     'state_id' => $request["state_id"],
-                //     'country_id' => $request["country_id"],
-                //     'created_by' => $auth_user_id,
-                //     'created_at' => date('Y-m-d H:i:s')
-                // ]);
-                // return $this->sendResponse($createState, 'City created successfully.');
             }
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
@@ -466,7 +459,7 @@ class HotelLocationController extends BaseApiController
                 if ($duplicate != 0) {
                     return $this->sendResponse('fail', "The " . $msg4 . " Already Exists");
                 } else {
-
+                    CityMaster::where('hotel_id', $hotel_id)->update(['is_default' => 0]);
                     $city_Edit = CityMaster::where('id', $city_id)->where('hotel_id', $hotel_id)->first();
                     if ($city_Edit) {
                         $city_Edit->name = (isset($request['name']) ? (empty($request['name']) ? "" : $request['name']) : $city_Edit->name);
