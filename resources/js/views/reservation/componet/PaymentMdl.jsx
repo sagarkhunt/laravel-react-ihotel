@@ -155,10 +155,11 @@
 
 // export default PaymentMdl;
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from '../../../components/common/Modal';
+import toast from 'react-hot-toast';
 
-function PaymentMdl({ open, setOpen, setFormData, formData }) {
+function PaymentMdl({ open, setOpen, setFormData, formData, totalAmount }) {
     const paymentDetails = structuredClone(formData.payment_json);
     const [pmtDtls, setPmtDtls] = useState(paymentDetails);
 
@@ -169,13 +170,37 @@ function PaymentMdl({ open, setOpen, setFormData, formData }) {
         });
     };
 
+    const [dueAmount, setDueAmount] = useState(0);
+
     const [paymentMethods, setPaymentMethods] = useState([
-        { method: 'Cash', amount: 6000 },
-        { method: 'Gpay', amount: 2000 },
+        { method: 'Cash', active: false },
+        { method: 'Gpay', active: false },
+        { method: 'SBI', active: false },
+        { method: 'HDFC', active: false },
+        { method: 'Paytm', active: false },
+        { method: 'Phone pe', active: false },
     ]);
 
-    const totalAmount = 12000;
-    const dueAmount = 4000;
+    const [selectedPaymentMethods, setSelectedPaymentMethods] = useState([]);
+
+    useEffect(() => {
+        var totalDueAmount = 0;
+
+        for (let i = 0; i < selectedPaymentMethods.length; i++) {
+            totalDueAmount += parseFloat(selectedPaymentMethods[i].amount);
+        }
+
+        const dueAmt =
+            parseFloat(totalAmount) -
+            parseFloat(totalDueAmount ? totalDueAmount : 0);
+
+        if (dueAmt < 0) {
+            toast.error('Amount should not exceed total amount');
+            setDueAmount(0);
+        } else {
+            setDueAmount(dueAmt);
+        }
+    }, [selectedPaymentMethods]);
 
     return (
         <Modal open={open} handleModal={() => setOpen(!open)}>
@@ -190,7 +215,7 @@ function PaymentMdl({ open, setOpen, setFormData, formData }) {
                 <div
                     className="modal-dialog modal-center"
                     style={{
-                        width: '60%',
+                        minWidth: '50%',
                     }}
                 >
                     <div className="modal-content w-100">
@@ -271,52 +296,167 @@ function PaymentMdl({ open, setOpen, setFormData, formData }) {
                             </div> */}
                             <div className="receipt-collection-container">
                                 <div className="payment-methods-sidebar">
-                                    <button className="method-item active">
-                                        Cash
-                                    </button>
-                                    <button className="method-item">
-                                        Gpay
-                                    </button>
-                                    <button className="method-item">SBI</button>
-                                    <button className="method-item">
-                                        HDFC
-                                    </button>
-                                    <button className="method-item">
-                                        Paytm
-                                    </button>
-                                    <button className="method-item">
-                                        Phone pe
-                                    </button>
+                                    {paymentMethods.map((method, index) => {
+                                        return (
+                                            <button
+                                                type="button"
+                                                className={`method-item ${method.active && 'active'}`}
+                                                key={index}
+                                                onClick={() => {
+                                                    const updatedMethods = [
+                                                        ...paymentMethods,
+                                                    ];
+                                                    updatedMethods[
+                                                        index
+                                                    ].active = true;
+                                                    setPaymentMethods(
+                                                        updatedMethods,
+                                                    );
+                                                    setSelectedPaymentMethods(
+                                                        (prevValue) => {
+                                                            const updatedPaymentMethods =
+                                                                [...prevValue];
+                                                            const isMethodExist =
+                                                                updatedPaymentMethods.filter(
+                                                                    (m) => {
+                                                                        return (
+                                                                            m.method ===
+                                                                            method.method
+                                                                        );
+                                                                    },
+                                                                );
+
+                                                            if (
+                                                                isMethodExist.length >
+                                                                0
+                                                            ) {
+                                                                return updatedPaymentMethods;
+                                                            } else {
+                                                                return [
+                                                                    ...updatedPaymentMethods,
+                                                                    {
+                                                                        method: method.method,
+                                                                        amount: 0,
+                                                                    },
+                                                                ];
+                                                            }
+                                                        },
+                                                    );
+                                                }}
+                                            >
+                                                {method.method}
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                                 <div className="payment-details">
-                                    {paymentMethods.map((method, index) => (
-                                        <div
-                                            key={index}
-                                            className="selected-method mb-2 mx-0 my-1 border rounded p-2"
-                                        >
-                                            <span className="title-1m btn-primary rounded-circle cp">
-                                                X
-                                            </span>
-                                            <span className="method-name">
-                                                {method.method}
-                                            </span>
-                                            <input
-                                                type="number"
-                                                value={method.amount}
-                                                className="form-input"
-                                                onChange={(e) =>
-                                                    handleInputChange(
-                                                        index,
-                                                        e.target.value,
-                                                    )
-                                                }
-                                            />
-                                        </div>
-                                    ))}
+                                    <div
+                                        className="y_scrolling"
+                                        style={{
+                                            height: '300px',
+                                            margin: '10px 0',
+                                        }}
+                                    >
+                                        {selectedPaymentMethods?.map(
+                                            (method, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="selected-method row mb-2 mx-0 my-1 border rounded p-2"
+                                                >
+                                                    <div className="col-8 p-0">
+                                                        <i
+                                                            className="material-icons-outlined btn-primary rounded-circle cp"
+                                                            onClick={() => {
+                                                                var mthd = null;
+                                                                setSelectedPaymentMethods(
+                                                                    selectedPaymentMethods.filter(
+                                                                        (
+                                                                            m,
+                                                                            i,
+                                                                        ) => {
+                                                                            if (
+                                                                                i !==
+                                                                                index
+                                                                            ) {
+                                                                                return m;
+                                                                            }
+                                                                            mthd =
+                                                                                m;
+                                                                        },
+                                                                    ),
+                                                                );
+                                                                const updatedMethods =
+                                                                    [
+                                                                        ...paymentMethods,
+                                                                    ];
+                                                                updatedMethods =
+                                                                    updatedMethods.map(
+                                                                        (m) => {
+                                                                            if (
+                                                                                m.method ===
+                                                                                mthd.method
+                                                                            ) {
+                                                                                m.active = false;
+                                                                            }
+                                                                        },
+                                                                    );
+
+                                                                setPaymentMethods(
+                                                                    updatedMethods,
+                                                                );
+                                                            }}
+                                                        >
+                                                            X
+                                                        </i>
+                                                        <span className="method-name">
+                                                            {method.method}
+                                                        </span>
+                                                    </div>
+                                                    <div className="col-4 p-0">
+                                                        <input
+                                                            type="number"
+                                                            value={
+                                                                method.amount
+                                                            }
+                                                            className="custom-input w-100 text-end"
+                                                            onChange={(e) => {
+                                                                setSelectedPaymentMethods(
+                                                                    selectedPaymentMethods.map(
+                                                                        (
+                                                                            m,
+                                                                            i,
+                                                                        ) => {
+                                                                            if (
+                                                                                i ===
+                                                                                index
+                                                                            ) {
+                                                                                return {
+                                                                                    ...m,
+                                                                                    amount: e
+                                                                                        .target
+                                                                                        .value,
+                                                                                };
+                                                                            }
+                                                                            return m;
+                                                                        },
+                                                                    ),
+                                                                );
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ),
+                                        )}
+                                    </div>
+
                                     <div className="amount-summary">
-                                        <div className="total-amount">
-                                            <span>Total Amount</span>
-                                            <span>₹{totalAmount}</span>
+                                        <div className="row total-amount m-0">
+                                            <div className="col-8 p-0">
+                                                <span>Total Amount</span>
+                                            </div>
+                                            <div className="col-4 p-0 text-end">
+                                                <span>₹{totalAmount}</span>
+                                            </div>
                                         </div>
                                         <div className="due-amount">
                                             <span>Due Amount</span>

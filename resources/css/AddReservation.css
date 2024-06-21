@@ -590,7 +590,8 @@ label.upload-button:before {
         border-left 0.3s;
 }
 
-.method-item:hover {
+.method-item:hover,
+.payment-methods-sidebar .active {
     background-color: #e9ecef;
     border-left: 4px solid #007bff;
 }
@@ -621,9 +622,6 @@ input[type='number'] {
     font-size: 1rem;
 }
 
-.amount-summary {
-    margin-top: 150px;
-}
 
 .total-amount,
 .due-amount {
@@ -631,10 +629,14 @@ input[type='number'] {
     justify-content: space-between;
     margin: 10px 0;
     font-size: 1rem;
+    background-color: #eeeeee;
+    padding:  0.7rem 1rem;
+    border-radius: 5px;
 }
 
 .due-amount {
     color: red;
+    background-color: #ffdede;
 }
 .title-1m {
     display: flex;
