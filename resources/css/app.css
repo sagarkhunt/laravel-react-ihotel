@@ -1667,10 +1667,6 @@ body {
     overflow-x: hidden;
 }
 
-.input-no-outline {
-    border: none !important;
-    outline: none !important;
-}
 
 .no-policy-selected-banner {
     border-radius: 24px;

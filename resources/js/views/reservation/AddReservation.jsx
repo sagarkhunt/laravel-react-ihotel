@@ -27,6 +27,9 @@ function AddReservation() {
     const [open, setOpen] = useState(false);
     const [dropDownData, setDropDownData] = useState({});
 
+    const [totalAmount, setTotalAmount] = useState(0.0);
+    const [taxAmount, setTaxAmount] = useState(0.0);
+
     const [showAvaInq, setShowAvaInq] = useState(false);
 
     const showAvailableModal = () => {
@@ -86,10 +89,9 @@ function AddReservation() {
             ref_name: '',
         },
         com_rm_status: false,
+        taxes: taxAmount,
+        rate: totalAmount,
     });
-
-    const [totalAmount, setTotalAmount] = useState(0.0);
-    const [taxAmount, setTaxAmount] = useState(0.0);
 
     useEffect(() => {
         const newTotalRate = formData.room_json.reduce((total, room) => {
@@ -200,6 +202,8 @@ function AddReservation() {
             'rooms_plan',
             'country',
             'guest_classes',
+            'state',
+            'city',
         ];
         dispatch({
             type: actions.RESER_DROPDOWN_LIST,
@@ -208,6 +212,34 @@ function AddReservation() {
             },
         });
     }, []);
+
+    const handleMinus = (index, field) => {
+        const newRoomDetails = [...formData.room_json];
+        let count = parseInt(newRoomDetails[index][field]) - 1;
+
+        if (field === 'chld') {
+            count = count < 0 ? 0 : count;
+        } else {
+            count = count < 1 ? 1 : count;
+        }
+
+        newRoomDetails[index][field] = count.toString();
+        setFormData({
+            ...formData,
+            room_json: newRoomDetails,
+        });
+    };
+
+    const handlePlus = (index, field) => {
+        const newRoomDetails = [...formData.room_json];
+        let count = parseInt(newRoomDetails[index][field]) + 1;
+
+        newRoomDetails[index][field] = count.toString();
+        setFormData({
+            ...formData,
+            room_json: newRoomDetails,
+        });
+    };
 
     return (
         <div className="row row mt-3 mx-2">
@@ -524,13 +556,114 @@ function AddReservation() {
                                                             }
                                                         </div>
                                                         <div className="col-2">
-                                                            {room.nor}
+                                                            <div className="number">
+                                                                <span
+                                                                    className="minus user-select-none"
+                                                                    onClick={() =>
+                                                                        handleMinus(
+                                                                            index,
+                                                                            'nor',
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    -
+                                                                </span>
+                                                                <input
+                                                                    className="input-number input-no-outline user-select-none"
+                                                                    value={
+                                                                        room.nor
+                                                                    }
+                                                                    data-index={
+                                                                        index
+                                                                    }
+                                                                    data-field="nor"
+                                                                />
+                                                                <span
+                                                                    className="plus user-select-none"
+                                                                    onClick={() =>
+                                                                        handlePlus(
+                                                                            index,
+                                                                            'nor',
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    +
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                         <div className="col-2">
-                                                            {room.adlt}
+                                                            <div className="number">
+                                                                <span
+                                                                    className="minus user-select-none"
+                                                                    onClick={() =>
+                                                                        handleMinus(
+                                                                            index,
+                                                                            'adlt',
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    -
+                                                                </span>
+                                                                <input
+                                                                    className="input-number input-no-outline user-select-none"
+                                                                    value={
+                                                                        room.adlt
+                                                                    }
+                                                                    data-index={
+                                                                        index
+                                                                    }
+                                                                    data-field="adlt"
+                                                                    disabled
+                                                                />
+                                                                <span
+                                                                    className="plus user-select-none"
+                                                                    onClick={() =>
+                                                                        handlePlus(
+                                                                            index,
+                                                                            'adlt',
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    +
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                         <div className="col-2">
-                                                            {room.chld}
+                                                            <div className="number">
+                                                                <span
+                                                                    className="minus user-select-none"
+                                                                    onClick={() =>
+                                                                        handleMinus(
+                                                                            index,
+                                                                            'chld',
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    -
+                                                                </span>
+                                                                <input
+                                                                    className="input-number input-no-outline user-select-none"
+                                                                    value={
+                                                                        room.chld
+                                                                    }
+                                                                    data-index={
+                                                                        index
+                                                                    }
+                                                                    data-field="chld"
+                                                                    disabled
+                                                                />
+                                                                <span
+                                                                    className="plus user-select-none"
+                                                                    onClick={() =>
+                                                                        handlePlus(
+                                                                            index,
+                                                                            'chld',
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    +
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                         <div className="col-2 ">
                                                             ₹ {room.amount}

@@ -9,6 +9,7 @@ use App\Models\BookingSource;
 use App\Models\BusinessSource;
 use App\Models\CountryMaster;
 use App\Models\StateMaster;
+use App\Models\CityMaster;
 use App\Models\FloorMaster;
 use App\Models\RoomCatMaster;
 use App\Models\RoomMaster;
@@ -159,6 +160,14 @@ class HotelLoginSyncController extends BaseApiController
                         ->get();
 
                     $data['state'] = $get_country;
+                }
+                if (in_array("city", $sync_req)) {
+
+                    $get_city = CityMaster::where('hotel_id', $hotel_id)
+                        ->select('id', 'name', 'country_id', 'state_id')
+                        ->get();
+
+                    $data['city'] = $get_city;
                 }
                 return $this->sendResponse($data, "");
             } else {

@@ -176,6 +176,10 @@
 }
 
 .input-no-outline {
+    outline: none !important;
+}
+
+.input-no-border {
     border: none !important;
     outline: none !important;
 }

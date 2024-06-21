@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from '../../../components/common/Modal';
 
 const EditCustomerDetails = ({
@@ -17,6 +17,35 @@ const EditCustomerDetails = ({
             [name]: value,
         });
     };
+
+    const [stateList, setStateList] = useState([]);
+    const [cityList, setCityList] = useState([]);
+
+    useEffect(() => {
+        if (customerDetails?.country_id) {
+            const states = dropDownData['state']?.filter(
+                (state) =>
+                    parseInt(state.country_id) ===
+                    parseInt(customerDetails?.country_id),
+            );
+            setStateList(states);
+            setCityList([]);
+        }
+    }, [customerDetails?.country_id]);
+
+    useEffect(() => {
+        if (customerDetails?.country_id) {
+            const city = dropDownData['city']?.filter(
+                (city) =>
+                    parseInt(city.state_id) ===
+                        parseInt(customerDetails?.state_id) &&
+                    parseInt(city.country_id) ===
+                        parseInt(customerDetails?.country_id),
+            );
+            setCityList(city);
+        }
+    }, [customerDetails?.state_id]);
+
     return (
         <Modal
             open={showEditCustomerDetails}
@@ -80,7 +109,7 @@ const EditCustomerDetails = ({
                                                     id="full_name"
                                                     name="full_name"
                                                     value={
-                                                        customerDetails.full_name
+                                                        customerDetails?.full_name
                                                     }
                                                     onChange={handleInputChange}
                                                     placeholder="Name"
@@ -128,7 +157,7 @@ const EditCustomerDetails = ({
                                         <select
                                             name="guestClass"
                                             onChange={handleInputChange}
-                                            value={customerDetails.guestClass}
+                                            value={customerDetails?.guestClass}
                                             className="form-select custom-input-lg"
                                             id="guestClass"
                                         >
@@ -169,7 +198,7 @@ const EditCustomerDetails = ({
                                             id="mobile"
                                             name="mobile"
                                             placeholder="Mobile No"
-                                            value={customerDetails.mobile}
+                                            value={customerDetails?.mobile}
                                             onChange={handleInputChange}
                                             minLength={10} // Set minimum length for validation
                                             pattern="[0-9]+" // Optional pattern for numeric input
@@ -191,7 +220,7 @@ const EditCustomerDetails = ({
                                             id="email"
                                             name="email"
                                             placeholder="Email"
-                                            value={customerDetails.email}
+                                            value={customerDetails?.email}
                                             onChange={handleInputChange}
                                         />
                                     </div>
@@ -211,13 +240,13 @@ const EditCustomerDetails = ({
                                             id="address"
                                             name="address"
                                             placeholder="Address"
-                                            value={customerDetails.add}
+                                            value={customerDetails?.add}
                                             onChange={handleInputChange}
                                         />
                                     </div>
                                 </div>
 
-                                <div className="col-3">
+                                <div className="col-6">
                                     <div className="form-group mb-3">
                                         <label
                                             htmlFor="country"
@@ -230,7 +259,7 @@ const EditCustomerDetails = ({
                                             id="country_id"
                                             name="country_id"
                                             placeholder="Country"
-                                            value={customerDetails.country_id}
+                                            value={customerDetails?.country_id}
                                             onChange={handleInputChange}
                                         >
                                             <option value="0">Select</option>
@@ -249,7 +278,7 @@ const EditCustomerDetails = ({
                                         </select>
                                     </div>
                                 </div>
-                                <div className="col-3">
+                                <div className="col-6">
                                     <div className="form-group mb-3">
                                         <label
                                             htmlFor="state_id"
@@ -262,26 +291,24 @@ const EditCustomerDetails = ({
                                             id="state_id"
                                             name="state_id"
                                             placeholder="State"
-                                            value={customerDetails.state_id}
+                                            value={customerDetails?.state_id}
                                             onChange={handleInputChange}
                                         >
                                             <option value="">Select</option>
-                                            <option value="Bagmati">
-                                                Bagmati
-                                            </option>
-                                            <option value="Gandaki">
-                                                Gandaki
-                                            </option>
-                                            <option value="Karnali">
-                                                Karnali
-                                            </option>
-                                            <option value="Lumbini">
-                                                Lumbini
-                                            </option>
+                                            {stateList?.map((item, index) => {
+                                                return (
+                                                    <option
+                                                        key={index}
+                                                        value={item.id}
+                                                    >
+                                                        {item.name}
+                                                    </option>
+                                                );
+                                            })}
                                         </select>
                                     </div>
                                 </div>
-                                <div className="col-3">
+                                <div className="col-6">
                                     <div className="form-group mb-3">
                                         <label
                                             htmlFor="city_id"
@@ -294,26 +321,24 @@ const EditCustomerDetails = ({
                                             id="city_id"
                                             name="city_id"
                                             placeholder="City"
-                                            value={customerDetails.city_id}
+                                            value={customerDetails?.city_id}
                                             onChange={handleInputChange}
                                         >
                                             <option value="">Select</option>
-                                            <option value="Kathmandu">
-                                                Kathmandu
-                                            </option>
-                                            <option value="Pokhara">
-                                                Pokhara
-                                            </option>
-                                            <option value="Biratnagar">
-                                                Biratnagar
-                                            </option>
-                                            <option value="Birgunj">
-                                                Birgunj
-                                            </option>
+                                            {cityList?.map((item, index) => {
+                                                return (
+                                                    <option
+                                                        key={index}
+                                                        value={item.id}
+                                                    >
+                                                        {item.name}
+                                                    </option>
+                                                );
+                                            })}
                                         </select>
                                     </div>
                                 </div>
-                                <div className="col-3">
+                                <div className="col-6">
                                     <div className="form-group mb-3">
                                         <label
                                             htmlFor="pincode"
@@ -327,7 +352,7 @@ const EditCustomerDetails = ({
                                             id="pincode"
                                             name="pincode"
                                             placeholder="Zip Code"
-                                            value={customerDetails.pincode}
+                                            value={customerDetails?.pincode}
                                             onChange={handleInputChange}
                                         />
                                     </div>
