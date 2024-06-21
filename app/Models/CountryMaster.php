@@ -15,7 +15,7 @@ class CountryMaster extends BaseModel
 
     public function getCity()
     {
-        return $this->hasMany(CityMaster::class, 'state_id', 'id');
+        return $this->hasMany(CityMaster::class, 'country_id', 'id');
     }
     public function getState()
     {
