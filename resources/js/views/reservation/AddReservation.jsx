@@ -33,6 +33,12 @@ function AddReservation() {
     const [showAvaInq, setShowAvaInq] = useState(false);
 
     const showAvailableModal = () => {
+        console.log(formData.frm_dt, '==');
+        console.log(formData.to_dt, '==');
+        if (formData.frm_dt == '' || formData.to_dt == '') {
+            toast.error('Please select checkin and checkout date');
+            return;
+        }
         setShowAvaInq(true);
     };
 
@@ -1109,6 +1115,8 @@ function AddReservation() {
                 <AvailableInqMdl
                     showAvaInq={showAvaInq}
                     setShowAvaInq={setShowAvaInq}
+                    checkAvaInDate={formData.frm_dt}
+                    checkAvaOutDate={formData.to_dt}
                 />
             )}
         </div>

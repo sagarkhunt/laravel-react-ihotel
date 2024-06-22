@@ -3,17 +3,22 @@ import Modal from '../../../components/common/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import actions from '../../../redux/Reservation/actions';
 
-function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
+function AvailableInqMdl({
+    showAvaInq,
+    setShowAvaInq,
+    checkAvaInDate,
+    checkAvaOutDate,
+}) {
     const dispatch = useDispatch();
     const [roomCateListData, setRoomCateListData] = useState({});
     const [dropDownData, setDropDownData] = useState({});
     const { dropDownList } = useSelector((state) => state?.reserReducer);
-    const currentDate = new Date();
+    const currentDate = checkAvaInDate ? new Date(checkAvaInDate) : new Date();
     const currentDateString = currentDate.toISOString().split('T')[0];
     const [selectedCategoryId, setSelectedCategoryId] = useState('');
     const { loader, roomCateList } = useSelector((state) => state.reserReducer);
     // Get the next day's date
-    const nextDate = new Date(currentDate);
+    const nextDate = new Date(checkAvaOutDate ?? currentDate);
     nextDate.setDate(nextDate.getDate() + 1);
     const nextDateString = nextDate.toISOString().split('T')[0];
 
@@ -127,7 +132,7 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
                             <div className="d-flex card-1 align-items-end justify-content-between border p-3 container-page">
                                 {/* Check In */}
                                 <div style={{ width: '20%' }}>
-                                    <p className="mb-1">Check In</p>
+                                    <p className="mb-1">From Date</p>
                                     <input
                                         type="date"
                                         className="custom-input w-100"
@@ -138,19 +143,30 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
 
                                 {/* Nights */}
                                 <div className="col-auto">
-                                    <div className="night-count rounded">
+                                    <label
+                                        htmlFor="checkin-date"
+                                        className="custom-label mb-1"
+                                    >
+                                        Nights
+                                    </label>
+                                    <div className="row m-0  cp border res-night-count rounded text-center py-1">
+                                        <div className="col-12 p-0 d-flex align-items-center justify-content-center mt-1">
+                                            <span className="h5">{nights}</span>
+                                        </div>
+                                    </div>
+                                    {/* <div className="night-count rounded">
                                         <p className="caption-2 font-white text-center mb-0">
                                             Nights
                                         </p>
                                         <p className="caption-1b font-white mt-1 text-center mb-0">
                                             {nights}
                                         </p>
-                                    </div>
+                                    </div> */}
                                 </div>
 
                                 {/* Check Out */}
                                 <div style={{ width: '20%' }}>
-                                    <p className="mb-1">Check Out</p>
+                                    <p className="mb-1">To Date</p>
                                     <input
                                         type="date"
                                         className="custom-input w-100"
@@ -526,7 +542,7 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
                                             )}
                                             <tr style={{ height: '48px' }}>
                                                 <td className="subtitle-2m align-middle px-3">
-                                                    Reserved Rooms
+                                                    Reserved
                                                 </td>
                                                 {roomCateListData?.room_summary?.catwise?.[0]?.datewise.map(
                                                     (date) => (
@@ -548,7 +564,7 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
                                             </tr>
                                             <tr style={{ height: '48px' }}>
                                                 <td className="subtitle-2m align-middle px-3">
-                                                    Booked Rooms
+                                                    Blocked
                                                 </td>
                                                 {roomCateListData?.room_summary?.catwise?.[0]?.datewise.map(
                                                     (date) => (
@@ -570,7 +586,7 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
                                             </tr>
                                             <tr style={{ height: '48px' }}>
                                                 <td className="subtitle-2m align-middle px-3">
-                                                    Out Of Order Rooms
+                                                    Out Of Order
                                                 </td>
                                                 {roomCateListData?.room_summary?.catwise?.[0]?.datewise.map(
                                                     (date) => (
@@ -592,7 +608,7 @@ function AvailableInqMdl({ showAvaInq, setShowAvaInq }) {
                                             </tr>
                                             <tr style={{ height: '48px' }}>
                                                 <td className="subtitle-2m align-middle px-3">
-                                                    Available Rooms
+                                                    Available
                                                 </td>
                                                 {roomCateListData?.room_summary?.catwise?.[0]?.datewise.map(
                                                     (date) => (
