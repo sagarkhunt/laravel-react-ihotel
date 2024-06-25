@@ -303,7 +303,7 @@ function PaymentMdl({ open, setOpen, setFormData, formData, totalAmount }) {
                                                 className={`method-item ${method.active && 'active'}`}
                                                 key={index}
                                                 onClick={() => {
-                                                    const updatedMethods = [
+                                                    let updatedMethods = [
                                                         ...paymentMethods,
                                                     ];
                                                     updatedMethods[
@@ -314,9 +314,9 @@ function PaymentMdl({ open, setOpen, setFormData, formData, totalAmount }) {
                                                     );
                                                     setSelectedPaymentMethods(
                                                         (prevValue) => {
-                                                            const updatedPaymentMethods =
+                                                            let updatedPaymentMethods =
                                                                 [...prevValue];
-                                                            const isMethodExist =
+                                                            let isMethodExist =
                                                                 updatedPaymentMethods.filter(
                                                                     (m) => {
                                                                         return (
@@ -385,7 +385,7 @@ function PaymentMdl({ open, setOpen, setFormData, formData, totalAmount }) {
                                                                         },
                                                                     ),
                                                                 );
-                                                                const updatedMethods =
+                                                                let updatedMethods =
                                                                     [
                                                                         ...paymentMethods,
                                                                     ];
