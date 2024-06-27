@@ -10,6 +10,7 @@ const initialStates = {
     reserDelete: {},
     dropDownList: {},
     roomCateList: {},
+    payTypList: {},
 };
 
 function Reducer(state = initialStates, action) {
@@ -77,6 +78,16 @@ function Reducer(state = initialStates, action) {
                 loader: false,
             };
         case actions.AVLBL_ROOM_CAT_FAILURE:
+            return { ...state, roomCateList: [], loader: false };
+        case actions.PAY_TYP_LIST:
+            return { ...state, loader: true };
+        case actions.PAY_TYPE_SUCCESS:
+            return {
+                ...state,
+                payTypList: action.payload,
+                loader: false,
+            };
+        case actions.PAY_TYPE_FAILURE:
             return { ...state, roomCateList: [], loader: false };
         default:
             return state;

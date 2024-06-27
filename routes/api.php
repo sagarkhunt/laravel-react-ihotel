@@ -179,4 +179,10 @@ Route::group(['prefix' => "/v1", 'middleware' => ['auth:sanctum'], 'namespace' =
     Route::POST('cr_city', 'HotelLocationController@createCity');
     Route::POST('upd_city', 'HotelLocationController@updateCity');
     Route::POST('del_city', 'HotelLocationController@deleteCity');
+
+    #payment method
+    Route::any('get_rcpt', 'HotelRcptCollectionController@getRcpt');
+    Route::any('cr_rcpt', 'HotelRcptCollectionController@crRcpt');
+    Route::any('upd_rcpt', 'HotelRcptCollectionController@updRcpt');
+    Route::any('del_rcpt', 'HotelRcptCollectionController@delRcpt');
 });

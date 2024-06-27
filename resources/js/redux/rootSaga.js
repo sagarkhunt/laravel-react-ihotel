@@ -20,6 +20,7 @@ import salesPersonManage from './SalesPerson/apiSaga';
 import marketSegmentManage from './MarketSegment/apiSaga';
 import idTypeManage from './IDType/apiSaga';
 import locationManage from './Location/apiSaga';
+import payTypManage from './PayTyp/apiSaga';
 
 // Here you can include all the saga which you write for components
 export default function* rootSaga() {
@@ -45,5 +46,6 @@ export default function* rootSaga() {
         marketSegmentManage(),
         idTypeManage(),
         locationManage(),
+        payTypManage(),
     ]);
 }

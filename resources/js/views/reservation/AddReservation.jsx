@@ -31,10 +31,9 @@ function AddReservation() {
     const [taxAmount, setTaxAmount] = useState(100.0);
 
     const [showAvaInq, setShowAvaInq] = useState(false);
+    const [advTotalAmount, setAdvTotalAmount] = useState(0);
 
     const showAvailableModal = () => {
-        console.log(formData.frm_dt, '==');
-        console.log(formData.to_dt, '==');
         if (formData.frm_dt == '' || formData.to_dt == '') {
             toast.error('Please select checkin and checkout date');
             return;
@@ -89,15 +88,27 @@ function AddReservation() {
         terms_con_id: '',
         sp_req_json: '',
         sp_remarks: '',
-        payment_json: {
-            pay_type: '',
-            pay_amnt: '',
-            ref_name: '',
-        },
+        payment_json: [],
+        // payment_json: {
+        //     pay_type: '',
+        //     pay_amnt: '',
+        //     ref_name: '',
+        // },
         com_rm_status: false,
         taxes: taxAmount,
         rate: totalAmount,
     });
+
+    useEffect(() => {
+        if (formData.payment_json) {
+            const total = formData.payment_json.reduce((total, payment) => {
+                return total + (payment.amount || 0);
+            }, 0);
+            setAdvTotalAmount(total);
+        } else {
+            setAdvTotalAmount(0);
+        }
+    }, [formData.payment_json]);
 
     useEffect(() => {
         const newTotalRate = formData.room_json.reduce((total, room) => {
@@ -1003,25 +1014,26 @@ function AddReservation() {
                                             </p>
                                         </div>
                                         <div className="col-4">
-                                            {formData.payment_json?.pay_type &&
-                                            formData.payment_json?.pay_amnt ? (
-                                                <p className="subtitle-2m m-0">
-                                                    (
-                                                    {
-                                                        formData.payment_json
-                                                            ?.pay_type
-                                                    }
-                                                    )-₹
-                                                    {
-                                                        formData.payment_json
-                                                            ?.pay_amnt
-                                                    }
-                                                </p>
-                                            ) : (
-                                                <p className="subtitle-2m m-0">
-                                                    ₹0
-                                                </p>
-                                            )}
+                                            <div>
+                                                {formData.payment_json?.length >
+                                                0 ? (
+                                                    <p className="subtitle-2m m-0">
+                                                        -₹
+                                                        {formData.payment_json.reduce(
+                                                            (total, payment) =>
+                                                                total +
+                                                                (parseFloat(
+                                                                    payment.amount,
+                                                                ) || 0),
+                                                            0,
+                                                        )}
+                                                    </p>
+                                                ) : (
+                                                    <p className="subtitle-2m m-0">
+                                                        ₹0
+                                                    </p>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="row my-2">

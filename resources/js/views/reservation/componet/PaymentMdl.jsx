@@ -158,41 +158,26 @@
 import React, { useEffect, useState } from 'react';
 import Modal from '../../../components/common/Modal';
 import toast from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
+import actions from '../../../redux/Reservation/actions';
 
 function PaymentMdl({ open, setOpen, setFormData, formData, totalAmount }) {
-    const paymentDetails = structuredClone(formData.payment_json);
-    const [pmtDtls, setPmtDtls] = useState(paymentDetails);
-
-    const handleChange = (e) => {
-        setPmtDtls({
-            ...pmtDtls,
-            [e.target.name]: e.target.value,
-        });
-    };
-
+    const [pmtDtls, setPmtDtls] = useState(() =>
+        structuredClone(formData?.payment_json || []),
+    );
+    const dispatch = useDispatch();
+    const { payTypList } = useSelector((state) => state?.reserReducer);
     const [dueAmount, setDueAmount] = useState(0);
 
-    const [paymentMethods, setPaymentMethods] = useState([
-        { method: 'Cash', active: false },
-        { method: 'Gpay', active: false },
-        { method: 'SBI', active: false },
-        { method: 'HDFC', active: false },
-        { method: 'Paytm', active: false },
-        { method: 'Phone pe', active: false },
-    ]);
-
+    const [paymentMethods, setPaymentMethods] = useState([]);
     const [selectedPaymentMethods, setSelectedPaymentMethods] = useState([]);
 
     useEffect(() => {
-        var totalDueAmount = 0;
-
-        for (let i = 0; i < selectedPaymentMethods.length; i++) {
-            totalDueAmount += parseFloat(selectedPaymentMethods[i].amount);
-        }
-
-        const dueAmt =
-            parseFloat(totalAmount) -
-            parseFloat(totalDueAmount ? totalDueAmount : 0);
+        const totalDueAmount = selectedPaymentMethods.reduce(
+            (sum, method) => sum + parseFloat(method.amount || 0),
+            0,
+        );
+        const dueAmt = parseFloat(totalAmount) - totalDueAmount;
 
         if (dueAmt < 0) {
             toast.error('Amount should not exceed total amount');
@@ -200,7 +185,51 @@ function PaymentMdl({ open, setOpen, setFormData, formData, totalAmount }) {
         } else {
             setDueAmount(dueAmt);
         }
-    }, [selectedPaymentMethods]);
+    }, [selectedPaymentMethods, totalAmount]);
+
+    const handleMethodClick = (method) => {
+        if (
+            !selectedPaymentMethods.some((m) => m.method === method.rcpt_type)
+        ) {
+            setSelectedPaymentMethods([
+                ...selectedPaymentMethods,
+                { method: method.rcpt_type, amount: 0 },
+            ]);
+        }
+    };
+
+    const handleRemoveMethod = (index) => {
+        setSelectedPaymentMethods(
+            selectedPaymentMethods.filter((_, idx) => idx !== index),
+        );
+    };
+
+    const handleAmountChange = (e, index) => {
+        const updatedMethods = selectedPaymentMethods.map((m, idx) =>
+            idx === index ? { ...m, amount: e.target.value } : m,
+        );
+        setSelectedPaymentMethods(updatedMethods);
+    };
+
+    const handleClose = () => {
+        setPmtDtls(null);
+        setOpen(false);
+    };
+
+    const handleSave = () => {
+        setFormData({ ...formData, payment_json: selectedPaymentMethods });
+        setOpen(false);
+    };
+
+    useEffect(() => {
+        setPaymentMethods(payTypList);
+    }, [payTypList]);
+
+    useEffect(() => {
+        dispatch({
+            type: actions.PAY_TYP_LIST,
+        });
+    }, [dispatch]);
 
     return (
         <Modal open={open} handleModal={() => setOpen(!open)}>
@@ -214,9 +243,7 @@ function PaymentMdl({ open, setOpen, setFormData, formData, totalAmount }) {
             >
                 <div
                     className="modal-dialog modal-center"
-                    style={{
-                        minWidth: '50%',
-                    }}
+                    style={{ minWidth: '50%' }}
                 >
                     <div className="modal-content w-100">
                         <div className="modal-header d-flex justify-content-between">
@@ -229,125 +256,34 @@ function PaymentMdl({ open, setOpen, setFormData, formData, totalAmount }) {
                                 </h5>
                                 <div>Reservation Number: RS1234</div>
                             </div>
-
-                            <div className="d-flex gap-4 align-items-center">
-                                <button
-                                    type="button"
-                                    className="btn-close"
-                                    data-bs-dismiss="modal"
-                                    aria-label="Close"
-                                    onClick={() => {
-                                        setPmtDtls(null);
-                                        setOpen(false);
-                                    }}
-                                ></button>
-                            </div>
+                            <button
+                                type="button"
+                                className="btn-close"
+                                aria-label="Close"
+                                onClick={handleClose}
+                            ></button>
                         </div>
                         <div className="modal-body">
-                            {/* <div
-                                className="col-2 card px-0 p-2"
-                                style={{
-                                    minHeight: 'calc(50vh - 100px)',
-                                }}
-                            >
-                                <div className="row m-0">
-                                    <div className="col-12 d-flex align-items-center">
-                                        <div className="col-12 d-flex gap-2 flex-column align-items-end">
-                                            <h6
-                                                className={`subtitle-1m mb-0 py-2 px-3 cp w-100 d-flex align-items-center gap-2 btn-h48`}
-                                                // onClick={() =>
-                                                //     setActiveButton('country')
-                                                // }
-                                            >
-                                                Country
-                                                <span
-                                                    className={`subtitle-1m `}
-                                                >
-                                                    3
-                                                </span>
-                                            </h6>
-
-                                            <h6
-                                                className={`subtitle-1m mb-0 p-2 px-3 cp w-100 d-flex align-items-center gap-2 btn-h48 `}
-                                                // onClick={() => setActiveButton('state')}
-                                            >
-                                                State
-                                                <span
-                                                    className={`subtitle-1m `}
-                                                >
-                                                    2
-                                                </span>
-                                            </h6>
-
-                                            <h6
-                                                className={`subtitle-1m mb-0 p-2 px-3 cp w-100 d-flex align-items-center gap-2 btn-h48 `}
-                                                // onClick={() => setActiveButton('city')}
-                                            >
-                                                City
-                                                <span
-                                                    className={`subtitle-1m `}
-                                                >
-                                                    1
-                                                </span>
-                                            </h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> */}
                             <div className="receipt-collection-container">
                                 <div className="payment-methods-sidebar">
-                                    {paymentMethods.map((method, index) => {
-                                        return (
+                                    {Array.isArray(paymentMethods) &&
+                                        paymentMethods.map((method, index) => (
                                             <button
-                                                type="button"
-                                                className={`method-item ${method.active && 'active'}`}
                                                 key={index}
-                                                onClick={() => {
-                                                    let updatedMethods = [
-                                                        ...paymentMethods,
-                                                    ];
-                                                    updatedMethods[
-                                                        index
-                                                    ].active = true;
-                                                    setPaymentMethods(
-                                                        updatedMethods,
-                                                    );
-                                                    setSelectedPaymentMethods(
-                                                        (prevValue) => {
-                                                            let updatedPaymentMethods =
-                                                                [...prevValue];
-                                                            let isMethodExist =
-                                                                updatedPaymentMethods.filter(
-                                                                    (m) => {
-                                                                        return (
-                                                                            m.method ===
-                                                                            method.method
-                                                                        );
-                                                                    },
-                                                                );
-
-                                                            if (
-                                                                isMethodExist.length >
-                                                                0
-                                                            ) {
-                                                                return updatedPaymentMethods;
-                                                            } else {
-                                                                return [
-                                                                    ...updatedPaymentMethods,
-                                                                    {
-                                                                        method: method.method,
-                                                                        amount: 0,
-                                                                    },
-                                                                ];
-                                                            }
-                                                        },
-                                                    );
-                                                }}
+                                                type="button"
+                                                className={`method-item ${selectedPaymentMethods.some((m) => m.method === method.rcpt_type) ? 'active' : ''}`}
+                                                onClick={() =>
+                                                    handleMethodClick(method)
+                                                }
+                                                disabled={selectedPaymentMethods.some(
+                                                    (m) =>
+                                                        m.method ===
+                                                        method.rcpt_type,
+                                                )}
                                             >
-                                                {method.method}
+                                                {method.rcpt_type}
                                             </button>
-                                        );
-                                    })}
+                                        ))}
                                 </div>
                                 <div className="payment-details">
                                     <div
@@ -357,98 +293,49 @@ function PaymentMdl({ open, setOpen, setFormData, formData, totalAmount }) {
                                             margin: '10px 0',
                                         }}
                                     >
-                                        {selectedPaymentMethods?.map(
-                                            (method, index) => (
-                                                <div
-                                                    key={index}
-                                                    className="selected-method row mb-2 mx-0 my-1 border rounded p-2"
-                                                >
-                                                    <div className="col-8 p-0">
-                                                        <i
-                                                            className="material-icons-outlined btn-primary rounded-circle cp"
-                                                            onClick={() => {
-                                                                var mthd = null;
-                                                                setSelectedPaymentMethods(
-                                                                    selectedPaymentMethods.filter(
-                                                                        (
-                                                                            m,
-                                                                            i,
-                                                                        ) => {
-                                                                            if (
-                                                                                i !==
-                                                                                index
-                                                                            ) {
-                                                                                return m;
-                                                                            }
-                                                                            mthd =
-                                                                                m;
-                                                                        },
-                                                                    ),
-                                                                );
-                                                                let updatedMethods =
-                                                                    [
-                                                                        ...paymentMethods,
-                                                                    ];
-                                                                updatedMethods =
-                                                                    updatedMethods.map(
-                                                                        (m) => {
-                                                                            if (
-                                                                                m.method ===
-                                                                                mthd.method
-                                                                            ) {
-                                                                                m.active = false;
-                                                                            }
-                                                                        },
-                                                                    );
-
-                                                                setPaymentMethods(
-                                                                    updatedMethods,
-                                                                );
-                                                            }}
-                                                        >
-                                                            X
-                                                        </i>
-                                                        <span className="method-name">
-                                                            {method.method}
-                                                        </span>
+                                        {Array.isArray(
+                                            selectedPaymentMethods,
+                                        ) &&
+                                            selectedPaymentMethods.map(
+                                                (method, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className="selected-method row mb-2 mx-0 my-1 border rounded p-2"
+                                                    >
+                                                        <div className="col-8 p-0">
+                                                            <i
+                                                                className="material-icons-outlined btn-primary rounded-circle cp"
+                                                                onClick={() =>
+                                                                    handleRemoveMethod(
+                                                                        index,
+                                                                    )
+                                                                }
+                                                            >
+                                                                X
+                                                            </i>
+                                                            <span className="method-name">
+                                                                {method.method}
+                                                            </span>
+                                                        </div>
+                                                        <div className="col-4 p-0">
+                                                            <input
+                                                                type="number"
+                                                                value={
+                                                                    method.amount
+                                                                }
+                                                                className="custom-input w-100 text-end"
+                                                                onChange={(e) =>
+                                                                    handleAmountChange(
+                                                                        e,
+                                                                        index,
+                                                                    )
+                                                                }
+                                                            />
+                                                        </div>
                                                     </div>
-                                                    <div className="col-4 p-0">
-                                                        <input
-                                                            type="number"
-                                                            value={
-                                                                method.amount
-                                                            }
-                                                            className="custom-input w-100 text-end"
-                                                            onChange={(e) => {
-                                                                setSelectedPaymentMethods(
-                                                                    selectedPaymentMethods.map(
-                                                                        (
-                                                                            m,
-                                                                            i,
-                                                                        ) => {
-                                                                            if (
-                                                                                i ===
-                                                                                index
-                                                                            ) {
-                                                                                return {
-                                                                                    ...m,
-                                                                                    amount: e
-                                                                                        .target
-                                                                                        .value,
-                                                                                };
-                                                                            }
-                                                                            return m;
-                                                                        },
-                                                                    ),
-                                                                );
-                                                            }}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            ),
-                                        )}
+                                                ),
+                                            )}
                                     </div>
-
                                     <div className="amount-summary">
                                         <div className="row total-amount m-0">
                                             <div className="col-8 p-0">
@@ -470,23 +357,14 @@ function PaymentMdl({ open, setOpen, setFormData, formData, totalAmount }) {
                             <button
                                 type="button"
                                 className="btn btn-outline"
-                                onClick={() => {
-                                    setPmtDtls(null);
-                                    setOpen(false);
-                                }}
+                                onClick={handleClose}
                             >
                                 Close
                             </button>
                             <button
-                                type="submit"
+                                type="button"
                                 className="btn btn-primary"
-                                onClick={() => {
-                                    setFormData({
-                                        ...formData,
-                                        payment_json: pmtDtls,
-                                    });
-                                    setOpen(false);
-                                }}
+                                onClick={handleSave}
                             >
                                 Save
                             </button>
@@ -497,5 +375,4 @@ function PaymentMdl({ open, setOpen, setFormData, formData, totalAmount }) {
         </Modal>
     );
 }
-
 export default PaymentMdl;

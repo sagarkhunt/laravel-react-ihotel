@@ -818,6 +818,29 @@ function Navbar() {
                                                     </li>
                                                     <li className="col-12 grid_padding">
                                                         <Link
+                                                            className={`nav-sub-box cp ${activeLink === '/pay_typ' ? 'active' : ''}`}
+                                                            to="/pay_typ"
+                                                            onClick={() =>
+                                                                handleLinkClick(
+                                                                    '/pay_typ',
+                                                                )
+                                                            }
+                                                        >
+                                                            <div
+                                                                data-bs-dismiss="offcanvas"
+                                                                className="dismissable"
+                                                            >
+                                                                <span
+                                                                    type="button"
+                                                                    className="nav-item"
+                                                                >
+                                                                    Payment Type
+                                                                </span>
+                                                            </div>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="col-12 grid_padding">
+                                                        <Link
                                                             className={`nav-sub-box cp ${activeLink === '/location' ? 'active' : ''}`}
                                                             to="/location"
                                                             onClick={() =>

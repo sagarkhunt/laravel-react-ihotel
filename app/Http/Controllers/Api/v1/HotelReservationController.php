@@ -235,16 +235,28 @@ class HotelReservationController extends BaseApiController
                 }
 
                 // Map the incoming data to match the database fields
-                $payData = [
-                    'hotel_id' => $roomBooking->hotel_id,
-                    'rbm_id' => $roomBooking->id,
-                    'pay_type' => $payDetails['pay_type'],
-                    'ref_name' => $payDetails['ref_name'],
-                    'pay_amnt' => $payDetails['pay_amnt'],
-                    'created_by' => $user_id
-                ];
+                // $payData = [
+                //     'hotel_id' => $roomBooking->hotel_id,
+                //     'rbm_id' => $roomBooking->id,
+                //     'pay_type' => $payDetails['pay_type'],
+                //     'ref_name' => $payDetails['ref_name'],
+                //     'pay_amnt' => $payDetails['pay_amnt'],
+                //     'created_by' => $user_id
+                // ];
 
-                BookingPayment::create($payData);
+                // BookingPayment::create($payData);
+                foreach ($payDetails as $payDetail) {
+                    $payData = [
+                        'hotel_id' => $roomBooking->hotel_id,
+                        'rbm_id' => $roomBooking->id,
+                        'pay_type' => $payDetail['method'],
+                        'ref_name' => $payDetail['ref_name'] ?? Null,
+                        'pay_amnt' => $payDetail['amount'],
+                        'created_by' => $user_id
+                    ];
+
+                    BookingPayment::create($payData);
+                }
             }
             return $this->sendResponse($roomBooking, 'Booking created successfully.');
         } catch (\Exception $e) {
