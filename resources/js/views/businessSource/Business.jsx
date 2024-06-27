@@ -29,7 +29,7 @@ function Business() {
 
     const columnsConfig = [
         { data: 'id', label: '#', className: 'table-left', width: '10%' },
-        { data: 'name', label: 'Business Resource Name', width: '70%' },
+        { data: 'name', label: 'Business Source Name', width: '70%' },
         {
             data: 'status',
             label: 'Status',

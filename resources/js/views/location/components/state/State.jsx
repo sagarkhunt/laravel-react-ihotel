@@ -77,8 +77,6 @@ const State = ({ listingData, loader }) => {
      */
     function handleSubmit(formData) {
         if (mode === 'Add State') {
-            console.log(formData);
-            console.log({ ...formData, name: formData.name });
             dispatch({
                 type: actions.STATE_ADD,
                 payload: formData,

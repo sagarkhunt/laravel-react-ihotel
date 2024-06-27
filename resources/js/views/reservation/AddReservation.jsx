@@ -1109,7 +1109,9 @@ function AddReservation() {
                     setOpen={setOpen}
                     formData={formData}
                     setFormData={setFormData}
-                    totalAmount={totalAmount}
+                    totalAmount={
+                        parseFloat(totalAmount) + parseFloat(taxAmount)
+                    }
                 />
             )}
             {showAvaInq && (

@@ -460,7 +460,7 @@ function Navbar() {
                                                                     type="button"
                                                                     className="nav-item"
                                                                 >
-                                                                    Cancel
+                                                                    Cancellation
                                                                     Policy
                                                                 </span>
                                                             </div>

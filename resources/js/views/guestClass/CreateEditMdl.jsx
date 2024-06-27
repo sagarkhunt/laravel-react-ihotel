@@ -71,7 +71,7 @@ function CreateEditMdl({
                                 value="0"
                             />
                             <div className="modal-content">
-                                <div className="modal-header">
+                                <div className="modal-header d-flex justify-content-between">
                                     <h5
                                         className="modal-title"
                                         id="ftable_header"

@@ -200,6 +200,11 @@ function PaymentMdl({ open, setOpen, setFormData, formData, totalAmount }) {
         } else {
             setDueAmount(dueAmt);
         }
+
+        setPmtDtls({
+            ...pmtDtls,
+            pay_amnt: totalDueAmount,
+        })
     }, [selectedPaymentMethods]);
 
     return (

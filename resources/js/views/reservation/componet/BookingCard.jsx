@@ -31,6 +31,20 @@ function BookingCard({
         const fullName = guest.full_name || 'No name available';
         return fullName;
     }
+    const getAdltTotal = (data) => {
+        let adltTotal = 0;
+        JSON.parse(data)?.map((item, index) => {
+            adltTotal += parseInt(item.adlt);
+        });
+        return adltTotal;
+    };
+    const getChldTotal = (data) => {
+        let chldTotal = 0;
+        JSON.parse(data)?.map((item, index) => {
+            chldTotal += parseInt(item.chld);
+        });
+        return chldTotal;
+    };
     const formatDate = (dateString) => {
         const date = new Date(dateString);
 
@@ -177,7 +191,7 @@ function BookingCard({
                                     man
                                 </span>
                                 <span className="align-items-center">
-                                    {/* {booking.adults} */}2
+                                    {getAdltTotal(booking?.room_json)}
                                 </span>
                             </div>
                             <div className="d-flex align-items-center">
@@ -185,7 +199,7 @@ function BookingCard({
                                     boy
                                 </span>
                                 <span className="align-items-center">
-                                    {/* {booking.children} */}1
+                                    {getChldTotal(booking?.room_json)}
                                 </span>
                             </div>
                         </div>

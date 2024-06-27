@@ -106,7 +106,7 @@ function CreateEditMdl({
                 newFormData.chk_out_dt = formatDate(checkOutDate);
             } else if (name === 'chk_out_dt' && isValidDate(value)) {
                 checkOutDate = new Date(value);
-                console.log('🚀 ~ handleChange ~ checkOutDate:', checkOutDate);
+                // console.log('🚀 ~ handleChange ~ checkOutDate:', checkOutDate);
                 if (checkOutDate <= checkInDate) {
                     toast.error(
                         'Check-out date cannot be earlier than or same as check-in date.',
@@ -179,7 +179,7 @@ function CreateEditMdl({
                 type: actions.BOOKINGINQ_ADD,
                 payload: formData,
             });
-            console.log('🚀 ~ handleSubmit ~ response:', response);
+            // console.log('🚀 ~ handleSubmit ~ response:', response);
         } else if (mode === 'Edit Inquiry') {
             formData.room_req = roomCategories;
             formData.status = statusValue;
@@ -260,7 +260,7 @@ function CreateEditMdl({
         if (followUpAdd && followUpAdd.follow_up) {
             try {
                 const parsedFollowUp = JSON.parse(followUpAdd.follow_up);
-                console.log('🚀 ~ useEffect ~ parsedFollowUp:', parsedFollowUp);
+                // console.log('🚀 ~ useEffect ~ parsedFollowUp:', parsedFollowUp);
                 setFollowUpList(parsedFollowUp);
             } catch (error) {
                 console.error('Error parsing JSON string:', error);
@@ -287,7 +287,7 @@ function CreateEditMdl({
     }, [roomCategories]);
 
     useEffect(() => {
-        const sync_req = ['room_cate', 'rooms_plan', 'bus_sou'];
+        const sync_req = ['room_cate', 'rooms_plan', 'bsns_src'];
         dispatch({
             type: actions.BOOKINGINQ_DROPDOWN_LIST,
             payload: {
@@ -328,6 +328,7 @@ function CreateEditMdl({
 
         updateTotalDays();
     }, [formData.chk_in_dt, formData.chk_out_dt]); // Dependency array
+
     return (
         <Modal open={open} handleModal={() => setOpen(!open)}>
             <div
@@ -356,7 +357,7 @@ function CreateEditMdl({
                             value="0"
                         />
                         <div className="modal-content modal-lf-container">
-                            <div className="modal-header">
+                            <div className="modal-header d-flex justify-content-between">
                                 <h5
                                     className="modal-title headline-h6m"
                                     id="booikng_header"
@@ -558,8 +559,8 @@ function CreateEditMdl({
                                                         <option value="">
                                                             Select
                                                         </option>
-                                                        {dropDownData?.bus_sou &&
-                                                            dropDownData.bus_sou.map(
+                                                        {dropDownData?.bsns_src &&
+                                                            dropDownData.bsns_src.map(
                                                                 (source) => (
                                                                     <option
                                                                         key={
@@ -745,7 +746,7 @@ function CreateEditMdl({
                                             <div className="col-12 mt-1">
                                                 <div className="form-group  mb-3">
                                                     <div className="d-flex  mt-1 align-items-center">
-                                                        <div className="custom-control me-2 custom-checkbox">
+                                                        <div className="custom-control me-2 custom-checkbox align-items-center d-flex">
                                                             <input
                                                                 type="checkbox"
                                                                 className="custom-control-input"
@@ -790,7 +791,7 @@ function CreateEditMdl({
                                             <div className="col-12 mt-1">
                                                 <div className="form-group  mb-3">
                                                     <div className="d-flex  mt-1 align-items-center">
-                                                        <div className="custom-control me-2 custom-checkbox">
+                                                        <div className="custom-control me-2 custom-checkbox align-items-center d-flex">
                                                             <input
                                                                 type="checkbox"
                                                                 className="custom-control-input"
@@ -883,13 +884,13 @@ function CreateEditMdl({
                                         className="container tab-pane fade"
                                     >
                                         <div className="row mt-0">
-                                            <div className="col-12 ">
+                                            <div className="col-12 p-0">
                                                 <p className="subtitle-2m  heading_box  primary-color">
                                                     Guest Information
                                                 </p>
                                             </div>
 
-                                            <div className="col-12">
+                                            <div className="col-12 p-0">
                                                 <div className="form-group  mb-3">
                                                     <label
                                                         htmlFor="customInput"
@@ -910,7 +911,7 @@ function CreateEditMdl({
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="col-6">
+                                            <div className="col-6 ps-0">
                                                 <div className="form-group  mb-3">
                                                     <label
                                                         htmlFor="mobile_no"
@@ -932,7 +933,7 @@ function CreateEditMdl({
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="col-6">
+                                            <div className="col-6 pe-0">
                                                 <div className="form-group  mb-3">
                                                     <label
                                                         htmlFor="customInput"
@@ -955,9 +956,9 @@ function CreateEditMdl({
                                     </div>
                                     <div
                                         id="follo_Up"
-                                        className="container tab-pane fade"
+                                        className="container tab-pane fade p-0"
                                     >
-                                        <div className="col-12">
+                                        <div className="col-12 ">
                                             <div className="form-group mb-3">
                                                 <textarea
                                                     rows="4"

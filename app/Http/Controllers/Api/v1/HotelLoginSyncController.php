@@ -148,7 +148,7 @@ class HotelLoginSyncController extends BaseApiController
                 if (in_array("country", $sync_req)) {
 
                     $get_country = CountryMaster::where('hotel_id', $hotel_id)
-                        ->select('id', 'name')
+                        ->select('id', 'name', 'is_default')
                         ->get();
 
                     $data['country'] = $get_country;
@@ -156,7 +156,7 @@ class HotelLoginSyncController extends BaseApiController
                 if (in_array("state", $sync_req)) {
 
                     $get_country = StateMaster::where('hotel_id', $hotel_id)
-                        ->select('id', 'name', 'country_id')
+                        ->select('id', 'name', 'country_id', 'is_default')
                         ->get();
 
                     $data['state'] = $get_country;

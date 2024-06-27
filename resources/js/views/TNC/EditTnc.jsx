@@ -94,7 +94,7 @@ function EditTnc({ setTncPolicyHide, tncName, tncDetails, tncId }) {
                         </ul>
                     </div>
 
-                    <div className="modal-footer">
+                    <div className="modal-footer m-3">
                         <button
                             type="button"
                             className="btn btn-primary"
@@ -114,10 +114,10 @@ function EditTnc({ setTncPolicyHide, tncName, tncDetails, tncId }) {
                             Edit Terms & Conditions
                         </h6>
                     </div>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} className='p-3'>
                         <div className="modal-body policy-container-body y_scrolling">
-                            <div className="row mb-3">
-                                <div className="col-5 d-flex flex-column">
+                            <div className="row mb-3 mx-0">
+                                <div className="col-5 p-0 d-flex flex-column">
                                     <label
                                         htmlFor="name"
                                         className="body-2 pb-1"
@@ -139,8 +139,8 @@ function EditTnc({ setTncPolicyHide, tncName, tncDetails, tncId }) {
                             </div>
                             <hr />
                             {policies.map((policy, index) => (
-                                <div className="row my-3" key={index}>
-                                    <div className="col-11 d-flex flex-column">
+                                <div className="row my-3 mx-0" key={index}>
+                                    <div className="col-11 p-0 d-flex flex-column">
                                         <input
                                             type="text"
                                             value={policy}

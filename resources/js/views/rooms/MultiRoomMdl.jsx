@@ -35,6 +35,8 @@ function MultiRoomMdl({ open, setOpen }) {
             ...additionalFormData,
         };
 
+        console.log(updatedFormData);
+
         dispatch({
             type: actions.ROOMS_MULTIPLE_ADD,
             payload: updatedFormData,

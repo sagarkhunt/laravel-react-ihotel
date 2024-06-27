@@ -1047,7 +1047,7 @@ function CreateEditMdl({ open, setOpen, mode, roomsData }) {
                                         type="button"
                                         className="btn btn-outline"
                                         data-bs-dismiss="modal"
-                                        // onClick="reset_field()"
+                                        onClick={() => setOpen(false)}
                                     >
                                         Close
                                     </button>

@@ -71,7 +71,7 @@ function CreateEditMdl({
                             onSubmit={handleSubmit}
                         >
                             <div className="modal-content modal-lf-container">
-                                <div className="modal-header">
+                                <div className="modal-header d-flex justify-content-between">
                                     <h5
                                         className="modal-title"
                                         id="utable_header"
@@ -160,10 +160,10 @@ function CreateEditMdl({
                                                     Mobile
                                                 </label>
                                                 <input
-                                                    type="number"
+                                                    type="tell"
                                                     maxLength="10"
                                                     name="mobile"
-                                                    className="form-control custom-input"
+                                                    className="custom-input form-control w-100"
                                                     id="mobile_no"
                                                     placeholder="Mobile"
                                                     value={
@@ -244,15 +244,16 @@ function CreateEditMdl({
                                                     Pincode
                                                 </label>
                                                 <input
-                                                    type="number"
-                                                    maxLength="6"
-                                                    className="form-control custom-input"
+                                                    type="text"
+                                                    pattern="[0-9]{6}"
+                                                    className="custom-input form-control w-100"
                                                     id="pin"
                                                     placeholder="Pincode"
                                                     name="pin"
                                                     required
                                                     value={formData.pin || ''}
                                                     onChange={handleChange}
+                                                    title='Six digit pincode "123456"'
                                                 />
                                             </div>
                                         </div>
@@ -292,14 +293,20 @@ function CreateEditMdl({
                                                     <option value="">
                                                         Select Designation
                                                     </option>
-                                                    <option value="1">
-                                                        One
+                                                    <option value="cleaning_staff">
+                                                        Cleaning staff
                                                     </option>
-                                                    <option value="2">
-                                                        Two
+                                                    <option value="kitchen_staff">
+                                                        Kitchen staff
                                                     </option>
-                                                    <option value="3">
-                                                        Three
+                                                    <option value="waiter">
+                                                        Waiter
+                                                    </option>
+                                                    <option value="manager">
+                                                        Manager
+                                                    </option>
+                                                    <option value="vice_manager">
+                                                        Vice Manager
                                                     </option>
                                                 </select>
                                             </div>
