@@ -31,6 +31,7 @@ import SalesPerson from '../views/salesPerson/SalesPerson.jsx';
 import MarketSegment from '../views/marketSegment/MarketSegment.jsx';
 import IDType from '../views/idType/IDType.jsx';
 import Location from '../views/location/Location.jsx';
+import PayTyp from '../views/payTyp/PayType.jsx';
 
 // Define a function to check if the user is authenticated
 const isAuthenticated = () => {
@@ -166,6 +167,10 @@ const router = createBrowserRouter([
             {
                 path: '/id_type',
                 element: <ProtectedRouteWrapper element={<IDType />} />,
+            },
+            {
+                path: '/pay_typ',
+                element: <ProtectedRouteWrapper element={<PayTyp />} />,
             },
             {
                 path: '/location',

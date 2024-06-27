@@ -19,6 +19,7 @@ import salesPersonReducer from './SalesPerson/reducer';
 import marketSegmentReducer from './MarketSegment/reducer';
 import idTypeReducer from './IDType/reducer';
 import locationReducer from './Location/reducer';
+import payTypReducer from './PayTyp/reducer';
 
 //Include all the reducer to combine and provide to configure store.
 export default {
@@ -43,4 +44,5 @@ export default {
     marketSegmentReducer,
     idTypeReducer,
     locationReducer,
+    payTypReducer,
 };

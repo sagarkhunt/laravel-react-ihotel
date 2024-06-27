@@ -19,7 +19,7 @@ function AvailableInqMdl({
     const { loader, roomCateList } = useSelector((state) => state.reserReducer);
     // Get the next day's date
     const nextDate = new Date(checkAvaOutDate ?? currentDate);
-    nextDate.setDate(nextDate.getDate() + 1);
+    nextDate.setDate(nextDate.getDate());
     const nextDateString = nextDate.toISOString().split('T')[0];
 
     // Initialize state with dynamic dates
