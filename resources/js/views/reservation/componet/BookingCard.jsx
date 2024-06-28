@@ -146,10 +146,9 @@ function BookingCard({
                             <p className="subtitle-2m text-center mb-0">
                                 {formatDate(booking.frm_dt)}
                             </p>
-                            <p className="caption-1 text-center mb-0">
-                                {/* {booking.checkInTime} */}
+                            {/* <p className="caption-1 text-center mb-0">
                                 10:00 PM
-                            </p>
+                            </p> */}
                         </div>
                     </div>
                     <div className="col-4 p-0">
@@ -168,9 +167,9 @@ function BookingCard({
                             <p className="subtitle-2m text-center mb-0">
                                 {formatDate(booking.to_dt)}
                             </p>
-                            <p className="caption-1 text-center  mb-0">
+                            {/* <p className="caption-1 text-center  mb-0">
                                 10:00 PM
-                            </p>
+                            </p> */}
                         </div>
                     </div>
                 </div>
@@ -258,7 +257,21 @@ function BookingCard({
                             </div>
                             <div className="col-6 p-0 d-flex justify-content-end">
                                 <p className="subtitle-2m m-0">
-                                    ₹ {booking?.room_adv_payment?.pay_amnt}
+                                    ₹{' '}
+                                    {
+                                        // booking?.room_adv_payment?.pay_amnt
+                                        booking?.room_adv_payment &&
+                                            booking?.room_adv_payment
+                                                .reduce((sum, payment) => {
+                                                    return (
+                                                        sum +
+                                                        parseFloat(
+                                                            payment.pay_amnt,
+                                                        )
+                                                    );
+                                                }, 0)
+                                                .toFixed(2)
+                                    }
                                 </p>
                             </div>
                         </div>
@@ -271,7 +284,15 @@ function BookingCard({
                                     ₹{' '}
                                     {(
                                         booking.total_amt -
-                                        booking?.room_adv_payment?.pay_amnt
+                                        booking?.room_adv_payment.reduce(
+                                            (sum, payment) => {
+                                                return (
+                                                    sum +
+                                                    parseFloat(payment.pay_amnt)
+                                                );
+                                            },
+                                            0,
+                                        )
                                     ).toFixed(2)}
                                 </p>
                             </div>

@@ -530,8 +530,23 @@ function ReservationList() {
                                                     }}
                                                 >
                                                     {
-                                                        row?.room_adv_payment
-                                                            ?.pay_amnt
+                                                        // row?.room_adv_payment[0]
+                                                        //     ?.pay_amnt
+                                                        row?.room_adv_payment &&
+                                                            row?.room_adv_payment.reduce(
+                                                                (
+                                                                    sum,
+                                                                    payment,
+                                                                ) => {
+                                                                    return (
+                                                                        sum +
+                                                                        parseFloat(
+                                                                            payment.pay_amnt,
+                                                                        )
+                                                                    );
+                                                                },
+                                                                0,
+                                                            )
                                                     }
                                                 </td>
                                                 <td className="td-custom body-2 text-center">

@@ -98,7 +98,7 @@ function AssignRoomMdl({ open, setOpen }) {
             ],
         },
         {
-            title: 'Kiing Suit Rooms (5)',
+            title: 'King Suite Rooms (5)', // Fixed typo
             reservations: [
                 {
                     checkIn: '10 Oct',
@@ -115,6 +115,7 @@ function AssignRoomMdl({ open, setOpen }) {
             ],
         },
     ];
+
     return (
         <>
             <Modal open={open} handleModal={() => setOpen(!open)}>
@@ -152,6 +153,7 @@ function AssignRoomMdl({ open, setOpen }) {
                                     style={{
                                         display: 'flex',
                                         alignItems: 'center',
+                                        marginRight: '10px',
                                     }}
                                 >
                                     <button

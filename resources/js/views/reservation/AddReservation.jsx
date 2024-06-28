@@ -28,7 +28,7 @@ function AddReservation() {
     const [dropDownData, setDropDownData] = useState({});
 
     const [totalAmount, setTotalAmount] = useState(0.0);
-    const [taxAmount, setTaxAmount] = useState(100.0);
+    const [taxAmount, setTaxAmount] = useState(0);
 
     const [showAvaInq, setShowAvaInq] = useState(false);
     const [advTotalAmount, setAdvTotalAmount] = useState(0);
@@ -1072,6 +1072,9 @@ function AddReservation() {
                                 type="button"
                                 className="btn btn-outline"
                                 data-bs-dismiss="modal"
+                                onClick={() => {
+                                    navigate('/reservation-list');
+                                }}
                             >
                                 Cancel
                             </button>

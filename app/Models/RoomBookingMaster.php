@@ -45,8 +45,8 @@ class RoomBookingMaster extends BaseModel
     {
         return $this->hasMany(RoomInventoryMaster::class, 'ref_id', 'id');
     }
-    public function roomAdvPayment(): HasOne
+    public function roomAdvPayment(): HasMany
     {
-        return $this->hasOne(BookingPayment::class, 'rbm_id', 'id');
+        return $this->hasMany(BookingPayment::class, 'rbm_id', 'id');
     }
 }

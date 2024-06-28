@@ -45,6 +45,7 @@ class HotelRoomCategoryController extends BaseApiController
             'short_name' => 'required|string',
             'short_name' => 'required|string',
             'base_rate' => 'required',
+            'qty' => 'required',
             'extra_person_charge' => 'required',
             'base_occu' => 'required',
             'room_size' => 'required',
@@ -82,6 +83,7 @@ class HotelRoomCategoryController extends BaseApiController
                     'max_occu' => $request["max_occu"] ?? 0,
                     'max_adult' => $request["max_adult"] ?? 0,
                     'max_child' => $request["max_child"] ?? 0,
+                    'qty' => $request["qty"] ?? 0,
                     'room_amnts_ids' => $request["room_amnts_ids"] ?? 0,
                     'max_extra_bed' => $request["max_extra_bed"] ?? 0,
                     'base_rate' => $request["base_rate"],
@@ -156,6 +158,7 @@ class HotelRoomCategoryController extends BaseApiController
                 $Cate_Edit->extra_person_charge = (isset($request['extra_person_charge']) ? (empty($request['extra_person_charge']) ? 0.00 : $request['extra_person_charge']) : $Cate_Edit->extra_person_charge);
                 $Cate_Edit->extra_bed_charge = (isset($request['extra_bed_charge']) ? (empty($request['extra_bed_charge']) ? 0.00 : $request['extra_bed_charge']) : $Cate_Edit->extra_bed_charge);
                 $Cate_Edit->room_size = (isset($request['room_size']) ? (empty($request['room_size']) ? 0.00 : $request['room_size']) : $Cate_Edit->room_size);
+                $Cate_Edit->qty = (isset($request['qty']) ? (empty($request['qty']) ? 0 : $request['qty']) : $Cate_Edit->qty);
                 $Cate_Edit->status = (isset($request['status']) ? ($request['status'] == 0 ? 0 : 1) : $Cate_Edit->status);
                 $Cate_Edit->updated_by = $user_id;;
                 $Cate_Edit->updated_at = date('Y-m-d H:i:s');

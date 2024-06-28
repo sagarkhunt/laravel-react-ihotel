@@ -168,9 +168,6 @@ function EditResMdl({ showEdirRes, setShowEditRes, setOpen }) {
                                 </div>
                             </div>
                             <div className="">
-                                {activeButton === 'Amend Stay'
-                                    ? 'active-btn'
-                                    : ''}
                                 <div className="row row_sapn">
                                     <button
                                         className={`col-md-4 bordered-column border-l btn-outline col-4_span d-flex flex-column align-items-center ${activeButton === 'Check In' ? 'active-btn' : ''}`}

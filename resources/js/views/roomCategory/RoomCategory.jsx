@@ -264,6 +264,14 @@ function RoomCategory() {
                                 </th>
                                 <th
                                     scope="col"
+                                    className="th-custom border-bnone text-center"
+                                    style={{ border: 'none !important' }}
+                                    width=""
+                                >
+                                    Qty
+                                </th>
+                                <th
+                                    scope="col"
                                     className="th-custom border-bnone"
                                     style={{ border: 'none !important' }}
                                     width=""
@@ -318,6 +326,10 @@ function RoomCategory() {
                                 <th scope="col" className="th-custom"></th>
                                 <th scope="col" className="th-custom"></th>
                                 <th scope="col" className="th-custom"></th>
+                                <th
+                                    scope="col-auto"
+                                    className="th-custom action-col"
+                                ></th>
                                 <th
                                     scope="col-auto"
                                     className="th-custom action-col"
@@ -382,6 +394,9 @@ function RoomCategory() {
                                                 </td>
                                                 <td className="td-custom text-center">
                                                     {item.max_extra_bed}
+                                                </td>
+                                                <td className="td-custom text-center">
+                                                    {item.qty}
                                                 </td>
 
                                                 <td className="td-custom">

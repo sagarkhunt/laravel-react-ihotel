@@ -55,6 +55,7 @@ function CreateEditMdl({
                 base_rate: '',
                 extra_person_charge: '',
                 extra_bed_charge: '',
+                qty: '',
                 status: 1,
             });
         } else {
@@ -163,6 +164,7 @@ function CreateEditMdl({
                 max_occu: formData.max_occu,
                 max_adult: formData.max_adult,
                 max_child: formData.max_child,
+                qty: formData.qty,
                 max_extra_bed: formData.max_extra_bed,
                 base_rate: formData.base_rate,
                 extra_person_charge: formData.extra_person_charge,
@@ -380,30 +382,49 @@ function CreateEditMdl({
                                                         ></textarea>
                                                     </div>
                                                 </div>
-                                                <div className="col-6">
-                                                    <div className="form-group  mb-3">
-                                                        <label
-                                                            htmlFor="customInput"
-                                                            className="custom-label"
-                                                        >
-                                                            Room Size
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            className="form-control custom-input"
-                                                            id="room_size"
-                                                            name="room_size"
-                                                            value={
-                                                                formData.room_size ||
-                                                                ''
-                                                            }
-                                                            onChange={
-                                                                handleChange
-                                                            }
-                                                            placeholder="Ex 1200x1200 sq ft"
-                                                        />
-                                                    </div>
+                                                {/* <div className="col-6"> */}
+                                                {/* <div className="row"> */}
+                                                <div className="col-6 form-group mb-3">
+                                                    <label
+                                                        htmlFor="room_size"
+                                                        className="custom-label"
+                                                    >
+                                                        Room Size
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control custom-input"
+                                                        id="room_size"
+                                                        name="room_size"
+                                                        value={
+                                                            formData.room_size ||
+                                                            ''
+                                                        }
+                                                        onChange={handleChange}
+                                                        placeholder="Ex 1200x1200 sq ft"
+                                                    />
                                                 </div>
+                                                <div className="col-6 form-group mb-3">
+                                                    <label
+                                                        htmlFor="qty"
+                                                        className="custom-label"
+                                                    >
+                                                        Quantity
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control custom-input"
+                                                        id="qty"
+                                                        name="qty"
+                                                        value={
+                                                            formData.qty || ''
+                                                        }
+                                                        onChange={handleChange}
+                                                        placeholder="Quantity"
+                                                    />
+                                                </div>
+                                                {/* </div> */}
+                                                {/* </div> */}
                                             </div>
                                             <div className="row">
                                                 <div className="col-12 ">
