@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from '../../../components/common/Modal';
 import EditResMdl from './EditResMdl';
+import actions from '../../../redux/Reservation/actions';
+import { useDispatch, useSelector } from 'react-redux';
 
-function AssignRoomMdl({ open, setOpen }) {
+function AssignRoomMdl({ open, setOpen, rmbId }) {
     const [selectedRoomType, setSelectedRoomType] = useState('');
     const [selectedRoomNumber, setSelectedRoomNumber] = useState('');
     const [isFormVisible, setIsFormVisible] = useState({});
     const [showEdirRes, setShowEditRes] = useState(false);
-
+    const [catWiseRoom, setCatWiseRoom] = useState([]);
+    const dispatch = useDispatch();
+    const { loader, catAssRoomList } = useSelector(
+        (state) => state.reserReducer,
+    );
     const toggleForm = (index) => {
         setIsFormVisible((prevState) => ({
             ...prevState,
@@ -115,7 +121,20 @@ function AssignRoomMdl({ open, setOpen }) {
             ],
         },
     ];
-
+    useEffect(() => {
+        if (catAssRoomList) {
+            setCatWiseRoom(Array.isArray(catAssRoomList) ? catAssRoomList : []);
+        }
+    }, [catAssRoomList]);
+    useEffect(() => {
+        const filters = {
+            rmb_id: rmbId,
+        };
+        dispatch({
+            type: actions.CAT_ASSIGN_ROOMS_LIST,
+            payload: filters,
+        });
+    }, [rmbId]);
     return (
         <>
             <Modal open={open} handleModal={() => setOpen(!open)}>
@@ -169,227 +188,233 @@ function AssignRoomMdl({ open, setOpen }) {
                                 className="accordion scrollable-accordion"
                                 id="roomAccordion"
                             >
-                                {roomTypes.map((roomType, typeIndex) => (
-                                    <div
-                                        className="accordion-item"
-                                        key={typeIndex}
-                                    >
-                                        <button
-                                            className="dropdown-item p-3 d-flex justify-content-between"
-                                            type="button"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target={`#collapse${typeIndex}`}
-                                            aria-expanded="true"
-                                            aria-controls={`collapse${typeIndex}`}
-                                        >
-                                            {roomType.title}
-                                            <span className="material-icons-outlined">
-                                                keyboard_arrow_down
-                                            </span>
-                                        </button>
+                                {catWiseRoom &&
+                                    catWiseRoom?.map((roomType, typeIndex) => (
                                         <div
-                                            id={`collapse${typeIndex}`}
-                                            className="accordion-collapse collapse"
-                                            aria-labelledby={`heading${typeIndex}`}
+                                            className="accordion-item"
+                                            key={typeIndex}
                                         >
-                                            <ul
-                                                className="col-12 p-0"
-                                                style={{ listStyle: 'none' }}
+                                            <button
+                                                className="dropdown-item p-3 d-flex justify-content-between"
+                                                type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target={`#collapse${typeIndex}`}
+                                                aria-expanded="true"
+                                                aria-controls={`collapse${typeIndex}`}
                                             >
-                                                {roomType.reservations.map(
-                                                    (reservation, index) => (
-                                                        <li
-                                                            className="border-l m-3 p-1"
-                                                            key={index}
-                                                        >
-                                                            <div className="dropdown-item dropdown-item-nohover">
-                                                                <div className="row">
-                                                                    <div
-                                                                        className="col-2 surface-s p-0"
-                                                                        width="2px"
-                                                                    >
+                                                {roomType.title}
+                                                <span className="material-icons-outlined">
+                                                    keyboard_arrow_down
+                                                </span>
+                                            </button>
+                                            <div
+                                                id={`collapse${typeIndex}`}
+                                                className="accordion-collapse collapse"
+                                                aria-labelledby={`heading${typeIndex}`}
+                                            >
+                                                <ul
+                                                    className="col-12 p-0"
+                                                    style={{
+                                                        listStyle: 'none',
+                                                    }}
+                                                >
+                                                    {roomType.reservations.map(
+                                                        (
+                                                            reservation,
+                                                            index,
+                                                        ) => (
+                                                            <li
+                                                                className="border-l m-3 p-1"
+                                                                key={index}
+                                                            >
+                                                                <div className="dropdown-item dropdown-item-nohover">
+                                                                    <div className="row">
                                                                         <div
-                                                                            style={{
-                                                                                display:
-                                                                                    'block',
-                                                                            }}
-                                                                            className="text-center"
+                                                                            className="col-2 surface-s p-0"
+                                                                            width="2px"
                                                                         >
                                                                             <div
                                                                                 style={{
-                                                                                    borderBottom:
-                                                                                        '1px solid #c4cfd7',
+                                                                                    display:
+                                                                                        'block',
                                                                                 }}
-                                                                                className="p-1"
+                                                                                className="text-center"
                                                                             >
+                                                                                <div
+                                                                                    style={{
+                                                                                        borderBottom:
+                                                                                            '1px solid #c4cfd7',
+                                                                                    }}
+                                                                                    className="p-1"
+                                                                                >
+                                                                                    {
+                                                                                        reservation.checkIn
+                                                                                    }
+                                                                                </div>
+                                                                                <div className="p-1">
+                                                                                    {
+                                                                                        reservation.checkOut
+                                                                                    }
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="col-7 mt-2">
+                                                                            <div className="font-ternary">
                                                                                 {
-                                                                                    reservation.checkIn
+                                                                                    reservation.guestName
                                                                                 }
                                                                             </div>
-                                                                            <div className="p-1">
+                                                                            <div className="body-2">
                                                                                 {
-                                                                                    reservation.checkOut
+                                                                                    reservation.reservationId
                                                                                 }
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div className="col-7 mt-2">
-                                                                        <div className="font-ternary">
-                                                                            {
-                                                                                reservation.guestName
-                                                                            }
-                                                                        </div>
-                                                                        <div className="body-2">
-                                                                            {
-                                                                                reservation.reservationId
-                                                                            }
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="col-3 mt-2">
-                                                                        <div className="body-2">
-                                                                            Room
-                                                                        </div>
-                                                                        <div>
-                                                                            <button
-                                                                                className="assign assign1 btn-secondary mt-1 mb-0 btn"
-                                                                                onClick={() =>
-                                                                                    toggleForm(
-                                                                                        `${typeIndex}-${index}`,
-                                                                                    )
-                                                                                }
-                                                                            >
-                                                                                Assign
+                                                                        <div className="col-3 mt-2">
+                                                                            <div className="body-2">
                                                                                 Room
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                {isFormVisible[
-                                                                    `${typeIndex}-${index}`
-                                                                ] && (
-                                                                    <div className="">
-                                                                        <form
-                                                                            onSubmit={(
-                                                                                event,
-                                                                            ) =>
-                                                                                handleAssignRoom(
-                                                                                    event,
-                                                                                    index,
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            <div className="row mb-2">
-                                                                                <label
-                                                                                    htmlFor="roomType"
-                                                                                    className="body-2 form-label mb-0 px-0 mt-2"
-                                                                                >
-                                                                                    Room
-                                                                                    Type
-                                                                                </label>
-                                                                                <select
-                                                                                    className="form-select"
-                                                                                    id="roomType"
-                                                                                    value={
-                                                                                        selectedRoomType
-                                                                                    }
-                                                                                    onChange={
-                                                                                        handleRoomTypeChange
-                                                                                    }
-                                                                                >
-                                                                                    <option value="">
-                                                                                        Select
-                                                                                        room
-                                                                                        type
-                                                                                    </option>
-                                                                                    <option value="Single">
-                                                                                        Single
-                                                                                    </option>
-                                                                                    <option value="Double">
-                                                                                        Double
-                                                                                    </option>
-                                                                                    <option value="Suite">
-                                                                                        Suite
-                                                                                    </option>
-                                                                                </select>
                                                                             </div>
-                                                                            <div className="row mb-2">
-                                                                                <label
-                                                                                    htmlFor="roomNumber"
-                                                                                    className="body-2 form-label mb-0 px-0"
-                                                                                >
-                                                                                    Room
-                                                                                </label>
-                                                                                <select
-                                                                                    className="form-select"
-                                                                                    id="roomNumber"
-                                                                                    value={
-                                                                                        selectedRoomNumber
-                                                                                    }
-                                                                                    onChange={
-                                                                                        handleRoomNumberChange
-                                                                                    }
-                                                                                >
-                                                                                    <option value="">
-                                                                                        Select
-                                                                                        room
-                                                                                        number
-                                                                                    </option>
-                                                                                    <option value="101">
-                                                                                        101
-                                                                                    </option>
-                                                                                    <option value="102">
-                                                                                        102
-                                                                                    </option>
-                                                                                    <option value="103">
-                                                                                        103
-                                                                                    </option>
-                                                                                </select>
-                                                                            </div>
-                                                                            <hr className="row border-l mb-2 mt-4" />
-                                                                            <div className="mb-3 d-flex justify-content-end">
+                                                                            <div>
                                                                                 <button
-                                                                                    type="button"
-                                                                                    className="btn btn-outline me-2"
+                                                                                    className="assign assign1 btn-secondary mt-1 mb-0 btn"
                                                                                     onClick={() =>
                                                                                         toggleForm(
                                                                                             `${typeIndex}-${index}`,
                                                                                         )
                                                                                     }
                                                                                 >
-                                                                                    Cancel
-                                                                                </button>
-                                                                                <button
-                                                                                    type="button"
-                                                                                    className="btn btn-secondary me-2"
-                                                                                    onClick={
-                                                                                        openEditRes
-                                                                                    }
-                                                                                >
-                                                                                    Check
-                                                                                    In
-                                                                                </button>
-                                                                                <button
-                                                                                    type="submit"
-                                                                                    className="btn btn-primary"
-                                                                                    onClick={
-                                                                                        openEditRes
-                                                                                    }
-                                                                                >
                                                                                     Assign
                                                                                     Room
                                                                                 </button>
                                                                             </div>
-                                                                        </form>
+                                                                        </div>
                                                                     </div>
-                                                                )}
-                                                            </div>
-                                                        </li>
-                                                    ),
-                                                )}
-                                            </ul>
+                                                                    {isFormVisible[
+                                                                        `${typeIndex}-${index}`
+                                                                    ] && (
+                                                                        <div className="">
+                                                                            <form
+                                                                                onSubmit={(
+                                                                                    event,
+                                                                                ) =>
+                                                                                    handleAssignRoom(
+                                                                                        event,
+                                                                                        index,
+                                                                                    )
+                                                                                }
+                                                                            >
+                                                                                <div className="row mb-2">
+                                                                                    <label
+                                                                                        htmlFor="roomType"
+                                                                                        className="body-2 form-label mb-0 px-0 mt-2"
+                                                                                    >
+                                                                                        Room
+                                                                                        Type
+                                                                                    </label>
+                                                                                    <select
+                                                                                        className="form-select"
+                                                                                        id="roomType"
+                                                                                        value={
+                                                                                            selectedRoomType
+                                                                                        }
+                                                                                        onChange={
+                                                                                            handleRoomTypeChange
+                                                                                        }
+                                                                                    >
+                                                                                        <option value="">
+                                                                                            Select
+                                                                                            room
+                                                                                            type
+                                                                                        </option>
+                                                                                        <option value="Single">
+                                                                                            Single
+                                                                                        </option>
+                                                                                        <option value="Double">
+                                                                                            Double
+                                                                                        </option>
+                                                                                        <option value="Suite">
+                                                                                            Suite
+                                                                                        </option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div className="row mb-2">
+                                                                                    <label
+                                                                                        htmlFor="roomNumber"
+                                                                                        className="body-2 form-label mb-0 px-0"
+                                                                                    >
+                                                                                        Room
+                                                                                    </label>
+                                                                                    <select
+                                                                                        className="form-select"
+                                                                                        id="roomNumber"
+                                                                                        value={
+                                                                                            selectedRoomNumber
+                                                                                        }
+                                                                                        onChange={
+                                                                                            handleRoomNumberChange
+                                                                                        }
+                                                                                    >
+                                                                                        <option value="">
+                                                                                            Select
+                                                                                            room
+                                                                                            number
+                                                                                        </option>
+                                                                                        <option value="101">
+                                                                                            101
+                                                                                        </option>
+                                                                                        <option value="102">
+                                                                                            102
+                                                                                        </option>
+                                                                                        <option value="103">
+                                                                                            103
+                                                                                        </option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <hr className="row border-l mb-2 mt-4" />
+                                                                                <div className="mb-3 d-flex justify-content-end">
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        className="btn btn-outline me-2"
+                                                                                        onClick={() =>
+                                                                                            toggleForm(
+                                                                                                `${typeIndex}-${index}`,
+                                                                                            )
+                                                                                        }
+                                                                                    >
+                                                                                        Cancel
+                                                                                    </button>
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        className="btn btn-secondary me-2"
+                                                                                        onClick={
+                                                                                            openEditRes
+                                                                                        }
+                                                                                    >
+                                                                                        Check
+                                                                                        In
+                                                                                    </button>
+                                                                                    <button
+                                                                                        type="submit"
+                                                                                        className="btn btn-primary"
+                                                                                        onClick={
+                                                                                            openEditRes
+                                                                                        }
+                                                                                    >
+                                                                                        Assign
+                                                                                        Room
+                                                                                    </button>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </li>
+                                                        ),
+                                                    )}
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
                             </div>
                         </div>
                     </div>

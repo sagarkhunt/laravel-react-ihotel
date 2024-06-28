@@ -852,4 +852,50 @@ class HotelReservationController extends BaseApiController
             return $this->sendError('Server Error', $e->getMessage());
         }
     }
+
+    /**
+     * 
+     */
+    public function getCatWiseRoomSummary(Request $request)
+    {
+        try {
+            $rbmId = $request['rmb_id'];
+            $catWiseRoomDetail = RoomBookingMaster::with(['roomInventory.roomCat', 'guestDetails'])->where('id', $rbmId)->first();
+            $data = [];
+            if (!empty($catWiseRoomDetail)) {
+                $categorized = [];
+
+                foreach ($catWiseRoomDetail['roomInventory'] as $reservation) {
+                    $categoryName = $reservation['roomCat']['cat_name'];
+
+                    // Initialize category if it doesn't exist
+                    if (!isset($categorized[$categoryName])) {
+                        $categorized[$categoryName] = [
+                            'title' => $categoryName,
+                            'reservations' => [],
+                        ];
+                    }
+
+                    // Add reservation to the category
+                    $categorized[$categoryName]['reservations'][] = [
+                        'checkIn' => $reservation['dt'],
+                        'checkOut' => $catWiseRoomDetail['to_dt'],
+                        'guestName' => $catWiseRoomDetail['guestDetails']['full_name'],
+                        'reservationId' => $catWiseRoomDetail['id'],
+                        'roomRate' => $reservation['room_rate'],
+                    ];
+                }
+
+                $result = array_values($categorized);
+
+                return $this->sendResponse($result, 'Success.');
+            } else {
+                return $this->sendResponse(Null, 'Room Booking id is wiorng');
+            }
+        } catch (\Exception $e) {
+
+            Log::error($e->getMessage());
+            return $this->sendError('Server Error', $e->getMessage());
+        }
+    }
 }

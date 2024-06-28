@@ -11,6 +11,7 @@ const initialStates = {
     dropDownList: {},
     roomCateList: {},
     payTypList: {},
+    catAssRoomList: {},
 };
 
 function Reducer(state = initialStates, action) {
@@ -79,6 +80,7 @@ function Reducer(state = initialStates, action) {
             };
         case actions.AVLBL_ROOM_CAT_FAILURE:
             return { ...state, roomCateList: [], loader: false };
+
         case actions.PAY_TYP_LIST:
             return { ...state, loader: true };
         case actions.PAY_TYPE_SUCCESS:
@@ -89,6 +91,16 @@ function Reducer(state = initialStates, action) {
             };
         case actions.PAY_TYPE_FAILURE:
             return { ...state, roomCateList: [], loader: false };
+        case actions.CAT_ASSIGN_ROOMS_LIST:
+            return { ...state, loader: true };
+        case actions.CAT_ASSIGN_ROOMS_SUCCESS:
+            return {
+                ...state,
+                catAssRoomList: action.payload,
+                loader: false,
+            };
+        case actions.CAT_ASSIGN_ROOMS_FAILURE:
+            return { ...state, catAssRoomList: [], loader: false };
         default:
             return state;
     }

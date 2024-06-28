@@ -207,6 +207,10 @@ function* roomAvlblList(action) {
         }
     }
 }
+/**
+ *
+ * @param {getPayTypList} action
+ */
 function* getPayTypList(action) {
     try {
         const response = yield call(postRequest, 'get_rcpt', action.payload);
@@ -229,6 +233,36 @@ function* getPayTypList(action) {
         }
     }
 }
+/**
+ *
+ * @param {getCateWiseRoomList} action
+ */
+function* getCateWiseRoomList(action) {
+    try {
+        const response = yield call(
+            postRequest,
+            'get_cat_wise_room_summary',
+            action.payload,
+        );
+        if (response) {
+            yield put({
+                type: actions.CAT_ASSIGN_ROOMS_SUCCESS,
+                payload: response?.data,
+            });
+        }
+    } catch (error) {
+        yield put({ type: actions.CAT_ASSIGN_ROOMS_FAILURE });
+        if (error.response.status === 401) {
+            toast.error(error.response.data.message);
+        } else if (
+            error.response &&
+            error.response.data &&
+            error.response.data.message
+        ) {
+            toast.error(error.response.data.message);
+        }
+    }
+}
 
 export default function* rootSaga() {
     yield all([
@@ -239,5 +273,6 @@ export default function* rootSaga() {
         takeLatest(actions.RESER_DROPDOWN_LIST, dropownList),
         takeLatest(actions.AVLBL_ROOM_CATE_LIST, roomAvlblList),
         takeLatest(actions.PAY_TYP_LIST, getPayTypList),
+        takeLatest(actions.CAT_ASSIGN_ROOMS_LIST, getCateWiseRoomList),
     ]);
 }

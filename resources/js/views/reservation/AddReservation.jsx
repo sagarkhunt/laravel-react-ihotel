@@ -1135,6 +1135,7 @@ function AddReservation() {
                     setShowAvaInq={setShowAvaInq}
                     checkAvaInDate={formData.frm_dt}
                     checkAvaOutDate={formData.to_dt}
+                    dropDownData={dropDownData}
                 />
             )}
         </div>

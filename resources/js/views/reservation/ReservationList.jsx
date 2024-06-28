@@ -34,6 +34,7 @@ function ReservationList() {
     const [endDate, setEndDate] = useState('');
     const [bsnsSrcId, setBsnsSrcId] = useState('');
     const [status, setStatus] = useState('');
+    const [rmbId, setrmbId] = useState('');
     const filterAndPaginateData = (
         data,
         searchQuery,
@@ -105,7 +106,8 @@ function ReservationList() {
     const toggleDropdown = (index) => {
         setDropdownIndex(dropdownIndex === index ? null : index);
     };
-    const assignRooms = () => {
+    const assignRooms = (id) => {
+        setrmbId(id);
         setOpen(true);
     };
     const [filterMdl, setFilter] = useState(false);
@@ -502,7 +504,7 @@ function ReservationList() {
                                                     <div
                                                         className="mt-1 cp"
                                                         onClick={() =>
-                                                            assignRooms()
+                                                            assignRooms(row?.id)
                                                         }
                                                     >
                                                         <p className="assign mt-1 mb-0 cp">
@@ -676,7 +678,9 @@ function ReservationList() {
                     </div>
                 </div>
             )}
-            {open && <AssignRoomMdl open={open} setOpen={setOpen} />}
+            {open && (
+                <AssignRoomMdl open={open} setOpen={setOpen} rmbId={rmbId} />
+            )}
             {filterMdl && (
                 <FilterReservationList
                     open={filterMdl}

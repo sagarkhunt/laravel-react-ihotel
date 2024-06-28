@@ -49,4 +49,8 @@ class RoomBookingMaster extends BaseModel
     {
         return $this->hasMany(BookingPayment::class, 'rbm_id', 'id');
     }
+    public function guestDetails(): HasOne
+    {
+        return $this->hasOne(GuestMaster::class, 'id', 'guest_id')->select('id', 'full_name');
+    }
 }
