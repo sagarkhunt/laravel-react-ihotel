@@ -27,8 +27,9 @@ function AddReservation() {
     const [open, setOpen] = useState(false);
     const [dropDownData, setDropDownData] = useState({});
 
+    const [taxAmount, setTaxAmount] = useState(100);
+    const [roomCharges, setRoomCharges] = useState(0.0);
     const [totalAmount, setTotalAmount] = useState(0.0);
-    const [taxAmount, setTaxAmount] = useState(0);
 
     const [showAvaInq, setShowAvaInq] = useState(false);
     const [advTotalAmount, setAdvTotalAmount] = useState(0);
@@ -96,7 +97,7 @@ function AddReservation() {
         // },
         com_rm_status: false,
         taxes: taxAmount,
-        rate: totalAmount,
+        rate: roomCharges,
     });
 
     useEffect(() => {
@@ -111,11 +112,20 @@ function AddReservation() {
     }, [formData.payment_json]);
 
     useEffect(() => {
+        setTotalAmount(roomCharges + taxAmount);
+        // const amountReceived = formData.payment_json?.reduce(
+        //     (total, payment) => total + parseFloat(payment.amount),
+        //     0,
+        // );
+        // setDueAmount(totalAmount - amountReceived);
+    }, [taxAmount, roomCharges]);
+
+    useEffect(() => {
         const newTotalRate = formData.room_json.reduce((total, room) => {
             return total + parseFloat(room?.rate);
         }, 0.0);
 
-        setTotalAmount(newTotalRate);
+        setRoomCharges(newTotalRate);
     }, [formData.room_json]);
 
     useEffect(() => {
@@ -257,6 +267,8 @@ function AddReservation() {
             room_json: newRoomDetails,
         });
     };
+
+    // TODO: add logic for the handling the Taxation
 
     return (
         <div className="row row mt-3 mx-2">
@@ -971,7 +983,7 @@ function AddReservation() {
                                         </div>
                                         <div className="col-4">
                                             <p className="subtitle-2m m-0">
-                                                ₹{parseFloat(totalAmount)}
+                                                ₹{parseFloat(roomCharges)}
                                             </p>
                                         </div>
                                     </div>
@@ -993,9 +1005,7 @@ function AddReservation() {
                                         </div>
                                         <div className="col-4">
                                             <p className="subtitle-2m primary-colori m-0">
-                                                ₹
-                                                {parseFloat(totalAmount) +
-                                                    parseFloat(taxAmount)}
+                                                ₹{parseFloat(totalAmount)}
                                             </p>
                                         </div>
                                     </div>
@@ -1043,24 +1053,11 @@ function AddReservation() {
                                             </p>
                                         </div>
                                         <div className="col-4">
-                                            {formData.payment_json?.pay_amnt ? (
-                                                <p className="subtitle-2m red m-0">
-                                                    ₹
-                                                    {parseFloat(totalAmount) -
-                                                        parseFloat(
-                                                            formData
-                                                                .payment_json
-                                                                .pay_amnt,
-                                                        ) +
-                                                        parseFloat(taxAmount)}
-                                                </p>
-                                            ) : (
-                                                <p className="subtitle-2m red m-0">
-                                                    ₹
-                                                    {parseFloat(totalAmount) +
-                                                        parseFloat(taxAmount)}
-                                                </p>
-                                            )}
+                                            <p className="body-2 pay-color m-0">
+                                                ₹
+                                                {parseFloat(totalAmount) -
+                                                    parseFloat(advTotalAmount)}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -1124,9 +1121,7 @@ function AddReservation() {
                     setOpen={setOpen}
                     formData={formData}
                     setFormData={setFormData}
-                    totalAmount={
-                        parseFloat(totalAmount) + parseFloat(taxAmount)
-                    }
+                    totalAmount={parseFloat(totalAmount)}
                 />
             )}
             {showAvaInq && (

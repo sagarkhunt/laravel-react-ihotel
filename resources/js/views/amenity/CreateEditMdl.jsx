@@ -174,7 +174,7 @@ function CreateEditMdl({
                                                     onChange={handleChange}
                                                 />
                                                 <button
-                                                    className="btn btn-secondary dropdown-toggle"
+                                                    className="btn btn-secondary dropdown-toggle d-flex align-items-center"
                                                     type="button"
                                                     id="iconDropdownButton"
                                                     data-bs-toggle="dropdown"
@@ -193,7 +193,7 @@ function CreateEditMdl({
                                                 >
                                                     <li>
                                                         <a
-                                                            className="dropdown-item"
+                                                            className="dropdown-item d-flex align-items-center"
                                                             href="#"
                                                             onClick={() =>
                                                                 selectIcon(
@@ -201,7 +201,7 @@ function CreateEditMdl({
                                                                 )
                                                             }
                                                         >
-                                                            <span className="material-icons-outlined edit-table">
+                                                            <span className="material-icons-outlined edit-table p-0">
                                                                 create
                                                             </span>
                                                             Home
@@ -209,7 +209,7 @@ function CreateEditMdl({
                                                     </li>
                                                     <li>
                                                         <a
-                                                            className="dropdown-item"
+                                                            className="dropdown-item d-flex align-items-center"
                                                             href="#"
                                                             onClick={() =>
                                                                 selectIcon(
@@ -225,7 +225,7 @@ function CreateEditMdl({
                                                     </li>
                                                     <li>
                                                         <a
-                                                            className="dropdown-item"
+                                                            className="dropdown-item d-flex align-items-center"
                                                             href="#"
                                                             onClick={() =>
                                                                 selectIcon(
