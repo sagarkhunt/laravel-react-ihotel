@@ -8,10 +8,11 @@ function AvailableInqMdl({
     setShowAvaInq,
     checkAvaInDate,
     checkAvaOutDate,
+    dropDownData,
 }) {
     const dispatch = useDispatch();
     const [roomCateListData, setRoomCateListData] = useState({});
-    const [dropDownData, setDropDownData] = useState({});
+    // const [dropDownData, setDropDownData] = useState({});
     const { dropDownList } = useSelector((state) => state?.reserReducer);
     const currentDate = checkAvaInDate ? new Date(checkAvaInDate) : new Date();
     const currentDateString = currentDate.toISOString().split('T')[0];
@@ -64,9 +65,9 @@ function AvailableInqMdl({
             payload: params,
         });
     };
-    useEffect(() => {
-        setDropDownData(dropDownList);
-    }, [dropDownList]);
+    // useEffect(() => {
+    //     setDropDownData(dropDownList);
+    // }, [dropDownList]);
     useEffect(() => {
         if (dropDownData['room_cate'] && dropDownData['room_cate'].length > 0) {
             setSelectedCategoryId(dropDownData['room_cate'][0].id);
@@ -86,15 +87,15 @@ function AvailableInqMdl({
             });
         }
     }, [selectedCategoryId, dispatch]);
-    useEffect(() => {
-        const sync_req = ['room_cate'];
-        dispatch({
-            type: actions.RESER_DROPDOWN_LIST,
-            payload: {
-                sync_req: sync_req.join(','),
-            },
-        });
-    }, []);
+    // useEffect(() => {
+    //     const sync_req = ['room_cate'];
+    //     dispatch({
+    //         type: actions.RESER_DROPDOWN_LIST,
+    //         payload: {
+    //             sync_req: sync_req.join(','),
+    //         },
+    //     });
+    // }, []);
     return (
         <Modal open={showAvaInq} handleModal={() => setShowAvaInq(!showAvaInq)}>
             <div
