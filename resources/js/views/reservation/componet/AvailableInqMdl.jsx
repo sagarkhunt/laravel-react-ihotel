@@ -69,7 +69,11 @@ function AvailableInqMdl({
     //     setDropDownData(dropDownList);
     // }, [dropDownList]);
     useEffect(() => {
-        if (dropDownData['room_cate'] && dropDownData['room_cate'].length > 0) {
+        if (
+            dropDownData &&
+            dropDownData['room_cate'] &&
+            dropDownData['room_cate'].length > 0
+        ) {
             setSelectedCategoryId(dropDownData['room_cate'][0].id);
         }
     }, [dropDownData]);
@@ -199,18 +203,19 @@ function AvailableInqMdl({
                                             <option value="0">
                                                 Select Room Category
                                             </option>{' '}
-                                            {dropDownData['room_cate']?.map(
-                                                (item, index) => {
-                                                    return (
-                                                        <option
-                                                            key={index}
-                                                            value={item.id}
-                                                        >
-                                                            {item.cat_name}
-                                                        </option>
-                                                    );
-                                                },
-                                            )}
+                                            {dropDownData &&
+                                                dropDownData['room_cate']?.map(
+                                                    (item, index) => {
+                                                        return (
+                                                            <option
+                                                                key={index}
+                                                                value={item.id}
+                                                            >
+                                                                {item.cat_name}
+                                                            </option>
+                                                        );
+                                                    },
+                                                )}
                                         </select>
                                     </div>
                                 </div>
@@ -256,8 +261,8 @@ function AvailableInqMdl({
                                     id="summary"
                                     className="row mt-0 mx-0 container px-0 tab-pane active"
                                     style={{
-                                        minWidth: '1000px',
-                                        overflowX: 'scroll',
+                                        minWidth: '900px',
+                                        // overflowX: 'scroll',
                                     }}
                                 >
                                     {/* Summary Content */}
@@ -460,7 +465,7 @@ function AvailableInqMdl({
                                     className="row mt-0 mx-0 tab-pane fade"
                                     style={{
                                         minWidth: '1000px',
-                                        overflowX: 'scroll',
+                                        // overflowX: 'scroll',
                                     }}
                                 >
                                     <table className="table table-bordered custom-table availableinquirytable">

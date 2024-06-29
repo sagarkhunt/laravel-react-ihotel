@@ -7,16 +7,18 @@ import headerLogo from '../../../public/assets/v1/images/header_logo.png';
 import Tooltip from '../components/common/ToolTip';
 import AvailableInqMdl from '../views/reservation/componet/AvailableInqMdl';
 import { UnorderedListOutlined } from '@ant-design/icons';
+import resActions from '../redux/Reservation/actions';
 
 function Navbar() {
     const [activeLink, setActiveLink] = useState(null);
     const [showAvaInq, setShowAvaInq] = useState(false);
+    const [dropDownData, setDropDownData] = useState({});
     const handleLinkClick = (link) => {
         setActiveLink(link);
     };
 
     const [activeLinks, setActiveLinks] = useState(['/masters']);
-
+    const { dropDownList } = useSelector((state) => state?.reserReducer);
     const handleLinkClick2 = (link) => {
         // Remove previously active link from activeLinks
         const updatedLinks = activeLinks.filter(
@@ -25,12 +27,21 @@ function Navbar() {
         // Add the clicked link
         setActiveLinks([...updatedLinks, link]);
     };
+    useEffect(() => {
+        const storedDropDownList = localStorage.getItem('dropDownList');
+        if (storedDropDownList) {
+            setDropDownData(JSON.parse(storedDropDownList));
+        }
+    }, [localStorage.getItem('dropDownList')]);
+    useEffect(() => {
+        localStorage.setItem('dropDownList', JSON.stringify(dropDownList));
+    }, [dropDownList]);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
     // if (typeof window !== 'undefined') {
     //     const token = localStorage.getItem('Access_Token');
-    //     console.log('🚀 ~ Navbar ~ token:', token);
+
     //     if (token) {
     //         dispatch({
     //             type: actions.VERIFYTOKEN,
@@ -59,6 +70,30 @@ function Navbar() {
         });
         navigate('/login');
     };
+
+    useEffect(() => {
+        const sync_req = [
+            'booking_src',
+            'sls_prsn',
+            'bsns_src',
+            'mrkt_sgmnt',
+            'tnc',
+            'cp',
+            'room_cate',
+            'rooms',
+            'rooms_plan',
+            'country',
+            'guest_classes',
+            'state',
+            'city',
+        ];
+        dispatch({
+            type: resActions.RESER_DROPDOWN_LIST,
+            payload: {
+                sync_req: sync_req.join(','),
+            },
+        });
+    }, []);
 
     return (
         <>
@@ -1517,6 +1552,7 @@ function Navbar() {
                     <AvailableInqMdl
                         showAvaInq={showAvaInq}
                         setShowAvaInq={setShowAvaInq}
+                        dropDownData={dropDownData}
                     />
                 )}
             </nav>

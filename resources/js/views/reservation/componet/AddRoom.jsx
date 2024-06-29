@@ -18,7 +18,7 @@ const AddRoom = ({
                 adlt: '1',
                 chld: '0',
                 amount: '',
-                rate: 4000.0,
+                rate: 0.0,
             },
         ]);
     };
@@ -37,7 +37,7 @@ const AddRoom = ({
                     adlt: '1',
                     chld: '0',
                     amount: '',
-                    rate: 4000.0,
+                    rate: 0.0,
                 },
             ];
         }
@@ -45,11 +45,44 @@ const AddRoom = ({
 
     const [isEditPrice, setIsEditPrice] = useState({});
 
-    const handleInputChange = (event, index, field) => {
-        const { value } = event.target;
-        const newRoomDetails = [...rDetails];
-        newRoomDetails[index][field] = value;
-        setRDetails(newRoomDetails);
+    // const handleInputChange = (event, index, field) => {
+    //     const { value } = event.target;
+    //     const newRoomDetails = [...rDetails];
+    //     newRoomDetails[index][field] = value;
+    //     setRDetails(newRoomDetails);
+    // };
+    const handleInputChange = (e, index, field) => {
+        const { name, value } = e.target;
+        const newRooms = [...rDetails];
+
+        if (field === 'amount') {
+            newRooms[index][field] = value;
+            let amount = parseFloat(value);
+            let nor = parseInt(newRooms[index].nor);
+
+            if (isNaN(amount)) amount = 0;
+            if (isNaN(nor) || nor === 0) nor = 1;
+
+            // Calculate rate as multiplication of amount and nor
+            newRooms[index].rate = (amount * nor).toFixed(2); // Assuming 2 decimal places for rate
+        } else if (field === 'nor') {
+            // Handle direct input change for nor
+            let nor = parseInt(value);
+            if (isNaN(nor) || nor < 1) nor = 1;
+
+            newRooms[index].nor = nor;
+
+            // Recalculate rate based on new nor and existing amount
+            let amount = parseFloat(newRooms[index].amount);
+            if (isNaN(amount)) amount = 0;
+
+            newRooms[index].rate = (amount * nor).toFixed(2); // Assuming 2 decimal places for rate
+        } else {
+            newRooms[index][field] = value;
+        }
+
+        // Update state with the modified rooms array
+        setRDetails(newRooms);
     };
 
     const toggleEditPrice = (index) => {
@@ -95,26 +128,66 @@ const AddRoom = ({
     //     });
     // }, []);
 
+    // const handleMinus = (index, field) => {
+    //     const newRoomDetails = [...rDetails];
+    //     let count = parseInt(newRoomDetails[index][field]) - 1;
+
+    //     if (field === 'chld') {
+    //         count = count < 0 ? 0 : count;
+    //     } else {
+    //         count = count < 1 ? 1 : count;
+    //     }
+
+    //     newRoomDetails[index][field] = count.toString();
+    //     setRDetails(newRoomDetails);
+    // };
+
+    // const handlePlus = (index, field) => {
+    //     const newRoomDetails = [...rDetails];
+    //     let count = parseInt(newRoomDetails[index][field]) + 1;
+
+    //     newRoomDetails[index][field] = count.toString();
+    //     setRDetails(newRoomDetails);
+    // };
     const handleMinus = (index, field) => {
-        const newRoomDetails = [...rDetails];
-        let count = parseInt(newRoomDetails[index][field]) - 1;
+        const newRooms = [...rDetails];
+        let value = parseInt(newRooms[index][field]);
+        if (!isNaN(value) && value > 1) {
+            value--;
+            newRooms[index][field] = value.toString();
 
-        if (field === 'chld') {
-            count = count < 0 ? 0 : count;
-        } else {
-            count = count < 1 ? 1 : count;
+            // Recalculate rate based on new nor and existing amount
+            let amount = parseFloat(newRooms[index].amount);
+            let nor = value;
+            if (isNaN(amount)) amount = 0;
+
+            newRooms[index].rate = (amount * nor).toFixed(2); // Assuming 2 decimal places for rate
+
+            // Update state with the modified rooms array
+            setRDetails(newRooms);
         }
-
-        newRoomDetails[index][field] = count.toString();
-        setRDetails(newRoomDetails);
     };
 
     const handlePlus = (index, field) => {
-        const newRoomDetails = [...rDetails];
-        let count = parseInt(newRoomDetails[index][field]) + 1;
+        const newRooms = [...rDetails];
+        let value = parseInt(newRooms[index][field]);
+        if (!isNaN(value)) {
+            value++;
+        } else {
+            value = 1;
+        }
 
-        newRoomDetails[index][field] = count.toString();
-        setRDetails(newRoomDetails);
+        newRooms[index][field] = value.toString();
+
+        // Recalculate rate based on new nor and existing amount
+        let amount = parseFloat(newRooms[index].amount);
+        let nor = value;
+        if (isNaN(amount)) amount = 0;
+
+        newRooms[index].rate = (amount * nor).toFixed(2); // Assuming 2 decimal places for rate
+
+        // Update state with the modified rooms array
+        setRDetails(newRooms);
     };
 
     return (
@@ -442,12 +515,6 @@ const AddRoom = ({
                                                     />
                                                 </div>
                                                 <div className="col-2 position-relative">
-                                                    {/* <button
-                                                    className="btn position-absolute start-1"
-                                                    onClick={() =>
-                                                        toggleEditPrice(index)
-                                                    }
-                                                ></button> */}
                                                     <input
                                                         type="text"
                                                         className="form-control custom-input-sm text-end"

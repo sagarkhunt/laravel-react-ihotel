@@ -155,7 +155,8 @@ class HotelReservationController extends BaseApiController
             // Set the attributes
             $roomBooking->hotel_id = $hotel_id;
             $roomBooking->group_id = $request->input('group_id');
-            $roomBooking->guest_id = $request->input('guest_id');
+            // $roomBooking->guest_id = $request->input('guest_id');
+            $roomBooking->guest_id = $guestArr['id'];
             $roomBooking->fy_id = 1;
             $roomBooking->frm_dt = $request->input('frm_dt');
             $roomBooking->to_dt = $request->input('to_dt');
@@ -167,6 +168,8 @@ class HotelReservationController extends BaseApiController
             $roomBooking->mrkt_sgmnt_id = $request->input('mrkt_sgmnt_id');
             $roomBooking->room_json = json_encode($rooms); //$request->input('room_json');
             $roomBooking->guest_json = json_encode($guest); //$request['guest_json'];
+            $roomBooking->guest_name = $guestArr['full_name']; //$request['guest_json'];
+            $roomBooking->guest_mobile = $guestArr['mobile']; //$request['guest_json'];
             $roomBooking->cncl_policy_id = $request->input('cncl_policy_id');
             $roomBooking->terms_con_id = $request->input('terms_con_id');
             $roomBooking->sp_req_json = $request->input('sp_req_json');

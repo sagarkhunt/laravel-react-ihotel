@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 function SideNavbar({ activeLink }) {
-    console.log('🚀 ~ SideNavbar ~ activeLink :', activeLink);
     let onLogout = () => {
         dispatch({
             type: actions.LOGOUT,

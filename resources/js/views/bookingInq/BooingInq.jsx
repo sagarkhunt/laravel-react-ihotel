@@ -63,7 +63,7 @@ function BooingInq() {
                 const chkOutDate = row.chk_out_dt ?? ''; // Check-out date
                 return chkInDate + ' - ' + chkOutDate; // Combine with a separator
             },
-            width: '25%',
+            width: '20%',
         },
         {
             data: 'cust_name',
@@ -76,7 +76,7 @@ function BooingInq() {
                 // Return the combined data formatted as HTML paragraphs
                 return `<p class="body-2 mb-0">${custName}</p><p class="caption-1 pt-1 mb-0">${mobile}</p>`;
             },
-            width: '25%',
+            width: '20%',
         },
         {
             data: 'room_req',
@@ -98,6 +98,20 @@ function BooingInq() {
                 return roomDetailsHTML;
             },
             width: '25%',
+        },
+        {
+            data: 'created_at',
+            label: 'Created On',
+            render: function (data, type, row) {
+                const date = new Date(data);
+
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                const day = date.getDate().toString().padStart(2, '0');
+                const year = date.getFullYear();
+
+                return `${year}-${day}-${month}`;
+            },
+            width: '10%',
         },
         {
             data: 'status',

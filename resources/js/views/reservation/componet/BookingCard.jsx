@@ -11,9 +11,11 @@ function BookingCard({
     setOpenDropdownIndex,
 }) {
     const [open, setOpen] = useState(false);
-    const openAssignRoom = () => {
+    const [rmbId, setRmbId] = useState('');
+    function openAssignRoom(id) {
         setOpen(true);
-    };
+        setRmbId(id);
+    }
 
     const [open2, setOpen2] = useState(false);
     const openGroupReservationMdl = () => {
@@ -231,7 +233,9 @@ function BookingCard({
                                     <button
                                         type="button"
                                         className="btn assign cp"
-                                        onClick={openAssignRoom}
+                                        onClick={() =>
+                                            openAssignRoom(room?.ref_id)
+                                        }
                                     >
                                         Assign Room
                                     </button>
@@ -300,7 +304,9 @@ function BookingCard({
                     </div>
                 </div>
             </div>
-            {open && <AssignRoomMdl open={open} setOpen={setOpen} />}
+            {open && (
+                <AssignRoomMdl open={open} setOpen={setOpen} rmbId={rmbId} />
+            )}
             {openn && <AssignRoommdlNew openn={openn} setOpenn={setOpenn} />}
             {open2 && <GroupReservationMdl open2={open2} setOpen2={setOpen2} />}
         </div>

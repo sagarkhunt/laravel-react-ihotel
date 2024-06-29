@@ -237,8 +237,8 @@ const EditCustomerDetails = ({
                                         <input
                                             type="text"
                                             className="form-control custom-input-lg"
-                                            id="address"
-                                            name="address"
+                                            id="add"
+                                            name="add"
                                             placeholder="Address"
                                             value={customerDetails?.add}
                                             onChange={handleInputChange}

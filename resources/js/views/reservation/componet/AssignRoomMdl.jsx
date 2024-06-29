@@ -39,88 +39,88 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
         setShowEditRes(true);
     };
 
-    const roomTypes = [
-        {
-            title: 'Exclusive Rooms (43)',
-            reservations: [
-                {
-                    checkIn: '10 Oct',
-                    checkOut: '12 Oct',
-                    guestName: 'Amitava Kulkarni',
-                    reservationId: 'RS1234',
-                },
-                // Add more reservations as needed
-            ],
-        },
-        {
-            title: 'Elegance Rooms (23)',
-            reservations: [
-                {
-                    checkIn: '10 Oct',
-                    checkOut: '12 Oct',
-                    guestName: 'Amitava Kulkarni',
-                    reservationId: 'RS1234',
-                },
-                {
-                    checkIn: '10 Oct',
-                    checkOut: '12 Oct',
-                    guestName: 'Amitava Kulkarni',
-                    reservationId: 'RS1234',
-                },
-            ],
-        },
-        {
-            title: 'Duplex Rooms (12)',
-            reservations: [
-                {
-                    checkIn: '10 Oct',
-                    checkOut: '12 Oct',
-                    guestName: 'Amitava Kulkarni',
-                    reservationId: 'RS1234',
-                },
-                {
-                    checkIn: '10 Oct',
-                    checkOut: '12 Oct',
-                    guestName: 'Amitava Kulkarni',
-                    reservationId: 'RS1234',
-                },
-            ],
-        },
-        {
-            title: 'Family Rooms (6)',
-            reservations: [
-                {
-                    checkIn: '10 Oct',
-                    checkOut: '12 Oct',
-                    guestName: 'Amitava Kulkarni',
-                    reservationId: 'RS1234',
-                },
-                {
-                    checkIn: '10 Oct',
-                    checkOut: '12 Oct',
-                    guestName: 'Amitava Kulkarni',
-                    reservationId: 'RS1234',
-                },
-            ],
-        },
-        {
-            title: 'King Suite Rooms (5)', // Fixed typo
-            reservations: [
-                {
-                    checkIn: '10 Oct',
-                    checkOut: '12 Oct',
-                    guestName: 'Amitava Kulkarni',
-                    reservationId: 'RS1234',
-                },
-                {
-                    checkIn: '10 Oct',
-                    checkOut: '12 Oct',
-                    guestName: 'Amitava Kulkarni',
-                    reservationId: 'RS1234',
-                },
-            ],
-        },
-    ];
+    // const roomTypes = [
+    //     {
+    //         title: 'Exclusive Rooms (43)',
+    //         reservations: [
+    //             {
+    //                 checkIn: '10 Oct',
+    //                 checkOut: '12 Oct',
+    //                 guestName: 'Amitava Kulkarni',
+    //                 reservationId: 'RS1234',
+    //             },
+    //             // Add more reservations as needed
+    //         ],
+    //     },
+    //     {
+    //         title: 'Elegance Rooms (23)',
+    //         reservations: [
+    //             {
+    //                 checkIn: '10 Oct',
+    //                 checkOut: '12 Oct',
+    //                 guestName: 'Amitava Kulkarni',
+    //                 reservationId: 'RS1234',
+    //             },
+    //             {
+    //                 checkIn: '10 Oct',
+    //                 checkOut: '12 Oct',
+    //                 guestName: 'Amitava Kulkarni',
+    //                 reservationId: 'RS1234',
+    //             },
+    //         ],
+    //     },
+    //     {
+    //         title: 'Duplex Rooms (12)',
+    //         reservations: [
+    //             {
+    //                 checkIn: '10 Oct',
+    //                 checkOut: '12 Oct',
+    //                 guestName: 'Amitava Kulkarni',
+    //                 reservationId: 'RS1234',
+    //             },
+    //             {
+    //                 checkIn: '10 Oct',
+    //                 checkOut: '12 Oct',
+    //                 guestName: 'Amitava Kulkarni',
+    //                 reservationId: 'RS1234',
+    //             },
+    //         ],
+    //     },
+    //     {
+    //         title: 'Family Rooms (6)',
+    //         reservations: [
+    //             {
+    //                 checkIn: '10 Oct',
+    //                 checkOut: '12 Oct',
+    //                 guestName: 'Amitava Kulkarni',
+    //                 reservationId: 'RS1234',
+    //             },
+    //             {
+    //                 checkIn: '10 Oct',
+    //                 checkOut: '12 Oct',
+    //                 guestName: 'Amitava Kulkarni',
+    //                 reservationId: 'RS1234',
+    //             },
+    //         ],
+    //     },
+    //     {
+    //         title: 'King Suite Rooms (5)', // Fixed typo
+    //         reservations: [
+    //             {
+    //                 checkIn: '10 Oct',
+    //                 checkOut: '12 Oct',
+    //                 guestName: 'Amitava Kulkarni',
+    //                 reservationId: 'RS1234',
+    //             },
+    //             {
+    //                 checkIn: '10 Oct',
+    //                 checkOut: '12 Oct',
+    //                 guestName: 'Amitava Kulkarni',
+    //                 reservationId: 'RS1234',
+    //             },
+    //         ],
+    //     },
+    // ];
     useEffect(() => {
         if (catAssRoomList) {
             setCatWiseRoom(Array.isArray(catAssRoomList) ? catAssRoomList : []);

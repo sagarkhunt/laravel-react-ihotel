@@ -68,7 +68,7 @@ function CreateEditMdl({
         ref_name: booingInqData?.ref_name || '',
         off_give: booingInqData?.off_give || '',
         cust_req: booingInqData?.cust_req || '',
-        bus_sou_id: booingInqData?.bus_sou_id || '',
+        bus_sou_id: booingInqData?.bsns_src_id || '',
         status: booingInqData?.status || 1,
     });
 
@@ -106,7 +106,7 @@ function CreateEditMdl({
                 newFormData.chk_out_dt = formatDate(checkOutDate);
             } else if (name === 'chk_out_dt' && isValidDate(value)) {
                 checkOutDate = new Date(value);
-                // console.log('🚀 ~ handleChange ~ checkOutDate:', checkOutDate);
+
                 if (checkOutDate <= checkInDate) {
                     toast.error(
                         'Check-out date cannot be earlier than or same as check-in date.',
@@ -179,7 +179,6 @@ function CreateEditMdl({
                 type: actions.BOOKINGINQ_ADD,
                 payload: formData,
             });
-            // console.log('🚀 ~ handleSubmit ~ response:', response);
         } else if (mode === 'Edit Inquiry') {
             formData.room_req = roomCategories;
             formData.status = statusValue;
@@ -260,7 +259,7 @@ function CreateEditMdl({
         if (followUpAdd && followUpAdd.follow_up) {
             try {
                 const parsedFollowUp = JSON.parse(followUpAdd.follow_up);
-                // console.log('🚀 ~ useEffect ~ parsedFollowUp:', parsedFollowUp);
+
                 setFollowUpList(parsedFollowUp);
             } catch (error) {
                 console.error('Error parsing JSON string:', error);
@@ -496,7 +495,34 @@ function CreateEditMdl({
                                                 </div>
                                             </div>
                                             <div className="col-auto">
-                                                <div
+                                                <div className="col-auto">
+                                                    <label
+                                                        htmlFor="checkin-date"
+                                                        className="custom-label mb-1"
+                                                    >
+                                                        Nights
+                                                    </label>
+                                                    <div className="row m-0  cp border res-night-count rounded text-center py-1">
+                                                        <div className="col-12 p-0 d-flex align-items-center justify-content-center mt-1">
+                                                            <span className="h5">
+                                                                {isNaN(
+                                                                    formData.total_day,
+                                                                )
+                                                                    ? 0
+                                                                    : formData.total_day}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    {/* <div className="night-count rounded">
+                                        <p className="caption-2 font-white text-center mb-0">
+                                            Nights
+                                        </p>
+                                        <p className="caption-1b font-white mt-1 text-center mb-0">
+                                            {nights}
+                                        </p>
+                                    </div> */}
+                                                </div>
+                                                {/* <div
                                                     className="night-count rounded"
                                                     style={{
                                                         marginTop: '27px',
@@ -512,7 +538,7 @@ function CreateEditMdl({
                                                             ? 0
                                                             : formData.total_day}
                                                     </span>
-                                                </div>
+                                                </div> */}
                                             </div>
                                             <div className="col">
                                                 <div className="form-group mb-3">

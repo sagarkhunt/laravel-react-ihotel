@@ -1667,7 +1667,6 @@ body {
     overflow-x: hidden;
 }
 
-
 .no-policy-selected-banner {
     border-radius: 24px;
     width: 450px;
@@ -1778,7 +1777,7 @@ select,
 }
 
 .availableinquirytable td {
-    min-width: 93px;
+    min-width: 10px;
 }
 .list-container {
     background-color: white;

@@ -25,8 +25,10 @@ function AddReservation() {
 
     const [nightCount, setNightCount] = useState(0);
     const [open, setOpen] = useState(false);
-    const [dropDownData, setDropDownData] = useState({});
-
+    const [dropDownData, setDropDownData] = useState(() => {
+        const savedData = localStorage.getItem('dropDownList');
+        return savedData ? JSON.parse(savedData) : [];
+    });
     const [taxAmount, setTaxAmount] = useState(100);
     const [roomCharges, setRoomCharges] = useState(0.0);
     const [totalAmount, setTotalAmount] = useState(0.0);
@@ -42,7 +44,7 @@ function AddReservation() {
         setShowAvaInq(true);
     };
 
-    const { dropDownList } = useSelector((state) => state?.reserReducer);
+    // const { dropDownList } = useSelector((state) => state?.reserReducer);
     /***
      * @param{handleAddPayment}
      */
@@ -85,8 +87,9 @@ function AddReservation() {
         sls_prsn_id: '',
         mrkt_sgmnt_id: 0,
         room_json: [],
+        guest_json: {},
         cncl_policy_id: '',
-        terms_con_id: '',
+        terms_con_id: 0,
         sp_req_json: '',
         sp_remarks: '',
         payment_json: [],
@@ -102,9 +105,10 @@ function AddReservation() {
 
     useEffect(() => {
         if (formData.payment_json) {
-            const total = formData.payment_json.reduce((total, payment) => {
-                return total + (payment.amount || 0);
+            const total = formData.payment_json.reduce((acc, payment) => {
+                return acc + parseFloat(payment.amount || 0);
             }, 0);
+
             setAdvTotalAmount(total);
         } else {
             setAdvTotalAmount(0);
@@ -158,12 +162,47 @@ function AddReservation() {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
+    // function validateParams(formData, paramsToValidate) {
+
+    //     for (let param of paramsToValidate) {
+
+    //         if (formData?.[param] === '') {
+    //             // Handle validation failure
+    //             if (formData?.[param].length !== 0) {
+    //                 toast.error(`Room details cannot be empty`);
+    //             } else {
+    //                 toast.error(`${param} cannot be empty or null`);
+    //             }
+    //             return false; // Indicate validation failure
+    //         }
+    //     }
+    //     return true; // All parameters passed validation
+    // }
     function validateParams(formData, paramsToValidate) {
         for (let param of paramsToValidate) {
-            if (formData?.[param] === '') {
-                // Handle validation failure
-                toast.error(`${param} cannot be empty or null`);
-                return false; // Indicate validation failure
+            // Check for specific parameters
+            switch (param) {
+                case 'room_json':
+                    if (
+                        !Array.isArray(formData[param]) ||
+                        formData[param].length === 0
+                    ) {
+                        toast.error('Room details cannot be empty');
+                        return false; // Indicate validation failure
+                    }
+                    break;
+                case 'guest_json':
+                    if (Object.keys(formData[param]).length === 0) {
+                        toast.error('Guest details cannot be empty');
+                        return false; // Indicate validation failure
+                    }
+                    break;
+                default:
+                    if (formData?.[param] === '') {
+                        toast.error(`${param} cannot be empty or null`);
+                        return false; // Indicate validation failure
+                    }
+                    break;
             }
         }
         return true; // All parameters passed validation
@@ -189,7 +228,9 @@ function AddReservation() {
             'booking_src_id',
             'bsns_src_id',
             'sls_prsn_id',
+            'room_json',
             'cncl_policy_id',
+            'guest_json',
         ];
 
         if (!validateParams(formData, paramsToValidate)) {
@@ -212,33 +253,33 @@ function AddReservation() {
         navigate('/reservation-list');
     }
 
-    useEffect(() => {
-        setDropDownData(dropDownList);
-    }, [dropDownList]);
+    // useEffect(() => {
+    //     setDropDownData(dropDownList);
+    // }, [dropDownList]);
 
-    useEffect(() => {
-        const sync_req = [
-            'booking_src',
-            'sls_prsn',
-            'bsns_src',
-            'mrkt_sgmnt',
-            'tnc',
-            'cp',
-            'room_cate',
-            'rooms',
-            'rooms_plan',
-            'country',
-            'guest_classes',
-            'state',
-            'city',
-        ];
-        dispatch({
-            type: actions.RESER_DROPDOWN_LIST,
-            payload: {
-                sync_req: sync_req.join(','),
-            },
-        });
-    }, []);
+    // useEffect(() => {
+    //     const sync_req = [
+    //         'booking_src',
+    //         'sls_prsn',
+    //         'bsns_src',
+    //         'mrkt_sgmnt',
+    //         'tnc',
+    //         'cp',
+    //         'room_cate',
+    //         'rooms',
+    //         'rooms_plan',
+    //         'country',
+    //         'guest_classes',
+    //         'state',
+    //         'city',
+    //     ];
+    //     dispatch({
+    //         type: actions.RESER_DROPDOWN_LIST,
+    //         payload: {
+    //             sync_req: sync_req.join(','),
+    //         },
+    //     });
+    // }, []);
 
     const handleMinus = (index, field) => {
         const newRoomDetails = [...formData.room_json];

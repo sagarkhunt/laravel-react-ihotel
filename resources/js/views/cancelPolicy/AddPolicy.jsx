@@ -26,7 +26,7 @@ function AddPolicy({ setPolicyHide, setShowPolicy }) {
             name: event.target.name.value,
             description: inputs.map((input) => input.value).join(','),
         };
-        console.log('Form Data:', formData);
+
         dispatch({
             type: actions.CP_ADD,
             payload: formData,

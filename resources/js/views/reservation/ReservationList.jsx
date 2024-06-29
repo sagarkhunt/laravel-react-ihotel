@@ -34,7 +34,7 @@ function ReservationList() {
     const [endDate, setEndDate] = useState('');
     const [bsnsSrcId, setBsnsSrcId] = useState('');
     const [status, setStatus] = useState('');
-    const [rmbId, setrmbId] = useState('');
+    const [rmbId, setRmbId] = useState('');
     const filterAndPaginateData = (
         data,
         searchQuery,
@@ -71,7 +71,7 @@ function ReservationList() {
                 const nextDate = new Date(currentDate);
                 nextDate.setDate(nextDate.getDate() + 1);
 
-                const arrivalDate = new Date(item.frm_dt);
+                const arrivalDate = new Date(item.to_dt);
                 return arrivalDate >= currentDate && arrivalDate <= nextDate;
             }
 
@@ -107,7 +107,7 @@ function ReservationList() {
         setDropdownIndex(dropdownIndex === index ? null : index);
     };
     const assignRooms = (id) => {
-        setrmbId(id);
+        setRmbId(id);
         setOpen(true);
     };
     const [filterMdl, setFilter] = useState(false);
@@ -651,6 +651,7 @@ function ReservationList() {
                                     index={index}
                                     openDropdownIndex={openDropdownIndex}
                                     setOpenDropdownIndex={setOpenDropdownIndex}
+                                    setRmbId={setRmbId}
                                 />
                             ))
                         ) : (

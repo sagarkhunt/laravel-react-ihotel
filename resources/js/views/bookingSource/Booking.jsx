@@ -110,7 +110,7 @@ function Booking() {
      */
     const handleDelete = (item) => {
         // onDelete(item);
-        console.log('delete item', item);
+
         if (item && item.id) {
             setShowDel(true);
             setDelId(item.id);
@@ -128,7 +128,6 @@ function Booking() {
         }
     };
     const handleDelSubmit = () => {
-        console.log('inside the handledelete', delId);
         const businessId = {
             booking_sou_id: delId,
         };

@@ -108,7 +108,6 @@ function GuestClass() {
             setShowDel(true);
             setDelId(item.id);
         } else {
-            console.log('id is missing');
         }
     };
 
