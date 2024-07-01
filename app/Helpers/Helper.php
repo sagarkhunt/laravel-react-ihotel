@@ -156,12 +156,12 @@ class Helper
         // Map the incoming data to match the database fields
         $mappedData = [
             'full_name' => $data['full_name'],
-            // 'guest_cls_id' => $data['guest_cls_id'],
+            'gst_cls_id' => $data['guest_class_id'],
             'email' => $data['email'],
             'mobile' => $data['mobile'],
             'address' => $data['add'],
-            // 'country_id' => $data['country_id'],
-            // 'state_id' => $data['state_id'],
+            'country_id' => $data['country_id'],
+            'state_id' => $data['state_id'],
             'city_id' => $data['city_id'],
             'pincode' => $data['pincode'],
         ];

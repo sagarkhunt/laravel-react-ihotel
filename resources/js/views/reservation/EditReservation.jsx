@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PaymentMdl from './componet/PaymentMdl';
 import '../../../css/AddReservation.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import actions from '../../redux/Reservation/actions';
 
@@ -12,7 +12,10 @@ import EditCustomerDetails from './componet/EditCustomerDetails';
 import AvailableInqMdl from './componet/AvailableInqMdl';
 import toast from 'react-hot-toast';
 
-function AddReservation() {
+function EditReservation() {
+    const { reservationId } = useParams();
+    // You can now use the reservationId in your component
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const handleBackClick = () => {
@@ -35,7 +38,8 @@ function AddReservation() {
 
     const [showAvaInq, setShowAvaInq] = useState(false);
     const [advTotalAmount, setAdvTotalAmount] = useState(0);
-
+    const [editReserDetail, setEditReserDetail] = useState({});
+    const { loader, reserDetails } = useSelector((state) => state.reserReducer);
     const showAvailableModal = () => {
         if (formData.frm_dt == '' || formData.to_dt == '') {
             toast.error('Please select checkin and checkout date');
@@ -62,8 +66,30 @@ function AddReservation() {
         return `${year}-${month}-${day}`;
     };
 
-    // Set today's date as the minimum date
-    const todayDate = getTodayDate();
+    useEffect(() => {
+        setEditReserDetail(reserDetails);
+    }, [reserDetails]);
+
+    const todayDate = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+    const inputRefFrom = useRef(null);
+    const inputRefTo = useRef(null);
+    const formatDateString = (dateString) => {
+        console.log('🚀 ~ formatDateString ~ dateString:', dateString);
+        if (!dateString) return '';
+        const [day, month, year] = dateString.split('/');
+        return `${year}-${month}-${day}`;
+    };
+    useEffect(() => {
+        // if (reservationId) {
+        const payload = {
+            rbm_id: reservationId,
+        };
+        dispatch({
+            type: actions.RESER_GET_DETAILS,
+            payload: payload,
+        });
+        // }
+    }, [reservationId]);
 
     const [customerDetails, setCustomerDetails] = useState({
         full_name: '',
@@ -76,6 +102,26 @@ function AddReservation() {
         city_id: '',
         pincode: '',
     });
+
+    useEffect(() => {
+        // Parse guest_json only if it exists
+        if (editReserDetail.guest_json) {
+            const GuestJson = JSON.parse(editReserDetail.guest_json);
+
+            // Update customerDetails state based on GuestJson
+            setCustomerDetails({
+                full_name: GuestJson?.full_name || '',
+                guest_class_id: GuestJson?.guest_class_id || '',
+                mobile: GuestJson?.mobile || '',
+                add: GuestJson?.add || '',
+                email: GuestJson?.email || '',
+                country_id: GuestJson?.country_id || '',
+                state_id: GuestJson?.state_id || '',
+                city_id: GuestJson?.city_id || '',
+                pincode: GuestJson?.pincode || '',
+            });
+        }
+    }, [editReserDetail.guest_json]);
     const [formData, setFormData] = useState({
         group_id: 0,
         guest_id: 0,
@@ -86,7 +132,7 @@ function AddReservation() {
         sls_prsn_id: '',
         mrkt_sgmnt_id: 0,
         room_json: [],
-        guest_json: null,
+        guest_json: {},
         cncl_policy_id: '',
         terms_con_id: 0,
         sp_req_json: '',
@@ -97,6 +143,58 @@ function AddReservation() {
         taxes: taxAmount,
         rate: roomCharges,
     });
+
+    useEffect(() => {
+        if (editReserDetail) {
+            const roomJsonArray = editReserDetail.room_json
+                ? JSON.parse(editReserDetail.room_json)
+                : [];
+            const parsedGuestJson = editReserDetail.guest_json
+                ? JSON.parse(editReserDetail.guest_json)
+                : {};
+            const parsedPaymentJson = editReserDetail.room_adv_payment
+                ? editReserDetail.room_adv_payment.map((payment) => ({
+                      method: payment.pay_type,
+                      amount: payment.pay_amnt,
+                      //   id: payment.id,
+                  }))
+                : [];
+            const defaultDate = new Date();
+
+            const fromDate = editReserDetail?.frm_dt
+                ? editReserDetail.frm_dt.split(' ')[0]
+                : defaultDate;
+            const toDate = editReserDetail?.to_dt
+                ? editReserDetail.to_dt.split(' ')[0]
+                : defaultDate;
+            // Set isComplimentary based on existing data
+            const isComplimentaryValue = editReserDetail.compl_rm ? 1 : 0;
+            setFormData({
+                rbm_id: reservationId,
+                group_id: editReserDetail.group_id || 0,
+                guest_id: editReserDetail.guest_id || 0,
+                frm_dt: fromDate,
+                to_dt: toDate,
+                bsns_src_id: editReserDetail.bsns_src_id || '',
+                booking_src_id: editReserDetail.booking_src_id || '',
+                sls_prsn_id: editReserDetail.sls_prsn_id || '',
+                mrkt_sgmnt_id: editReserDetail.mrkt_sgmnt_id || 0,
+                room_json: Array.isArray(roomJsonArray) ? roomJsonArray : [],
+                guest_json: parsedGuestJson || {},
+                cncl_policy_id: editReserDetail.cncl_policy_id || '',
+                terms_con_id: editReserDetail.terms_con_id || 0,
+                sp_req_json: editReserDetail.sp_req_json || '',
+                sp_remarks: editReserDetail.sp_remarks || '',
+                payment_json: Array.isArray(parsedPaymentJson)
+                    ? parsedPaymentJson
+                    : [],
+                isComplimentary: isComplimentaryValue,
+                com_rm_status: editReserDetail.com_rm_status || false,
+                taxes: taxAmount,
+                // rate: roomCharges,
+            });
+        }
+    }, [editReserDetail]);
 
     useEffect(() => {
         if (formData.payment_json) {
@@ -112,11 +210,6 @@ function AddReservation() {
 
     useEffect(() => {
         setTotalAmount(roomCharges + taxAmount);
-        // const amountReceived = formData.payment_json?.reduce(
-        //     (total, payment) => total + parseFloat(payment.amount),
-        //     0,
-        // );
-        // setDueAmount(totalAmount - amountReceived);
     }, [taxAmount, roomCharges]);
 
     useEffect(() => {
@@ -136,27 +229,14 @@ function AddReservation() {
             setNightCount(diffDays);
         }
     }, [formData.frm_dt, formData.to_dt]);
-    const inputRefFrom = useRef(null);
-    const inputRefTo = useRef(null);
-    // const todayDate = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
 
     const handleContainerClickFrom = () => {
-        if (inputRefFrom.current) {
-            inputRefFrom.current.focus();
-            inputRefFrom.current.showPicker();
-        }
+        inputRefFrom.current.showPicker(); // This triggers the date picker
     };
     const handleContainerClickTo = () => {
-        if (inputRefTo.current) {
-            inputRefTo.current.focus();
-            inputRefTo.current.showPicker();
-        }
+        inputRefTo.current.showPicker(); // This triggers the date picker
     };
 
-    // const handleInputChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setFormData({ ...formData, [name]: value });
-    // };
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
         const inputValue = type === 'checkbox' ? (checked ? 1 : 0) : value;
@@ -176,24 +256,24 @@ function AddReservation() {
                         formData[param].length === 0
                     ) {
                         toast.error('Room details cannot be empty');
-                        return false; // Indicate validation failure
+                        return false;
                     }
                     break;
                 case 'guest_json':
                     if (Object.keys(formData[param]).length === 0) {
                         toast.error('Guest details cannot be empty');
-                        return false; // Indicate validation failure
+                        return false;
                     }
                     break;
                 default:
                     if (formData?.[param] === '') {
                         toast.error(`${param} cannot be empty or null`);
-                        return false; // Indicate validation failure
+                        return false;
                     }
                     break;
             }
         }
-        return true; // All parameters passed validation
+        return true;
     }
 
     const handleDeleteRow = (index) => {
@@ -221,16 +301,18 @@ function AddReservation() {
             return;
         }
 
-        setFormData({
+        const updatedFormData = {
             ...formData,
             taxes: taxAmount,
             non: nightCount,
             total_amnt: totalAmount,
-        });
+        };
+
+        setFormData(updatedFormData);
 
         dispatch({
-            type: actions.RESER_ADD,
-            payload: formData,
+            type: actions.RESER_UPDATE,
+            payload: updatedFormData,
         });
 
         navigate('/reservation-list');
@@ -264,8 +346,6 @@ function AddReservation() {
         });
     };
 
-    // TODO: add logic for the handling the Taxation
-
     return (
         <div className="row row mt-3 mx-2">
             <div className="col-8">
@@ -278,7 +358,7 @@ function AddReservation() {
                         >
                             arrow_back
                         </span>
-                        <h5 className="headline-h6m m-0">New Reservation</h5>
+                        <h5 className="headline-h6m m-0">Edit Reservation</h5>
                     </div>
                     <div className="card-body">
                         <div className="mb-4">
@@ -287,7 +367,7 @@ function AddReservation() {
                                     <div className="row mx-0">
                                         <div className="col-4 p-0">
                                             <label
-                                                htmlFor="checkin-date"
+                                                htmlFor="frm_dt"
                                                 className="custom-label mb-1"
                                             >
                                                 Check In
@@ -302,7 +382,7 @@ function AddReservation() {
                                                     <input
                                                         type="date"
                                                         className="w-100 h-100 custom-input-lg rounded-right-none"
-                                                        id="checkin-date"
+                                                        id="frm_dt"
                                                         name="frm_dt"
                                                         value={formData.frm_dt}
                                                         onChange={
@@ -315,14 +395,14 @@ function AddReservation() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-2  ps-4">
+                                        <div className="col-2 ps-4">
                                             <label
                                                 htmlFor="checkin-date"
                                                 className="custom-label mb-1"
                                             >
                                                 Nights
                                             </label>
-                                            <div className="row m-0  cp border res-night-count rounded text-center py-1">
+                                            <div className="row m-0 cp border res-night-count rounded text-center py-1">
                                                 <div className="col-12 p-0 d-flex align-items-center justify-content-center mt-1">
                                                     <span className="h5">
                                                         {nightCount}
@@ -330,9 +410,9 @@ function AddReservation() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-4  p-0">
+                                        <div className="col-4 p-0">
                                             <label
-                                                htmlFor="checkout-date"
+                                                htmlFor="to_dt"
                                                 className="custom-label mb-1"
                                             >
                                                 Check Out
@@ -345,7 +425,7 @@ function AddReservation() {
                                                     <input
                                                         type="date"
                                                         className="custom-input-lg w-100 h-100"
-                                                        id="checkout-date"
+                                                        id="to_dt"
                                                         name="to_dt"
                                                         value={formData.to_dt}
                                                         onChange={
@@ -380,7 +460,7 @@ function AddReservation() {
 
                                     <select
                                         className="form-select custom-input-lg"
-                                        id="bookingSourceDropdown"
+                                        id="booking_src_id"
                                         name="booking_src_id"
                                         value={formData.booking_src_id}
                                         onChange={handleInputChange}
@@ -413,7 +493,7 @@ function AddReservation() {
                                     <div className="">
                                         <select
                                             className="form-select custom-input-lg"
-                                            id="businessSourceDropdown"
+                                            id="bsns_src_id"
                                             name="bsns_src_id"
                                             value={formData.bsns_src_id}
                                             onChange={handleInputChange}
@@ -475,7 +555,7 @@ function AddReservation() {
                                     <div className="">
                                         <select
                                             className="form-select custom-input-lg"
-                                            id="marketSegment"
+                                            id="mrkt_sgmnt_id"
                                             name="mrkt_sgmnt_id"
                                             value={formData.mrkt_sgmnt_id}
                                             onChange={handleInputChange}
@@ -538,180 +618,198 @@ function AddReservation() {
                                         height: 'calc(100vh - 470px)',
                                     }}
                                 >
-                                    {formData.room_json?.map((room, index) => (
-                                        <div
-                                            className="row mx-0 my-3"
-                                            key={index}
-                                        >
-                                            <div className="col-1 ps-0 text-center">
-                                                <span
-                                                    className="material-icons-outlined delete-table me-3"
-                                                    onClick={() =>
-                                                        handleDeleteRow(index)
-                                                    }
-                                                >
-                                                    delete
-                                                </span>
-                                            </div>
-                                            <div className="col-2">
-                                                {dropDownData &&
-                                                    dropDownData[
-                                                        'room_cate'
-                                                    ].find(
-                                                        (category) =>
-                                                            category.id ==
-                                                            room.rcid,
-                                                    )?.cat_name}
-                                            </div>
-                                            <div className="col-9">
-                                                <div className="row">
-                                                    <div className="col-2">
-                                                        {dropDownData &&
-                                                            dropDownData[
-                                                                'rooms_plan'
-                                                            ].find(
-                                                                (rPlan) =>
-                                                                    rPlan.id ==
-                                                                    room.pid,
-                                                            )?.plan_name}
-                                                    </div>
-                                                    <div className="col-2">
-                                                        <div className="number">
-                                                            <span
-                                                                className="minus user-select-none"
-                                                                onClick={() =>
-                                                                    handleMinus(
-                                                                        index,
-                                                                        'nor',
-                                                                    )
-                                                                }
-                                                            >
-                                                                -
-                                                            </span>
-                                                            <input
-                                                                className="input-number input-no-outline user-select-none"
-                                                                value={room.nor}
-                                                                onChange={(e) =>
-                                                                    handleInputChange(
-                                                                        e,
-                                                                        index,
-                                                                        'nor',
-                                                                    )
-                                                                }
-                                                                data-index={
-                                                                    index
-                                                                }
-                                                                data-field="nor"
-                                                            />
-                                                            <span
-                                                                className="plus user-select-none"
-                                                                onClick={() =>
-                                                                    handlePlus(
-                                                                        index,
-                                                                        'nor',
-                                                                    )
-                                                                }
-                                                            >
-                                                                +
-                                                            </span>
+                                    {formData.room_json?.map((room, index) => {
+                                        return (
+                                            <div
+                                                className="row mx-0 my-3"
+                                                key={index}
+                                            >
+                                                <div className="col-1 ps-0 text-center">
+                                                    <span
+                                                        className="material-icons-outlined delete-table me-3"
+                                                        onClick={() =>
+                                                            handleDeleteRow(
+                                                                index,
+                                                            )
+                                                        }
+                                                    >
+                                                        delete
+                                                    </span>
+                                                </div>
+                                                <div className="col-2">
+                                                    {dropDownData &&
+                                                        dropDownData[
+                                                            'room_cate'
+                                                        ].find(
+                                                            (category) =>
+                                                                category.id ==
+                                                                room.rcid,
+                                                        )?.cat_name}
+                                                </div>
+                                                <div className="col-9">
+                                                    <div className="row">
+                                                        <div className="col-2">
+                                                            {dropDownData &&
+                                                                dropDownData[
+                                                                    'rooms_plan'
+                                                                ].find(
+                                                                    (rPlan) =>
+                                                                        rPlan.id ==
+                                                                        room.pid,
+                                                                )?.plan_name}
                                                         </div>
-                                                    </div>
-                                                    <div className="col-2">
-                                                        <div className="number">
-                                                            <span
-                                                                className="minus user-select-none"
-                                                                onClick={() =>
-                                                                    handleMinus(
-                                                                        index,
-                                                                        'adlt',
-                                                                    )
-                                                                }
-                                                            >
-                                                                -
-                                                            </span>
-                                                            <input
-                                                                className="input-number input-no-outline user-select-none"
-                                                                value={
-                                                                    room.adlt
-                                                                }
-                                                                onChange={(e) =>
-                                                                    handleInputChange(
+                                                        <div className="col-2">
+                                                            <div className="number">
+                                                                <span
+                                                                    className="minus user-select-none"
+                                                                    onClick={() =>
+                                                                        handleMinus(
+                                                                            index,
+                                                                            'nor',
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    -
+                                                                </span>
+                                                                <input
+                                                                    className="input-number input-no-outline user-select-none"
+                                                                    value={
+                                                                        room.nor
+                                                                    }
+                                                                    onChange={(
                                                                         e,
-                                                                        index,
-                                                                        'adlt',
-                                                                    )
-                                                                }
-                                                                data-index={
-                                                                    index
-                                                                }
-                                                                data-field="adlt"
-                                                            />
-                                                            <span
-                                                                className="plus user-select-none"
-                                                                onClick={() =>
-                                                                    handlePlus(
-                                                                        index,
-                                                                        'adlt',
-                                                                    )
-                                                                }
-                                                            >
-                                                                +
-                                                            </span>
+                                                                    ) =>
+                                                                        handleInputChange(
+                                                                            e,
+                                                                            index,
+                                                                            'nor',
+                                                                        )
+                                                                    }
+                                                                    data-index={
+                                                                        index
+                                                                    }
+                                                                    data-field="nor"
+                                                                />
+                                                                <span
+                                                                    className="plus user-select-none"
+                                                                    onClick={() =>
+                                                                        handlePlus(
+                                                                            index,
+                                                                            'nor',
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    +
+                                                                </span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div className="col-2">
-                                                        <div className="number">
-                                                            <span
-                                                                className="minus user-select-none"
-                                                                onClick={() =>
-                                                                    handleMinus(
-                                                                        index,
-                                                                        'chld',
-                                                                    )
-                                                                }
-                                                            >
-                                                                -
-                                                            </span>
-                                                            <input
-                                                                className="input-number input-no-outline user-select-none"
-                                                                value={
-                                                                    room.chld
-                                                                }
-                                                                onChange={(e) =>
-                                                                    handleInputChange(
+                                                        <div className="col-2">
+                                                            <div className="number">
+                                                                <span
+                                                                    className="minus user-select-none"
+                                                                    onClick={() =>
+                                                                        handleMinus(
+                                                                            index,
+                                                                            'adlt',
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    -
+                                                                </span>
+                                                                <input
+                                                                    className="input-number input-no-outline user-select-none"
+                                                                    value={
+                                                                        room.adlt
+                                                                    }
+                                                                    onChange={(
                                                                         e,
-                                                                        index,
-                                                                        'chld',
-                                                                    )
-                                                                }
-                                                                data-index={
-                                                                    index
-                                                                }
-                                                                data-field="chld"
-                                                            />
-                                                            <span
-                                                                className="plus user-select-none"
-                                                                onClick={() =>
-                                                                    handlePlus(
-                                                                        index,
-                                                                        'chld',
-                                                                    )
-                                                                }
-                                                            >
-                                                                +
-                                                            </span>
+                                                                    ) =>
+                                                                        handleInputChange(
+                                                                            e,
+                                                                            index,
+                                                                            'adlt',
+                                                                        )
+                                                                    }
+                                                                    data-index={
+                                                                        index
+                                                                    }
+                                                                    data-field="adlt"
+                                                                    disabled={
+                                                                        false
+                                                                    } // Enable if intended
+                                                                />
+                                                                <span
+                                                                    className="plus user-select-none"
+                                                                    onClick={() =>
+                                                                        handlePlus(
+                                                                            index,
+                                                                            'adlt',
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    +
+                                                                </span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div className="col-2">
-                                                        ₹ {room.amount}
-                                                    </div>
-                                                    <div className="col-2 text-end">
-                                                        ₹ {room.rate}
+                                                        <div className="col-2">
+                                                            <div className="number">
+                                                                <span
+                                                                    className="minus user-select-none"
+                                                                    onClick={() =>
+                                                                        handleMinus(
+                                                                            index,
+                                                                            'chld',
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    -
+                                                                </span>
+                                                                <input
+                                                                    className="input-number input-no-outline user-select-none"
+                                                                    value={
+                                                                        room.chld
+                                                                    }
+                                                                    onChange={(
+                                                                        e,
+                                                                    ) =>
+                                                                        handleInputChange(
+                                                                            e,
+                                                                            index,
+                                                                            'chld',
+                                                                        )
+                                                                    }
+                                                                    data-index={
+                                                                        index
+                                                                    }
+                                                                    data-field="chld"
+                                                                    disabled={
+                                                                        false
+                                                                    } // Enable if intended
+                                                                />
+                                                                <span
+                                                                    className="plus user-select-none"
+                                                                    onClick={() =>
+                                                                        handlePlus(
+                                                                            index,
+                                                                            'chld',
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    +
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-2">
+                                                            ₹ {room.amount}
+                                                        </div>
+                                                        <div className="col-2 text-end">
+                                                            ₹ {room.rate}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
 
                                     <div className="custom-row">
                                         <div className="pt-0 d-flex align-items-center gap-4">
@@ -733,16 +831,17 @@ function AddReservation() {
                                                 <input
                                                     type="checkbox"
                                                     name="isComplimentary"
-                                                    id="complimentary"
+                                                    id="isComplimentary"
                                                     className="custom-input"
-                                                    value={
-                                                        formData.isComplimentary
+                                                    checked={
+                                                        formData.isComplimentary ===
+                                                        1
                                                     }
                                                     onChange={handleInputChange}
                                                 />
                                                 <label
                                                     htmlFor="isComplimentary"
-                                                    className=" m-0 body-2"
+                                                    className="m-0 body-2"
                                                 >
                                                     Complimentary Room
                                                 </label>
@@ -764,7 +863,7 @@ function AddReservation() {
                                 <div className="">
                                     <select
                                         className="form-select custom-input-lg text-truncate"
-                                        id="cancellationPolicyDropdown"
+                                        id="cncl_policy_id"
                                         name="cncl_policy_id"
                                         value={formData.cncl_policy_id}
                                         onChange={handleInputChange}
@@ -795,7 +894,7 @@ function AddReservation() {
                                 <div className="">
                                     <select
                                         className="form-select custom-input-lg text-truncate"
-                                        id="termsAndConditionsDropdown"
+                                        id="terms_con_id"
                                         name="terms_con_id"
                                         value={formData.terms_con_id}
                                         onChange={handleInputChange}
@@ -898,7 +997,7 @@ function AddReservation() {
                                                         formData.guest_json
                                                             ?.guest_class_id
                                                     } */}
-                                                    {
+                                                    {dropDownData &&
                                                         dropDownData[
                                                             'guest_classes'
                                                         ].find(
@@ -907,8 +1006,7 @@ function AddReservation() {
                                                                 formData
                                                                     ?.guest_json
                                                                     ?.guest_class_id,
-                                                        )?.name
-                                                    }
+                                                        )?.name}
                                                 </p>
                                             </div>
                                             <div className="col-6 p-0">
@@ -955,7 +1053,7 @@ function AddReservation() {
                                             id="sp_req_json"
                                             name="sp_req_json"
                                             placeholder="Special Terms"
-                                            value={formData.specialTerms}
+                                            value={formData.sp_req_json}
                                             onChange={handleInputChange}
                                         />
                                     </div>
@@ -1120,6 +1218,7 @@ function AddReservation() {
                     showEditCustomerDetails={showEditCustomerDetails}
                     setShowEditCustomerDetails={setShowEditCustomerDetails}
                     dropDownData={dropDownData}
+                    editReserDetail={editReserDetail}
                 />
             )}
             {open && (
@@ -1144,4 +1243,4 @@ function AddReservation() {
     );
 }
 
-export default AddReservation;
+export default EditReservation;

@@ -80,7 +80,7 @@ function* createReservation(action) {
 function* updateReservation(action) {
     const { payload } = action;
     try {
-        const response = yield call(postRequest, 'update_reservation', payload);
+        const response = yield call(postRequest, 'upd_reservation', payload);
         if (response) {
             yield put({
                 type: actions.RESER_UPDATE_SUCCESS,
@@ -263,11 +263,42 @@ function* getCateWiseRoomList(action) {
         }
     }
 }
+/**
+ *
+ * @param {getPayTypList} action
+ */
+function* getReservationDetails(action) {
+    try {
+        const response = yield call(
+            postRequest,
+            'get_res_detail',
+            action.payload,
+        );
+        if (response) {
+            yield put({
+                type: actions.RESER_GET_DETAILS_SUCCESS,
+                payload: response?.data,
+            });
+        }
+    } catch (error) {
+        yield put({ type: actions.RESER_GET_DETAILS_FAILURE });
+        if (error.response.status === 401) {
+            toast.error(error.response.data.message);
+        } else if (
+            error.response &&
+            error.response.data &&
+            error.response.data.message
+        ) {
+            toast.error(error.response.data.message);
+        }
+    }
+}
 
 export default function* rootSaga() {
     yield all([
         takeLatest(actions.RESER_LIST, reservationList),
         takeLatest(actions.RESER_ADD, createReservation),
+        takeLatest(actions.RESER_GET_DETAILS, getReservationDetails),
         takeLatest(actions.RESER_UPDATE, updateReservation),
         takeLatest(actions.RESER_DELETE, deleteReservation),
         takeLatest(actions.RESER_DROPDOWN_LIST, dropownList),

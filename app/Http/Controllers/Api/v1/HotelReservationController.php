@@ -92,6 +92,7 @@ class HotelReservationController extends BaseApiController
             $user = Auth::user();
             $user_id = $user->id;
             $hotel_id = $user->hotel_id;
+
             Helper::change_database_using_hotel_id($hotel_id);
 
             $toDate = new DateTime($request->input('to_dt'));
@@ -130,11 +131,15 @@ class HotelReservationController extends BaseApiController
 
             $guest = array(
                 "full_name" => $guestArr->full_name,
+                "email" => $guestArr->email,
+                "mobile" => $guestArr->mobile,
+                "guest_class_id" => $guestArr->gst_cls_id,
                 "add" => $guestArr->address,
                 "nlt" => $guestArr->nationality,
-                "city" => $guestArr->city,
+                "country_id" => $guestArr->country_id,
+                "state_id" => $guestArr->state_id,
                 "city_id" => $guestArr->city_id,
-                "email_id" => $guestArr->email
+                "pincode" => $guestArr->pincode
             );
 
             $rooms = [];
@@ -146,6 +151,7 @@ class HotelReservationController extends BaseApiController
                     "nor" => $room['nor'],
                     "adlt" => $room['adlt'],
                     "chld" => $room['chld'],
+                    "amount" => $room['amount'],
                     "rate" => $room['rate'],
                 );
             }
@@ -176,6 +182,8 @@ class HotelReservationController extends BaseApiController
             $roomBooking->pax_json = $request->input('pax_json');
             $roomBooking->sp_remarks = $request->input('sp_remarks');
             $roomBooking->taxes = $request->input('taxes');
+            $roomBooking->total_amt = $request->input('total_amnt');
+            $roomBooking->compl_rm = $request->input('isComplimentary');
             $roomBooking->total_amt = $totalAmount;
             $roomBooking->created_by = $user_id;
             $roomBooking->created_at = now();
@@ -263,7 +271,7 @@ class HotelReservationController extends BaseApiController
             }
             return $this->sendResponse($roomBooking, 'Booking created successfully.');
         } catch (\Exception $e) {
-            dd($e);
+
             Log::debug($e->getMessage());
             return $this->sendError('Server Error', $e->getMessage());
         }
@@ -287,7 +295,7 @@ class HotelReservationController extends BaseApiController
 
         $rbm_id = $request->input('rbm_id');
 
-        $booking = RoomBookingMaster::find($rbm_id);
+        $booking = RoomBookingMaster::with(['roomInventory.roomCat', 'roomInventory.roomPlan', 'roomAdvPayment'])->find($rbm_id);
 
 
         if (!$booking) {
@@ -297,7 +305,7 @@ class HotelReservationController extends BaseApiController
         // Include associated room inventory
         // $booking->load('roomInventory');
 
-        return $this->sendResponse(['booking' => $booking], '');
+        return $this->sendResponse($booking, '');
     }
 
     /**
@@ -346,8 +354,8 @@ class HotelReservationController extends BaseApiController
             $toDate = new DateTime($request->input('to_dt'));
             $fromDate = new DateTime($request->input('frm_dt'));
 
-            $room_inventory = json_decode($request->room_json, true);
-
+            // $room_inventory = json_decode($request->room_json, true);
+            $room_inventory = json_decode(json_encode($request->room_json), true);
             $roomError = false;
             $roomErrorDetails = [];
             foreach ($room_inventory as $roomInv) {
@@ -374,13 +382,18 @@ class HotelReservationController extends BaseApiController
 
             $guestArr = Helper::guestInfoAddUpdate($guest_id, $request['guest_json']);
 
-            $guest = [
-                "add" => $guestArr->full_name,
+            $guest = array(
+                "full_name" => $guestArr->full_name,
+                "email" => $guestArr->email,
+                "mobile" => $guestArr->mobile,
+                "guest_class_id" => $guestArr->gst_cls_id,
+                "add" => $guestArr->address,
                 "nlt" => $guestArr->nationality,
-                "city" => $guestArr->city,
+                "country_id" => $guestArr->country_id,
+                "state_id" => $guestArr->state_id,
                 "city_id" => $guestArr->city_id,
-                "email_id" => $guestArr->email
-            ];
+                "pincode" => $guestArr->pincode
+            );
 
             $rooms = [];
             foreach ($room_inventory as $room) {
@@ -390,6 +403,7 @@ class HotelReservationController extends BaseApiController
                     "nor" => $room['nor'],
                     "adlt" => $room['adlt'],
                     "chld" => $room['chld'],
+                    "amount" => $room['amount'],
                     "rate" => $room['rate'],
                 ];
             }
@@ -397,7 +411,7 @@ class HotelReservationController extends BaseApiController
             // Update the attributes of the existing booking
             $roomBooking->hotel_id = $hotel_id;
             $roomBooking->group_id = $request->input('group_id');
-            $roomBooking->guest_id = $request->input('guest_id');
+            $roomBooking->guest_id = $guestArr['id'];
             $roomBooking->frm_dt = $request->input('frm_dt');
             $roomBooking->to_dt = $request->input('to_dt');
             $roomBooking->nor = count($room_inventory);
@@ -408,11 +422,16 @@ class HotelReservationController extends BaseApiController
             $roomBooking->mrkt_sgmnt_id = $request->input('mrkt_sgmnt_id');
             $roomBooking->room_json = json_encode($rooms);
             $roomBooking->guest_json = json_encode($guest);
+            $roomBooking->guest_name = $guestArr['full_name']; //$request['guest_json'];
+            $roomBooking->guest_mobile = $guestArr['mobile']; //$request['guest_json'];
+            $roomBooking->cncl_policy_id = $request->input('cncl_policy_id');
+            $roomBooking->terms_con_id = $request->input('terms_con_id');
             $roomBooking->sp_req_json = $request->input('sp_req_json');
             $roomBooking->pax_json = $request->input('pax_json');
             $roomBooking->sp_remarks = $request->input('sp_remarks');
             $roomBooking->taxes = $request->input('taxes');
             $roomBooking->total_amt = $request->input('total_amnt');
+            $roomBooking->compl_rm = $request->input('isComplimentary');
             $roomBooking->updated_by = $user_id;
             $roomBooking->updated_at = now();
             $roomBooking->save();
@@ -475,33 +494,73 @@ class HotelReservationController extends BaseApiController
             }
 
             // Update or create payment details
+            // if ($request->input('payment_json')) {
+            //     $payDetails = $request->input('payment_json');
+
+            //     if (is_string($payDetails)) {
+            //         $payDetails = json_decode($payDetails, true);
+            //     }
+
+            //     if (!is_array($payDetails)) {
+            //         throw new \Exception("Invalid data format. Array expected.");
+            //     }
+
+            //     // Find an existing payment record or create a new one if it doesn't exist
+            //     $payData = BookingPayment::firstOrNew(
+            //         ['rbm_id' => $roomBooking->id],
+            //         ['hotel_id' => $roomBooking->hotel_id]
+            //     );
+
+            //     // Populate the fields
+            //     $payData->pay_date = $payDetails['pay_date'];
+            //     $payData->pay_type = $payDetails['pay_type'];
+            //     $payData->ref_name = $payDetails['ref_name'];
+            //     $payData->pay_amnt = $payDetails['pay_amnt'];
+            //     $payData->created_by = $user_id;
+
+            //     // Save the record (either update or create)
+            //     $payData->save();
+            // }
             if ($request->input('payment_json')) {
                 $payDetails = $request->input('payment_json');
 
+                // Decode JSON if $payDetails is a JSON string
                 if (is_string($payDetails)) {
                     $payDetails = json_decode($payDetails, true);
                 }
 
+                // Ensure $payDetails is an array
                 if (!is_array($payDetails)) {
                     throw new \Exception("Invalid data format. Array expected.");
                 }
 
-                // Find an existing payment record or create a new one if it doesn't exist
-                $payData = BookingPayment::firstOrNew(
-                    ['rbm_id' => $roomBooking->id],
-                    ['hotel_id' => $roomBooking->hotel_id]
-                );
+                // Fetch existing payment records for the booking
+                $existingPayments = BookingPayment::where('rbm_id', $roomBooking->id)->get()->keyBy('id');
 
-                // Populate the fields
-                $payData->pay_date = $payDetails['pay_date'];
-                $payData->pay_type = $payDetails['pay_type'];
-                $payData->ref_name = $payDetails['ref_name'];
-                $payData->pay_amnt = $payDetails['pay_amnt'];
-                $payData->created_by = $user_id;
+                foreach ($payDetails as $payDetail) {
+                    $payData = [
+                        'hotel_id' => $roomBooking->hotel_id,
+                        'rbm_id' => $roomBooking->id,
+                        'pay_type' => $payDetail['method'],
+                        'ref_name' => $payDetail['ref_name'] ?? null,
+                        'pay_amnt' => $payDetail['amount'],
+                        'created_by' => $user_id
+                    ];
 
-                // Save the record (either update or create)
-                $payData->save();
+                    if (isset($payDetail['id']) && $existingPayments->has($payDetail['id'])) {
+                        // Update existing payment record
+                        $existingPayment = $existingPayments->pull($payDetail['id']);
+                        $existingPayment->update($payData);
+                    } else {
+                        // Create new payment record
+                        BookingPayment::create($payData);
+                    }
+                }
+
+                // Delete any remaining existing payments that were not included in the request
+                BookingPayment::whereIn('id', $existingPayments->keys())->delete();
             }
+
 
             return $this->sendResponse($roomBooking, 'Booking updated successfully.');
         } catch (\Exception $e) {

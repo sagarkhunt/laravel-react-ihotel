@@ -12,7 +12,7 @@ class GuestMaster extends BaseModel
 
     protected $fillable = [
         'full_name',
-        'guest_cls_id',
+        'gst_cls_id',
         'email',
         'mobile',
         'address',

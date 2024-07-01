@@ -12,6 +12,7 @@ const initialStates = {
     roomCateList: {},
     payTypList: {},
     catAssRoomList: {},
+    reserDetails: {},
 };
 
 function Reducer(state = initialStates, action) {
@@ -101,6 +102,16 @@ function Reducer(state = initialStates, action) {
             };
         case actions.CAT_ASSIGN_ROOMS_FAILURE:
             return { ...state, catAssRoomList: [], loader: false };
+        case actions.RESER_GET_DETAILS:
+            return { ...state, loader: true };
+        case actions.RESER_GET_DETAILS_SUCCESS:
+            return {
+                ...state,
+                reserDetails: action.payload,
+                loader: false,
+            };
+        case actions.RESER_GET_DETAILS_FAILURE:
+            return { ...state, reserDetails: [], loader: false };
         default:
             return state;
     }

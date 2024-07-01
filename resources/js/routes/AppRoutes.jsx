@@ -32,6 +32,7 @@ import MarketSegment from '../views/marketSegment/MarketSegment.jsx';
 import IDType from '../views/idType/IDType.jsx';
 import Location from '../views/location/Location.jsx';
 import PayTyp from '../views/payTyp/PayType.jsx';
+import EditReservation from '../views/reservation/EditReservation.jsx';
 
 // Define a function to check if the user is authenticated
 const isAuthenticated = () => {
@@ -103,6 +104,12 @@ const router = createBrowserRouter([
             {
                 path: '/add-reservation',
                 element: <ProtectedRouteWrapper element={<AddReservation />} />,
+            },
+            {
+                path: '/edit-reservation/:reservationId',
+                element: (
+                    <ProtectedRouteWrapper element={<EditReservation />} />
+                ),
             },
             {
                 path: '/edit_res_info',

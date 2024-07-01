@@ -134,6 +134,22 @@ function BookingCard({
                                             Check In
                                         </Link>
                                     </div>
+                                    <div className="px-3 py-4 dropdown-reservation_list">
+                                        <Link
+                                            className="dropdown-item subtitle-2m"
+                                            to={`/edit-reservation/${booking?.id}`}
+                                        >
+                                            <span
+                                                className="material-icons-outlined me-2"
+                                                style={{
+                                                    cursor: 'pointer',
+                                                }}
+                                            >
+                                                edit
+                                            </span>
+                                            Edit
+                                        </Link>
+                                    </div>
                                 </div>
                             )}
                         </div>
@@ -148,9 +164,9 @@ function BookingCard({
                             <p className="subtitle-2m text-center mb-0">
                                 {formatDate(booking.frm_dt)}
                             </p>
-                            {/* <p className="caption-1 text-center mb-0">
+                            <p className="caption-1 text-center mb-0">
                                 10:00 PM
-                            </p> */}
+                            </p>
                         </div>
                     </div>
                     <div className="col-4 p-0">
@@ -169,9 +185,9 @@ function BookingCard({
                             <p className="subtitle-2m text-center mb-0">
                                 {formatDate(booking.to_dt)}
                             </p>
-                            {/* <p className="caption-1 text-center  mb-0">
+                            <p className="caption-1 text-center  mb-0">
                                 10:00 PM
-                            </p> */}
+                            </p>
                         </div>
                     </div>
                 </div>

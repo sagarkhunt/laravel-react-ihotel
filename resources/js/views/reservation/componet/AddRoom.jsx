@@ -96,59 +96,6 @@ const AddRoom = ({
         const newRoomDetails = rDetails.filter((_, i) => i !== index);
         setRDetails(newRoomDetails);
     };
-
-    // useEffect(() => {
-    //     $(document).ready(function () {
-    //         $('.minus').click(function () {
-    //             var $input = $(this).parent().find('input');
-    //             var type = $input.attr('value');
-    //             const index = $input.data('index');
-    //             var count = parseInt($input.val()) - 1;
-    //             if (type === '0') {
-    //                 // if it's a child input
-    //                 count = count < 0 ? 0 : count;
-    //             } else {
-    //                 // if it's nor or adlt input
-    //                 count = count < 1 ? 1 : count;
-    //             }
-    //             $input.val(count);
-    //             $input.change();
-    //             handleInputChange({ target: { value: count } }, index, field);
-    //             return false;
-    //         });
-    //         $('.plus').click(function () {
-    //             var $input = $(this).parent().find('input');
-    //             const index = $input.data('index');
-    //             var count = parseInt($input.val()) + 1;
-    //             $input.val(count);
-    //             $input.change();
-    //             handleInputChange({ target: { value: count } }, index, field);
-    //             return false;
-    //         });
-    //     });
-    // }, []);
-
-    // const handleMinus = (index, field) => {
-    //     const newRoomDetails = [...rDetails];
-    //     let count = parseInt(newRoomDetails[index][field]) - 1;
-
-    //     if (field === 'chld') {
-    //         count = count < 0 ? 0 : count;
-    //     } else {
-    //         count = count < 1 ? 1 : count;
-    //     }
-
-    //     newRoomDetails[index][field] = count.toString();
-    //     setRDetails(newRoomDetails);
-    // };
-
-    // const handlePlus = (index, field) => {
-    //     const newRoomDetails = [...rDetails];
-    //     let count = parseInt(newRoomDetails[index][field]) + 1;
-
-    //     newRoomDetails[index][field] = count.toString();
-    //     setRDetails(newRoomDetails);
-    // };
     const handleMinus = (index, field) => {
         const newRooms = [...rDetails];
         let value = parseInt(newRooms[index][field]);
@@ -233,7 +180,9 @@ const AddRoom = ({
 
                         <form
                             className="h-100"
-                            onSubmit={() => {
+                            onSubmit={(event) => {
+                                event.preventDefault(); // Prevent default form submission
+
                                 setFormData({
                                     ...formData,
                                     room_json: rDetails,

@@ -170,7 +170,9 @@ function PaymentMdl({ open, setOpen, setFormData, formData, totalAmount }) {
     const [dueAmount, setDueAmount] = useState(0);
 
     const [paymentMethods, setPaymentMethods] = useState([]);
-    const [selectedPaymentMethods, setSelectedPaymentMethods] = useState([]);
+    const [selectedPaymentMethods, setSelectedPaymentMethods] = useState(
+        formData?.payment_json ?? [],
+    );
 
     useEffect(() => {
         const totalDueAmount = selectedPaymentMethods.reduce(

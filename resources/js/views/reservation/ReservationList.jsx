@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import '../../../css/AddReservation.css';
 import AssignRoomMdl from './componet/AssignRoomMdl';
 import AssignRoommdlNew from './componet/AssignRoommdlNew';
@@ -42,7 +42,7 @@ function ReservationList() {
         indexOfLastItem,
         isArrivals = false,
     ) => {
-        if (data === null || data === undefined || !Array.isArray(data)) {
+        if (!Array.isArray(data)) {
             return [];
         }
 
@@ -71,7 +71,7 @@ function ReservationList() {
                 const nextDate = new Date(currentDate);
                 nextDate.setDate(nextDate.getDate() + 1);
 
-                const arrivalDate = new Date(item.to_dt);
+                const arrivalDate = new Date(item.frm_dt);
                 return arrivalDate >= currentDate && arrivalDate <= nextDate;
             }
 
@@ -81,21 +81,23 @@ function ReservationList() {
         return filteredData.slice(indexOfFirstItem, indexOfLastItem);
     };
 
-    const currentItems =
-        activeButton === 'reservations'
-            ? filterAndPaginateData(
-                  reserListingData,
-                  searchQuery,
-                  indexOfFirstItem,
-                  indexOfLastItem,
-              )
-            : filterAndPaginateData(
-                  reserListingData,
-                  searchQuery,
-                  indexOfFirstItem,
-                  indexOfLastItem,
-                  true,
-              );
+    const currentItems = useMemo(
+        () =>
+            filterAndPaginateData(
+                reserListingData,
+                searchQuery,
+                indexOfFirstItem,
+                indexOfLastItem,
+                activeButton === 'arrivals',
+            ),
+        [
+            reserListingData,
+            searchQuery,
+            indexOfFirstItem,
+            indexOfLastItem,
+            activeButton,
+        ],
+    );
 
     // Change page
     const onPageChange = (pageNumber) => {
@@ -172,7 +174,7 @@ function ReservationList() {
 
         const formatDate = (date) => {
             const yyyy = date.getFullYear();
-            const mm = String(date.getMonth() + 1).padStart(2, '0'); // Months start at 0!
+            const mm = String(date.getMonth() + 1).padStart(2, '0');
             const dd = String(date.getDate()).padStart(2, '0');
             return `${yyyy}-${mm}-${dd}`;
         };
@@ -181,15 +183,19 @@ function ReservationList() {
         const tomorrowStr = formatDate(tomorrow);
 
         const arrivalCounts = data.reduce((acc, item) => {
-            const date = item.frm_dt.split(' ')[0]; // Extract only the date part
+            const date = item.frm_dt.split(' ')[0];
             if (date === todayStr || date === tomorrowStr) {
-                acc[date] = (acc[date] || 0) + 1;
+                acc = 1;
             }
             return acc;
-        }, {});
+        }, 0);
 
         return arrivalCounts;
     };
+    const arrivalCounts = useMemo(
+        () => countArrivals(reserListingData),
+        [reserListingData],
+    );
 
     const getAdltTotal = (data) => {
         let adltTotal = 0;
@@ -205,7 +211,8 @@ function ReservationList() {
         });
         return chldTotal;
     };
-    const arrivalCounts = countArrivals(reserListingData);
+    // const arrivalCounts = countArrivals(reserListingData);
+
     const showActiveTab = (val) => {
         if (val === 'reservations') {
             setActiveButton('reservations');
@@ -220,60 +227,27 @@ function ReservationList() {
                     <div className="col-6 d-flex align-items-center">
                         <div className="col-6 d-flex align-items-end">
                             <h6
-                                className={`subtitle-1m mb-0 p-2 cp ${
-                                    activeButton === 'reservations'
-                                        ? 'btn-primary reservations'
-                                        : ''
-                                }`}
+                                className={`subtitle-1m mb-0 p-2 cp ${activeButton === 'reservations' ? 'btn-primary reservations' : ''}`}
                                 onClick={() => showActiveTab('reservations')}
                             >
                                 Reservations
                                 <span
-                                    className={`subtitle-2m ${
-                                        activeButton === 'reservations'
-                                            ? 'btn-primary rounded-circle'
-                                            : 'rounded-circle2'
-                                    }`}
+                                    className={`subtitle-2m ${activeButton === 'reservations' ? 'btn-primary rounded-circle' : 'rounded-circle2'}`}
                                 >
                                     {currentItems.length}
                                 </span>
                             </h6>
 
                             <h6
-                                className={`subtitle-1m mb-0 mx-3 p-2 cp ${
-                                    activeButton === 'arrivals'
-                                        ? 'btn-primary'
-                                        : ''
-                                }`}
+                                className={`subtitle-1m mb-0 mx-3 p-2 cp ${activeButton === 'arrivals' ? 'btn-primary' : ''}`}
                                 onClick={() => showActiveTab('arrivals')}
                             >
-                                Arrivals{' '}
-                                {Object.keys(arrivalCounts || {}).length > 0 ? (
-                                    Object.entries(arrivalCounts).map(
-                                        ([date, count]) => (
-                                            <span
-                                                key={date}
-                                                className={`subtitle-2m ${
-                                                    activeButton === 'arrivals'
-                                                        ? 'btn-primary rounded-circle'
-                                                        : 'rounded-circle2'
-                                                }`}
-                                            >
-                                                {count ?? 0}
-                                            </span>
-                                        ),
-                                    )
-                                ) : (
-                                    <span
-                                        className={`subtitle-2m ${
-                                            activeButton === 'arrivals'
-                                                ? 'btn-primary rounded-circle'
-                                                : 'rounded-circle2'
-                                        }`}
-                                    >
-                                        0
-                                    </span>
-                                )}
+                                Arrivals
+                                <span
+                                    className={`subtitle-2m ${activeButton === 'arrivals' ? 'btn-primary rounded-circle' : 'rounded-circle2'}`}
+                                >
+                                    {arrivalCounts}
+                                </span>
                             </h6>
                         </div>
                     </div>
@@ -317,8 +291,8 @@ function ReservationList() {
                                     autoComplete="off"
                                     className="d-none"
                                     required
-                                    checked={isGridView}
-                                    readOnly
+                                    // checked={isGridView}
+                                    // readOnly
                                 />
                                 <span className="material-icons">
                                     view_comfy
@@ -337,8 +311,8 @@ function ReservationList() {
                                     autoComplete="off"
                                     className="d-none"
                                     required
-                                    checked={!isGridView}
-                                    readOnly
+                                    // checked={!isGridView}
+                                    // readOnly
                                 />
                                 <span className="material-icons"> list </span>
                             </label>
@@ -600,6 +574,22 @@ function ReservationList() {
                                                                             exit_to_app
                                                                         </span>
                                                                         Check In
+                                                                    </Link>
+                                                                </div>
+                                                                <div className="px-3 py-4 dropdown-reservation_list">
+                                                                    <Link
+                                                                        className="dropdown-item subtitle-2m"
+                                                                        to={`/edit-reservation/${row?.id}`}
+                                                                    >
+                                                                        <span
+                                                                            className="material-icons-outlined me-2"
+                                                                            style={{
+                                                                                cursor: 'pointer',
+                                                                            }}
+                                                                        >
+                                                                            edit
+                                                                        </span>
+                                                                        Edit
                                                                     </Link>
                                                                 </div>
                                                             </div>

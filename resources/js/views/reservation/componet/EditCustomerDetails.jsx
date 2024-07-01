@@ -111,7 +111,13 @@ const EditCustomerDetails = ({
                                                     value={
                                                         customerDetails?.full_name
                                                     }
-                                                    onChange={handleInputChange}
+                                                    onChange={(e) =>
+                                                        setCustomerDetails({
+                                                            ...customerDetails,
+                                                            full_name:
+                                                                e.target.value,
+                                                        })
+                                                    }
                                                     placeholder="Name"
                                                 />
                                             </div>
@@ -149,17 +155,25 @@ const EditCustomerDetails = ({
                                 <div className="col-6">
                                     <div className="form-group mb-3">
                                         <label
-                                            htmlFor="guestClass"
+                                            htmlFor="guest_class_id"
                                             className="custom-label"
                                         >
                                             Guest Class
                                         </label>
                                         <select
-                                            name="guestClass"
-                                            onChange={handleInputChange}
-                                            value={customerDetails?.guestClass}
+                                            name="guest_class_id"
+                                            onChange={(e) =>
+                                                setCustomerDetails({
+                                                    ...customerDetails,
+                                                    guest_class_id:
+                                                        e.target.value,
+                                                })
+                                            }
+                                            value={
+                                                customerDetails?.guest_class_id
+                                            }
                                             className="form-select custom-input-lg"
-                                            id="guestClass"
+                                            id="guest_class_id"
                                         >
                                             <option value="0">Select</option>
                                             {dropDownData['guest_classes']?.map(

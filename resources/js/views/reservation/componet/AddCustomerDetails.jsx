@@ -82,7 +82,7 @@ const AddCustomerDetails = ({
                                     onClick={() => {
                                         setCustomerDetails({
                                             full_name: '',
-                                            guestClass: '',
+                                            guest_class_id: '',
                                             mobile: '',
                                             email: '',
                                             country_id: '',
@@ -153,17 +153,19 @@ const AddCustomerDetails = ({
                                 <div className="col-6">
                                     <div className="form-group mb-3">
                                         <label
-                                            htmlFor="guestClass"
+                                            htmlFor="guest_class_id"
                                             className="custom-label"
                                         >
                                             Guest Class
                                         </label>
                                         <select
-                                            name="guestClass"
+                                            name="guest_class_id"
                                             onChange={handleInputChange}
-                                            value={customerDetails?.guestClass}
+                                            value={
+                                                customerDetails?.guest_class_id
+                                            }
                                             className="form-select custom-input-lg"
-                                            id="guestClass"
+                                            id="guest_class_id"
                                         >
                                             <option value="">Select</option>
                                             {dropDownData['guest_classes']?.map(
