@@ -135,6 +135,17 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
             payload: filters,
         });
     }, [rmbId]);
+    const [dropDownData, setDropDownData] = useState(() => {
+        const savedData = localStorage.getItem('dropDownList');
+        return savedData ? JSON.parse(savedData) : [];
+    });
+    // Function to format the date
+    const formatDate = (dateString) => {
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB', options).split('/').join('-');
+    };
+
     return (
         <>
             <Modal open={open} handleModal={() => setOpen(!open)}>
@@ -224,11 +235,11 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
                                                             index,
                                                         ) => (
                                                             <li
-                                                                className="border-l m-3 p-1"
+                                                                className="border-l m-3 p-2"
                                                                 key={index}
                                                             >
                                                                 <div className="dropdown-item dropdown-item-nohover">
-                                                                    <div className="row">
+                                                                    <div className="row mx-0">
                                                                         <div
                                                                             className="col-2 surface-s p-0"
                                                                             width="2px"
@@ -247,14 +258,14 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
                                                                                     }}
                                                                                     className="p-1"
                                                                                 >
-                                                                                    {
-                                                                                        reservation.checkIn
-                                                                                    }
+                                                                                    {formatDate(
+                                                                                        reservation.checkIn,
+                                                                                    )}
                                                                                 </div>
                                                                                 <div className="p-1">
-                                                                                    {
-                                                                                        reservation.checkOut
-                                                                                    }
+                                                                                    {formatDate(
+                                                                                        reservation.checkOut,
+                                                                                    )}
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -292,7 +303,7 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
                                                                     {isFormVisible[
                                                                         `${typeIndex}-${index}`
                                                                     ] && (
-                                                                        <div className="">
+                                                                        <div>
                                                                             <form
                                                                                 onSubmit={(
                                                                                     event,
@@ -303,7 +314,7 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
                                                                                     )
                                                                                 }
                                                                             >
-                                                                                <div className="row mb-2">
+                                                                                <div className="row mb-2 mx-0">
                                                                                     <label
                                                                                         htmlFor="roomType"
                                                                                         className="body-2 form-label mb-0 px-0 mt-2"
@@ -326,18 +337,33 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
                                                                                             room
                                                                                             type
                                                                                         </option>
-                                                                                        <option value="Single">
-                                                                                            Single
-                                                                                        </option>
-                                                                                        <option value="Double">
-                                                                                            Double
-                                                                                        </option>
-                                                                                        <option value="Suite">
-                                                                                            Suite
-                                                                                        </option>
+                                                                                        {dropDownData &&
+                                                                                            dropDownData[
+                                                                                                'room_cate'
+                                                                                            ]?.map(
+                                                                                                (
+                                                                                                    item,
+                                                                                                    index,
+                                                                                                ) => {
+                                                                                                    return (
+                                                                                                        <option
+                                                                                                            key={
+                                                                                                                index
+                                                                                                            }
+                                                                                                            value={
+                                                                                                                item.id
+                                                                                                            }
+                                                                                                        >
+                                                                                                            {
+                                                                                                                item.cat_name
+                                                                                                            }
+                                                                                                        </option>
+                                                                                                    );
+                                                                                                },
+                                                                                            )}
                                                                                     </select>
                                                                                 </div>
-                                                                                <div className="row mb-2">
+                                                                                <div className="row mb-2 mx-0">
                                                                                     <label
                                                                                         htmlFor="roomNumber"
                                                                                         className="body-2 form-label mb-0 px-0"
@@ -359,15 +385,30 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
                                                                                             room
                                                                                             number
                                                                                         </option>
-                                                                                        <option value="101">
-                                                                                            101
-                                                                                        </option>
-                                                                                        <option value="102">
-                                                                                            102
-                                                                                        </option>
-                                                                                        <option value="103">
-                                                                                            103
-                                                                                        </option>
+                                                                                        {dropDownData &&
+                                                                                            dropDownData[
+                                                                                                'rooms'
+                                                                                            ]?.map(
+                                                                                                (
+                                                                                                    item,
+                                                                                                    index,
+                                                                                                ) => {
+                                                                                                    return (
+                                                                                                        <option
+                                                                                                            key={
+                                                                                                                index
+                                                                                                            }
+                                                                                                            value={
+                                                                                                                item.id
+                                                                                                            }
+                                                                                                        >
+                                                                                                            {
+                                                                                                                item.room_no
+                                                                                                            }
+                                                                                                        </option>
+                                                                                                    );
+                                                                                                },
+                                                                                            )}
                                                                                     </select>
                                                                                 </div>
                                                                                 <hr className="row border-l mb-2 mt-4" />
