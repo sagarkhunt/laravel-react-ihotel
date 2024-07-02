@@ -35,6 +35,7 @@ function ReservationList() {
     const [bsnsSrcId, setBsnsSrcId] = useState('');
     const [status, setStatus] = useState('');
     const [rmbId, setRmbId] = useState('');
+
     const filterAndPaginateData = (
         data,
         searchQuery,
@@ -69,10 +70,11 @@ function ReservationList() {
             if (isArrivals) {
                 const currentDate = new Date();
                 const nextDate = new Date(currentDate);
+                // console.log('🚀 ~ filteredData ~ nextDate:', nextDate);
                 nextDate.setDate(nextDate.getDate() + 1);
 
                 const arrivalDate = new Date(item.frm_dt);
-                return arrivalDate >= currentDate && arrivalDate <= nextDate;
+                return arrivalDate >= currentDate;
             }
 
             return true;
@@ -88,7 +90,7 @@ function ReservationList() {
                 searchQuery,
                 indexOfFirstItem,
                 indexOfLastItem,
-                activeButton === 'arrivals',
+                activeButton === 'arrivals', // Pass isArrivals flag based on activeButton
             ),
         [
             reserListingData,
@@ -99,6 +101,37 @@ function ReservationList() {
         ],
     );
 
+    // Function to count arrivals for today and tomorrow
+    const countArrivals = (data) => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Set to the start of the current day
+
+        const formatDate = (date) => {
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, '0');
+            const dd = String(date.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        };
+
+        const todayStr = formatDate(today);
+
+        const arrivalCounts = data.reduce((acc, item) => {
+            const itemDate = new Date(item.frm_dt);
+            itemDate.setHours(0, 0, 0, 0); // Set to the start of the item's date
+
+            if (itemDate > today) {
+                acc += 1; // Increment count for each matching arrival
+            }
+            return acc;
+        }, 0);
+
+        return arrivalCounts;
+    };
+    // useMemo for arrivalCounts
+    const arrivalCounts = useMemo(
+        () => countArrivals(reserListingData),
+        [reserListingData],
+    );
     // Change page
     const onPageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -167,35 +200,35 @@ function ReservationList() {
         });
     }, [resCreated, startDate, endDate, bsnsSrcId, status]);
 
-    const countArrivals = (data) => {
-        const today = new Date();
-        const tomorrow = new Date();
-        tomorrow.setDate(today.getDate() + 1);
+    // const countArrivals = (data) => {
+    //     const today = new Date();
+    //     const tomorrow = new Date();
+    //     tomorrow.setDate(today.getDate() + 1);
 
-        const formatDate = (date) => {
-            const yyyy = date.getFullYear();
-            const mm = String(date.getMonth() + 1).padStart(2, '0');
-            const dd = String(date.getDate()).padStart(2, '0');
-            return `${yyyy}-${mm}-${dd}`;
-        };
+    //     const formatDate = (date) => {
+    //         const yyyy = date.getFullYear();
+    //         const mm = String(date.getMonth() + 1).padStart(2, '0');
+    //         const dd = String(date.getDate()).padStart(2, '0');
+    //         return `${yyyy}-${mm}-${dd}`;
+    //     };
 
-        const todayStr = formatDate(today);
-        const tomorrowStr = formatDate(tomorrow);
+    //     const todayStr = formatDate(today);
+    //     const tomorrowStr = formatDate(tomorrow);
 
-        const arrivalCounts = data.reduce((acc, item) => {
-            const date = item.frm_dt.split(' ')[0];
-            if (date === todayStr || date === tomorrowStr) {
-                acc = 1;
-            }
-            return acc;
-        }, 0);
+    //     const arrivalCounts = data.reduce((acc, item) => {
+    //         const date = item.frm_dt.split(' ')[0];
+    //         if (date === todayStr || date === tomorrowStr) {
+    //             acc = 1;
+    //         }
+    //         return acc;
+    //     }, 0);
 
-        return arrivalCounts;
-    };
-    const arrivalCounts = useMemo(
-        () => countArrivals(reserListingData),
-        [reserListingData],
-    );
+    //     return arrivalCounts;
+    // };
+    // const arrivalCounts = useMemo(
+    //     () => countArrivals(reserListingData),
+    //     [reserListingData],
+    // );
 
     const getAdltTotal = (data) => {
         let adltTotal = 0;
@@ -211,7 +244,6 @@ function ReservationList() {
         });
         return chldTotal;
     };
-    // const arrivalCounts = countArrivals(reserListingData);
 
     const showActiveTab = (val) => {
         if (val === 'reservations') {
@@ -234,7 +266,7 @@ function ReservationList() {
                                 <span
                                     className={`subtitle-2m ${activeButton === 'reservations' ? 'btn-primary rounded-circle' : 'rounded-circle2'}`}
                                 >
-                                    {currentItems.length}
+                                    {reserListData.length}
                                 </span>
                             </h6>
 
