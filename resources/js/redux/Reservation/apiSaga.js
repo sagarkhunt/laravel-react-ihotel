@@ -169,14 +169,13 @@ function* dropownList(action) {
     } catch (error) {
         yield put({ type: actions.RESER_DROPDOWN_LIST_FAILURE });
         if (error.response.status === 401) {
-            message.error(error.response.data.message);
+            toast.error(error.response.data.message);
         } else if (
             error.response &&
             error.response.data &&
             error.response.data.message
         ) {
             toast.error(error.response.data.message);
-            message.error(error.response.data.message);
         }
     }
 }

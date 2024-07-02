@@ -217,7 +217,6 @@ function* dropownList(action) {
             error.response.data.message
         ) {
             toast.error(error.response.data.message);
-            // message.error(error.response.data.message);
         }
     }
 }
