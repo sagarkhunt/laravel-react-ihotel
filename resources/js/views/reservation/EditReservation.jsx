@@ -74,7 +74,6 @@ function EditReservation() {
     const inputRefFrom = useRef(null);
     const inputRefTo = useRef(null);
     const formatDateString = (dateString) => {
-        console.log('🚀 ~ formatDateString ~ dateString:', dateString);
         if (!dateString) return '';
         const [day, month, year] = dateString.split('/');
         return `${year}-${month}-${day}`;
