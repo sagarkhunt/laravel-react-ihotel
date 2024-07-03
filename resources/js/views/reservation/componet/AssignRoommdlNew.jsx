@@ -135,7 +135,7 @@ function AssignRoommdlNew({ openn, setOpenn }) {
                                     </div>
                                     <div>
                                         <p className="mb-0 body-2">
-                                            Arrival Date
+                                            Departure Date
                                         </p>
                                         <p className="subtitle-1m">
                                             10/10/2024{' '}

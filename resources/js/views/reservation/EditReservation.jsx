@@ -236,13 +236,42 @@ function EditReservation() {
         inputRefTo.current.showPicker(); // This triggers the date picker
     };
 
-    const handleInputChange = (e) => {
+    // const handleInputChange = (e) => {
+    //     const { name, value, type, checked } = e.target;
+    //     const inputValue = type === 'checkbox' ? (checked ? 1 : 0) : value;
+    //     setFormData((prevData) => ({
+    //         ...prevData,
+    //         [name]: inputValue,
+    //     }));
+    // };
+    const calculateRate = (amount, nor) => {
+        return amount * nor; // Adjust the formula as needed
+    };
+    const handleInputChange = (e, index, field) => {
         const { name, value, type, checked } = e.target;
         const inputValue = type === 'checkbox' ? (checked ? 1 : 0) : value;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: inputValue,
-        }));
+
+        if (index !== undefined && field !== undefined) {
+            const updatedRoomJson = [...formData.room_json];
+            updatedRoomJson[index][field] = inputValue;
+
+            if (field === 'amount' || field === 'nor') {
+                updatedRoomJson[index].rate = calculateRate(
+                    updatedRoomJson[index].amount,
+                    updatedRoomJson[index].nor,
+                );
+            }
+
+            setFormData((prevData) => ({
+                ...prevData,
+                room_json: updatedRoomJson,
+            }));
+        } else {
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]: inputValue,
+            }));
+        }
     };
 
     function validateParams(formData, paramsToValidate) {
@@ -316,34 +345,69 @@ function EditReservation() {
 
         navigate('/reservation-list');
     }
-
+    const calculateTotal = (roomJson) => {
+        return roomJson.reduce((total, room) => total + (room.amount || 0), 0);
+    };
     const handleMinus = (index, field) => {
-        const newRoomDetails = [...formData.room_json];
-        let count = parseInt(newRoomDetails[index][field]) - 1;
+        const updatedRoomJson = [...formData.room_json];
+        if (updatedRoomJson[index][field] > 0) {
+            updatedRoomJson[index][field] =
+                parseInt(updatedRoomJson[index][field] || 0) - 1;
 
-        if (field === 'chld') {
-            count = count < 0 ? 0 : count;
-        } else {
-            count = count < 1 ? 1 : count;
+            if (field === 'nor' || field === 'amount') {
+                updatedRoomJson[index].rate = calculateRate(
+                    updatedRoomJson[index].amount,
+                    updatedRoomJson[index].nor,
+                );
+            }
+
+            const total = calculateTotal(updatedRoomJson);
+
+            setFormData({ ...formData, room_json: updatedRoomJson, total });
+        }
+    };
+    // const handleMinus = (index, field) => {
+    //     const newRoomDetails = [...formData.room_json];
+    //     let count = parseInt(newRoomDetails[index][field]) - 1;
+
+    //     if (field === 'chld') {
+    //         count = count < 0 ? 0 : count;
+    //     } else {
+    //         count = count < 1 ? 1 : count;
+    //     }
+
+    //     newRoomDetails[index][field] = count.toString();
+    //     setFormData({
+    //         ...formData,
+    //         room_json: newRoomDetails,
+    //     });
+    // };
+    const handlePlus = (index, field) => {
+        const updatedRoomJson = [...formData.room_json];
+        updatedRoomJson[index][field] =
+            parseInt(updatedRoomJson[index][field] || 0) + 1;
+
+        if (field === 'nor' || field === 'amount') {
+            updatedRoomJson[index].rate = calculateRate(
+                updatedRoomJson[index].amount,
+                updatedRoomJson[index].nor,
+            );
         }
 
-        newRoomDetails[index][field] = count.toString();
-        setFormData({
-            ...formData,
-            room_json: newRoomDetails,
-        });
-    };
+        const total = calculateTotal(updatedRoomJson);
 
-    const handlePlus = (index, field) => {
-        const newRoomDetails = [...formData.room_json];
-        let count = parseInt(newRoomDetails[index][field]) + 1;
-
-        newRoomDetails[index][field] = count.toString();
-        setFormData({
-            ...formData,
-            room_json: newRoomDetails,
-        });
+        setFormData({ ...formData, room_json: updatedRoomJson, total });
     };
+    // const handlePlus = (index, field) => {
+    //     const newRoomDetails = [...formData.room_json];
+    //     let count = parseInt(newRoomDetails[index][field]) + 1;
+
+    //     newRoomDetails[index][field] = count.toString();
+    //     setFormData({
+    //         ...formData,
+    //         room_json: newRoomDetails,
+    //     });
+    // };
 
     return (
         <div className="row row mt-3 mx-2">
@@ -799,8 +863,29 @@ function EditReservation() {
                                                             </div>
                                                         </div>
                                                         <div className="col-2">
-                                                            ₹ {room.amount}
+                                                            {/* <div className="number-amnt"> */}
+                                                            <input
+                                                                className="form-control custom-input-sm text-end"
+                                                                value={
+                                                                    room.amount
+                                                                }
+                                                                onChange={(e) =>
+                                                                    handleInputChange(
+                                                                        e,
+                                                                        index,
+                                                                        'amount',
+                                                                    )
+                                                                }
+                                                                data-index={
+                                                                    index
+                                                                }
+                                                                data-field="amount"
+                                                            />
+                                                            {/* </div> */}
                                                         </div>
+                                                        {/* <div className="col-2">
+                                                            ₹ {room.amount}
+                                                        </div> */}
                                                         <div className="col-2 text-end">
                                                             ₹ {room.rate}
                                                         </div>

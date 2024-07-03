@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Modal from '../../../components/common/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import actions from '../../../redux/Reservation/actions';
@@ -12,7 +12,7 @@ function AvailableInqMdl({
 }) {
     const dispatch = useDispatch();
     const [roomCateListData, setRoomCateListData] = useState({});
-    // const [dropDownData, setDropDownData] = useState({});
+
     const { dropDownList } = useSelector((state) => state?.reserReducer);
     const currentDate = checkAvaInDate ? new Date(checkAvaInDate) : new Date();
     const currentDateString = currentDate.toISOString().split('T')[0];
@@ -22,11 +22,25 @@ function AvailableInqMdl({
     const nextDate = new Date(checkAvaOutDate ?? currentDate);
     nextDate.setDate(nextDate.getDate());
     const nextDateString = nextDate.toISOString().split('T')[0];
-
+    const inputRefFrom = useRef(null);
+    const inputRefTo = useRef(null);
     // Initialize state with dynamic dates
     const [checkInDate, setCheckInDate] = useState(currentDateString);
     const [checkOutDate, setCheckOutDate] = useState(nextDateString);
     const [nights, setNights] = useState(1);
+
+    const handleContainerClickFrom = () => {
+        if (inputRefFrom.current) {
+            inputRefFrom.current.focus();
+            inputRefFrom.current.showPicker();
+        }
+    };
+    const handleContainerClickTo = () => {
+        if (inputRefTo.current) {
+            inputRefTo.current.focus();
+            inputRefTo.current.showPicker();
+        }
+    };
 
     useEffect(() => {
         calculateNights(checkInDate, checkOutDate);
@@ -37,7 +51,31 @@ function AvailableInqMdl({
     }, [roomCateList]);
 
     const handleCheckInChange = (e) => {
-        setCheckInDate(e.target.value);
+        const selectedDate = e.target.value;
+        setCheckInDate(selectedDate);
+
+        // Calculate minimum and maximum check-out dates
+        const minCheckOutDate = new Date(selectedDate);
+        minCheckOutDate.setDate(minCheckOutDate.getDate() + 1);
+        const maxCheckOutDate = new Date(selectedDate);
+        maxCheckOutDate.setDate(maxCheckOutDate.getDate() + 14);
+
+        // Format dates as yyyy-mm-dd
+        const minCheckOutDateString = minCheckOutDate
+            .toISOString()
+            .split('T')[0];
+        const maxCheckOutDateString = maxCheckOutDate
+            .toISOString()
+            .split('T')[0];
+
+        // Reset check-out date if it is outside the 14-day range
+        if (
+            !checkOutDate ||
+            new Date(checkOutDate) < minCheckOutDate ||
+            new Date(checkOutDate) > maxCheckOutDate
+        ) {
+            setCheckOutDate(minCheckOutDateString);
+        }
     };
 
     const handleCheckOutChange = (e) => {
@@ -49,6 +87,7 @@ function AvailableInqMdl({
         const checkOutDate = new Date(checkOut);
         const diffTime = Math.abs(checkOutDate - checkInDate);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
         setNights(diffDays);
     };
     const handleCategoryChange = (e) => {
@@ -65,9 +104,21 @@ function AvailableInqMdl({
             payload: params,
         });
     };
-    // useEffect(() => {
-    //     setDropDownData(dropDownList);
-    // }, [dropDownList]);
+
+    const calculateMinCheckOutDate = () => {
+        if (!checkInDate) return '';
+        const minCheckOutDate = new Date(checkInDate);
+        minCheckOutDate.setDate(minCheckOutDate.getDate() + 1);
+        return minCheckOutDate.toISOString().split('T')[0]; // Format as yyyy-mm-dd
+    };
+
+    const calculateMaxCheckOutDate = () => {
+        if (!checkInDate) return '';
+        const maxCheckOutDate = new Date(checkInDate);
+        maxCheckOutDate.setDate(maxCheckOutDate.getDate() + 14);
+        return maxCheckOutDate.toISOString().split('T')[0]; // Format as yyyy-mm-dd
+    };
+
     useEffect(() => {
         if (
             dropDownData &&
@@ -91,15 +142,6 @@ function AvailableInqMdl({
             });
         }
     }, [selectedCategoryId, dispatch]);
-    // useEffect(() => {
-    //     const sync_req = ['room_cate'];
-    //     dispatch({
-    //         type: actions.RESER_DROPDOWN_LIST,
-    //         payload: {
-    //             sync_req: sync_req.join(','),
-    //         },
-    //     });
-    // }, []);
     return (
         <Modal open={showAvaInq} handleModal={() => setShowAvaInq(!showAvaInq)}>
             <div
@@ -136,17 +178,19 @@ function AvailableInqMdl({
                         <div className="modal-body modal-lf-body">
                             <div className="d-flex card-1 align-items-end justify-content-between border p-3 container-page">
                                 {/* Check In */}
-                                <div style={{ width: '20%' }}>
+                                <div
+                                    style={{ width: '20%' }}
+                                    onClick={handleContainerClickFrom}
+                                >
                                     <p className="mb-1">From Date</p>
                                     <input
                                         type="date"
                                         className="custom-input w-100"
                                         value={checkInDate}
                                         onChange={handleCheckInChange}
+                                        ref={inputRefFrom}
                                     />
                                 </div>
-
-                                {/* Nights */}
                                 <div className="col-auto">
                                     <label
                                         htmlFor="checkin-date"
@@ -156,27 +200,26 @@ function AvailableInqMdl({
                                     </label>
                                     <div className="row m-0  cp border res-night-count rounded text-center py-1">
                                         <div className="col-12 p-0 d-flex align-items-center justify-content-center mt-1">
-                                            <span className="h5">{nights}</span>
+                                            <span className="h5">
+                                                {nights ?? 0}
+                                            </span>
                                         </div>
                                     </div>
-                                    {/* <div className="night-count rounded">
-                                        <p className="caption-2 font-white text-center mb-0">
-                                            Nights
-                                        </p>
-                                        <p className="caption-1b font-white mt-1 text-center mb-0">
-                                            {nights}
-                                        </p>
-                                    </div> */}
                                 </div>
-
-                                {/* Check Out */}
-                                <div style={{ width: '20%' }}>
+                                <div
+                                    style={{ width: '20%' }}
+                                    onClick={handleContainerClickTo}
+                                >
                                     <p className="mb-1">To Date</p>
                                     <input
                                         type="date"
                                         className="custom-input w-100"
                                         value={checkOutDate}
                                         onChange={handleCheckOutChange}
+                                        min={calculateMinCheckOutDate()}
+                                        max={calculateMaxCheckOutDate()}
+                                        ref={inputRefTo}
+                                        disabled={!checkInDate} // Disable if check-in date is not selected
                                     />
                                 </div>
 

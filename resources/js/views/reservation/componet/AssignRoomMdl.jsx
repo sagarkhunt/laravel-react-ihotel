@@ -4,16 +4,20 @@ import EditResMdl from './EditResMdl';
 import actions from '../../../redux/Reservation/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
-function AssignRoomMdl({ open, setOpen, rmbId }) {
+function AssignRoomMdl({ open, setOpen, rmbId, rmbData }) {
     const [selectedRoomType, setSelectedRoomType] = useState('');
     const [selectedRoomNumber, setSelectedRoomNumber] = useState('');
     const [isFormVisible, setIsFormVisible] = useState({});
-    const [showEdirRes, setShowEditRes] = useState(false);
+    const [showEditRes, setShowEditRes] = useState(false);
     const [catWiseRoom, setCatWiseRoom] = useState([]);
+    const [checkInDate, setCheckInDate] = useState('');
+    const [roomDetail, setRoomDetail] = useState('');
+
     const dispatch = useDispatch();
     const { loader, catAssRoomList } = useSelector(
         (state) => state.reserReducer,
     );
+
     const toggleForm = (index) => {
         setIsFormVisible((prevState) => ({
             ...prevState,
@@ -23,8 +27,6 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
 
     const handleAssignRoom = (event, index) => {
         event.preventDefault();
-        // Handle room assignment logic here
-        console.log(`Assigned Room: ${selectedRoomType} ${selectedRoomNumber}`);
     };
 
     const handleRoomTypeChange = (event) => {
@@ -35,116 +37,51 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
         setSelectedRoomNumber(event.target.value);
     };
 
-    const openEditRes = () => {
+    const openEditRes = (data) => {
+        setRoomDetail(data);
         setShowEditRes(true);
     };
 
-    // const roomTypes = [
-    //     {
-    //         title: 'Exclusive Rooms (43)',
-    //         reservations: [
-    //             {
-    //                 checkIn: '10 Oct',
-    //                 checkOut: '12 Oct',
-    //                 guestName: 'Amitava Kulkarni',
-    //                 reservationId: 'RS1234',
-    //             },
-    //             // Add more reservations as needed
-    //         ],
-    //     },
-    //     {
-    //         title: 'Elegance Rooms (23)',
-    //         reservations: [
-    //             {
-    //                 checkIn: '10 Oct',
-    //                 checkOut: '12 Oct',
-    //                 guestName: 'Amitava Kulkarni',
-    //                 reservationId: 'RS1234',
-    //             },
-    //             {
-    //                 checkIn: '10 Oct',
-    //                 checkOut: '12 Oct',
-    //                 guestName: 'Amitava Kulkarni',
-    //                 reservationId: 'RS1234',
-    //             },
-    //         ],
-    //     },
-    //     {
-    //         title: 'Duplex Rooms (12)',
-    //         reservations: [
-    //             {
-    //                 checkIn: '10 Oct',
-    //                 checkOut: '12 Oct',
-    //                 guestName: 'Amitava Kulkarni',
-    //                 reservationId: 'RS1234',
-    //             },
-    //             {
-    //                 checkIn: '10 Oct',
-    //                 checkOut: '12 Oct',
-    //                 guestName: 'Amitava Kulkarni',
-    //                 reservationId: 'RS1234',
-    //             },
-    //         ],
-    //     },
-    //     {
-    //         title: 'Family Rooms (6)',
-    //         reservations: [
-    //             {
-    //                 checkIn: '10 Oct',
-    //                 checkOut: '12 Oct',
-    //                 guestName: 'Amitava Kulkarni',
-    //                 reservationId: 'RS1234',
-    //             },
-    //             {
-    //                 checkIn: '10 Oct',
-    //                 checkOut: '12 Oct',
-    //                 guestName: 'Amitava Kulkarni',
-    //                 reservationId: 'RS1234',
-    //             },
-    //         ],
-    //     },
-    //     {
-    //         title: 'King Suite Rooms (5)', // Fixed typo
-    //         reservations: [
-    //             {
-    //                 checkIn: '10 Oct',
-    //                 checkOut: '12 Oct',
-    //                 guestName: 'Amitava Kulkarni',
-    //                 reservationId: 'RS1234',
-    //             },
-    //             {
-    //                 checkIn: '10 Oct',
-    //                 checkOut: '12 Oct',
-    //                 guestName: 'Amitava Kulkarni',
-    //                 reservationId: 'RS1234',
-    //             },
-    //         ],
-    //     },
-    // ];
+    const formatDate = (isoDateStr) => {
+        const date = new Date(isoDateStr);
+        const options = { day: '2-digit', month: 'short' };
+        return date.toLocaleDateString('en-GB', options);
+    };
+    const clearCheckInDate = () => {
+        setCheckInDate('');
+    };
+    const handleCheckInDateChange = (event) => {
+        setCheckInDate(event.target.value);
+    };
+
+    const filterReservations = (reservations) => {
+        if (!checkInDate) return reservations;
+
+        const selectedDate = new Date(checkInDate);
+        return reservations.filter((reservation) => {
+            const checkIn = new Date(reservation.checkIn);
+            return checkIn.toDateString() === selectedDate.toDateString();
+        });
+    };
+
     useEffect(() => {
         if (catAssRoomList) {
             setCatWiseRoom(Array.isArray(catAssRoomList) ? catAssRoomList : []);
         }
     }, [catAssRoomList]);
+
     useEffect(() => {
-        const filters = {
-            rmb_id: rmbId,
-        };
+        const filters = { rmb_id: rmbId };
         dispatch({
             type: actions.CAT_ASSIGN_ROOMS_LIST,
             payload: filters,
         });
-    }, [rmbId]);
+    }, [rmbId, dispatch]);
+
     const [dropDownData, setDropDownData] = useState(() => {
         const savedData = localStorage.getItem('dropDownList');
         return savedData ? JSON.parse(savedData) : [];
     });
-    // Function to format the date
-    const formatDate = (dateString) => {
-        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-GB', options).split('/').join('-');
-    };
 
     return (
         <>
@@ -172,10 +109,29 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
                                         alignItems: 'center',
                                     }}
                                 >
+                                    {/* <div
+                                        className="mb-1 mt-1"
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            marginRight: '10px',
+                                        }}
+                                    >
+                                        <button
+                                            type="button"
+                                            className="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close"
+                                            onClick={clearCheckInDate}
+                                        ></button>
+                                    </div> */}
+
                                     <input
                                         type="date"
                                         className="form-control date custom-input"
                                         id="checkin-date"
+                                        value={checkInDate}
+                                        onChange={handleCheckInDateChange}
                                     />
                                 </div>
                                 <div
@@ -200,7 +156,7 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
                                 id="roomAccordion"
                             >
                                 {catWiseRoom &&
-                                    catWiseRoom?.map((roomType, typeIndex) => (
+                                    catWiseRoom.map((roomType, typeIndex) => (
                                         <div
                                             className="accordion-item"
                                             key={typeIndex}
@@ -213,7 +169,13 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
                                                 aria-expanded="true"
                                                 aria-controls={`collapse${typeIndex}`}
                                             >
-                                                {roomType.title}
+                                                {roomType.title} (
+                                                {
+                                                    filterReservations(
+                                                        roomType.reservations,
+                                                    ).length
+                                                }
+                                                )
                                                 <span className="material-icons-outlined">
                                                     keyboard_arrow_down
                                                 </span>
@@ -229,7 +191,9 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
                                                         listStyle: 'none',
                                                     }}
                                                 >
-                                                    {roomType.reservations.map(
+                                                    {filterReservations(
+                                                        roomType.reservations,
+                                                    ).map(
                                                         (
                                                             reservation,
                                                             index,
@@ -244,19 +208,13 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
                                                                             className="col-2 surface-s p-0"
                                                                             width="2px"
                                                                         >
-                                                                            <div
-                                                                                style={{
-                                                                                    display:
-                                                                                        'block',
-                                                                                }}
-                                                                                className="text-center"
-                                                                            >
+                                                                            <div className="text-center">
                                                                                 <div
+                                                                                    className="p-1"
                                                                                     style={{
                                                                                         borderBottom:
                                                                                             '1px solid #c4cfd7',
                                                                                     }}
-                                                                                    className="p-1"
                                                                                 >
                                                                                     {formatDate(
                                                                                         reservation.checkIn,
@@ -276,6 +234,7 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
                                                                                 }
                                                                             </div>
                                                                             <div className="body-2">
+                                                                                RS
                                                                                 {
                                                                                     reservation.reservationId
                                                                                 }
@@ -313,6 +272,7 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
                                                                                         index,
                                                                                     )
                                                                                 }
+                                                                                className="mt-2"
                                                                             >
                                                                                 <div className="row mb-2 mx-0">
                                                                                     <label
@@ -323,7 +283,7 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
                                                                                         Type
                                                                                     </label>
                                                                                     <select
-                                                                                        className="form-select"
+                                                                                        className="form-select mt-1"
                                                                                         id="roomType"
                                                                                         value={
                                                                                             selectedRoomType
@@ -371,7 +331,7 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
                                                                                         Room
                                                                                     </label>
                                                                                     <select
-                                                                                        className="form-select"
+                                                                                        className="form-select mt-1"
                                                                                         id="roomNumber"
                                                                                         value={
                                                                                             selectedRoomNumber
@@ -427,9 +387,11 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
                                                                                     <button
                                                                                         type="button"
                                                                                         className="btn btn-secondary me-2"
-                                                                                        onClick={
-                                                                                            openEditRes
-                                                                                        }
+                                                                                        onClick={() => {
+                                                                                            openEditRes(
+                                                                                                roomType,
+                                                                                            );
+                                                                                        }}
                                                                                     >
                                                                                         Check
                                                                                         In
@@ -437,9 +399,11 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
                                                                                     <button
                                                                                         type="submit"
                                                                                         className="btn btn-primary"
-                                                                                        onClick={
-                                                                                            openEditRes
-                                                                                        }
+                                                                                        onClick={() => {
+                                                                                            openEditRes(
+                                                                                                roomType,
+                                                                                            );
+                                                                                        }}
                                                                                     >
                                                                                         Assign
                                                                                         Room
@@ -461,11 +425,14 @@ function AssignRoomMdl({ open, setOpen, rmbId }) {
                     </div>
                 </div>
             </Modal>
-            {showEdirRes && (
+            {showEditRes && (
                 <EditResMdl
-                    showEdirRes={showEdirRes}
+                    showEditRes={showEditRes}
                     setShowEditRes={setShowEditRes}
                     setOpen={setOpen}
+                    rmbId={rmbId}
+                    rmbData={rmbData}
+                    roomDetail={roomDetail}
                 />
             )}
         </>

@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from '../../../components/common/Modal';
 import { useNavigate } from 'react-router-dom';
 
-function EditResMdl({ showEdirRes, setShowEditRes, setOpen }) {
+function EditResMdl({
+    showEdirRes,
+    setShowEditRes,
+    setOpen,
+    rmbId,
+    rmbData,
+    roomDetail,
+}) {
     const [activeButton, setActiveButton] = useState(null);
+    const [totalAdults, setTotalAdults] = useState(0);
+    const [totalChildren, setTotalChildren] = useState(0);
+    const [roomJsonArray, setRoomJsonArray] = useState([]);
     const navigate = useNavigate();
     const handleClick = (buttonName) => {
         setActiveButton(buttonName);
@@ -11,22 +21,42 @@ function EditResMdl({ showEdirRes, setShowEditRes, setOpen }) {
     const editReservstion = () => {
         navigate('/edit_res_info');
     };
-    const reservationData = {
-        name: 'Devang Kulkarni',
-        phoneNumber: '9898989898',
-        location: 'Gujrat',
-        email: 'devkulkarni@gmail.com',
-        reservationNumber: 'RS12345',
-        arrivalDate: '10/10/2024 11:00 AM',
-        bookingDate: '3/10/2024 11:00 AM',
-        pax: {
-            men: 2,
-            boys: 1,
-        },
-        status: 'Confirmed Reservation',
-        roomCategory: 'Duplex Room',
-        averageDailyRate: 'Rs. 1,000.00',
+    const [dropDownData, setDropDownData] = useState(() => {
+        const savedData = localStorage.getItem('dropDownList');
+        return savedData ? JSON.parse(savedData) : [];
+    });
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const year = date.getFullYear();
+
+        return `${day}/${month}/${year}`;
     };
+    const guestData = rmbData && JSON.parse(rmbData?.guest_json);
+    useEffect(() => {
+        try {
+            const parsedJson = JSON.parse(rmbData?.room_json);
+            setRoomJsonArray(parsedJson);
+        } catch (error) {
+            console.error('Error parsing room_json:', error);
+        }
+    }, [rmbData?.room_json]);
+    useEffect(() => {
+        let adultsCount = 0;
+        let childrenCount = 0;
+
+        roomJsonArray.forEach((room) => {
+            adultsCount += parseInt(room.adlt) || 0; // Ensure to parse as integer and handle NaN
+            childrenCount += parseInt(room.chld) || 0; // Ensure to parse as integer and handle NaN
+        });
+
+        setTotalAdults(adultsCount);
+        setTotalChildren(childrenCount);
+    }, [roomJsonArray]);
+
     return (
         <Modal
             showEdirRes={showEdirRes}
@@ -48,23 +78,30 @@ function EditResMdl({ showEdirRes, setShowEditRes, setOpen }) {
                                     className="modal-title headline-h6m title-modal"
                                     id="exampleModalLabel"
                                 >
-                                    {reservationData.name}
+                                    {guestData?.full_name}
                                 </h5>
                                 <p className="mb-0 contact-info">
                                     <span className="material-icons-outlined align-items-center icon">
                                         call
                                     </span>
                                     <span className="sapn_header">
-                                        {reservationData.phoneNumber}
+                                        {guestData?.mobile}
                                     </span>
                                     <span className="material-icons-outlined align-items-center icon">
                                         location_on
                                     </span>
-                                    <span>{reservationData.location}</span>
+                                    <span>
+                                        {dropDownData &&
+                                            dropDownData['state'].find(
+                                                (state) =>
+                                                    state.id ==
+                                                    guestData?.state_id,
+                                            )?.name}
+                                    </span>
                                     <span className="material-icons-outlined align-items-center icon">
                                         email
                                     </span>
-                                    <span>{reservationData.email}</span>
+                                    <span>{guestData?.email}</span>
                                 </p>
                             </div>
                             <div className="mb-4">
@@ -92,7 +129,7 @@ function EditResMdl({ showEdirRes, setShowEditRes, setOpen }) {
                                             Reservation Number
                                         </p>
                                         <p className="subtitle-1m">
-                                            {reservationData.reservationNumber}
+                                            RS {rmbData?.id}
                                         </p>
                                     </div>
                                     <div>
@@ -100,7 +137,7 @@ function EditResMdl({ showEdirRes, setShowEditRes, setOpen }) {
                                             Arrival Date
                                         </p>
                                         <p className="subtitle-1m">
-                                            {reservationData.arrivalDate}
+                                            {formatDate(rmbData?.frm_dt)}
                                         </p>
                                     </div>
                                     <div>
@@ -108,7 +145,7 @@ function EditResMdl({ showEdirRes, setShowEditRes, setOpen }) {
                                             Booking Date
                                         </p>
                                         <p className="subtitle-1m">
-                                            {reservationData.bookingDate}
+                                            {formatDate(rmbData?.created_at)}
                                         </p>
                                     </div>
                                     <div>
@@ -119,7 +156,7 @@ function EditResMdl({ showEdirRes, setShowEditRes, setOpen }) {
                                                     man
                                                 </span>
                                                 <span className="align-items-center">
-                                                    {reservationData.pax.men}
+                                                    {totalAdults}
                                                 </span>
                                             </div>
                                             <div className="icon-item d-flex align-items-center">
@@ -127,7 +164,7 @@ function EditResMdl({ showEdirRes, setShowEditRes, setOpen }) {
                                                     boy
                                                 </span>
                                                 <span className="align-items-center">
-                                                    {reservationData.pax.boys}
+                                                    {totalChildren}
                                                 </span>
                                             </div>
                                         </div>
@@ -138,15 +175,17 @@ function EditResMdl({ showEdirRes, setShowEditRes, setOpen }) {
                                     <div>
                                         <p className="mb-0 body-2">Status</p>
                                         <p className="subtitle-1m">
-                                            {reservationData.status}
+                                            {rmbData?.block_status == 1
+                                                ? 'Confirmed Reservation'
+                                                : 'Cancel Reservation'}
                                         </p>
                                     </div>
                                     <div>
                                         <p className="mb-0 body-2">
-                                            Arrival Date
+                                            Departure Date
                                         </p>
                                         <p className="subtitle-1m">
-                                            {reservationData.arrivalDate}
+                                            {formatDate(rmbData.to_dt)}
                                         </p>
                                     </div>
                                     <div>
@@ -154,7 +193,10 @@ function EditResMdl({ showEdirRes, setShowEditRes, setOpen }) {
                                             Room Category
                                         </p>
                                         <p className="subtitle-1m">
-                                            {reservationData.roomCategory}
+                                            {/* {rmbData?.room_inventory &&
+                                                rmbData?.room_inventory[0]
+                                                    ?.room_cat?.cat_name} */}
+                                            {roomDetail?.title}
                                         </p>
                                     </div>
                                     <div>
@@ -162,7 +204,12 @@ function EditResMdl({ showEdirRes, setShowEditRes, setOpen }) {
                                             Average Daily Rate
                                         </p>
                                         <p className="subtitle-1m">
-                                            {reservationData.averageDailyRate}
+                                            RS{' '}
+                                            {rmbData?.total_amt
+                                                ? Number(
+                                                      rmbData.total_amt,
+                                                  ).toFixed(2)
+                                                : '0.00'}
                                         </p>
                                     </div>
                                 </div>

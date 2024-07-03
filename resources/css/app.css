@@ -2132,3 +2132,15 @@ select,
     border: 1px solid #ddd;
     font-size: 16px;
 }
+
+.number-amnt {
+    display: flex;
+    align-items: center;
+}
+.number-amnt .input-number {
+    width: 85px;
+    height: 30px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
