@@ -257,11 +257,11 @@ function BooingInq() {
                                     </span>
                                 )}
                             </div>
-                            <button className="btn btn-secondary d-flex">
+                            {/* <button className="btn btn-secondary d-flex">
                                 <span className="material-icons-outlined">
                                     tune
                                 </span>
-                            </button>
+                            </button> */}
 
                             {/* <button
                                 className="btn btn-outline d-flex"
