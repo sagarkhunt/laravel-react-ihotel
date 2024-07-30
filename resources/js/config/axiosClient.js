@@ -3,7 +3,7 @@ import { toast } from 'react-hot-toast';
 import Cookies from 'js-cookie';
 
 const baseURL = import.meta.env.REACT_APP_URL;
-
+console.log(baseURL,'=====')
 export const axiosApi = axios.create({
     baseURL: baseURL,
     timeout: 10000,
